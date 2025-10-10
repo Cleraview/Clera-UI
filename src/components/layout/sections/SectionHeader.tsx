@@ -6,7 +6,7 @@ import { cva, VariantProps } from 'class-variance-authority'
 import { Badge, type BadgeProps } from '@/components/ui/badge'
 import { cn } from '@/utils/tailwind'
 
-const sectionHeaderVariants = cva('flex flex-col gap-(--space-md)', {
+const sectionHeaderVariants = cva('flex flex-col gap-space-md', {
   variants: {
     textAlign: {
       left: 'text-left items-start',
@@ -43,6 +43,7 @@ export interface SectionHeaderProps
   className?: string
   titleClassName?: string
   subTitleClassName?: string
+  isAnimate?: boolean
 }
 
 const isStringHtml = (content: unknown): content is string => {
@@ -65,6 +66,7 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
       className,
       titleClassName,
       subTitleClassName,
+      isAnimate = true,
     },
     ref
   ) => {
@@ -73,6 +75,8 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
     const descRef = useRef<HTMLHeadingElement>(null)
 
     useEffect(() => {
+      if (!isAnimate) return
+
       const ctx = gsap.context(() => {
         if (badgeRef.current) {
           gsap.fromTo(
@@ -130,7 +134,7 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
       })
 
       return () => ctx.revert()
-    }, [])
+    }, [isAnimate])
 
     return (
       <div
@@ -154,10 +158,13 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
           </div>
         )}
 
-        <div className="inline-flex flex flex-col justify-between gap-(--space-sm) md:gap-(--space-md)">
+        <div className="inline-flex flex flex-col justify-between gap-space-sm">
           <h1
             ref={titleRef}
-            className={cn('heading-display opacity-0', titleClassName)}
+            className={cn(
+              titleClassName ? titleClassName : 'text-heading-4xl font-bold!',
+              isAnimate && 'opacity-0'
+            )}
           >
             {typeof title === 'string' && isStringHtml(title) ? (
               <span dangerouslySetInnerHTML={{ __html: title }} />
@@ -169,7 +176,12 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
           {subtitle && (
             <h2
               ref={descRef}
-              className={cn('heading-sub opacity-0', subTitleClassName)}
+              className={cn(
+                subTitleClassName
+                  ? subTitleClassName
+                  : 'text-heading-xl text-subtle font-light!',
+                isAnimate && 'opacity-0'
+              )}
             >
               {typeof subtitle === 'string' && isStringHtml(subtitle) ? (
                 <span dangerouslySetInnerHTML={{ __html: subtitle }} />

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import React, { PropsWithChildren, useRef } from 'react'
 import { SectionHeader, SectionShell } from '@/components/layout/sections'
 import { Button, ButtonProps } from '@/components/ui/button'
@@ -7,7 +8,6 @@ import { SectionHeaderProps } from '../sections/SectionHeader'
 import { type BannerImageProps, BannerImage } from './BannerImage'
 import { cn } from '@/utils/tailwind'
 import { extractSlots } from '@/utils/slots'
-import Link from 'next/link'
 
 type CTAType = {
   label?: string
@@ -51,13 +51,18 @@ const BannerComponent: React.FC<BannerProps> = ({
       className={cn('content-block--py', className)}
       direction="col"
     >
-      <div className="flex flex-col items-center gap-(--space-lg) md:gap-(--space-2xl)">
+      <div className="flex flex-col items-center gap-space-lg md:gap-space-2xl">
         {slots.Content ? slots.Content : <SectionHeader {...headerProps} />}
 
         {Boolean(ctas?.length) && (
-          <div className="flex gap-(--space-md) items-start max-w-full font-semibold">
+          <div className="flex gap-space-md items-start max-w-full font-semibold">
             {ctas?.map((cta, index) => (
-              <Button key={index} {...cta} asChild={Boolean(cta.link)}>
+              <Button
+                key={index}
+                {...cta}
+                asChild={Boolean(cta.link)}
+                variant={cta.variant}
+              >
                 {cta.link ? (
                   <Link href={cta.link}>{cta.label}</Link>
                 ) : (
