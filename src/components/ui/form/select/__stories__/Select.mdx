@@ -1,0 +1,320 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as SelectStories from "./Select.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Form/Select" of={SelectStories} />
+
+<div className="flex gap-space-4xl">
+  <div className="max-w-3xl">
+    # Select
+
+    The `Select` component is a versatile dropdown menu that allows users to choose one option from a list. It is ideal for scenarios where space is limited, and you want to present a clean and organized way for users to make selections. Use it for:
+    <DocInfo 
+      importStatement={`import { Select } from "@/components/ui/form/input"`} 
+      sourcePath={`components/ui/form/input`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+    The `Select` component is designed to enhance user experience by providing a compact and efficient way to select options. It is particularly useful in forms, settings, and filters where multiple choices are available but only one can be selected at a time. Common use cases include:
+    -   Choosing a country or region from a list.
+    -   Selecting a category or tag for content organization.
+    -   Picking a date or time from predefined options.
+    -   Filtering search results based on specific criteria.
+    -   Selecting preferences in user settings.
+    
+    Key features of the `Select` component include:
+    -   **Options**: A list of selectable items that can be customized to fit the application's needs.
+    -   **Labels**: Descriptive text that guides users on what to select.
+    -   **Default Value**: Pre-select an option to provide a starting point for users
+    -   **OnChange Handler**: A callback function that triggers when the selected option changes, allowing for dynamic updates.
+    -   **Disabled State**: Prevent interaction with the select when necessary.
+    -   **Error Handling**: Visual feedback for invalid selections or required fields.
+    -   **Custom Styling**: Ability to customize the appearance to match the application's design system
+    -   **Accessibility**: Built with accessibility in mind, ensuring it can be used by all users, including those relying on assistive technologies.
+    -   **Size Variants**: Options to adjust the size of the select component to fit different UI contexts.
+    -   **Placeholder**: Display a hint to guide users on what to select.
+    -   **Searchable**: Option to enable searching within the dropdown for easier navigation through
+
+    ## **Examples**
+
+    ### **Default**
+    A basic text input for general use.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectDefaultExample = () => {
+            return (
+              <Select 
+                placeholder="Select an option" 
+                options={["Option 1", "Option 2", "Option 3"]} 
+              />
+            );
+          }
+
+          export default SelectDefaultExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **FullWidth**
+    A full-width select that takes up the entire container width.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.FullWidth} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectFullWidthExample = () => {
+            return (
+              <Select 
+                placeholder="Select an option" 
+                options={["Option 1", "Option 2", "Option 3"]} 
+                fullWidth 
+              />
+            );
+          }
+
+          export default SelectFullWidthExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Disabled**
+    A select that is disabled and cannot be interacted with.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.Disabled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectDisabledExample = () => {
+            return (
+              <Select 
+                placeholder="Select an option" 
+                options={["Option 1", "Option 2", "Option 3"]} 
+                disabled 
+              />
+            );
+          }
+
+          export default SelectDisabledExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **ReadOnly**
+    A select that is read-only and cannot be modified. Users can still see the selected value.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.ReadOnly} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectReadOnlyExample = () => {
+            return (
+              <Select 
+                placeholder="Select an option" 
+                options={["Option 1", "Option 2", "Option 3"]} 
+                readOnly 
+              />
+            );
+          }
+
+          export default SelectReadOnlyExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **WithError**
+    A select that displays an error message when the input is invalid. This is useful for form validation.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.WithError} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectWithErrorExample = () => {
+            return (
+              <Select 
+                error="This field is required" 
+                placeholder="Select an option" 
+                options={["Option 1", "Option 2", "Option 3"]} 
+              />
+            );
+          }
+
+          export default SelectWithErrorExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Controlled**
+    A controlled select where the value is managed by React state. This allows for more complex interactions and validation.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SelectStories.Controlled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from "react";
+          import { Select } from "@/components/ui/form/input";
+
+          const SelectControlledExample = () => {
+            const [value, setValue] = useState("");
+
+            return (
+              <Select
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Select an option"
+                options={["Option 1", "Option 2", "Option 3"]}
+              />
+            );
+          }
+
+          export default SelectControlledExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    The `Select` component accepts the following props: 
+
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I set a default selected option?**
+    Use the `defaultValue` prop to define which option should be selected when the component first renders.  
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Select 
+          defaultValue="option2" 
+          options={[
+            { value: "option1", label: "One" }, 
+            { value: "option2", label: "Two" }
+          ]} 
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I make the Select component full width?**
+    Set the fullWidth prop to true. This allows the Select to stretch across its container.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Select fullWidth options={options} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Can I disable the Select so users can’t change the value?**
+    Yes. Add the disabled prop to prevent user interaction.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Select disabled options={options} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How can I handle changes when a user selects an option?**
+    Use the onChange callback to capture the selected value.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Select onChange={(val) => console.log(val)} options={options} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I show an error or validation state?**
+    Use the hasError prop to visually indicate an error, and optionally show a message below the input via the FormInputWrapper.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Select hasError label="Country" options={options} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        { id: "purpose-and-context", label: "Purpose and Context" },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            { id: "default", label: "Default" },
+            { id: "fullwidth", label: "Full Width" },
+            { id: "disabled", label: "Disabled" },
+            { id: "readonly", label: "Read Only" },
+            { id: "witherror", label: "With Error" },
+            { id: "controlled", label: "Controlled" },
+          ],
+        },
+        { id: "api", label: "API" },
+        { 
+          id: "faq", 
+          label: "FAQ",
+          children: [
+            {
+              id: 'how-do-i-set-a-default-selected-option',
+              label: 'How do I set a...'
+            },
+            {
+              id: 'how-do-i-make-the-select-component-full-width',
+              label: 'How do I make the...'
+            }
+          ] 
+        },
+      ]}
+    />
+  </div>
+</div>

@@ -41,6 +41,13 @@ const cardVariants = cva('', {
       all: 'axis-all',
       y: 'axis-y',
     },
+    shadow: {
+      none: 'shadow-none',
+      sm: 'shadow-sm',
+      md: 'shadow-md',
+      lg: 'shadow-lg',
+      xl: 'shadow-xl',
+    },
     padding: {
       sm: null,
       md: null,
@@ -52,6 +59,10 @@ const cardVariants = cva('', {
     // sm
     // { padding: 'sm', paddingAxis: 'all', class: 'p-space-sm' },
     // { padding: 'sm', paddingAxis: 'y', class: 'py-space-sm' },
+    {
+      shadow: ['sm', 'md', 'lg', 'xl'],
+      class: 'shadow-default',
+    },
 
     // md
     { padding: 'md', paddingAxis: 'all', class: 'p-space-md' },
@@ -121,6 +132,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
       className,
       roundedSize = 'md',
       padding = 'md',
+      shadow = 'none',
       title,
       textSize,
       description,
@@ -153,7 +165,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           'group w-full relative overflow-hidden',
-          cardVariants({ roundedSize }),
+          cardVariants({ roundedSize, shadow }),
           !hasThumbnail &&
             padding &&
             cardVariants({ padding, paddingAxis: 'all' }),

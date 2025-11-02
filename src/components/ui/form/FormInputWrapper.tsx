@@ -53,7 +53,7 @@ export const FormInputWrapper = ({
       <label
         htmlFor={inputId}
         className={cn(
-          'absolute -left-1 bg-white px-1 transition-all pointer-events-none z-[1]',
+          'absolute -left-1 bg-default px-1 transition-all pointer-events-none whitespace-nowrap z-[1]',
           labelClasses[inputSize],
           (focused || filled || readOnly || disabled) && [
             labelSizes[inputSize],
@@ -70,7 +70,7 @@ export const FormInputWrapper = ({
 
         <fieldset
           className={cn(
-            'absolute inset-0 rounded-sm px-2 pointer-events-none border transition-all duration-200',
+            'absolute inset-0 rounded-sm px-space-xs pointer-events-none border transition-all duration-200',
             inputColors[state].border
           )}
         >
@@ -83,7 +83,7 @@ export const FormInputWrapper = ({
                 : 'max-w-[0.01px] px-0'
             )}
           >
-            {displayLabel}
+            <span>{displayLabel}</span>
           </legend>
         </fieldset>
       </div>

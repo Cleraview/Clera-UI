@@ -109,7 +109,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {loading && (
           <div
             className={cn(
-              'flex gap-space-sm items-center justify-center cursor-not-allowed',
+              'absolute flex gap-space-sm items-center justify-center cursor-not-allowed',
               buttonSizes[size as keyof typeof buttonSizes],
               innerClassName
             )}
@@ -122,26 +122,25 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </div>
         )}
 
-        {!loading && (
-          <Slottable>
-            {asChild ? (
-              children
-            ) : (
-              <div
-                className={cn(
-                  'flex gap-space-sm items-center justify-center',
-                  buttonSizes[size as keyof typeof buttonSizes],
-                  innerClassName
-                )}
-              >
-                {!loading && icon && (
-                  <span className="contents self-stretch">{icon}</span>
-                )}
-                <span>{children}</span>
-              </div>
-            )}
-          </Slottable>
-        )}
+        <Slottable>
+          {asChild ? (
+            children
+          ) : (
+            <div
+              className={cn(
+                'flex gap-space-sm items-center justify-center',
+                loading && 'invisible',
+                buttonSizes[size as keyof typeof buttonSizes],
+                innerClassName
+              )}
+            >
+              {!loading && icon && (
+                <span className="contents self-stretch">{icon}</span>
+              )}
+              <span>{children}</span>
+            </div>
+          )}
+        </Slottable>
       </Comp>
     )
   }

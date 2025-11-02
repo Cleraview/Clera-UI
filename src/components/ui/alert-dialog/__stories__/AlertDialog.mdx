@@ -1,0 +1,286 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as AlertDialogStories from "./AlertDialog.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Feedback/AlertDialog" of={AlertDialogStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # AlertDialog
+
+    A component for critical user confirmations and irreversible actions.
+
+    <DocInfo 
+      importStatement={`import { AlertDialog } from "@/components/ui/alert-dialog"`}
+      sourcePath={`components/ui/alert-dialog`}
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    The `AlertDialog` component is used to present users with critical actions that require confirmation — such as deleting data, archiving projects, or performing irreversible operations. It ensures users make deliberate choices before continuing.
+
+    Use `AlertDialog` when:
+    - Confirming destructive or sensitive actions.
+    - Warning users about irreversible operations.
+    - Asking for acknowledgment of critical information.
+
+    Key features:
+    - Prevents accidental closure during loading or processing.
+    - Flexible size, position, and footer actions.
+    - Can be triggered programmatically or via a button.
+
+    ## **Examples**
+
+    ### **Default**
+
+    A standard alert dialog with confirmation and cancellation actions.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertDialogStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AlertDialog } from "@/components/ui/alert-dialog";
+
+          const Example = () => (
+            <AlertDialog
+              title="Delete Project"
+              message="Are you sure you want to delete this project? This action cannot be undone."
+              onOk={() => new Promise(resolve => setTimeout(resolve, 1000))}
+            />
+          );
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Trigger Button**
+
+    An alert dialog opened by a trigger button.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertDialogStories.WithTriggerButton} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AlertDialog } from "@/components/ui/alert-dialog";
+          import { Button } from "@/components/ui/button";
+
+          const Example = () => (
+            <AlertDialog
+              trigger={<Button variant="outline">Open Alert Dialog</Button>}
+              title="Delete Project"
+              message="Are you sure you want to delete this project? This action cannot be undone."
+              onOk={() => new Promise(resolve => setTimeout(resolve, 1000))}
+            />
+          );
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Loading State**
+
+    Shows a locked dialog while the action is in progress.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertDialogStories.WithLoadingState} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AlertDialog } from "@/components/ui/alert-dialog";
+
+          const Example = () => (
+            <AlertDialog
+              title="Deleting Project"
+              message="This process may take a few seconds. The dialog will be locked during the operation."
+              onOk={() => new Promise(resolve => setTimeout(resolve, 3000))}
+            />
+          );
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Prevent Close During Loading**
+
+    Prevents the dialog from being closed while the operation is active.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertDialogStories.PreventCloseDuringLoading} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AlertDialog } from "@/components/ui/alert-dialog";
+
+          const Example = () => (
+            <AlertDialog
+              title="Processing Request"
+              message="You cannot close this dialog while the request is being processed."
+              onOk={() => new Promise(resolve => setTimeout(resolve, 4000))}
+            />
+          );
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Custom Text and Trigger**
+
+    Demonstrates how to use custom button text and a trigger element.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertDialogStories.CustomText} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AlertDialog } from "@/components/ui/alert-dialog";
+          import { Button } from "@/components/ui/button";
+
+          const Example = () => (
+            <AlertDialog
+              trigger={<Button variant="secondary">Open Custom Alert</Button>}
+              title="Archive Project"
+              message="Archiving will remove this project from active view. You can restore it later."
+              okText="Archive"
+              cancelText="Back"
+              onOk={() => new Promise(resolve => setTimeout(resolve, 1500))}
+            />
+          );
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    The following table lists all props available for the `AlertDialog` component.
+
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **When should I use AlertDialog instead of Dialog?**
+
+    Use `AlertDialog` for critical or destructive actions that require explicit confirmation (e.g., deletions). Use `Dialog` for general-purpose interactions or forms.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AlertDialog
+          title="Delete Item"
+          message="Are you sure you want to delete this item?"
+          onOk={() => console.log("Confirmed")}
+        />
+      `} />
+    </Canvas.Source>
+
+    #### **How can I prevent users from closing the dialog during loading?**
+
+    The `AlertDialog` automatically disables interaction and prevents closure when `loading` is true.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AlertDialog
+          title="Processing"
+          message="The dialog is locked while loading."
+          onOk={() => new Promise(resolve => setTimeout(resolve, 3000))}
+        />
+      `} />
+    </Canvas.Source>
+
+    #### **Can I use a custom button to trigger the alert dialog?**
+
+    Yes. Pass any React node to the `trigger` prop.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AlertDialog
+          trigger={<Button>Custom Trigger</Button>}
+          title="Confirm Action"
+          message="Triggered by a custom button."
+          onOk={() => console.log("Confirmed")}
+        />
+      `} />
+    </Canvas.Source>
+
+    #### **How can I customize button labels?**
+
+    Use `okText` and `cancelText` props to customize the button labels.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AlertDialog
+          title="Archive Project"
+          message="Do you want to archive this project?"
+          okText="Yes, Archive"
+          cancelText="Cancel"
+          onOk={() => console.log("Archived")}
+        />
+      `} />
+    </Canvas.Source>
+
+    #### **How can I perform async confirmation actions?**
+
+    The `onOk` prop supports async functions. Returning a promise automatically triggers a loading state until it resolves.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AlertDialog
+          title="Sync Data"
+          message="This may take several seconds."
+          onOk={() => new Promise(resolve => setTimeout(resolve, 4000))}
+        />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        { id: "purpose-and-context", label: "Purpose and Context" },
+        { 
+          id: "examples", 
+          label: "Examples",
+          children: [
+            { id: "default", label: "Default" },
+            { id: "with-trigger-button", label: "With Trigger Button" },
+            { id: "with-loading-state", label: "With Loading State" },
+            { id: "prevent-close-during-loading", label: "Prevent Close During Loading" },
+            { id: "custom-text-and-trigger", label: "Custom Text and Trigger" },
+          ]
+        },
+        { id: "api", label: "API" },
+        { 
+          id: "faq", 
+          label: "FAQ",
+          children: [
+            { id: "when-should-i-use-alertdialog-instead-of-dialog", label: "When should I use AlertDialog..." },
+            { id: "how-can-i-prevent-users-from-closing-the-dialog-during-loading", label: "How can I prevent..." },
+            { id: "can-i-use-a-custom-button-to-trigger-the-alert-dialog", label: "Can I use a custom..." },
+            { id: "how-can-i-customize-button-labels", label: "How can I customize..." },
+            { id: "how-can-i-perform-async-confirmation-actions", label: "How can I perform async..." },
+          ]
+        },
+      ]}
+    />
+  </div>
+</div>

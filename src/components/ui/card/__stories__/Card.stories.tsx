@@ -53,6 +53,23 @@ const meta: Meta<typeof Card> = {
         defaultValue: { summary: 'lg' },
       },
     },
+    shadow: {
+      control: 'select',
+      options: ['none', 'sm', 'md', 'lg', 'xl'],
+      description: 'Shadow depth of the card',
+      table: {
+        type: { summary: 'none | sm | md | lg | xl' },
+        defaultValue: { summary: 'none' },
+      },
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes for the card',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: '' },
+      },
+    },
     padding: {
       control: 'select',
       options: ['sm', 'md', 'lg', 'xl'],
@@ -152,6 +169,8 @@ const meta: Meta<typeof Card> = {
 export default meta
 
 type Story = StoryObj<typeof Card>
+
+export const Playground: Story = {}
 
 export const WithImage: Story = {
   render: args => <Card {...args} />,
