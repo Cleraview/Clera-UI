@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import Dialog from '..'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
+import { Switch } from '@/components/ui/form'
 
 const meta: Meta<typeof Dialog> = {
   title: 'UI/Dialog',

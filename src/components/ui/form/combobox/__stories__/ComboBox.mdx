@@ -1,0 +1,340 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as ComboBoxStories from "./ComboBox.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Form/ComboBox" of={ComboBoxStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # ComboBox
+
+    A `ComboBox` combines a text input with a dropdown list, allowing users to select a value from a list or type to filter and find a value. It is an essential component for forms with long lists of options.
+    <DocInfo 
+      importStatement={`import { ComboBox } from "@/components/ui/form/combobox"`} 
+      sourcePath={`components/ui/form/combobox`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    The `ComboBox` is designed for performance and user experience when dealing with extensive datasets. Unlike a standard `Select` component which renders every option, the `ComboBox` (built on `cmdk`) efficiently filters and displays only relevant items as the user types.
+
+    It is the ideal choice over a `Select` component when:
+    -   You have more than 20 options (e.g., a list of countries, users, or search tags).
+    -   You want to provide a "search" or "filter" functionality within the dropdown.
+    -   You are fetching data asynchronously (though this component is the client-side version).
+
+    This component is fully integrated with your `FormInputWrapper`, supporting floating labels, error states, and all standard form props.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Default**
+
+    A standard ComboBox. The dropdown opens, and users can type to filter the list of frameworks.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboBoxStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from "react";
+          import { ComboBox } from "@/components/ui/form/combobox";
+
+          const frameworks = [
+            { value: "next.js", label: "Next.js" },
+            { value: "sveltekit", label: "SvelteKit" },
+            { value: "nuxt.js", label: "Nuxt.js" },
+            { value: "remix", label: "Remix" },
+            { value: "astro", label: "Astro" },
+          ];
+
+          const ComboBoxDefaultExample = () => {
+            const [value, setValue] = useState("");
+
+            return (
+              <ComboBox
+                label="Select Framework"
+                options={frameworks}
+                value={value}
+                onChange={setValue}
+              />
+            );
+          }
+
+          export default ComboBoxDefaultExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Disabled State**
+
+    A `ComboBox` in a disabled state. It cannot be opened or focused.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboBoxStories.Disabled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { ComboBox } from "@/components/ui/form/combobox";
+
+          const frameworks = [
+            { value: "next.js", label: "Next.js" },
+            // ...
+          ];
+
+          const ComboBoxDisabledExample = () => {
+            return (
+              <ComboBox
+                label="Select Framework"
+                options={frameworks}
+                disabled
+              />
+            );
+          }
+
+          export default ComboBoxDisabledExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    
+    <br />
+
+    ### **With Error**
+
+    A `ComboBox` displaying an error state, which is passed down from the form controller.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboBoxStories.WithError} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { ComboBox } from "@/components/ui/form/combobox";
+
+          const frameworks = [
+            { value: "next.js", label: "Next.js" },
+            // ...
+          ];
+
+          const ComboBoxErrorExample = () => {
+            return (
+              <ComboBox
+                label="Select Framework"
+                options={frameworks}
+                hasError
+              />
+            );
+          }
+
+          export default ComboBoxErrorExample;
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    Below is a comprehensive list of all the props available for the `ComboBox` component, along with their types, default values, and descriptions.
+
+    <ArgTypes />
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. How do I use the ComboBox with `react-hook-form`?**
+
+    The `ComboBox` is designed to work seamlessly with your `Form.Item` component. Wrap it in a `Form.Item` and use the `name` prop. The `onChange`, `onBlur`, `value`, and `hasError` props will be injected automatically.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { Form } from "@/components/ui/form";
+        import { ComboBox } from "@/components/ui/form/combobox";
+        import { useForm } from "react-hook-form";
+        
+        // ... in your component
+        const methods = useForm();
+        
+        <Form form={methods} onSubmit={...}>
+          <Form.Item name="framework">
+            <ComboBox
+              label="Select Framework"
+              options={frameworkOptions}
+            />
+          </Form.Item>
+        </Form>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **2. What's the difference between `Select` and `ComboBox`?**
+
+    Use `Select` for short lists (e.g., < 15-20 items) where searching is not needed. Use `ComboBox` for long lists where the user benefits from typing to filter the results.
+    
+    -   `Select`: Renders a native `<select>` element. Good for simplicity and accessibility.
+    -   `ComboBox`: Renders a custom popover with a search input (`cmdk`). Better for UX with large datasets.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        // Use for short lists (e.g., "Sort By")
+        <Select 
+          label="Sort By" 
+          options={[
+            { value: "asc", label: "Ascending" },
+            { value: "desc", label: "Descending" }
+          ]} 
+        />
+        
+        // Use for long lists (e.g., "Country")
+        <ComboBox 
+          label="Country" 
+          options={allCountries} 
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **3. How do I set a default value?**
+
+    You can set a default value in two ways:
+    1.  **Uncontrolled (local state):** Use the `defaultValue` prop.
+    2.  **Controlled (React state):** Pass a `value` prop and manage it with `useState`.
+    3.  **React Hook Form:** Set the `defaultValues` in your `useForm` hook.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        // 1. Uncontrolled
+        <ComboBox
+          label="Framework"
+          options={options}
+          defaultValue="next.js"
+        />
+        
+        // 2. Controlled
+        const [value, setValue] = useState("next.js");
+        <ComboBox
+          label="Framework"
+          options={options}
+          value={value}
+          onChange={setValue}
+        />
+
+        // 3. React Hook Form
+        const methods = useForm({
+          defaultValues: {
+            framework: "next.js"
+          }
+        });
+      `} />
+    </Canvas.Source>
+    
+    <br />
+
+    #### **4. How does the "No results found" message work?**
+
+    This message is built-in! The component uses `cmdk`'s `CommandEmpty` component, which automatically displays when the user's search query returns no items from the `options` list. You can see this text by opening the ComboBox and typing "zzzz".
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        // ... inside the ComboBox component
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          {options.map(...)}
+        </CommandList>
+      `} />
+    </Canvas.Source>
+    
+    <br />
+    
+    #### **5. How do I make the dropdown align with the input width?**
+
+    It does this by default. The component uses a CSS variable to set the `Popover.Content` width to match the trigger's width.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        // This CSS variable is set on the trigger and read by the content
+        <Popover.Content
+          className="w-[var(--radix-popover-trigger-width)] ..."
+        >
+          ...
+        </Popover.Content>
+      `} />
+    </Canvas.Source>
+
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "default",
+              label: "Default"
+            },
+            {
+              id: "disabled-state",
+              label: "Disabled State"
+            },
+            {
+              id: "with-error",
+              label: "With Error"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "1-how-do-i-use-the-combobox-with-react-hook-form",
+              label: "Usage with React Hook Form"
+            },
+            {
+              id: "2-whats-the-difference-between-select-and-combobox",
+              label: "ComboBox vs. Select"
+            },
+            {
+              id: "3-how-do-i-set-a-default-value",
+              label: "Setting a default value"
+            },
+            {
+              id: "4-how-does-the-no-results-found-message-work",
+              label: "No results message"
+            },
+            {
+              id: "5-how-do-i-make-the-dropdown-align-with-the-input-width",
+              label: "Dropdown alignment"
+            }
+          ]
+        },
+      ]}
+    />
+  </div>
+</div>
+

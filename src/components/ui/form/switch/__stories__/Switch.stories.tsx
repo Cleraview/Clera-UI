@@ -5,7 +5,7 @@ import { HiXMark } from 'react-icons/hi2'
 import { Switch } from '..'
 
 const meta: Meta<typeof Switch> = {
-  title: 'UI/Switch',
+  title: 'UI/Form/Switch',
   component: Switch,
   tags: ['dev'],
   parameters: {

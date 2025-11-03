@@ -1,0 +1,186 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks";
+import * as CheckboxStories from "./Checkbox.stories";
+import { Canvas } from "@/stories/_components/Canvas";
+import { DocInfo } from "@/stories/_components/DocInfo";
+import { TableOfContents } from "@/stories/_components/TableOfContents";
+
+<Meta title="UI/Form/Checkbox" of={CheckboxStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Checkbox
+
+    A control that allows the user to toggle between checked and unchecked states.
+
+    <DocInfo 
+      importStatement={`import { Checkbox } from "@/components/ui/form/checkbox"`} 
+      sourcePath={`components/ui/form/checkbox`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Checkbox` component is used in forms to allow users to select one or more options from a set, or to agree to terms. It's a fundamental part of any form that requires binary (yes/no) input.
+
+    -  **Label**: A descriptive label is provided via the `label` prop, which is associated with the checkbox for accessibility and ease of use.
+    -  **Controlled and Uncontrolled**: Can be used as a controlled component with `checked` and `onChange`, or as an uncontrolled component with `defaultChecked`.
+    -  **Disabled**: Supports a `disabled` state to prevent interaction.
+    -  **Styling**: Styled to match the existing form elements, like the `Radio` component, for a consistent look and feel.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Default Checkbox**
+
+    A simple checkbox with a label. The component's state is managed internally.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CheckboxStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Checkbox } from "@/components/ui/form/checkbox";
+          import { useState } from "react";
+
+          const CheckboxExample = () => {
+            const [checked, setChecked] = useState(false);
+            
+            return (
+              <Checkbox 
+                label="Accept terms and conditions"
+                checked={checked}
+                onChange={setChecked}
+              />
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Disabled**
+
+    The checkbox can be disabled in both checked and unchecked states.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CheckboxStories.Disabled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Checkbox } from "@/components/ui/form/checkbox";
+
+          const DisabledCheckboxExample = () => {
+            return (
+              <div className="flex flex-col gap-4">
+                <Checkbox 
+                  label="Disabled (Unchecked)"
+                  disabled
+                />
+                <Checkbox 
+                  label="Disabled (Checked)"
+                  checked
+                  disabled
+                />
+              </div>
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+    
+    Below are the props for the `Checkbox` component:
+
+    <ArgTypes />
+
+    <br />
+
+    ## **FAQ**
+    
+    ### **How do I use this in a `Form`?**
+    
+    Like other form components, `Checkbox` is designed to work with `Form.Item`. However, because `react-hook-form`'s `onChange` expects an event and `Checkbox`'s `onChange` provides a boolean, you need to use `Form.Item`'s render prop.
+    
+    <strong>
+      <i>
+        *Note: The `Form.Item` component was not provided, but if it's set up to inject props, you may need a custom `FormField` wrapper for boolean values.* A simple controlled setup inside a form is often cleanest:
+      </i>
+    </strong>
+    
+    <br />
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { Form } from "@/components/ui/form";
+        import { Checkbox } from "@/components/ui/form/checkbox";
+        import { useFormContext } from "react-hook-form";
+        
+        // ... in your form component
+        const { control, setValue } = useFormContext();
+
+        <Form.Item name="agreeToTerms">
+          <Checkbox 
+            label="I agree"
+            checked={field.value}
+            onChange={field.onChange}
+          />
+        </Form.Item>
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div className="hidden lg:block sticky top-24 h-max self-start">
+    <TableOfContents 
+      items={[
+        {
+          id: "checkbox",
+          label: "Checkbox",
+          children: [
+            {
+              id: "purpose-and-context",
+              label: "Purpose and Context"
+            },
+            {
+              id: "examples",
+              label: "Examples",
+              children: [
+                {
+                  id: "default-checkbox",
+                  label: "Default Checkbox"
+                },
+                {
+                  id: "disabled",
+                  label: "Disabled"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-use-this-in-a-form",
+              label: "How do I use this in a Form?"
+            }
+          ]
+        },
+      ]}
+    />
+  </div>
+</div>

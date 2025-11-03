@@ -1,3 +1,6 @@
+export { Form } from './Form'
 export { Input, MaskedInput } from './input'
 export { Select } from './select'
+export { Checkbox } from './checkbox'
+export { Switch } from './switch'
 export { Radio, RadioGroup } from './radio'

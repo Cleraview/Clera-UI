@@ -4,7 +4,7 @@ import { FiUser, FiArrowRight } from 'react-icons/fi'
 import { userEvent, within } from '@storybook/testing-library'
 import { Button } from '..'
 import { variantMapKeys, sizeMapKeys } from '../../_utils/variants'
-import { Switch } from '../../switch'
+import { Switch } from '@/components/ui/form'
 import { useState } from 'react'
 
 const meta: Meta<typeof Button> = {
