@@ -77,8 +77,8 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
 
   const handleBillingChange = (val: string) =>
     setBillingCycle(val as BillingCycle)
-  const handleCurrencyChange = (e: ChangeEvent<HTMLSelectElement>) =>
-    setCurrency(e.target.value as CurrencyValues)
+  const handleCurrencyChange = (value: string) =>
+    setCurrency(value as CurrencyValues)
 
   return (
     <div className="flex flex-col gap-space-md">

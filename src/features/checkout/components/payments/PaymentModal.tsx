@@ -63,8 +63,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <Select
               label="Payment Methods"
               value={paymentSelectedId}
-              onChange={e =>
-                setPaymentSelectedId(e.target.value as PaymentGroupIdType)
+              onChange={value =>
+                setPaymentSelectedId(value as PaymentGroupIdType)
               }
               options={paymentOptions}
             />
