@@ -55,7 +55,7 @@ export const RoundedVariants: Story = {
 
 export const CardExample: Story = {
   render: () => (
-    <div className="flex items-center space-x-4 p-4 border border-default rounded-md w-96">
+    <div className="w-96 flex items-center space-x-gap-sm p-space-sm border border-default rounded-md">
       <Skeleton rounded="full" className="h-12 w-12" />
       <div className="space-y-2 w-full">
         <Skeleton className="h-4 w-3/4" />
