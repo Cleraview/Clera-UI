@@ -55,13 +55,13 @@ describe('components/form/Input', () => {
 
   it('applies disabled state', () => {
     render(<Input id="disabled" label="Username" disabled />)
-    const input = screen.getByRole('textbox')
+    const input = screen.getByLabelText('Disabled')
     expect(input).toBeDisabled()
   })
 
   it('applies readOnly state', () => {
     render(<Input id="readonly" label="Username" readOnly />)
-    const input = screen.getByRole('textbox')
+    const input = screen.getByLabelText('Read Only')
     expect(input).toHaveAttribute('readOnly')
   })
 
@@ -70,10 +70,40 @@ describe('components/form/Input', () => {
     expect(screen.getAllByText('*')).toHaveLength(2)
   })
 
-  it('handles value change', () => {
-    render(<Input id="username" label="Username" />)
+  it('handles value change and calls onChange', () => {
+    const handleChange = jest.fn()
+    render(<Input id="username" label="Username" onChange={handleChange} />)
     const input = screen.getByRole('textbox') as HTMLInputElement
     fireEvent.change(input, { target: { value: 'test' } })
     expect(input.value).toBe('test')
+    expect(handleChange).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls onBlur prop when blurred', () => {
+    const handleBlur = jest.fn()
+    render(<Input id="email" label="Email" onBlur={handleBlur} />)
+
+    const input = screen.getByLabelText('Email')
+    fireEvent.focus(input)
+    fireEvent.blur(input)
+
+    expect(handleBlur).toHaveBeenCalledTimes(1)
+  })
+
+  it('applies error styles when hasError is true', () => {
+    render(<Input id="email" label="Email" hasError />)
+    const input = screen.getByLabelText('Email')
+    expect(input).toHaveClass('text-destructive')
+  })
+
+  it('renders with different types', () => {
+    const { rerender } = render(<Input id="email" label="Email" type="email" />)
+    expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email')
+
+    rerender(<Input id="password" label="Password" type="password" />)
+    expect(screen.getByLabelText('Password')).toHaveAttribute(
+      'type',
+      'password'
+    )
   })
 })

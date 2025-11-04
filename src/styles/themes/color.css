@@ -98,7 +98,7 @@
   --border-color-disabled: theme(colors.gray.400);
   --border-color-input: theme(colors.gray.300);
   --border-color-focused: theme(colors.violet.700);
-  --border-color-error: theme(colors.red.700);
+  --border-color-error: theme(colors.red.600);
   --border-color-inverse: theme(colors.gray.50);
   --border-color-selected: theme(colors.violet.700);
 

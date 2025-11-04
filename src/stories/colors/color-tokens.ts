@@ -224,7 +224,7 @@ export const borderColorTokens: Tokens = {
     },
     {
       name: 'border-error',
-      palette: 'bg-red-700',
+      palette: 'bg-red-600',
       description:
         'Default border color for input fields in their error state.',
     },

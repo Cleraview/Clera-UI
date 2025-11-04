@@ -37,7 +37,6 @@ export function maskTokenCapacity(mask: MaskPattern): number {
 export function extractRawForMask(mask: MaskPattern, input: string): string {
   const out: string[] = []
   let tokenIdx = 0
-
   const tokens = [...mask].filter(ch => isToken(ch))
 
   for (const ch of input) {
@@ -90,7 +89,9 @@ export function buildMaskIndexMap(mask: MaskPattern, masked: string) {
   const maskedToRaw: number[] = []
   let rawIdx = 0
 
-  for (let i = 0; i < masked.length; i++) {
+  const len = Math.min(mask.length, masked.length)
+
+  for (let i = 0; i < len; i++) {
     const m = mask[i]
     if (isToken(m ?? '')) {
       rawToMasked[rawIdx] = i
@@ -142,10 +143,16 @@ export function applyMask({
         out += next
         ci++
       } else {
-        if (placeholderChar) out += placeholderChar
+        if (placeholderChar) {
+          out += placeholderChar
+        } else {
+          break
+        }
       }
     } else {
-      out += m
+      if (ci > 0 || (mi === 0 && chars.length > 0) || placeholderChar) {
+        out += m
+      }
     }
   }
   return out
@@ -156,18 +163,8 @@ export function unmaskToRaw(mask: MaskPattern, masked: string): string {
   for (let i = 0; i < mask.length && i < masked.length; i++) {
     const m = mask[i]
     const ch = masked[i]
-    switch (m) {
-      case '9':
-        if (isDigit(ch)) raw.push(ch)
-        break
-      case 'A':
-        if (isLetter(ch)) raw.push(ch)
-        break
-      case '*':
-        if (isAlnum(ch)) raw.push(ch)
-        break
-      default:
-        break
+    if (isToken(m) && matchesToken(m, ch)) {
+      raw.push(ch)
     }
   }
   return raw.join('')

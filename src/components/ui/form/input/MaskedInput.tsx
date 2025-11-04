@@ -36,7 +36,6 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
       label,
       mask: maskProp,
       maskPreset,
-      // defaultValue,
       rawValue,
       onRawChange,
       onBlur,
@@ -170,6 +169,8 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
           ref={ref}
           value={maskedValue}
           disabled={disabled}
+          readOnly={readOnly}
+          required={required}
           maxLength={inputMaxLength}
           placeholder={
             floatLabel
