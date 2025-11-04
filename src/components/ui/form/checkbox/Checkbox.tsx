@@ -22,34 +22,29 @@ export const Checkbox = forwardRef<
   const id = idProp || autoId
 
   return (
-    <div className="inline-flex items-center">
+    <div className="relative inline-flex items-center">
+      <CheckboxPrimitive.Root
+        ref={ref}
+        id={id}
+        className={cn(
+          'absolute left-0 peer h-5 w-5 cursor-pointer appearance-none rounded-sm border border-input transition-all',
+          'data-[state=checked]:bg-primary-intense data-[state=checked]:border-primary',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          className
+        )}
+        onCheckedChange={onChange}
+        {...props}
+      >
+        <CheckboxPrimitive.Indicator>
+          <FiCheck className="pl-[2px] text-inverse" strokeWidth={3} />
+        </CheckboxPrimitive.Indicator>
+      </CheckboxPrimitive.Root>
       <label
         htmlFor={id}
-        className={cn(
-          'relative flex items-center cursor-pointer',
-          props.disabled && 'cursor-not-allowed opacity-70'
-        )}
+        className="ml-space-lg text-default cursor-pointer text-body-md font-semibold"
       >
-        <CheckboxPrimitive.Root
-          ref={ref}
-          id={id}
-          className={cn(
-            'peer h-5 w-5 cursor-pointer appearance-none rounded-sm border border-input transition-all',
-            'data-[state=checked]:bg-primary-intense data-[state=checked]:border-primary',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-            className
-          )}
-          onCheckedChange={onChange}
-          {...props}
-        >
-          <CheckboxPrimitive.Indicator>
-            <FiCheck className="pl-[2px] text-inverse" strokeWidth={3} />
-          </CheckboxPrimitive.Indicator>
-        </CheckboxPrimitive.Root>
-        <span className="ml-2 text-default cursor-pointer text-body-md font-semibold">
-          {label}
-        </span>
+        {label}
       </label>
     </div>
   )
