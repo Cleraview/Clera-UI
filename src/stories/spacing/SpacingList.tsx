@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/badge'
 import { cn } from '@/utils/tailwind'
 import { spacingTokens } from './spacing-tokens'
 

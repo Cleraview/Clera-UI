@@ -3,7 +3,7 @@ const principles = [
     thumb: '/assets/readability.jpg',
     title: 'Prioritize Readability',
     description:
-      'Present content in a way that\'s easy to scan, understand, and enjoy — ensuring accessibility for all users.',
+      "Present content in a way that's easy to scan, understand, and enjoy — ensuring accessibility for all users.",
   },
   {
     thumb: '/assets/visual-harmony.jpg',

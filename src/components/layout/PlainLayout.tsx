@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, type PropsWithChildren } from 'react'
-import { BrandLogo } from '@/components/ui/brand-logo'
+import { BrandLogo } from '@/components/brand-logo'
 import { extractSlots } from '@/utils/slots'
 
 type PlainLayoutProps = PropsWithChildren

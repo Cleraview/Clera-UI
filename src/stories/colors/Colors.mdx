@@ -1,7 +1,8 @@
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
-import { ColorList } from "./ColorList";
-import { TableOfContents } from "@/stories/_components/TableOfContents";
-import FoundationColor from "@/assets/docs/foundation-color.png";
+import { Meta, Canvas } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import { ColorList } from "./ColorList"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import FoundationColor from "@/assets/docs/foundation-color.png"
 import { 
   backgroundColorTokenKeys, 
   backgroundColorTokens, 
@@ -24,7 +25,7 @@ import {
 <div className="flex gap-space-4xl">
   <div>
     # Colors
-    **InsightBoard.com** is a highly visual tool, and our color system plays a critical role in enhancing usability. Colors help users quickly identify statuses, recognize actionable elements, find guidance, and understand the next steps.
+    **{config.title}** is a highly visual tool, and our color system plays a critical role in enhancing usability. Colors help users quickly identify statuses, recognize actionable elements, find guidance, and understand the next steps.
     By using a consistent and accessible color language, we reduce cognitive load and deliver a cohesive user experience across the product. Our palette is structured into three main themes to support various use cases and accessibility requirements.
 
     <br />

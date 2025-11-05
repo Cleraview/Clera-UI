@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react'
 import { SectionShell } from '@/components/layout/sections'
 import { ColorBox } from './ColorBox'
 import type { Tokens, TokenItem, TokenKeys } from './color-tokens'

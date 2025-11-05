@@ -1,6 +1,6 @@
 {
-  "name": "Insight Board",
-  "short_name": "InsightBoard",
+  "name": "Clara UI",
+  "short_name": "Clara UI",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

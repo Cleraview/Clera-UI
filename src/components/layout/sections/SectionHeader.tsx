@@ -3,7 +3,7 @@
 import { useEffect, useRef, forwardRef } from 'react'
 import { gsap } from 'gsap'
 import { cva, VariantProps } from 'class-variance-authority'
-import { Badge, type BadgeProps } from '@/components/ui/badge'
+import { Badge, type BadgeProps } from '@/components/badge'
 import { cn } from '@/utils/tailwind'
 
 const sectionHeaderVariants = cva('flex flex-col gap-space-md', {

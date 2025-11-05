@@ -1,0 +1,154 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as SkeletonStories from "./Skeleton.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Skeleton" of={SkeletonStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Skeleton
+
+    A component used to display a placeholder preview of content while it is loading.
+    <DocInfo 
+      importStatement={`import { Skeleton } from "@/components/skeleton"`} 
+      sourcePath={`components/skeleton`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    Skeletons are used to create a "content-first" loading experience, reducing layout shift and providing a better perception of performance compared to a traditional spinner. They should mimic the shape and size of the content that will eventually load.
+
+    -   **`className`**: Use utility classes (e.g., `h-4`, `w-full`) to control the size and shape.
+    -   **`rounded`**: Use variants to match the border-radius of the content you are loading (e.g., `rounded="full"` for an avatar).
+
+    <br />
+
+    ## **Examples**
+
+    ### **Default**
+
+    A basic skeleton line, typically used for text.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SkeletonStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Skeleton } from "@/components/skeleton";
+
+          const SkeletonExample = () => {
+            return <Skeleton className="h-4 w-64" />;
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Rounded Variants**
+
+    You can control the border radius to match your UI, from sharp corners to a full circle.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SkeletonStories.RoundedVariants} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Skeleton } from "@/components/skeleton";
+
+          const SkeletonExample = () => {
+            return (
+              <div className="flex flex-col gap-3 w-64">
+                <Skeleton rounded="none" className="h-4 w-full" />
+                <Skeleton rounded="sm" className="h-4 w-full" />
+                <Skeleton rounded="md" className="h-4 w-full" />
+                <Skeleton rounded="lg" className="h-4 w-full" />
+                <Skeleton rounded="full" className="h-4 w-full" />
+              </div>
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Card Example**
+
+    A common use case is to build a placeholder for a list item or card component.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={SkeletonStories.CardExample} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Skeleton } from "@/components/skeleton";
+
+          const SkeletonCardExample = () => {
+            return (
+              <div className="flex items-center space-x-4 p-4 border rounded-md w-96">
+                <Skeleton rounded="full" className="h-12 w-12" />
+                <div className="space-y-2 w-full">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+              </div>
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    Below is a comprehensive list of all the props available for the `Skeleton` component.
+
+    <ArgTypes />
+
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "default",
+              label: "Default"
+            },
+            {
+              id: "rounded-variants",
+              label: "Rounded Variants"
+            },
+            {
+              id: "card-example",
+              label: "Card Example"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        }
+      ]}
+    />
+  </div>
+</div>

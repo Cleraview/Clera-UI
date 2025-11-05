@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/badge'
 import { TypographyToken, typographyTokens } from './typography-tokens'
 
 const TypographyTable = ({ list }: { list: TypographyToken }) => {

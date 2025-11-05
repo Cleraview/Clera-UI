@@ -1,111 +1,90 @@
-# Insight Board
+# Clera UI
 
-[![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-20232a?logo=react&logoColor=61dafb)](https://reactjs.org/)
-[![TanStack Query](https://img.shields.io/badge/TanStack%20Query-FF4154?logo=react-query&logoColor=white)](https://tanstack.com/query)
-[![Jest](https://img.shields.io/badge/tested%20with-jest-99424f.svg?logo=jest)](https://jestjs.io/)
-[![GitHub Actions](https://github.com/itsferdiardiansa/Insight-Board/actions/workflows/test.yaml/badge.svg)](https://github.com/itsferdiardiansa/Insight-Board/actions/workflows/test.yaml)
+[![React](https://img.shields.io/badge/React-20232a?logo=react&logoColor=61dafb)](https://reactjs.org/) [![Storybook](https://img.shields.io/badge/Storybook-FF4785?logo=storybook&logoColor=white)](https://storybook.js.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) [![tested with jest](https://img.shields.io/badge/tested%20with-jest-99424f.svg?logo=jest)](https://jestjs.io/) [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 
-A modern, scalable SaaS application built with **Next.js (TypeScript)**. It provides AI-powered dashboards by integrating data from services like Stripe, Shopify, and Google Analytics.
-Designed with **TDD**, component-based architecture, and full test coverage using **Jest** and **React Testing Library**.
+The official design system and shared React component library for the **Cleraview** platform.
 
-![homepage](https://github.com/user-attachments/assets/6430339c-c0ad-4881-a122-dd7bd588e135)
+This repository contains the core UI elements used across all Cleraview products. It is developed and documented in isolation using **Storybook**, built with **React (TypeScript)**, and styled with **Tailwind CSS**.
 
 ---
 
 ## Features
 
-- **Next.js (TypeScript)** – Fast, SEO-optimized React framework
-- **NextAuth.js** – Secure authentication and provider logins
-- **API Integrations** – Connect Stripe, Shopify, GA4 (OAuth-based)
-- **Smart Dashboards** – Auto-generated KPIs with customizable layouts
-- **TDD Workflow** – Unit and integration testing baked in from day 1
-- **TailwindCSS** – Utility-first styling for fast UI iteration
-- **CI/CD Ready** – Deploy on Vercel with preview URLs and GitHub Actions
-
+-   **React (TypeScript):** Fully-typed, reusable React components.
+-   **Storybook:** Isolated component development, documentation, and testing.
+-   **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
+-   **Testing (Jest & RTL):** Unit and integration testing for component logic.
+-   **Testing (Playwright):** End-to-end and visual regression testing.
+-   **CI/CD:** Automated testing (GitHub Actions) and deployment of Storybook to Vercel.
 
 ## Tech Stack
 
-| Area          | Stack                        |
-|---------------|------------------------------|
-| Framework     | Next.js (TypeScript)         |
-| Styling       | Tailwind CSS                 |
-| Auth          | NextAuth.js                  |
-| Testing       | Jest, React Testing Library  |
-| Deployment    | Vercel                       |
-
+| Area | Stack |
+| --- | --- |
+| Core Framework | React (with Next.js for Storybook) |
+| Component Dev | Storybook |
+| Styling | Tailwind CSS |
+| Unit Testing | Jest, React Testing Library |
+| E2E Testing | Playwright |
+| Linting | ESLint, Prettier |
+| Deployment | Vercel (for Storybook) |
 
 ## Getting Started
 
 #### 1. Clone & Install
-
 ```bash
-git clone https://github.com/itsferdiardiansa/Insight-Board.git
-cd insight-board
+git clone [https://github.com/Cleraview/Clera-UI.git](https://github.com/Cleraview/Clera-UI.git)
+cd Clera-UI
+
+# Install dependencies
 pnpm install
 ```
 
-#### 2. Create .env(?.local|)
-```bash
-DATABASE_URL=postgres://...
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret
-STRIPE_CLIENT_ID=...
-STRIPE_SECRET=...
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-SHOPIFY_API_KEY=...
-```
+#### 2. Run Storybook
+To browse and develop components in isolation, run the Storybook server:
 
-#### 3. Start Dev Server
 ```bash
 pnpm run dev
 ```
-then visit `http://localhost:3000`
-
+Then visit `http://localhost:6006` in your browser.
 
 ## Testing
+This repository uses a hybrid testing strategy:
 
-#### Run All Tests
+#### 1. Jest (Unit & Integration Tests)
+Run all unit tests:
 ```bash
 pnpm test
 ```
 
-#### Watch Mode
+Run tests in watch mode:
 ```bash
 pnpm run test:watch
 ```
 
-#### Coverage Report
+Generate a coverage report:
 ```bash
 pnpm run test:coverage
 ```
 
-#### Example test file:
-```ts
-// button/__tests__/index.tsx
-import { render, screen } from '@testing-library/react';
-import Button from '..';
+#### 2. Playwright (E2E & Visual Tests)
+#### Available Scripts
 
-test('renders button with text', () => {
-  render(<Button label="Click me" />);
-  expect(screen.getByText('Click me')).toBeInTheDocument();
-});
-
-```
-
+| Script | Command |
+| --- | --- |
+| `pnpm install` | Enforces `pnpm` as the only package manager. |
+| `pnpm prepare` | Runs Husky to set up Git hooks. |
+| `pnpm clean-install` | Removes `node_modules`, caches, and lockfile, then reinstalls. |
+| `pnpm build` | Creates a static production build of Storybook. |
+| `pnpm dev` | Starts the Storybook dev server on port 6006 without opening a browser. |
+| `pnpm doc:build` | Builds the project for Vercel production. |
+| `pnpm doc:deploy` | Builds and deploys the project to Vercel production. |
+| `pnpm lint` | Lints files in the `src` directory using ESLint/Next.js. |
+| `pnpm lint:fix` | Automatically fixes linting errors in the `src` directory. |
+| `pnpm test` | Runs all Jest unit tests. |
+| `pnpm test:watch` | Runs Jest in watch mode, re-running tests on file changes. |
+| `pnpm test:coverage` | Generates a test coverage report. |
+| `pnpm type-check` | Checks the project for TypeScript type errors without compiling. |
 
 ## Deployment
-
-#### Recommended: Vercel
-- Push code to GitHub
-- Import the repo into Vercel
-- Set environment variables
-- Vercel auto-detects and deploys your Next.js app
-
-#### Roadmap
-- TDD setup with Jest + RTL
-- OAuth integration with Stripe, GA, Shopify
-- Drag-and-drop dashboard editor
-- Multi-tenant support
-- Admin portal for usage analytics
+The Storybook static site is configured to be automatically deployed to Vercel. Any commits or pull requests pushed to the repository will trigger a new build and deployment via GitHub Actions.

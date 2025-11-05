@@ -1,0 +1,283 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks";
+import * as CalendarStories from "./Calendar.stories";
+import { Canvas } from "@/stories/_components/Canvas";
+import { DocInfo } from "@/stories/_components/DocInfo";
+import { TableOfContents } from "@/stories/_components/TableOfContents";
+
+<Meta title="UI/Form/Calendar" of={CalendarStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Calendar
+
+    A component for selecting dates and date ranges, built upon `react-day-picker`.
+    <DocInfo 
+      importStatement={`import Calendar from "@/components/form/calendar"`} 
+      sourcePath={`components/form/calendar`} 
+    />
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Calendar` component provides a flexible and interactive way for users to select dates. It is integrated into the form system and supports various selection modes.
+
+    -   **Modes**: Can be set to `single`, `range`, or `multiple` date selection.
+    -   **Formatting**: Allows custom date formatting for the display value via the `formatDate` prop (using `date-fns` format strings). The default is `MM/dd/yyyy`.
+    -   **Controlled/Uncontrolled**: Works with `selected` and `onSelect` for controlled state, or can manage its own state.
+    -   **Form Integration**: Designed to work seamlessly with `Form.Item`, automatically handling `value`, `onChange`, and `hasError`.
+    -   **Customization**: Supports passing `options` directly to the underlying `react-day-picker` component for advanced configurations (e.g., disabling dates, setting navigation layout).
+    
+    <br />
+
+    ## **Examples**
+
+    ### **Single Date**
+
+    The default mode, allowing a single date selection.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CalendarStories.Single} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          import { useState } from 'react';
+          import Calendar from '@/components/form/calendar';
+
+          const CalendarSingleExample = () => {
+            const [date, setDate] = useState('');
+
+            return (
+              <Calendar
+                label="Select a date"
+                mode="single"
+                selected={date}
+                onSelect={(val) => setDate(val as string)}
+              />
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    <br />
+
+    ### **Date Range**
+
+    Set `mode="range"` to allow users to select a start and end date. The `onSelect` callback will return a `DateRange` object.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CalendarStories.Range} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          import { useState } from 'react';
+          import Calendar from '@/components/form/calendar';
+          import { DateRange } from 'react-day-picker';
+
+          const CalendarRangeExample = () => {
+            const [range, setRange] = useState<DateRange | undefined>();
+
+            return (
+              <Calendar
+                label="Select range"
+                mode="range"
+                formatDate="d MMM yyy"
+                selected={range}
+                onSelect={(val) => setRange(val as DateRange)}
+              />
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    <br />
+
+    ### **Multiple Dates**
+
+    Set `mode="multiple"` to allow users to select multiple, non-consecutive dates.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CalendarStories.Multiple} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          import { useState } from 'react';
+          import Calendar from '@/components/form/calendar';
+
+          const CalendarMultipleExample = () => {
+            const [dates, setDates] = useState<string[]>([]);
+
+            return (
+              <Calendar
+                label="Select multiple dates"
+                mode="multiple"
+                selected={dates}
+                onSelect={(val) => setDates(val as string[])}
+              />
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    <br />
+
+    ### **Controlled Example**
+
+    Manage the calendar's state externally, allowing you to set or clear the value programmatically.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CalendarStories.ControlledExample} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          import { useState } from 'react';
+          import Calendar from '@/components/form/calendar';
+          import { Button } from '@/components/button';
+
+          const CalendarControlledExample = () => {
+            const [date, setDate] = useState('01/01/2025');
+
+            return (
+              <div className="flex flex-col items-center gap-space-md">
+                <div className="flex gap-space-sm">
+                  <Button onClick={() => setDate('10/19/2025')}>Set Date</Button>
+                  <Button variant="outlinePrimary" onClick={() => setDate('')}>Clear</Button>
+                </div>
+                <Calendar
+                  label="Controlled date picker"
+                  mode="single"
+                  selected={date}
+                  onSelect={(val) => setDate(val as string)}
+                />
+              </div>
+            );
+          };
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    <br />
+
+    ## **API**
+    
+    The component wraps `react-day-picker` and includes props from the `FormInputWrapper`. See the Storybook "Controls" tab for a full prop list.
+    
+    <ArgTypes />
+    <br />
+
+    ## **FAQ**
+
+    #### **How do I change the date format?**
+
+    Pass a `formatDate` prop with a `date-fns` format string. The default is `"MM/dd/yyyy"`.
+
+    <Canvas.Source>
+      <Source dark code={`
+        <Calendar 
+          label="Custom Format" 
+          formatDate="d, MMM yy" 
+        />
+      `} />
+    </Canvas.Source>
+    <br />
+
+    #### **How do I disable dates?**
+
+    Pass `react-day-picker` options through the `options` prop. For example, to disable all past dates:
+
+    <Canvas.Source>
+      <Source dark code={`
+        <Calendar 
+          label="Future Dates Only" 
+          options={{
+            disabled: {
+              before: new Date()
+            }
+          }}
+        />
+      `} />
+    </Canvas.Source>
+    <br />
+
+    #### **How do I use this component in a form?**
+
+    Wrap the `Calendar` component in a `Form.Item` from `@/components/form`. The `name` prop on `Form.Item` will link it to your `react-hook-form` state.
+
+    <Canvas.Source>
+      <Source dark code={`
+        import { Form } from '@/components/form';
+        import Calendar from '@/components/form/calendar';
+        import { useForm } from 'react-hook-form';
+
+        // ...
+
+        <Form form={methods} onSubmit={...}>
+          <Form.Item name="appointmentDate">
+            <Calendar label="Appointment Date" />
+          </Form.Item>
+        </Form>
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "single-date",
+              label: "Single Date"
+            },
+            {
+              id: "date-range",
+              label: "Date Range"
+            },
+            {
+              id: "multiple-dates",
+              label: "Multiple Dates"
+            },
+            {
+              id: "controlled-example",
+              label: "Controlled Example"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-change-the-date-format",
+              label: "How do I change the date format?"
+            },
+            {
+              id: "how-do-i-disable-dates",
+              label: "How do I disable dates?"
+            },
+            {
+              id: "how-do-i-use-this-component-in-a-form",
+              label: "How do I use this in a form?"
+            }
+          ]
+        },
+      ]}
+    />
+  </div>
+</div>

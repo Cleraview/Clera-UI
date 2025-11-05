@@ -1,30 +1,40 @@
-import type { Config } from '@jest/types'
-import nextJest from 'next/jest.js'
+import type { Config } from 'jest'
 
-const createJestConfig = nextJest({
-  dir: './',
-})
+const config: Config = {
+  preset: 'ts-jest/presets/default-esm',
 
-const defaultConfig: Config.InitialOptions = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jsdom',
-}
 
-const config = async () => {
-  const nextJestConfig = await createJestConfig(defaultConfig)()
-  return {
-    ...nextJestConfig,
-    moduleNameMapper: {
-      '\\.svg$': '<rootDir>/__mocks__/svg.ts',
-      '^@root/(.*)$': '<rootDir>/$1',
-      '^@/(.*)$': '<rootDir>/src/$1',
-      ...nextJestConfig.moduleNameMapper,
-    },
-  }
+  moduleNameMapper: {
+    '\\.(css|scss|sass)$': 'identity-obj-proxy',
+    '\\.svg$': '<rootDir>/__mocks__/svg.ts',
+    '^@root/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(' +
+      'gsap' +
+      '|@radix-ui/.*' +
+      '|@hookform/.*' +
+      '|@tanstack/.*' +
+      '|cmdk' +
+      '|react-icons' +
+      '|date-fns' +
+      '|zod' +
+      ')/)',
+  ],
+
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      useESM: true,
+      tsconfig: 'tsconfig.json'
+    }]
+  },
 }
 
 export default config

@@ -1,0 +1,382 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as AsyncComboBoxStories from "./AsyncComboBox.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Form/AsyncComboBox" of={AsyncComboBoxStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # AsyncComboBox
+
+    An advanced `ComboBox` that fetches and filters options from a server as the user types.
+    It is ideal for searching large, remote datasets.
+    <DocInfo 
+      importStatement={`import { AsyncComboBox } from "@/components/form/async-combobox"`} 
+      sourcePath={`components/form/async-combobox`} 
+    />
+
+    <br />
+
+    ## **Overview and Key Features**
+
+    The `AsyncComboBox` is a crucial component for modern data-driven applications. While a standard `ComboBox` is excellent for filtering a *known* list of items on the client, the `AsyncComboBox` is built for cases where the data lives on a server and the list is too large (e.g., thousands or millions of items) to load into memory at once.
+
+    It provides a "search-as-you-type" experience by sending user input to your API and displaying the results. This is the standard component used for searching destinations, products, flights, or users in a database.
+
+    Key features include:
+    -   **Asynchronous Data Fetching**: A required `loadOptions` prop fetches data as the user types. The function must return a `Promise` that resolves to a grouped object (e.g., `{"Products": [...]}`).
+    -   **Default State**: An optional `loadDefaultOptions` prop populates the dropdown with initial content (like "Popular Searches" or "Trending") when it's first opened with an empty search field.
+    -   **Custom Item Rendering**: A required `renderItem` prop gives you full control over how each result is displayed, allowing for rich content like images, icons, multi-line text, and even other components like sliders.
+    -   **Loading State**: Automatically shows a `Skeleton` loader while fetching. This can be completely customized with the `loading` and `loadingItemCount` props.
+    -   **Custom Empty State**: An optional `notFoundContent` prop allows you to render a custom component when a user's search returns no results, replacing the default "No results found." text.
+    -   **Built-in Debouncing**: Includes a 300ms debounce on user input to prevent excessive API calls. This is now configurable via the `debounceMs` prop.
+
+    <br />
+
+    ## **Examples**
+
+    ### **E-commerce Product Search**
+
+    A complex example showing grouped default items (Popular, Trends, Categories) and a different set of results when searching.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AsyncComboBoxStories.ECommerceSearch} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from "react";
+          import { AsyncComboBox, AsyncComboBoxOption } from "@/components/form/asyn-combobox";
+          import { FiShoppingBag, FiTrendingUp } from 'react-icons/fi';
+          
+          
+          const loadDefaultProducts = () => {
+            
+            return Promise.resolve({
+              "Popular Products": [
+                { value: 'pop-txt-01', label: 'iPhone 15 Pro', type: 'text' },
+                { value: 'pop-img-01', label: 'Sony Headphones', type: 'image', img: '...' },
+              ],
+              "Trending Searches": [
+                { value: 'trend-01', label: 'Smart Watches', type: 'trend' },
+              ],
+              "Shop by Category": [
+                { value: 'cat-slider-01', type: 'slider', categories: [...] },
+              ]
+            })
+          }
+
+          const searchAllProducts = (search: string) => {
+            const results = allProducts.filter(...)
+            return Promise.resolve({ "Products": results })
+          }
+
+          
+          const renderProductItem = (option) => {
+            switch (option.type) {
+              case 'text':
+                return (
+                  <div className="flex items-center gap-3 p-space-sm">
+                    <FiShoppingBag className="w-4 h-4 text-subtle" />
+                    <span>{option.label}</span>
+                  </div>
+                )
+              case 'trend':
+                return (
+                  <div className="flex items-center gap-3 p-space-sm">
+                    <FiTrendingUp className="w-4 h-4 text-subtle" />
+                    <span>{option.label}</span>
+                  </div>
+                )
+              case 'slider':
+                return <ImageSlider categories={option.categories} /> 
+              case 'product':
+                return (
+                  <div className="flex items-center gap-3 p-space-sm">
+                    <img src={option.img} className="w-10 h-10 rounded-md" />
+                    <div className="flex flex-col">
+                      <span>{option.label}</span>
+                      <span className="text-xs text-subtle">{option.category}</span>
+                    </div>
+                  </div>
+                )
+              default:
+                return <div className="p-space-sm">{option.label}</div>
+            }
+          }
+          
+          const ProductSearch = () => {
+            const [value, setValue] = useState("");
+
+            return (
+              <AsyncComboBox
+                label="Search products"
+                placeholder="Search for electronics, apparel..."
+                value={value}
+                onChange={setValue}
+                loadOptions={searchAllProducts}
+                loadDefaultOptions={loadDefaultProducts}
+                renderItem={renderProductItem}
+              />
+            );
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Custom Not Found**
+
+    You can pass a custom React node to the `notFoundContent` prop to be displayed when a search yields no results.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AsyncComboBoxStories.CustomNotFound} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AsyncComboBox } from "@/components/form/asyn-combobox";
+          import { FiDatabase } from 'react-icons/fi';
+
+          const MyCustomNotFound = () => (
+            <div className="flex flex-col items-center justify-center p-space-lg text-subtle gap-2">
+              <FiDatabase className="w-8 h-8" />
+              <span className="text-body-sm font-semibold">No Data</span>
+              <p className="text-body-xs text-center">
+                We couldn't find any destinations matching your search.
+              </p>
+            </div>
+          );
+          
+          const DestinationSearch = () => {
+            
+            return (
+              <AsyncComboBox
+                label="Search Destination"
+                loadOptions={...}
+                renderItem={...}
+                notFoundContent={<MyCustomNotFound />}
+              />
+            );
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    
+    <br />
+
+    ### **Custom Loading State**
+
+    You can provide your own custom loading component via the `loading` prop, or a function to render a specific number of skeletons.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AsyncComboBoxStories.CustomLoadingSkeletons} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AsyncComboBox } from "@/components/form/asyn-combobox";
+          import { Skeleton } from "@/components/skeleton";
+
+          const renderLoading = (count: number) => (
+            Array.from({ length: count }, (_, i) => (
+            <div key={i} className="flex items-center space-x-3 p-space-sm">
+              <Skeleton rounded="full" className="h-6 w-6" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+            ))
+          );
+          
+          const SkeletonLoaderStory = () => {
+            
+            return (
+              <AsyncComboBox
+                label="Custom Skeletons"
+                loadOptions={...}
+                renderItem={...}
+                loading={renderLoading}
+                loadingItemCount={4}
+              />
+            );
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    This component accepts all standard `ComboBox` props, but replaces `options` with `loadOptions` and `renderItem`.
+
+    <ArgTypes />
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. How is this different from the `ComboBox`?**
+
+    -   **`ComboBox` (Client-Side):** You must provide *all* options via the `options` prop. The component filters them in the browser. Use this for short lists (e.g., < 100 items).
+    -   **`AsyncComboBox` (Server-Side):** You provide a `loadOptions` function. The component calls your function with the user's search term and expects a `Promise` of results. Use this for large, remote datasets.
+
+    <br />
+
+    #### **2. How do I handle grouped results (e.g., "Destinations" and "Hotels")?**
+
+    The `loadOptions` and `loadDefaultOptions` props must return an *object* where keys are the group titles and values are the list of options. The component will automatically render `CommandGroup` components for you.
+    
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const myLoadFunction = async (search) => {
+          const destinations = await fetchDestinations(search);
+          const hotels = await fetchHotels(search);
+
+          return {
+            "Destinations": destinations,
+            "Hotels": hotels
+          }
+        }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **3. Can I use this with `react-hook-form`?**
+
+    Yes. Just like the standard `ComboBox`, wrap it in a `Form.Item` component. The `onChange`, `value`, and `hasError` props will be injected automatically.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Form form={methods} onSubmit={...}>
+          <Form.Item name="destination">
+            <AsyncComboBox
+              label="Destination"
+              loadOptions={searchDestinations}
+              renderItem={renderDestinationItem}
+            />
+          </Form.Item>
+        </Form>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **4. How do I change the debounce time?**
+
+    Pass the `debounceMs` prop to the component. The default is `300` milliseconds. Setting it to `0` will make the search fire instantly on every keystroke.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <AsyncComboBox
+          label="Destination"
+          loadOptions={searchDestinations}
+          renderItem={renderDestinationItem}
+          debounceMs={500} 
+        />
+      `} />
+    </Canvas.Source>
+    
+    <br />
+    
+    #### **5. How does the selected value's label get displayed on load?**
+
+    When you provide a `value` (e.g., `value="par"` from `react-hook-form`), the component doesn't know the `label` ("Paris, France"). The component will search for the value in its *current* `options` list. If you provide `loadDefaultOptions`, it's good practice to include any likely pre-selected items in that default list so the label can be found.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const methods = useForm({
+          defaultValues: {
+            destination: 'par' 
+          }
+        });
+
+        
+        
+        const loadDefaults = () => Promise.resolve({
+          "Popular": [
+            { value: 'par', label: 'Paris, France', ... },
+            { value: 'nyc', label: 'New York, USA', ... }
+          ]
+        });
+
+        return (
+          <Form.Item name="destination">
+            <AsyncComboBox
+              label="Destination"
+              loadOptions={searchDestinations}
+              loadDefaultOptions={loadDefaults} 
+              renderItem={renderDestinationItem}
+            />
+          </Form.Item>
+        )
+      `} />
+    </Canvas.Source>
+
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "overview-and-key-features",
+          label: "Overview & Key Features"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "e-commerce-product-search",
+              label: "E-commerce Search"
+            },
+            {
+              id: "custom-not-found",
+              label: "Custom Not Found"
+            },
+            {
+              id: "custom-loading-state",
+              label: "Custom Loading State"
+            }
+          ]
+        },
+        {
+          id: 'api',
+          label: 'API'
+        },
+        {
+          id: 'faq',
+          label: 'FAQ',
+          children: [
+            {
+              id: "1-how-is-this-different-from-the-combobox",
+              label: "Difference from ComboBox..."
+            },
+            {
+              id: "2-how-do-i-handle-grouped-results-eg-destinations-and-hotels",
+              label: "Handling grouped results..."
+            },
+            {
+              id: "3-can-i-use-this-with-react-hook-form",
+              label: "Using with react-hook-form..."
+            },
+            {
+              id: "4-how-do-i-change-the-debounce-time",
+              label: "Changing debounce time..."
+            },
+            {
+              id: "5-how-does-the-selected-values-label-get-displayed-on-load",
+              label: "Selected value on load..."
+            }
+          ]
+        }
+      ]}
+    />
+  </div>
+</div>

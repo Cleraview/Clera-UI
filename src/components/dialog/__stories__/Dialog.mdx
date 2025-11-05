@@ -1,0 +1,228 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as DialogStories from "./Dialog.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Dialog" of={DialogStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Dialog
+
+    A modal component for displaying structured content, forms, or confirmation flows.
+
+    <DocInfo
+      importStatement={`import Dialog from "@/components/dialog"`}
+      sourcePath={`components/dialog`}
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Dialog` component presents content in a focused overlay, blocking interaction with the background until dismissed.  
+    It is typically used to confirm user actions, edit content, display forms, or show detailed information without leaving the current view.
+
+    Core capabilities:
+    - Configurable **size** (`sm`, `md`, `lg`, `xl`).
+    - Flexible **position** (`center`, `top`, `bottom`).
+    - Optional **header and footer** structure.
+    - **Close control** visibility.
+    - Supports **loading states** for async actions.
+
+    ## **Examples**
+
+    ### **Default**
+
+    A standard centered dialog.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DialogStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          import { useState } from "react";
+          import { Button } from "@/components/button";
+          import Dialog from "@/components/dialog";
+
+          const Example = () => {
+            const [open, setOpen] = useState(false);
+            return (
+              <>
+                <Button onClick={() => setOpen(true)}>Open Dialog</Button>
+                <Dialog open={open} onOpenChange={setOpen} title="Dialog Title">
+                  <Dialog.Content>
+                    <p className="text-body-md text-subtle">This is dialog content.</p>
+                  </Dialog.Content>
+                </Dialog>
+              </>
+            );
+          };
+        `}/>
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Position Variants**
+
+    Dialog can appear at different vertical positions on screen.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DialogStories.PositionVariants} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          <Dialog position="top">...</Dialog>
+          <Dialog position="center">...</Dialog>
+          <Dialog position="bottom">...</Dialog>
+        `}/>
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Large Dialog**
+
+    A larger dialog variant for complex content layouts.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DialogStories.LargeDialog} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          <Dialog size="lg" title="Large Dialog">
+            <Dialog.Content>
+              <p>Spacious layout for extended content.</p>
+            </Dialog.Content>
+          </Dialog>
+        `}/>
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Footer**
+
+    Example showing actions in the footer for confirmation flows.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DialogStories.WithFooter} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source dark code={`
+          <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog.Content>
+              <p>This dialog includes a footer with actions.</p>
+            </Dialog.Content>
+            <Dialog.Footer>
+              <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button loading={loading} onClick={handleConfirm}>Confirm</Button>
+            </Dialog.Footer>
+          </Dialog>
+        `}/>
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    All available props for the Dialog component.
+
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I control the dialog visibility?**
+
+    Control visibility using the `open` prop and handle changes via `onOpenChange`.
+
+    <Canvas.Source>
+      <Source dark code={`<Dialog open={open} onOpenChange={setOpen} />`} />
+    </Canvas.Source>
+
+    #### **How can I customize dialog size?**
+
+    Use the `size` prop — available options: `sm`, `md`, `lg`, `xl`.
+
+    <Canvas.Source>
+      <Source dark code={`<Dialog size="lg" />`} />
+    </Canvas.Source>
+
+    #### **Can I move the dialog to the top or bottom?**
+
+    Yes. Use the `position` prop (`top`, `center`, or `bottom`).
+
+    <Canvas.Source>
+      <Source dark code={`<Dialog position="top" />`} />
+    </Canvas.Source>
+
+    #### **How do I show a footer section?**
+
+    Wrap buttons or actions within `<Dialog.Footer>`.
+
+    <Canvas.Source>
+      <Source dark code={`
+        <Dialog>
+          <Dialog.Footer>
+            <Button variant="outline">Cancel</Button>
+            <Button>Confirm</Button>
+          </Dialog.Footer>
+        </Dialog>
+      `}/>
+    </Canvas.Source>
+
+    #### **How to display a loading state for async actions?**
+
+    Pass a loading prop to your action button within the footer.
+
+    <Canvas.Source>
+      <Source dark code={`
+        <Button loading={loading}>Confirm</Button>
+      `}/>
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context",
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            { id: "default", label: "Default" },
+            { id: "position-variants", label: "Position Variants" },
+            { id: "large-dialog", label: "Large Dialog" },
+            { id: "with-footer", label: "With Footer" },
+          ],
+        },
+        { id: "api", label: "API" },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            { id: "how-do-i-control-the-dialog-visibility", label: "Control visibility" },
+            { id: "how-can-i-customize-dialog-size", label: "Customize size" },
+            { id: "can-i-move-the-dialog-to-the-top-or-bottom", label: "Position control" },
+            { id: "how-do-i-show-a-footer-section", label: "Footer usage" },
+            { id: "how-to-display-a-loading-state-for-async-actions", label: "Loading state" },
+          ],
+        },
+      ]}
+    />
+  </div>
+</div>

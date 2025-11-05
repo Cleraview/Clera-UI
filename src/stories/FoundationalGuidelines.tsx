@@ -1,4 +1,3 @@
-
 const foundationGuidelines = [
   {
     thumb: '/assets/color-illustration.jpg',
