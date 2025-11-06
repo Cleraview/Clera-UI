@@ -178,18 +178,6 @@ async function run() {
 
     printHeader(port, version)
 
-    console.log(chalk.blue('\n[type-check] Starting watcher...'))
-    const typeCheck = execa(
-      'tsc',
-      ['--noEmit', '--watch', '--preserveWatchOutput'],
-      { stdio: 'pipe' },
-    )
-
-    prefixStream(typeCheck.stdout, chalk.blue('[type-check] '), {
-      skip: [/Starting compilation/, /Watching for file changes/],
-    })
-    prefixStream(typeCheck.stderr, chalk.red('[type-check] '))
-
     console.log(chalk.yellow('[lint] Running check...'))
     await runLint()
     chokidar
@@ -207,11 +195,9 @@ async function run() {
         },
       })
       .on('all', (event, path) => {
-        console.log(chalk.yellow(`[lint] File ${event}. Re-running lint...`))
+        console.log(chalk.yellow(`[lint] Re-running lint...`))
         runLint()
       })
-
-    await typeCheck
   } catch (error: any) {
     console.error(chalk.red('\nClera UI dev script failed to start:'))
     console.error(error.message)
