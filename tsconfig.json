@@ -5,7 +5,9 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -22,14 +24,21 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "**/*.ts", 
-    "**/*.tsx", 
-    "types"
+ "include": [
+    "src"
   ],
   "exclude": [
     "node_modules",
+    "lib",
+    "dist",
+    "src/stories",
+    "src/config",
     "**/*.stories.tsx",
-    "__stories__"
+    "**/*.stories.mdx",
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/__stories__",
+    "**/__tests__",
+    "**/__mocks__"
   ]
 }
