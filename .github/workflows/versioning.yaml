@@ -1,0 +1,49 @@
+name: create versioning PR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    name: Create Versioning PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup-node
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Capture new release versions
+        id: capture_versions
+        run: |
+          if pnpm changeset status --output=release.json; then
+            echo "HAS_CHANGES=true" >> "$GITHUB_OUTPUT"
+            
+            COMMIT_MSG=$(jq -r '.releases[0] | "chore(release): bump version \(.oldVersion) to \(.newVersion)"' release.json)
+            
+            echo "COMMIT_MSG=$COMMIT_MSG" >> "$GITHUB_ENV"
+            
+            rm release.json
+          else
+            echo "HAS_CHANGES=false" >> "$GITHUB_OUTPUT"
+            echo "No changesets found. Skipping version PR."
+          fi
+
+      - name: Create or Update Versioning PR
+        if: steps.capture_versions.outputs.HAS_CHANGES == 'true'
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset:version
+          commit: ${{ env.COMMIT_MSG }}
+          title: ${{ env.COMMIT_MSG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
