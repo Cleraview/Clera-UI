@@ -1,0 +1,28 @@
+name: create versioning PR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    name: create versioning PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup-node
+
+      - name: Create or Update Versioning PR
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset:version
+          title: "Version Packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
