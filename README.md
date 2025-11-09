@@ -29,7 +29,31 @@ This repository contains the core UI elements used across all Cleraview products
 | Linting | ESLint, Prettier |
 | Deployment | Vercel (for Storybook) |
 
-## Getting Started
+## Installation
+```bash
+npm install clera-ui
+```
+
+```bash
+pnpm add clera-ui
+```
+
+```bash
+yarn add clera-ui
+```
+
+## Usage
+```tsx
+import { Button } from "clera-ui/button"
+
+const ButtonSelectedExample = () => {
+  return <Button variant="outlinePrimary">Selected button</Button>
+}
+
+export default ButtonSelectedExample
+```
+
+## Development
 
 #### 1. Clone & Install
 ```bash
@@ -40,8 +64,8 @@ cd Clera-UI
 pnpm install
 ```
 
-#### 2. Run Storybook
-To browse and develop components in isolation, run the Storybook server:
+#### 2. Run Dev Server
+To browse and develop components in isolation, run the dev server:
 
 ```bash
 pnpm run dev
@@ -75,8 +99,8 @@ pnpm run test:coverage
 | `pnpm install` | Enforces `pnpm` as the only package manager. |
 | `pnpm prepare` | Runs Husky to set up Git hooks. |
 | `pnpm clean-install` | Removes `node_modules`, caches, and lockfile, then reinstalls. |
-| `pnpm build` | Creates a static production build of Storybook. |
-| `pnpm dev` | Starts the Storybook dev server on port 6006 without opening a browser. |
+| `pnpm build` | Creates a static production build. |
+| `pnpm dev` | Starts the dev server on port 6006 without opening a browser. |
 | `pnpm doc:build` | Builds the project for Vercel production. |
 | `pnpm doc:deploy` | Builds and deploys the project to Vercel production. |
 | `pnpm lint` | Lints files in the `src` directory using ESLint/Next.js. |
