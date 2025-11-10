@@ -32,13 +32,13 @@ jobs:
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         continue-on-error: true
-
-      - name: Comment
-        uses: peter-evans/create-or-update-comment@v5
+      
+      - name: Post Visual Regression Comment
+        uses: ./.github/actions/post-comment
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: visual-regression-report
           issue-number: ${{ github.event.pull_request.number }}
-          comment-id: chromatic-passed-report
           body: |
             ${{ steps.chromatic_run.outcome == 'success' && '### Visual Regression Passed' || '' }}
             ${{ steps.chromatic_run.outcome == 'success' && '<img src="https://media.makeameme.org/created/test-passed.jpg" width="120">' || '' }}

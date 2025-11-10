@@ -71,11 +71,11 @@ jobs:
             echo "| \`clera-ui.min.css\` | \`$MAIN_CSS kB\` | \`$PR_CSS kB\` | \`$DIFF_CSS B\` |"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
-
-      - name: Comment
-        uses: peter-evans/create-or-update-comment@v5
+      
+      - name: Post Bundle Size Comment
+        uses: ./.github/actions/post-comment
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-id: bundle-size-report
+          issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.format_comment.outputs.body }}
