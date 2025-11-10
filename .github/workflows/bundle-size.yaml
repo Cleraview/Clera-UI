@@ -6,11 +6,11 @@ on:
       - main
 
 permissions:
-  contents: read
   pull-requests: write
+  contents: read
 
 jobs:
-  check-bundle-size:
+  analyze-bundle:
     name: analyze bundle size
     runs-on: ubuntu-latest
     
@@ -23,16 +23,49 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup-node
 
-      - name: Build
+      - name: Build PR branch
         run: pnpm bundle
-
-      - name: Check Bundle Size
-        uses: sbatson/github-action-bundle-size@v9
+        
+      - name: Get PR branch file sizes
+        run: |
+          echo "PR_JS_SIZE=$(ls -l dist/umd/clera-ui.min.js | awk '{print $5}')" >> $GITHUB_ENV
+          echo "PR_CSS_SIZE=$(ls -l dist/umd/clera-ui.min.css | awk '{print $5}')" >> $GITHUB_ENV
+          
+      - name: Checkout main branch
+        uses: actions/checkout@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-id: bundle-size-comment
-          build-command: 'true'
-          dist-path: dist/umd
-          files: |
-            clera-ui.min.js
-            clera-ui.min.css
+          ref: main
+          
+      - name: Setup
+        uses: ./.github/actions/setup-node
+
+      - name: Build main branch
+        run: pnpm bundle
+        
+      - name: Get main branch file sizes
+        run: |
+          echo "MAIN_JS_SIZE=$(ls -l dist/umd/clera-ui.min.js | awk '{print $5}')" >> $GITHUB_ENV
+          echo "MAIN_CSS_SIZE=$(ls -l dist/umd/clera-ui.min.css | awk '{print $5}')" >> $GITHUB_ENV
+
+      - name: Format comment body
+        id: format_comment
+        run: |
+          # A helper function to format bytes
+          body=$(cat <<EOF
+          ## 📦 Bundle Size Report
+
+          | File | main | PR | Change |
+          | :--- | ---: | ---: | ---: |
+          | \`clera-ui.min.js\` | \`$(($MAIN_JS_SIZE / 1000)) kB\` | \`$(($PR_JS_SIZE / 1000)) kB\` | \`$(($PR_JS_SIZE - $MAIN_JS_SIZE)) B\` |
+          | \`clera-ui.min.css\` | \`$(($MAIN_CSS_SIZE / 1000)) kB\` | \`$(($PR_CSS_SIZE / 1000)) kB\` | \`$(($PR_CSS_SIZE - $MAIN_CSS_SIZE)) B\` |
+          EOF
+          )
+          echo "body=$body" >> $GITHUB_OUTPUT
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: bundle-size-report
+          body: ${{ steps.format_comment.outputs.body }}
