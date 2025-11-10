@@ -63,11 +63,6 @@ const config = {
         });
       },
     })
-    // config.plugins = config.plugins?.filter(
-    //   (p) => p.constructor.name !== 'ESLintWebpackPlugin'
-    // )
-    
-    config.mode = 'development'
 
     return config
   }

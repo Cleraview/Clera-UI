@@ -6,8 +6,8 @@ export default create({
   fontBase: '"Nunito", sans-serif',
   fontCode: 'monospace',
 
-  brandTitle: 'Clara UI',
-  brandUrl: 'https://clara-ui.com',
+  brandTitle: 'Clera UI',
+  brandUrl: 'https://clera-ui.vercel.app',
   brandImage: '/brand-logo-ui.png',
   brandTarget: '_self',
 

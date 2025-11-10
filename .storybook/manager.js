@@ -1,6 +1,6 @@
 import { addons } from 'storybook/manager-api'
 import uiTheme from './ui-theme'
-import "./manager.css"
+import './manager.css'
 
 addons.setConfig({
   theme: uiTheme,
