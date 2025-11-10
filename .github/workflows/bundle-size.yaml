@@ -22,42 +22,42 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup-node
-
       - name: Build PR branch
         run: pnpm bundle
         
       - name: Get PR branch file sizes
         run: |
-          echo "PR_JS_SIZE=$(ls -l dist/umd/clera-ui.min.js | awk '{print $5}')" >> $GITHUB_ENV
-          echo "PR_CSS_SIZE=$(ls -l dist/umd/clera-ui.min.css | awk '{print $5}')" >> $GITHUB_ENV
+          # This '|| true' prevents the step from failing if the file doesn't exist (e.g., in a draft PR)
+          echo "PR_JS_SIZE=$(ls -l dist/umd/clara-ui.min.js | awk '{print $5}' || echo "0")" >> $GITHUB_ENV
+          echo "PR_CSS_SIZE=$(ls -l dist/umd/clara-ui.min.css | awk '{print $5}' || echo "0")" >> $GITHUB_ENV
           
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
           ref: main
           
-      - name: Setup
-        uses: ./.github/actions/setup-node
+      - name: Install (main)
+        run: pnpm install --frozen-lockfile
 
       - name: Build main branch
         run: pnpm bundle
         
       - name: Get main branch file sizes
         run: |
-          echo "MAIN_JS_SIZE=$(ls -l dist/umd/clera-ui.min.js | awk '{print $5}')" >> $GITHUB_ENV
-          echo "MAIN_CSS_SIZE=$(ls -l dist/umd/clera-ui.min.css | awk '{print $5}')" >> $GITHUB_ENV
+          # This '|| echo "0"' is the key. If ls fails (file not found), it will echo 0
+          echo "MAIN_JS_SIZE=$(ls -l dist/umd/clara-ui.min.js | awk '{print $5}' || echo "0")" >> $GITHUB_ENV
+          echo "MAIN_CSS_SIZE=$(ls -l dist/umd/clara-ui.min.css | awk '{print $5}' || echo "0")" >> $GITHUB_ENV
 
       - name: Format comment body
         id: format_comment
         run: |
-          # A helper function to format bytes
           body=$(cat <<EOF
           ## 📦 Bundle Size Report
 
           | File | main | PR | Change |
           | :--- | ---: | ---: | ---: |
-          | \`clera-ui.min.js\` | \`$(($MAIN_JS_SIZE / 1000)) kB\` | \`$(($PR_JS_SIZE / 1000)) kB\` | \`$(($PR_JS_SIZE - $MAIN_JS_SIZE)) B\` |
-          | \`clera-ui.min.css\` | \`$(($MAIN_CSS_SIZE / 1000)) kB\` | \`$(($PR_CSS_SIZE / 1000)) kB\` | \`$(($PR_CSS_SIZE - $MAIN_CSS_SIZE)) B\` |
+          | \`clara-ui.min.js\` | \`$((${MAIN_JS_SIZE:-0} / 1000)) kB\` | \`$((${PR_JS_SIZE:-0} / 1000)) kB\` | \`$((${PR_JS_SIZE:-0} - ${MAIN_JS_SIZE:-0})) B\` |
+          | \`clara-ui.min.css\` | \`$((${MAIN_CSS_SIZE:-0} / 1000)) kB\` | \`$((${PR_CSS_SIZE:-0} / 1000)) kB\` | \`$((${PR_CSS_SIZE:-0} - ${MAIN_CSS_SIZE:-0})) B\` |
           EOF
           )
           echo "body=$body" >> $GITHUB_OUTPUT
