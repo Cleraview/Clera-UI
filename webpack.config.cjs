@@ -14,9 +14,9 @@ const createConfig = (isProduction) => {
     entry: './src/index.ts',
     output: {
       path: path.resolve(__dirname, 'dist/umd'), 
-      filename: `clara-ui${suffix}.js`,
+      filename: `clera-ui${suffix}.js`,
       library: {
-        name: 'ClaraUI',
+        name: 'CleraUI',
         type: 'umd',
         umdNamedDefine: true,
       },

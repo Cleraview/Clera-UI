@@ -1,0 +1,38 @@
+name: bundle size
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-bundle-size:
+    name: analyze bundle size
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: pnpm bundle
+
+      - name: Check Bundle Size
+        uses: sbatson/github-action-bundle-size@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: bundle-size-comment
+          build-command: 'true'
+          dist-path: dist/umd
+          files: |
+            clera-ui.min.js
+            clera-ui.min.css

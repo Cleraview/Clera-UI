@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import { FiUser, FiArrowRight } from 'react-icons/fi'
-import { userEvent, within } from '@storybook/testing-library'
 import { Button } from '..'
 import { variantMapKeys, sizeMapKeys } from '../../_utils/variants'
 import { Switch } from '@/components/form'
@@ -151,11 +150,6 @@ const meta: Meta<typeof Button> = {
     icon: null,
     iconPosition: 'left',
     onClick: action('You clicked me!'),
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    const button = await canvas.getByRole('button', { name: /click me/i })
-    await userEvent.click(button)
   },
 }
 
