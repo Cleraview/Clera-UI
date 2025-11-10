@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     A component used to display a placeholder preview of content while it is loading.
     <DocInfo 
-      importStatement={`import { Skeleton } from "@/components/skeleton"`} 
+      importStatement={`import { Skeleton } from 'clera-ui/skeleton'`} 
       sourcePath={`components/skeleton`} 
     />
 
@@ -40,11 +40,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Skeleton } from "@/components/skeleton";
+          import { Skeleton } from 'clera-ui/skeleton'
 
           const SkeletonExample = () => {
-            return <Skeleton className="h-4 w-64" />;
-          };
+            return <Skeleton className="h-4 w-64" />
+          }
         `} />
       </Canvas.Source>
     </Canvas>
@@ -62,7 +62,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Skeleton } from "@/components/skeleton";
+          import { Skeleton } from 'clera-ui/skeleton'
 
           const SkeletonExample = () => {
             return (
@@ -73,8 +73,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Skeleton rounded="lg" className="h-4 w-full" />
                 <Skeleton rounded="full" className="h-4 w-full" />
               </div>
-            );
-          };
+            )
+          }
         `} />
       </Canvas.Source>
     </Canvas>
@@ -92,7 +92,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Skeleton } from "@/components/skeleton";
+          import { Skeleton } from 'clera-ui/skeleton'
 
           const SkeletonCardExample = () => {
             return (
@@ -103,8 +103,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   <Skeleton className="h-4 w-1/2" />
                 </div>
               </div>
-            );
-          };
+            )
+          }
         `} />
       </Canvas.Source>
     </Canvas>

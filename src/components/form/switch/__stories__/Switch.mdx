@@ -13,8 +13,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     A component for toggling between two states, typically "on" and "off". It is commonly used in forms and settings where a binary choice is required.
 
     <DocInfo 
-      importStatement={`import { Switch } from "@/components/switch"`} 
-      sourcePath={`components/switch`} 
+      importStatement={`import { Switch } from 'clera-ui/form'`} 
+      sourcePath={`components/form/switch`} 
     />
 
     <br />
@@ -48,15 +48,15 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Switch } from "@/components/switch";
+          import { Switch } from 'clera-ui/form'
 
           const SwitchExample = () => {
             return <Switch 
               label="Enable feature"
               name="featureToggle"
               value="enabled"
-            />;
-          };
+            />
+          }
         `} />
       </Canvas.Source>
     </Canvas>

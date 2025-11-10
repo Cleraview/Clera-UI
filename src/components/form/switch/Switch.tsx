@@ -4,7 +4,7 @@ import { cn } from '@/utils/tailwind'
 import { FaCheck } from 'react-icons/fa'
 import { HiXMark } from 'react-icons/hi2'
 
-export interface SwitchProps {
+export type SwitchProps = {
   checked?: boolean
   defaultChecked?: boolean
   disabled?: boolean

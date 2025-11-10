@@ -1,5 +1,5 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks";
-import * as RadioGroupStories from "./RadioGroup.stories";
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as RadioGroupStories from "./RadioGroup.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     A component for selecting a single option from a set of choices. It is typically used in forms where only one selection is allowed.
 
     <DocInfo 
-      importStatement={`import { RadioGroup } from "@/components/form/radio"`} 
+      importStatement={`import { RadioGroup } from 'clera-ui/form'`} 
       sourcePath={`components/form/radio`} 
     />
 
@@ -48,15 +48,15 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Radio } from "@/components/form/radio";
+          import { Radio } from 'clera-ui/form'
 
           const RadioExample = () => {
             return <Radio 
               label="Option 1"
               name="example"
               value="option1"
-            />;
-          };
+            />
+          }
         `} />
       </Canvas.Source>
     </Canvas>

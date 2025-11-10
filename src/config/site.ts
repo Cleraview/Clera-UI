@@ -1,7 +1,7 @@
 const config = {
-  title: 'Clara UI',
+  title: 'Clera UI',
   description: 'A simple, modular and accessible component library for React.',
-  url: 'https://clara-ui.com',
+  url: 'https://clera-ui.com',
   repoUrl: 'https://github.com/Cleraview/Clera-UI',
 }
 

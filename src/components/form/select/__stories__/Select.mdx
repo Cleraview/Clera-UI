@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     The `Select` component is a versatile dropdown menu that allows users to choose one option from a list. It is ideal for scenarios where space is limited, and you want to present a clean and organized way for users to make selections. Use it for:
     <DocInfo 
-      importStatement={`import { Select } from "@/components/form/input"`} 
+      importStatement={`import { Select } from 'clera-ui/form'`} 
       sourcePath={`components/form/input`} 
     />
 
@@ -51,7 +51,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Select } from "@/components/form/input";
+          import { Select } from 'clera-ui/form'
 
           const SelectDefaultExample = () => {
             return (
@@ -59,10 +59,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 placeholder="Select an option" 
                 options={["Option 1", "Option 2", "Option 3"]} 
               />
-            );
+            )
           }
 
-          export default SelectDefaultExample;
+          export default SelectDefaultExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -79,7 +79,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Select } from "@/components/form/input";
+          import { Select } from 'clera-ui/form'
 
           const SelectFullWidthExample = () => {
             return (
@@ -88,10 +88,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 options={["Option 1", "Option 2", "Option 3"]} 
                 fullWidth 
               />
-            );
+            )
           }
 
-          export default SelectFullWidthExample;
+          export default SelectFullWidthExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -108,7 +108,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Select } from "@/components/form/input";
+          import { Select } from 'clera-ui/form'
 
           const SelectDisabledExample = () => {
             return (
@@ -117,10 +117,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 options={["Option 1", "Option 2", "Option 3"]} 
                 disabled 
               />
-            );
+            )
           }
 
-          export default SelectDisabledExample;
+          export default SelectDisabledExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -137,7 +137,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Select } from "@/components/form/input";
+          import { Select } from 'clera-ui/form'
 
           const SelectReadOnlyExample = () => {
             return (
@@ -146,10 +146,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 options={["Option 1", "Option 2", "Option 3"]} 
                 readOnly 
               />
-            );
+            )
           }
 
-          export default SelectReadOnlyExample;
+          export default SelectReadOnlyExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -166,7 +166,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Select } from "@/components/form/input";
+          import { Select } from 'clera-ui/form'
 
           const SelectWithErrorExample = () => {
             return (
@@ -175,10 +175,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 placeholder="Select an option" 
                 options={["Option 1", "Option 2", "Option 3"]} 
               />
-            );
+            )
           }
 
-          export default SelectWithErrorExample;
+          export default SelectWithErrorExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -195,11 +195,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { useState } from "react";
-          import { Select } from "@/components/form/input";
+          import { useState } from 'react'
+          import { Select } from 'clera-ui/form'
 
           const SelectControlledExample = () => {
-            const [value, setValue] = useState("");
+            const [value, setValue] = useState("")
 
             return (
               <Select
@@ -208,10 +208,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 placeholder="Select an option"
                 options={["Option 1", "Option 2", "Option 3"]}
               />
-            );
+            )
           }
 
-          export default SelectControlledExample;
+          export default SelectControlledExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -251,7 +251,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <br />
 
-    #### **Can I disable the Select so users can’t change the value?**
+    #### **Can I disable the Select so users can't change the value?**
     Yes. Add the disabled prop to prevent user interaction.
 
     <Canvas.Source>

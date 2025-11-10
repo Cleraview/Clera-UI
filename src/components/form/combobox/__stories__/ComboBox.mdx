@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     A `ComboBox` combines a text input with a dropdown list, allowing users to select a value from a list or type to filter and find a value. It is an essential component for forms with long lists of options.
     <DocInfo 
-      importStatement={`import { ComboBox } from "@/components/form/combobox"`} 
+      importStatement={`import { ComboBox } from 'clera-ui/form'`} 
       sourcePath={`components/form/combobox`} 
     />
 
@@ -44,8 +44,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { useState } from "react";
-          import { ComboBox } from "@/components/form/combobox";
+          import { useState } from 'react'
+          import { ComboBox } from 'clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
@@ -53,10 +53,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             { value: "nuxt.js", label: "Nuxt.js" },
             { value: "remix", label: "Remix" },
             { value: "astro", label: "Astro" },
-          ];
+          ]
 
           const ComboBoxDefaultExample = () => {
-            const [value, setValue] = useState("");
+            const [value, setValue] = useState("")
 
             return (
               <ComboBox
@@ -65,10 +65,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 value={value}
                 onChange={setValue}
               />
-            );
+            )
           }
 
-          export default ComboBoxDefaultExample;
+          export default ComboBoxDefaultExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -86,12 +86,12 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { ComboBox } from "@/components/form/combobox";
+          import { ComboBox } from 'clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
             // ...
-          ];
+          ]
 
           const ComboBoxDisabledExample = () => {
             return (
@@ -100,10 +100,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 options={frameworks}
                 disabled
               />
-            );
+            )
           }
 
-          export default ComboBoxDisabledExample;
+          export default ComboBoxDisabledExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -121,12 +121,12 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { ComboBox } from "@/components/form/combobox";
+          import { ComboBox } from 'clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
             // ...
-          ];
+          ]
 
           const ComboBoxErrorExample = () => {
             return (
@@ -135,10 +135,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 options={frameworks}
                 hasError
               />
-            );
+            )
           }
 
-          export default ComboBoxErrorExample;
+          export default ComboBoxErrorExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -161,12 +161,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { Form } from "@/components/form";
-        import { ComboBox } from "@/components/form/combobox";
-        import { useForm } from "react-hook-form";
+        import { Form, ComboBox } from 'clera-ui/form'
+        import { useForm } from "react-hook-form"
         
-        // ... in your component
-        const methods = useForm();
+        const methods = useForm()
         
         <Form form={methods} onSubmit={...}>
           <Form.Item name="framework">
@@ -190,7 +188,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // Use for short lists (e.g., "Sort By")
         <Select 
           label="Sort By" 
           options={[
@@ -199,7 +196,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           ]} 
         />
         
-        // Use for long lists (e.g., "Country")
         <ComboBox 
           label="Country" 
           options={allCountries} 
@@ -218,15 +214,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // 1. Uncontrolled
         <ComboBox
           label="Framework"
           options={options}
           defaultValue="next.js"
         />
         
-        // 2. Controlled
-        const [value, setValue] = useState("next.js");
+        const [value, setValue] = useState("next.js")
         <ComboBox
           label="Framework"
           options={options}
@@ -234,12 +228,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           onChange={setValue}
         />
 
-        // 3. React Hook Form
         const methods = useForm({
           defaultValues: {
             framework: "next.js"
           }
-        });
+        })
       `} />
     </Canvas.Source>
     
@@ -251,7 +244,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // ... inside the ComboBox component
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           {options.map(...)}
@@ -267,7 +259,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // This CSS variable is set on the trigger and read by the content
         <Popover.Content
           className="w-[var(--radix-popover-trigger-width)] ..."
         >

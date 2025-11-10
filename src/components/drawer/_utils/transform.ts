@@ -6,7 +6,7 @@ export const getPositionStyles = (
     width: ['left', 'right'].includes(position)
       ? fullScreen
         ? '100vw'
-        : '378px' // Set default width to 378px when not fullScreen
+        : '378px'
       : '100vw',
     height: ['top', 'bottom'].includes(position)
       ? fullScreen

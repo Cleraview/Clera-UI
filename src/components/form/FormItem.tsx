@@ -9,7 +9,7 @@ import {
 import { isValidElement, cloneElement, ReactElement } from 'react'
 import { cn } from '@/utils/tailwind'
 
-type FormItemProps<T extends FieldValues> = {
+export type FormItemProps<T extends FieldValues> = {
   name: Path<T>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: ReactElement<any>

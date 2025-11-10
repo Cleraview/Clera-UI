@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Button
 
     To trigger an operation.
-    <DocInfo importStatement={`import { Button } from "@/components/button"`} sourcePath={`components/button`} />
+    <DocInfo importStatement={`import { Button } from 'clera-ui/button'`} sourcePath={`components/button`} />
 
     <br />
 
@@ -37,7 +37,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     - **Full Width**: Use when the button should span the entire width of its container, common in forms or mobile layouts.
     - **Loading**: Indicate an action is processing and prevent multiple submissions. The button becomes disabled while loading.
     - **Disabled**: Clearly signal when an action is unavailable. Disabled buttons cannot be interacted with.
-    - **Rounded**: Control the button’s shape — from sharp corners (`none`) to fully pill-shaped (`full`).
+    - **Rounded**: Control the button's shape — from sharp corners (`none`) to fully pill-shaped (`full`).
     - **As Child**: Render the button as a child element (via `Slot`), useful for integrating with other UI primitives or custom wrappers.
     - **Inner Class Name**: Apply custom styles to the inner content wrapper when fine-grained control of padding or spacing is needed.
 
@@ -54,7 +54,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from "@/component/button"
+          import { Button } from 'clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="primary">Selected button</Button>
@@ -75,7 +75,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from "@/component/button"
+          import { Button } from 'clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary">Selected button</Button>
@@ -95,7 +95,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from "@/component/button"
+          import { Button } from 'clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary" loading>Selected button</Button>

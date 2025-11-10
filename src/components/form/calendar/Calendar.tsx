@@ -18,7 +18,6 @@ import {
   isSameDay,
   isSunday,
   format as formatDateFns,
-  parse as parseDateFns,
   isValid as isValidDate,
 } from 'date-fns'
 import {
@@ -30,11 +29,12 @@ import {
 import { cn } from '@/utils/tailwind'
 import { FormInputWrapper } from '@/components/form/FormInputWrapper'
 import { InputSize, sizeClasses } from '../_props/input-props'
+import { safeParse } from './_utils/parse'
 import 'react-day-picker/dist/style.css'
 
 type CalendarMode = 'single' | 'range' | 'multiple'
 
-type CalendarProps = {
+export type CalendarProps = {
   label: string
   mode?: CalendarMode
   selected?: Date | Date[] | DateRange | string | string[] | undefined
@@ -193,18 +193,6 @@ const classNamesCommon = (
     'bg-primary-intense hover:bg-primary-intense! text-inverse rounded-tl-none rounded-bl-none',
   selected: 'bg-primary text-accent-violet hover:bg-primary/90 font-semibold',
 })
-
-const safeParse = (val: string, fmt: string) => {
-  try {
-    const parsed = parseDateFns(val, fmt, new Date())
-    if (isValidDate(parsed)) {
-      return parsed
-    }
-    return undefined
-  } catch {
-    return undefined
-  }
-}
 
 const Calendar: React.FC<CalendarProps> = ({
   label,

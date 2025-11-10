@@ -1,5 +1,5 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks";
-import * as MaskedInputStories from "./MaskedInput.stories";
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as MaskedInputStories from "./MaskedInput.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     A component for accepting user input with predefined formatting. it is useful for inputs like phone numbers, credit card numbers, and dates.
     
     <DocInfo 
-      importStatement={`import { MaskedInput } from "@/components/form/input"`} 
+      importStatement={`import { MaskedInput } from 'clera-ui/form'`} 
       sourcePath={`components/form/input`} 
     />
 
@@ -51,7 +51,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { MaskedInput } from "@/components/form/input";
+          import { MaskedInput } from 'clera-ui/form'
 
           const MaskedInputExample = () => {
             return <MaskedInput 
@@ -60,10 +60,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               inputMode="numeric"
               autoComplete="cc-exp"
               placeholder="2222 2222 2222 2222"
-            />;
-          };
+            />
+          }
 
-          export default MaskedInputExample;
+          export default MaskedInputExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -80,7 +80,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { MaskedInput } from "@/components/form/input";
+          import { MaskedInput } from 'clera-ui/form'
 
           const MaskedInputExample = () => {
             return <MaskedInput 
@@ -89,10 +89,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               inputMode="numeric"
               autoComplete="cc-exp"
               placeholder="MM/YY"
-            />;
-          };
+            />
+          }
 
-          export default MaskedInputExample;
+          export default MaskedInputExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -109,7 +109,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { MaskedInput } from "@/components/form/input";
+          import { MaskedInput } from 'clera-ui/form'
 
           const MaskedInputExample = () => {
             return <MaskedInput 
@@ -118,10 +118,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               inputMode="numeric"
               autoComplete="cc-csc"
               placeholder="123"
-            />;
-          };
+            />
+          }
 
-          export default MaskedInputExample;
+          export default MaskedInputExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -137,11 +137,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { useState } from 'react';
-          import { MaskedInput } from "@/components/form/input";
+          import { useState } from 'react'
+          import { MaskedInput } from 'clera-ui/form'
 
           const ControlledMaskedInputExample = () => {
-            const [value, setValue] = useState('');
+            const [value, setValue] = useState('')
 
             return (
               <MaskedInput 
@@ -153,10 +153,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />
-            );
-          };
+            )
+          }
 
-          export default ControlledMaskedInputExample;
+          export default ControlledMaskedInputExample
         `} />
       </Canvas.Source>
     </Canvas>

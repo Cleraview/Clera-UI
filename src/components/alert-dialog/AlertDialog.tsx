@@ -48,7 +48,7 @@ const contentVariants = cva(
   }
 )
 
-type AlertDialogProps = {
+export type AlertDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   title?: string

@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     An advanced `ComboBox` that fetches and filters options from a server as the user types.
     It is ideal for searching large, remote datasets.
     <DocInfo 
-      importStatement={`import { AsyncComboBox } from "@/components/form/async-combobox"`} 
+      importStatement={`import { AsyncComboBox } from 'clera-ui/form'`} 
       sourcePath={`components/form/async-combobox`} 
     />
 
@@ -48,9 +48,9 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { useState } from "react";
-          import { AsyncComboBox, AsyncComboBoxOption } from "@/components/form/asyn-combobox";
-          import { FiShoppingBag, FiTrendingUp } from 'react-icons/fi';
+          import { useState } from 'react'
+          import { AsyncComboBox, AsyncComboBoxOption } from 'clera-ui/form'
+          import { FiShoppingBag, FiTrendingUp } from 'react-icons/fi'
           
           
           const loadDefaultProducts = () => {
@@ -109,7 +109,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           }
           
           const ProductSearch = () => {
-            const [value, setValue] = useState("");
+            const [value, setValue] = useState("")
 
             return (
               <AsyncComboBox
@@ -121,7 +121,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 loadDefaultOptions={loadDefaultProducts}
                 renderItem={renderProductItem}
               />
-            );
+            )
           }
         `} />
       </Canvas.Source>
@@ -140,8 +140,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AsyncComboBox } from "@/components/form/asyn-combobox";
-          import { FiDatabase } from 'react-icons/fi';
+          import { AsyncComboBox } from 'clera-ui/form'
+          import { FiDatabase } from 'react-icons/fi'
 
           const MyCustomNotFound = () => (
             <div className="flex flex-col items-center justify-center p-space-lg text-subtle gap-2">
@@ -151,7 +151,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 We couldn't find any destinations matching your search.
               </p>
             </div>
-          );
+          )
           
           const DestinationSearch = () => {
             
@@ -162,7 +162,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 renderItem={...}
                 notFoundContent={<MyCustomNotFound />}
               />
-            );
+            )
           }
         `} />
       </Canvas.Source>
@@ -181,8 +181,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AsyncComboBox } from "@/components/form/asyn-combobox";
-          import { Skeleton } from "@/components/skeleton";
+          import { AsyncComboBox } from 'clera-ui/form'
+          import { Skeleton } from 'clera-ui/skeleton'
 
           const renderLoading = (count: number) => (
             Array.from({ length: count }, (_, i) => (
@@ -191,7 +191,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               <Skeleton className="h-4 w-3/4" />
             </div>
             ))
-          );
+          )
           
           const SkeletonLoaderStory = () => {
             
@@ -203,7 +203,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 loading={renderLoading}
                 loadingItemCount={4}
               />
-            );
+            )
           }
         `} />
       </Canvas.Source>
@@ -235,8 +235,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         const myLoadFunction = async (search) => {
-          const destinations = await fetchDestinations(search);
-          const hotels = await fetchHotels(search);
+          const destinations = await fetchDestinations(search)
+          const hotels = await fetchHotels(search)
 
           return {
             "Destinations": destinations,
@@ -295,7 +295,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           defaultValues: {
             destination: 'par' 
           }
-        });
+        })
 
         
         
@@ -304,7 +304,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             { value: 'par', label: 'Paris, France', ... },
             { value: 'nyc', label: 'New York, USA', ... }
           ]
-        });
+        })
 
         return (
           <Form.Item name="destination">

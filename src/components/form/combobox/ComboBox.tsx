@@ -17,12 +17,12 @@ import {
 } from '@/components/form/_props/input-props'
 import { FormInputWrapper } from '../FormInputWrapper'
 
-export interface ComboBoxOption {
+export type ComboBoxOption = {
   value: string
   label: React.ReactNode
 }
 
-interface ComboBoxProps {
+export type ComboBoxProps = {
   id?: string
   label: string
   options: ComboBoxOption[]

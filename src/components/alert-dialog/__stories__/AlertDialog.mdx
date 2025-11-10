@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     A component for critical user confirmations and irreversible actions.
 
     <DocInfo 
-      importStatement={`import { AlertDialog } from "@/components/alert-dialog"`}
+      importStatement={`import { AlertDialog } from 'clera-ui/alert-dialog'`}
       sourcePath={`components/alert-dialog`}
     />
 
@@ -46,7 +46,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from "@/components/alert-dialog";
+          import { AlertDialog } from 'clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -54,7 +54,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               message="Are you sure you want to delete this project? This action cannot be undone."
               onOk={() => new Promise(resolve => setTimeout(resolve, 1000))}
             />
-          );
+          )
         `} />
       </Canvas.Source>
     </Canvas>
@@ -72,8 +72,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from "@/components/alert-dialog";
-          import { Button } from "@/components/button";
+          import { AlertDialog } from 'clera-ui/alert-dialog'
+          import { Button } from "clera-ui/button"
 
           const Example = () => (
             <AlertDialog
@@ -82,7 +82,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               message="Are you sure you want to delete this project? This action cannot be undone."
               onOk={() => new Promise(resolve => setTimeout(resolve, 1000))}
             />
-          );
+          )
         `} />
       </Canvas.Source>
     </Canvas>
@@ -100,7 +100,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from "@/components/alert-dialog";
+          import { AlertDialog } from 'clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -108,7 +108,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               message="This process may take a few seconds. The dialog will be locked during the operation."
               onOk={() => new Promise(resolve => setTimeout(resolve, 3000))}
             />
-          );
+          )
         `} />
       </Canvas.Source>
     </Canvas>
@@ -126,7 +126,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from "@/components/alert-dialog";
+          import { AlertDialog } from 'clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -134,7 +134,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               message="You cannot close this dialog while the request is being processed."
               onOk={() => new Promise(resolve => setTimeout(resolve, 4000))}
             />
-          );
+          )
         `} />
       </Canvas.Source>
     </Canvas>
@@ -152,8 +152,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from "@/components/alert-dialog";
-          import { Button } from "@/components/button";
+          import { AlertDialog } from 'clera-ui/alert-dialog'
+          import { Button } from "clera-ui/button"
 
           const Example = () => (
             <AlertDialog
@@ -164,7 +164,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               cancelText="Back"
               onOk={() => new Promise(resolve => setTimeout(resolve, 1500))}
             />
-          );
+          )
         `} />
       </Canvas.Source>
     </Canvas>

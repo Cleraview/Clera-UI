@@ -11,12 +11,12 @@ import { FormInputWrapper } from '../FormInputWrapper'
 import { GoChevronDown } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
 
-export interface SelectOption {
+export type SelectOption = {
   value: string
   label: React.ReactNode
 }
 
-interface SelectProps {
+export type SelectProps = {
   id?: string
   label: string
   options: SelectOption[]

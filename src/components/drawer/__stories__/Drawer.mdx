@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Drawer
 
     A panel that slides in from the side of the screen to display additional content.
-    <DocInfo importStatement={`import { Drawer } from "@/components/drawer"`} sourcePath={`components/drawer`} />
+    <DocInfo importStatement={`import { Drawer } from 'clera-ui/drawer'`} sourcePath={`components/drawer`} />
     
     <br />
 
@@ -46,8 +46,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Drawer } from "@/components/drawer";
-          import { Button } from "@/components/button";
+          import { Drawer } from 'clera-ui/drawer'
+          import { Button } from "clera-ui/button"
 
           const DrawerDefaultExample = () => {
             return (
@@ -59,10 +59,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   </Drawer.Content>
                 </Drawer>
               </div>
-            );
-          };
+            )
+          }
 
-          export default DrawerDefaultExample;
+          export default DrawerDefaultExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -80,8 +80,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Drawer } from "@/components/drawer";
-          import { Button } from "@/components/button";
+          import { Drawer } from 'clera-ui/drawer'
+          import { Button } from 'clera-ui/button'
 
           const DrawerLeftPositionExample = () => {
             return (
@@ -93,10 +93,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   </Drawer.Content>
                 </Drawer>
               </div>
-            );
-          };
+            )
+          }
 
-          export default DrawerLeftPositionExample;
+          export default DrawerLeftPositionExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -114,8 +114,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Drawer } from "@/components/drawer";
-          import { Button } from "@/components/button";
+          import { Drawer } from 'clera-ui/drawer'
+          import { Button } from 'clera-ui/button'
 
           const DrawerFullScreenExample = () => {
             return (
@@ -127,10 +127,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   </Drawer.Content>
                 </Drawer>
               </div>
-            );
-          };
+            )
+          }
 
-          export default DrawerFullScreenExample;
+          export default DrawerFullScreenExample
         `} />
       </Canvas.Source>
     </Canvas>

@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     A modal component for displaying structured content, forms, or confirmation flows.
 
     <DocInfo
-      importStatement={`import Dialog from "@/components/dialog"`}
+      importStatement={`import Dialog from 'clera-ui/dialog'`}
       sourcePath={`components/dialog`}
     />
 
@@ -44,12 +44,12 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source dark code={`
-          import { useState } from "react";
-          import { Button } from "@/components/button";
-          import Dialog from "@/components/dialog";
+          import { useState } from 'react'
+          import { Button } from 'clera-ui/button'
+          import Dialog from 'clera-ui/dialog'
 
           const Example = () => {
-            const [open, setOpen] = useState(false);
+            const [open, setOpen] = useState(false)
             return (
               <>
                 <Button onClick={() => setOpen(true)}>Open Dialog</Button>
@@ -59,8 +59,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   </Dialog.Content>
                 </Dialog>
               </>
-            );
-          };
+            )
+          }
         `}/>
       </Canvas.Source>
     </Canvas>

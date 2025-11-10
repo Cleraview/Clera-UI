@@ -1,7 +1,7 @@
 import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import { id } from "zod/locales"
-import * as BadgeStories from "./Badge.stories";
+import * as BadgeStories from "./Badge.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Badge
 
     A small, visually distinct element used to highlight or label items.
-    <DocInfo importStatement={`import { Badge } from "@/components/badge"`} sourcePath={`components/badge`} />
+    <DocInfo importStatement={`import { Badge } from 'clera-ui/badge'`} sourcePath={`components/badge`} />
 
     <br />
 
@@ -47,13 +47,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
+          import { Badge } from 'clera-ui/badge'
 
           const BadgeBasicExample = () => {
-            return <Badge>Feature</Badge>;
-          };
+            return <Badge>Feature</Badge>
+          }
 
-          export default BadgeBasicExample;
+          export default BadgeBasicExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -71,7 +71,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
+          import { Badge } from 'clera-ui/badge'
 
           const BadgeVariantsExample = () => {
             return (
@@ -83,10 +83,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Badge variant="warning">Warning</Badge>
                 <Badge variant="destructive">Destructive</Badge>
               </div>
-            );
-          };
+            )
+          }
 
-          export default BadgeVariantsExample;
+          export default BadgeVariantsExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -104,7 +104,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
+          import { Badge } from 'clera-ui/badge'
 
           const BadgeVariantsExample = () => {
             return (
@@ -116,10 +116,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Badge variant="outlineWarning">Outline Warning</Badge>
                 <Badge variant="outlineDestructive">Outline Destructive</Badge>
               </div>
-            );
-          };
+            )
+          }
 
-          export default BadgeVariantsExample;
+          export default BadgeVariantsExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -137,7 +137,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
+          import { Badge } from 'clera-ui/badge'
 
           const BadgeSizesExample = () => {
             return (
@@ -147,10 +147,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Badge size="md">Medium</Badge>
                 <Badge size="lg">Large</Badge>
               </div>
-            );
-          };
+            )
+          }
 
-          export default BadgeSizesExample;
+          export default BadgeSizesExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -168,7 +168,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
+          import { Badge } from 'clera-ui/badge'
 
           const BadgeRoundedExample = () => {
             return (
@@ -178,10 +178,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Badge rounded="md">Medium</Badge>
                 <Badge rounded="full">Full</Badge>
               </div>
-            );
-          };
+            )
+          }
 
-          export default BadgeRoundedExample;
+          export default BadgeRoundedExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -199,8 +199,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Badge } from "@/components/badge";
-          import { FiUser, FiArrowRight } from 'react-icons/fi';
+          import { Badge } from 'clera-ui/badge'
+          import { FiUser, FiArrowRight } from 'react-icons/fi'
 
           const BadgeWithIconExample = () => {
             return (
@@ -208,10 +208,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Badge icon={<FiUser />} iconPosition="left">User</Badge>
                 <Badge icon={<FiArrowRight />} iconPosition="right">Arrow</Badge>
               </div>
-            );
-          };
+            )
+          }
 
-          export default BadgeWithIconExample;
+          export default BadgeWithIconExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -262,7 +262,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { FiUser } from 'react-icons/fi';
+        import { FiUser } from 'react-icons/fi'
         <Badge icon={<FiUser />} iconPosition="left">User</Badge>
       `} />
     </Canvas.Source>

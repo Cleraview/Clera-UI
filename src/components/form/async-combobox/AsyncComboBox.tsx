@@ -20,7 +20,7 @@ import { FormInputWrapper } from '../FormInputWrapper'
 import { Skeleton } from '@/components/skeleton'
 import { debounce } from '@/utils/debounce'
 
-export interface AsyncComboBoxOption {
+export type AsyncComboBoxOption = {
   value: string
   label: React.ReactNode
   [key: string]: unknown
@@ -33,7 +33,7 @@ type LoadingState =
   | React.ReactNode
   | ((count: number) => React.ReactNode)
 
-interface AsyncComboBoxProps {
+export type AsyncComboBoxProps = {
   id?: string
   label: string
   fullWidth?: boolean

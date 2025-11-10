@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Card
 
     A flexible container for grouping and displaying related content.
-    <DocInfo importStatement={`import { Card } from "@/components/card"`} sourcePath={`components/card`} />
+    <DocInfo importStatement={`import { Card } from 'clera-ui/card'`} sourcePath={`components/card`} />
     
     <br />
 
@@ -54,8 +54,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from "@/components/card";
-          import AgileImage from "@/assets/images/agile-methodology.jpg";
+          import { Card } from 'clera-ui/card'
+          import AgileImage from "@/assets/images/agile-methodology.jpg"
 
           const CardWithImageExample = () => {
             return (
@@ -66,10 +66,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 metaItems={["Product", "28.2025"]}
                 footerActionLabel="Read more"
               />
-            );
-          };
+            )
+          }
 
-          export default CardWithImageExample;
+          export default CardWithImageExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -87,7 +87,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from "@/components/card";
+          import { Card } from 'clera-ui/card'
 
           const CardWithCustomContentExample = () => {
             return (
@@ -99,10 +99,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   </p>
                 </Card.Content>
               </Card>
-            );
-          };
+            )
+          }
 
-          export default CardWithCustomContentExample;
+          export default CardWithCustomContentExample
         `} />
       </Canvas.Source>
     </Canvas>

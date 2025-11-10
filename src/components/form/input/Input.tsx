@@ -6,7 +6,7 @@ import { inputColors, sizeClasses } from '@/components/form/_props/input-props'
 import type { InputSize } from '@/components/form/_props/input-props'
 import { FormInputWrapper } from '../FormInputWrapper'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   fullWidth?: boolean
   defaultValue?: string

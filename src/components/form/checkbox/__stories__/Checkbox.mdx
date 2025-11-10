@@ -1,8 +1,8 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks";
-import * as CheckboxStories from "./Checkbox.stories";
-import { Canvas } from "@/stories/_components/Canvas";
-import { DocInfo } from "@/stories/_components/DocInfo";
-import { TableOfContents } from "@/stories/_components/TableOfContents";
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as CheckboxStories from "./Checkbox.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
 
 <Meta title="UI/Form/Checkbox" of={CheckboxStories} />
 
@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
     A control that allows the user to toggle between checked and unchecked states.
 
     <DocInfo 
-      importStatement={`import { Checkbox } from "@/components/form/checkbox"`} 
+      importStatement={`import { Checkbox } from 'clera-ui/form'`} 
       sourcePath={`components/form/checkbox`} 
     />
 
@@ -43,11 +43,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Checkbox } from "@/components/form/checkbox";
-          import { useState } from "react";
+          import { useState } from 'react'
+          import { Checkbox } from 'clera-ui/form'
 
           const CheckboxExample = () => {
-            const [checked, setChecked] = useState(false);
+            const [checked, setChecked] = useState(false)
             
             return (
               <Checkbox 
@@ -55,8 +55,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
                 checked={checked}
                 onChange={setChecked}
               />
-            );
-          };
+            )
+          }
         `} />
       </Canvas.Source>
     </Canvas>
@@ -74,7 +74,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Checkbox } from "@/components/form/checkbox";
+          import { Checkbox } from 'clera-ui/form'
 
           const DisabledCheckboxExample = () => {
             return (
@@ -89,8 +89,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
                   disabled
                 />
               </div>
-            );
-          };
+            )
+          }
         `} />
       </Canvas.Source>
     </Canvas>
@@ -121,12 +121,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents";
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { Form } from "@/components/form";
-        import { Checkbox } from "@/components/form/checkbox";
-        import { useFormContext } from "react-hook-form";
+        import { useFormContext } from "react-hook-form"
+        import { Form, Checkbox } from 'clera-ui/form'
         
-        // ... in your form component
-        const { control, setValue } = useFormContext();
+        const { control, setValue } = useFormContext()
 
         <Form.Item name="agreeToTerms">
           <Checkbox 

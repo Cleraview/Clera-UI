@@ -10,7 +10,7 @@ import {
   labelSizes,
 } from '@/components/form/_props/input-props'
 
-type FormInputWrapperProps = {
+export type FormInputWrapperProps = {
   id?: string
   label: string
   inputSize?: InputSize

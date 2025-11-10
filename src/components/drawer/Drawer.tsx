@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import * as Portal from '@radix-ui/react-portal'
 import { FiX } from 'react-icons/fi'
-import { getPositionStyles, getTransformStyles } from './utils'
+import { getPositionStyles, getTransformStyles } from './_utils/transform'
 import { cn } from '@/utils/tailwind'
 
-type DrawerProps = {
+export type DrawerProps = {
   open: boolean
   onClose: () => void
   children: React.ReactNode

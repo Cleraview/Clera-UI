@@ -12,7 +12,7 @@ export const DocInfo: React.FC<DocInfoProps> = ({
   sourcePath,
 }) => {
   const [importCopied, setImportCopied] = useState(false)
-  const githubRepoUrl = config.repoUrl
+  const githubRepoUrl = config.repoUrl + '/tree/main/src'
 
   const copyToClipboard = (
     text: string,

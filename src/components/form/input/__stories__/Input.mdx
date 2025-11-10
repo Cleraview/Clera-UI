@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     A component for accepting user input.
     <DocInfo 
-      importStatement={`import { Input } from "@/components/form/input"`} 
+      importStatement={`import { Input } from 'clera-ui/form'`} 
       sourcePath={`components/form/input`} 
     />
 
@@ -51,13 +51,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputTextExample = () => {
-            return <Input type="text" placeholder="Enter text" />;
-          };
+            return <Input type="text" placeholder="Enter text" />
+          }
 
-          export default InputTextExample;
+          export default InputTextExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -75,13 +75,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputPasswordExample = () => {
-            return <Input type="password" placeholder="Enter password" />;
-          };
+            return <Input type="password" placeholder="Enter password" />
+          }
 
-          export default InputPasswordExample;
+          export default InputPasswordExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -99,13 +99,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputNumberExample = () => {
-            return <Input type="number" placeholder="Enter number" />;
-          };
+            return <Input type="number" placeholder="Enter number" />
+          }
 
-          export default InputNumberExample;
+          export default InputNumberExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -123,13 +123,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputSearchExample = () => {
-            return <Input type="search" placeholder="Enter search term" />;
-          };
+            return <Input type="search" placeholder="Enter search term" />
+          }
 
-          export default InputSearchExample;
+          export default InputSearchExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -147,13 +147,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputFullWidthExample = () => {
-            return <Input fullWidth placeholder="Full width input" />;
-          };
+            return <Input fullWidth placeholder="Full width input" />
+          }
 
-          export default InputFullWidthExample;
+          export default InputFullWidthExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -171,13 +171,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputRequiredExample = () => {
-            return <Input required placeholder="Required input" />;
-          };
+            return <Input required placeholder="Required input" />
+          }
 
-          export default InputRequiredExample;
+          export default InputRequiredExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -195,13 +195,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputSmallExample = () => {
-            return <Input inputSize="sm" placeholder="Small input" />;
-          };
+            return <Input inputSize="sm" placeholder="Small input" />
+          }
 
-          export default InputSmallExample;
+          export default InputSmallExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -219,13 +219,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputMediumExample = () => {
-            return <Input inputSize="md" placeholder="Medium input" />;
-          };
+            return <Input inputSize="md" placeholder="Medium input" />
+          }
 
-          export default InputMediumExample;
+          export default InputMediumExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -243,13 +243,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputLargeExample = () => {
-            return <Input inputSize="lg" placeholder="Large input" />;
-          };
+            return <Input inputSize="lg" placeholder="Large input" />
+          }
 
-          export default InputLargeExample;
+          export default InputLargeExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -267,13 +267,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputReadOnlyExample = () => {
-            return <Input readOnly placeholder="Read-only input" />;
-          };
+            return <Input readOnly placeholder="Read-only input" />
+          }
 
-          export default InputReadOnlyExample;
+          export default InputReadOnlyExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -291,13 +291,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Input } from "@/components/form/input";
+          import { Input } from 'clera-ui/form'
 
           const InputDisabledExample = () => {
-            return <Input disabled placeholder="Disabled input" />;
-          };
+            return <Input disabled placeholder="Disabled input" />
+          }
 
-          export default InputDisabledExample;
+          export default InputDisabledExample
         `} />
       </Canvas.Source>
     </Canvas>

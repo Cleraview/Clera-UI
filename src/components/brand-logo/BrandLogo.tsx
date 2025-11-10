@@ -2,7 +2,7 @@ import Link from 'next/link'
 import DefaultBrandLogo from '@/assets/logo/brand/brand-logo.svg'
 import ConsoleBrandLogo from '@/assets/logo/brand/brand-console-logo.svg'
 
-type BrandLogoProps = {
+export type BrandLogoProps = {
   variant?: 'default' | 'console'
 }
 

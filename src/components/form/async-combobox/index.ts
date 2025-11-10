@@ -1,2 +1,2 @@
 export { AsyncComboBox } from './AsyncComboBox'
-export type { AsyncComboBoxOption } from './AsyncComboBox'
+export type { AsyncComboBoxOption, AsyncComboBoxProps } from './AsyncComboBox'
