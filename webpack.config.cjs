@@ -1,12 +1,12 @@
-const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const path = require('path')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 const createConfig = (isProduction) => {
-  const mode = isProduction ? 'production' : 'development';
-  const suffix = isProduction ? '.min' : '';
+  const mode = isProduction ? 'production' : 'development'
+  const suffix = isProduction ? '.min' : ''
 
   return {
     mode: mode,
@@ -14,9 +14,9 @@ const createConfig = (isProduction) => {
     entry: './src/index.ts',
     output: {
       path: path.resolve(__dirname, 'dist/umd'), 
-      filename: `clara-ui${suffix}.js`,
+      filename: `clera-ui${suffix}.js`,
       library: {
-        name: 'ClaraUI',
+        name: 'CleraUI',
         type: 'umd',
         umdNamedDefine: true,
       },
@@ -78,10 +78,10 @@ const createConfig = (isProduction) => {
         new CssMinimizerPlugin(),
       ],
     },
-  };
-};
+  }
+}
 
 module.exports = [
   createConfig(false),
   createConfig(true),
-];
+]

@@ -1,10 +1,8 @@
-import type { Preview } from '@storybook/react-webpack5'
 import { DocsContainer } from "@storybook/addon-docs/blocks"
-
 import '../src/styles/globals.css'
 import '../src/styles/prose.css'
 
-const preview: Preview = {
+const preview = {
   parameters: {
     layout: 'centered',
     controls: {
@@ -44,4 +42,4 @@ const preview: Preview = {
   }
 }
 
-export default preview;
+export default preview
