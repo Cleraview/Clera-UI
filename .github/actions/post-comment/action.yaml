@@ -1,0 +1,47 @@
+name: 'Post or Update Comment'
+description: 'Posts a new comment or updates an existing one based on a unique hidden ID.'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  issue-number:
+    description: 'The PR or Issue number'
+    required: true
+  comment-id:
+    description: 'Unique ID for the comment (will be hidden in the body)'
+    required: true
+  body:
+    description: 'The comment body (markdown)'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Find Comment
+      uses: peter-evans/find-comment@v3
+      id: fc
+      with:
+        issue-number: ${{ inputs.issue-number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: '<!-- comment-id: ${{ inputs.comment-id }} -->'
+
+    - name: Create Comment
+      if: steps.fc.outputs.comment-id == ''
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        token: ${{ inputs.github-token }}
+        issue-number: ${{ inputs.issue-number }}
+        body: |
+          <!-- comment-id: ${{ inputs.comment-id }} -->
+          ${{ inputs.body }}
+
+    - name: Update Comment
+      if: steps.fc.outputs.comment-id != ''
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        token: ${{ inputs.github-token }}
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        body: |
+          <!-- comment-id: ${{ inputs.comment-id }} -->
+          ${{ inputs.body }}
+        edit-mode: replace

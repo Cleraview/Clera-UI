@@ -1,0 +1,44 @@
+name: visual regression
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  chromatic:
+    name: analyze visual regression
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup-node
+
+      - name: Run Chromatic
+        id: chromatic_run
+        run: pnpm chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        continue-on-error: true
+      
+      - name: Post Visual Regression Comment
+        uses: ./.github/actions/post-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-id: visual-regression-report
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ steps.chromatic_run.outcome == 'success' && '### Visual Regression Passed' || '' }}
+            ${{ steps.chromatic_run.outcome == 'success' && '<img src="https://media.makeameme.org/created/test-passed.jpg" width="120">' || '' }}
