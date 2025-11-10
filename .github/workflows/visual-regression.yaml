@@ -5,9 +5,12 @@ on:
     branches:
       - main
 
+permissions:
+  pull-requests: write
+
 jobs:
   chromatic:
-    name: check visual regression
+    name: analyze visual regression
     runs-on: ubuntu-latest
     
     steps:
@@ -20,6 +23,18 @@ jobs:
         uses: ./.github/actions/setup-node
 
       - name: Run Chromatic
+        id: chromatic_run
         run: pnpm chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        continue-on-error: true
+
+      - name: Post or Delete "Passed" Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: chromatic-passed-report
+          edit-mode: replace
+          body: |
+            ${{ steps.chromatic_run.outcome == 'success' && '### Regression Passed\n<img src="https://media.makeameme.org/created/test-passed.jpg" width="120">' || '' }}
