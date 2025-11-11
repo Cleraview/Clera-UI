@@ -59,6 +59,7 @@ export type DialogProps = {
   position?: 'center' | 'top' | 'bottom'
   showCloseButton?: boolean
   loading?: boolean
+  onOpenAutoFocus?: (event: Event) => void
 }
 
 type DialogSubcomponents = {
@@ -77,6 +78,7 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
   position = 'center',
   showCloseButton = true,
   loading = false,
+  onOpenAutoFocus,
 }) => {
   const handleOpenChange = (nextOpen: boolean) => {
     console.log('dialog loading: ', loading)
@@ -94,6 +96,7 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
           className={cn(overlayVariants({ state: open ? 'open' : 'closed' }))}
         />
         <DialogPrimitive.Content
+          onOpenAutoFocus={onOpenAutoFocus}
           onInteractOutside={e => {
             if (loading) e.preventDefault()
           }}

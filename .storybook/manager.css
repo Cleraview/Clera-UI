@@ -3,6 +3,10 @@
   height: auto;
   object-fit: contain;
 }
+.sidebar-header a {
+  outline: none!important;
+  border: none!important;
+}
 .sidebar-subheading:not(:first-child) {
   padding-bottom: 12px;
   border-bottom: 1px solid oklch(96.7% 0.003 264.542);
