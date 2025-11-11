@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: ./.github/actions/setup-node
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.0.0
 
       - name: Build package
         run: pnpm bundle
@@ -56,7 +56,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: ./.github/actions/setup-node
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.0.0
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -91,7 +91,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: ./.github/actions/setup-node
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.0.0
       
       - name: Download build artifacts
         uses: actions/download-artifact@v4
