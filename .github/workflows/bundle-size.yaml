@@ -16,8 +16,8 @@ concurrency:
 jobs:
   analyze:
     name: analyze
-    uses: itsferdiardiansa/ci-toolbox/.github/workflows/bundle-size.yaml@main
+    uses: itsferdiardiansa/ci-toolbox/.github/workflows/bundle-size.yaml@v1.0.0
     with:
       issue-number: ${{ github.event.pull_request.number }}
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
