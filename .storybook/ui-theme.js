@@ -3,9 +3,6 @@ import { create } from 'storybook/theming/create'
 export default create({
   base: 'light',
 
-  fontBase: '"Nunito", sans-serif',
-  fontCode: 'monospace',
-
   brandTitle: 'Clera UI',
   brandUrl: 'https://clera-ui.vercel.app',
   brandImage: '/brand-logo-ui.png',

@@ -24,11 +24,11 @@ export const DocInfo: React.FC<DocInfoProps> = ({
   }
 
   return (
-    <div className="my-space-md!">
-      <div className="flex items-center justify-between py-space-sm bg-muted">
+    <div className="my-space-md! p-space-sm bg-elevation-surface-sunken rounded-md">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-space-md">
-          <span className="text-xs! text-subtle">Import</span>
-          <code className="text-sm text-default cursor-pointer hover:bg-inverse-hovered/60 py-space-xs px-space-sm rounded-md">
+          <span className="text-body-xs! text-subtle">Import</span>
+          <code className="text-body-sm text-default cursor-pointer hover:bg-inverse-hovered/60 py-space-xs px-space-sm rounded-md">
             {importStatement}
           </code>
         </div>

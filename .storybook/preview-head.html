@@ -1,14 +1,18 @@
 <title>Clera UI</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <style>
   :root {
     --font-nunito: "Nunito","Nunito Fallback";
+    --font-code: "Google Sans Code", monospace;
   }
   body {
     font-size: 16px;
   }
   code, kbd, samp, pre {
     font-size: 14px;
+    font-family: var(--font-code);
   }
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)),
   .sbdocs.sbdocs-content :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)),

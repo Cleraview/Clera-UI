@@ -3,14 +3,7 @@ import config from "@/config/site"
 import { ColorList } from "./ColorList"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
 import FoundationColor from "@/assets/docs/foundation-color.png"
-import { 
-  backgroundColorTokenKeys, 
-  backgroundColorTokens, 
-  borderColorTokenKeys, 
-  borderColorTokens, 
-  textColorTokenKeys, 
-  textColorTokens 
-} from "./color-tokens"
+// dynamic tokens: ColorList will scan stylesheets at runtime; no static token manifest imported
 
 <Meta title="Foundations/Colors" />
 
@@ -33,16 +26,42 @@ import {
 
     ## **Text Colors**
     **Text color tokens** define a consistent set of colors specifically for typography. They ensure readability, contrast, and alignment with the design system's semantic rules for text elements.
-    <ColorList prefix="text-color" tokenGroup={textColorTokenKeys} tokens={textColorTokens} />
+    <ColorList prefix="text-color" groupKey="text" />
+
+    ## **Link Colors**
+    **Link color tokens** tell users which text elements are interactive hyperlinks. They provide visual cues through color changes on hover and active states, enhancing usability and navigation.
+    <ColorList prefix="link-color" groupKey="link" />
+
+    ## **Icon Colors**
+    **Icon color tokens** provide a standardized palette for iconography across the UI. They ensure icons are visually distinct, accessible, and aligned with the overall design language.
+    <ColorList prefix="icon-color" groupKey="icon" />
 
     ## **Border Colors**
     **Border color tokens** provide a standardized palette for outlining, dividing, and framing components. They reinforce visual hierarchy, separate content, and maintain consistent boundaries across the UI.
-    <ColorList prefix="border-color" tokenGroup={borderColorTokenKeys} tokens={borderColorTokens} />
+    <ColorList prefix="border-color" groupKey="border" />
 
     ## **Background Colors**
     **Background color tokens** establish the base and contextual layers of the interface. They create depth, group related content, and align with brand guidelines for visual balance.
-    <ColorList prefix="background-color" tokenGroup={backgroundColorTokenKeys} tokens={backgroundColorTokens} />
+    <ColorList prefix="background-color" groupKey="background" />
 
+    ## **Chart Colors**
+    **Chart color tokens** provide a consistent and accessible palette for data visualization elements. They ensure clarity, distinction, and alignment with the overall design language.
+    <ColorList prefix="chart-color" groupKey="chart" />
+
+    ## **Shadow Colors**
+    **Shadow color tokens** define the colors used for shadows and elevation effects in the UI. They enhance depth perception, highlight interactive elements, and maintain visual hierarchy.
+    <ColorList prefix="shadow-color" groupKey="shadow" />
+
+    ## **Elevation**
+    Elevation in our design system is represented through a series of shadow styles that create depth and hierarchy within the user interface. These elevation levels help distinguish between different layers of content, guiding users' attention and improving overall usability.
+    
+    ### **Surface**
+    **Elevation Surface**: The base layer with no shadow, representing the default surface level. It provides a clean and neutral backdrop for content.
+    <ColorList prefix="elevation" groupKey="elevation-surface" />
+
+    ### **Shadow**
+    **Elevation Shadow**: A set of shadow styles that indicate different levels of elevation. These shadows create a sense of depth, helping users understand the spatial relationships between UI elements.
+    <ColorList prefix="elevation" groupKey="shadow-elevation" />
 
     ## **Usage**
 
@@ -156,56 +175,44 @@ import {
             {
               id: "text-colors",
               label: "Text",
-              children: [
-                {
-                  id: "text-color-core",
-                  label: "Core"
-                },
-                {
-                  id: "text-color-semantic",
-                  label: "Semantic"
-                },
-                {
-                  id: "text-color-accents",
-                  label: "Accents"
-                }
-              ]
+            },
+            {
+              id: 'link-colors',
+              label: 'Link'
+            },
+            {
+              id: "icon-colors",
+              label: "Icon",
             },
             {
               id: "border-colors",
               label: "Border",
-              children: [
-                {
-                  id: "border-color-core",
-                  label: "Core"
-                },
-                {
-                  id: "border-color-semantic",
-                  label: "Semantic"
-                },
-                {
-                  id: "border-color-accents",
-                  label: "Accents"
-                }
-              ]
             },
             {
               id: "background-colors",
               label: "Background",
-              children: [
-                {
-                  id: "background-color-core",
-                  label: "Core"
-                },
-                {
-                  id: "background-color-semantic",
-                  label: "Semantic"
-                },
-                {
-                  id: "background-color-accents",
-                  label: "Accents"
-                }
-              ]
+            },
+            {
+              id: "chart-colors",
+              label: "Chart",
+            },
+            {
+              id: "shadow-colors",
+              label: "Shadow",
+            }
+          ]
+        },
+        {
+          id: "elevation",
+          label: "Elevation",
+          children: [
+            {
+              id: "surface",
+              label: "Surface",
+            },
+            {
+              id: "shadow",
+              label: "Shadow",
             }
           ]
         },

@@ -109,9 +109,12 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
             href={`#${item.id}`}
             target="_self"
             className={cn(
-              'text-default! block text-sm! py-space-xs',
+              'block text-body-sm! py-space-xs',
               level === 0 && 'font-semibold',
-              level > 0 && 'text-muted-foreground'
+              level > 0 && 'text-subtle',
+              item.id === activeId
+                ? 'text-primary! font-semibold'
+                : 'text-default!'
             )}
             onClick={e => {
               e.preventDefault()
@@ -133,12 +136,12 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
     <nav
       ref={tocRef}
       className={cn(
-        'relative sticky top-20 right-20 w-[200px] max-h-[calc(100vh-5rem)] px-4 py-3 border-l border-default',
+        'relative sticky top-20 right-20 w-[200px] max-h-[calc(100vh-5rem)] px-space-md py-space-xs border-l border-default',
         className
       )}
     >
       <span
-        className="absolute left-[-2px] w-[4px] bg-secondary-intense-pressed transition-all duration-200"
+        className="absolute left-[-2px] w-[4px] bg-selected-bold transition-all duration-200"
         style={{ top: indicatorY, height: indicatorHeight }}
       />
       <h2 className="text-sm! font-bold mb-space-md border-inverse!">
