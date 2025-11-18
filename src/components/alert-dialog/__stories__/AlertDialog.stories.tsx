@@ -5,7 +5,7 @@ import { Button } from '@/components/button'
 const meta: Meta<typeof AlertDialog> = {
   title: 'UI/AlertDialog',
   component: AlertDialog,
-  tags: ['dev'],
+  tags: ['dev', 'v12.1.1'],
   parameters: {
     layout: 'centered',
   },
@@ -58,6 +58,7 @@ export default meta
 type Story = StoryObj<typeof AlertDialog>
 
 export const Default: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -71,6 +72,7 @@ export const Default: Story = {
 }
 
 export const WithTriggerButton: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -85,6 +87,7 @@ export const WithTriggerButton: Story = {
 }
 
 export const WithLoadingState: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -100,6 +103,7 @@ export const WithLoadingState: Story = {
 }
 
 export const PreventCloseDuringLoading: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -115,6 +119,7 @@ export const PreventCloseDuringLoading: Story = {
 }
 
 export const CustomText: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}

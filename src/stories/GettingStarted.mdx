@@ -1,0 +1,17 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { CodeTabs } from './_components/CodeBlock'
+
+<Meta title="Getting Started" tags={['v12.3.0']} />
+
+# Installation
+Using npm or yarn or pnpm or bun.<br />
+**We recommend using `npm` or `yarn` or `pnpm` or `bun` to install,** it not only makes development easier, but also allow you to take advantage of the rich ecosystem of Javascript packages and tooling.
+
+<CodeTabs data={
+  [
+    { label: 'npm', content: 'npm install @clera/ui' },
+    { label: 'yarn', content: 'yarn add @clera/ui' },
+    { label: 'pnpm', content: 'pnpm add @clera/ui' },
+    { label: 'bun', content: 'bun add @clera/ui' },
+  ]
+} />

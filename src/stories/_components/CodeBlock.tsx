@@ -1,0 +1,109 @@
+import React, { useState } from 'react'
+import { MdTerminal, MdContentCopy, MdCheck } from 'react-icons/md'
+import { Tooltip } from '@/components/tooltip'
+import { cn } from '@/utils'
+
+export type CodeTabItem = {
+  label: string
+  content: string
+}
+
+type CodeTabsProps = {
+  data: CodeTabItem[]
+  className?: string
+}
+
+export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [copied, setCopied] = useState(false)
+
+  // 1. Add state to track the tooltip's open status
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
+
+  const activeItem = data[activeIndex]
+
+  const handleCopy = async () => {
+    if (!activeItem) return
+    try {
+      await navigator.clipboard.writeText(activeItem.content)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+    }
+  }
+
+  return (
+    <div
+      className={cn(
+        'w-full rounded-lg overflow-hidden my-space-md border',
+        'bg-elevation-surface-sunken dark:bg-elevation-surface-raised border-default',
+        className
+      )}
+    >
+      <div className="flex items-center justify-between border-b border-default dark:border-accent-gray bg-neutral-subtle">
+        <div className="flex items-center">
+          <div className="px-space-sm text-subtle flex items-center justify-center h-full">
+            <MdTerminal className="w-5 h-5" />
+          </div>
+
+          <div className="flex py-space-sm gap-space-xs" role="tablist">
+            {data.map((item, index) => {
+              const isActive = activeIndex === index
+              return (
+                <button
+                  key={`${item.label}-${index}`}
+                  onClick={() => setActiveIndex(index)}
+                  role="tab"
+                  aria-selected={isActive}
+                  className={cn(
+                    'px-space-sm py-space-xs',
+                    'text-body-sm font-(font-family:--font-code) text-default transition-colors focus:outline-none rounded-md',
+                    'border border-transparent cursor-pointer',
+                    isActive
+                      ? 'border-default! dark:border-accent-gray!'
+                      : 'hover:border-default dark:hover:border-accent-gray'
+                  )}
+                >
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="px-space-sm">
+          {/* 2. Control the tooltip state */}
+          <Tooltip
+            content="Copy code"
+            // If copied is true, force closed (false). Otherwise, use hover state (isTooltipOpen).
+            open={copied ? false : isTooltipOpen}
+            onOpenChange={setIsTooltipOpen}
+          >
+            <button
+              onClick={handleCopy}
+              className="p-space-xs rounded text-subtle hover:bg-neutral-hovered hover:text-default transition-colors flex items-center justify-center cursor-pointer"
+              aria-label="Copy code"
+            >
+              {copied ? (
+                <MdCheck className="w-4 h-4 text-success" />
+              ) : (
+                <MdContentCopy className="w-4 h-4" />
+              )}
+            </button>
+          </Tooltip>
+        </div>
+      </div>
+
+      <div className="relative">
+        <div className="p-space-sm overflow-x-auto">
+          <pre className="text-body-sm! leading-relaxed">
+            <code className="border-0! bg-transparent!">
+              {activeItem?.content}
+            </code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  )
+}

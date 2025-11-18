@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import config from '@/config/site'
 import { FiGithub, FiCopy } from 'react-icons/fi'
 
-interface DocInfoProps {
+type DocInfoProps = {
   importStatement: string
   sourcePath: string
 }
@@ -24,11 +24,11 @@ export const DocInfo: React.FC<DocInfoProps> = ({
   }
 
   return (
-    <div className="my-space-md! p-space-sm bg-elevation-surface-sunken rounded-md">
+    <div className="max-w-2xl my-space-md! p-space-sm bg-elevation-surface-sunken dark:bg-elevation-surface-raised rounded-md">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-space-md">
+        <div className="flex items-center gap-space-md [&>*]:font-(family-name:--font-code)!">
           <span className="text-body-xs! text-subtle">Import</span>
-          <code className="text-body-sm text-default cursor-pointer hover:bg-inverse-hovered/60 py-space-xs px-space-sm rounded-md">
+          <code className="text-body-sm text-default border-0! cursor-pointer hover:bg-inverse-hovered/60 py-space-xs px-space-sm rounded-md">
             {importStatement}
           </code>
         </div>
@@ -45,11 +45,11 @@ export const DocInfo: React.FC<DocInfoProps> = ({
         </button>
       </div>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-space-md">
+        <div className="flex items-center gap-space-md [&>*]:font-(family-name:--font-code)!">
           <span className="text-xs! text-subtle">Source</span>
           <a
             href={`${githubRepoUrl}/${sourcePath}`}
-            className="flex items-center gap-space-sm hover:bg-inverse-hovered/60 py-space-xs px-space-sm rounded-md"
+            className="flex items-center gap-space-sm hover:underline! py-space-xs px-space-sm rounded-md"
             target="_blank"
             rel="noreferrer"
           >

@@ -391,7 +391,7 @@ const fakeDefaultApi = (): Promise<Record<string, AsyncComboBoxOption[]>> => {
 const meta: Meta<typeof AsyncComboBox> = {
   title: 'UI/Form/AsyncComboBox',
   component: AsyncComboBox,
-  tags: ['dev'],
+  tags: ['dev', 'v12.1.2'],
   argTypes: {
     label: { control: 'text' },
     placeholder: { control: 'text' },

@@ -141,6 +141,9 @@ importers:
       '@storybook/addon-onboarding':
         specifier: ^9.1.1
         version: 9.1.16(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))
+      '@storybook/addon-themes':
+        specifier: ^10.0.7
+        version: 10.0.7(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))
       '@storybook/addon-vitest':
         specifier: 9.1.1
         version: 9.1.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))
@@ -162,6 +165,9 @@ importers:
       '@storybook/testing-library':
         specifier: ^0.2.2
         version: 0.2.2
+      '@storybook/theming':
+        specifier: ^8.6.14
+        version: 8.6.14(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.3)
@@ -2340,6 +2346,11 @@ packages:
     peerDependencies:
       storybook: ^9.1.16
 
+  '@storybook/addon-themes@10.0.7':
+    resolution: {integrity: sha512-0MJSvBFg7A+uDRdKJ+TyQInoc2f4zmegB4Be9tNRfnSGcjbiQFBZ4d/s3inHE7Clkl9r3ad7kEWpPRZNJimCQA==}
+    peerDependencies:
+      storybook: ^10.0.7
+
   '@storybook/addon-vitest@9.1.1':
     resolution: {integrity: sha512-8qbJx9ZC5kqbLp+wZ9RsDwVb+ypUiT3L7YMuDZHBqHROfn6UYmz1x3iHWOCI7YTkffLSjI9OkJYjOltrL/094Q==}
     peerDependencies:
@@ -2448,6 +2459,11 @@ packages:
   '@storybook/testing-library@0.2.2':
     resolution: {integrity: sha512-L8sXFJUHmrlyU2BsWWZGuAjv39Jl1uAqUHdxmN42JY15M4+XCMjGlArdCCjDe1wpTSW6USYISA9axjZojgtvnw==}
     deprecated: In Storybook 8, this package functionality has been integrated to a new package called @storybook/test, which uses Vitest APIs for an improved experience. When upgrading to Storybook 8 with 'npx storybook@latest upgrade', you will get prompted and will get an automigration for the new package. Please migrate when you can.
+
+  '@storybook/theming@8.6.14':
+    resolution: {integrity: sha512-r4y+LsiB37V5hzpQo+BM10PaCsp7YlZ0YcZzQP1OCkPlYXmUAFy2VvDKaFRpD8IeNPKug2u4iFm/laDEbs03dg==}
+    peerDependencies:
+      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0':
     resolution: {integrity: sha512-b9MIk7yhdS1pMCZM8VeNfUlSKVRhsHZNMl5O9SfaX0l0t5wjdgu4IDzGB8bpnGBBOjGST3rRFVsaaEtI4W6f7g==}
@@ -11187,6 +11203,11 @@ snapshots:
     dependencies:
       storybook: 9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2)
 
+  '@storybook/addon-themes@10.0.7(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))':
+    dependencies:
+      storybook: 9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2)
+      ts-dedent: 2.2.0
+
   '@storybook/addon-vitest@9.1.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))':
     dependencies:
       '@storybook/global': 5.0.0
@@ -11377,6 +11398,10 @@ snapshots:
       '@testing-library/dom': 9.3.4
       '@testing-library/user-event': 14.6.1(@testing-library/dom@9.3.4)
       ts-dedent: 2.2.0
+
+  '@storybook/theming@8.6.14(storybook@9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2))':
+    dependencies:
+      storybook: 9.1.16(@testing-library/dom@9.3.4)(prettier@3.6.2)
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.28.5)':
     dependencies:

@@ -10,21 +10,26 @@ type DynamicColorGroupsProps = {
 export const DynamicColorGroups = ({ groupKey }: DynamicColorGroupsProps) => {
   const { tokenGroups, loading } = useColorTokens(groupKey)
 
-  if (loading) return <div>Loading tokens...</div>
+  if (loading)
+    return (
+      <div>
+        <p>Loading tokens...</p>
+      </div>
+    )
 
   return (
     <div className="overflow-x-auto">
       <div className="inline-block min-w-full">
         <div className="">
           <div className="grid grid-cols-[1fr_200px_200px] border-b border-default">
-            <div className="font-semibold py-space-sm px-space-sm">
-              Token & Description
+            <div className="py-space-sm px-space-sm">
+              <span className="font-semibold">Token & Description</span>
             </div>
-            <div className="font-semibold py-space-sm px-space-sm justify-self-center">
-              Light
+            <div className="py-space-sm px-space-sm justify-self-center">
+              <span className="font-semibold">Light</span>
             </div>
-            <div className="font-semibold py-space-sm px-space-sm justify-self-center">
-              Dark
+            <div className="py-space-sm px-space-sm justify-self-center">
+              <span className="font-semibold">Dark</span>
             </div>
           </div>
 

@@ -5,9 +5,15 @@ import { spacingTokens } from './spacing-tokens'
 export const SpacingList = () => (
   <div className="border border-default rounded-md py-space-md">
     <div className="grid grid-cols-[100px_.5fr_1fr] gap-x-space-4xl items-center px-space-md pb-space-sm border-b border-default font-semibold">
-      <div>Token name</div>
-      <div>Value</div>
-      <div>Description</div>
+      <div>
+        <p>Token name</p>
+      </div>
+      <div>
+        <p>Value</p>
+      </div>
+      <div>
+        <p>Description</p>
+      </div>
     </div>
     {spacingTokens.map((token, index) => (
       <div

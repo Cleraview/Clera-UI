@@ -1,13 +1,16 @@
 import remarkGfm from 'remark-gfm'
 import path from 'path'
+type StorybookConfig = Record<string, any>
+import type { Configuration as WebpackConfiguration } from 'webpack'
 
-const config = {
+const config: StorybookConfig = {
   stories: [
     "../@(src|docs)/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",
+    "@storybook/addon-themes",
     {
       name: "@storybook/addon-docs",
       options: {
@@ -29,16 +32,16 @@ const config = {
       from: "../src/assets/docs", to: "/assets"
     }
   ],
-  webpackFinal: async (config) => {
+  webpackFinal: async (config: WebpackConfiguration) => {
     config.module = config.module || {}
-    config.module.rules = config.module.rules || []
+    config.module.rules = (config.module.rules || []) as any[]
  
-    const imageRule = config.module.rules.find((rule) =>
-      typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('.svg')
+    const imageRule = config.module.rules.find((rule: any) =>
+      !!rule && typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('.svg')
     )
 
     if (imageRule) {
-      imageRule.exclude = /\.svg$/
+      ;(imageRule as any).exclude = /\.svg$/
     }
 
     if (config.resolve) {

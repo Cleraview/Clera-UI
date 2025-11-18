@@ -12,7 +12,7 @@ const meta: Meta<typeof Button> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['dev'],
+  tags: ['dev', 'status:new'],
   argTypes: {
     variant: {
       control: { type: 'select' },

@@ -111,10 +111,8 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
             className={cn(
               'block text-body-sm! py-space-xs',
               level === 0 && 'font-semibold',
-              level > 0 && 'text-subtle',
-              item.id === activeId
-                ? 'text-primary! font-semibold'
-                : 'text-default!'
+              item.id === activeId && 'text-accent-violet! font-semibold',
+              level > 0 && item.id !== activeId && 'text-subtlest!'
             )}
             onClick={e => {
               e.preventDefault()
@@ -141,12 +139,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
       )}
     >
       <span
-        className="absolute left-[-2px] w-[4px] bg-selected-bold transition-all duration-200"
+        className="absolute left-[-2px] w-[4px] bg-accent-violet-bolder transition-all duration-200"
         style={{ top: indicatorY, height: indicatorHeight }}
       />
-      <h2 className="text-sm! font-bold mb-space-md border-inverse!">
-        Contents
-      </h2>
+      <h2 className="text-body-sm! font-bold mb-space-md">Contents</h2>
       {renderItems(items)}
     </nav>
   )

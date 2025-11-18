@@ -57,7 +57,7 @@ export const TokenGroups = ({ group, tokenIdx, token }: TokenGroupsProps) => {
         >
           <code
             onClick={() => handleCopy(token.name)}
-            className="self-start text-body-xs! bg-gray-50 hover:bg-gray-200 border border-default py-space-xs px-space-sm rounded-md cursor-pointer"
+            className="self-start text-body-xs! text-default font-(family-name:--font-code) bg-neutral hover:bg-neutral-hovered border border-default py-[2px] px-space-sm rounded-md cursor-pointer"
           >
             {token.name}
           </code>

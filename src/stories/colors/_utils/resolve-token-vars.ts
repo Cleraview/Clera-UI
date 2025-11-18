@@ -84,8 +84,8 @@ export const resolveAllColorTokens = (): TokenRecord[] => {
     const name = tokenName
       .replace(/^--/, '')
       .replace(/^background-color-/, 'bg-')
-      .replace(/^(text|link|border|icon)-color-/, '$1-')
-      .replace(/^(text|link|border|icon)-color$/, '$1')
+      .replace(/^(text|fill|link|border|icon)-color-/, '$1-')
+      .replace(/^(text|fill|link|border|icon)-color$/, '$1')
       .replace(/^color-(text|link|border|icon)/, '$1')
 
     out.push({

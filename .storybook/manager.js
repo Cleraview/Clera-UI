@@ -1,16 +1,27 @@
-import { addons } from 'storybook/manager-api'
-import uiTheme from './ui-theme'
+import React from 'react'
+import { addons, types } from 'storybook/manager-api'
+import { ManagerHeader } from './components/ManagerHeader'
+import customSidebar from './addons/custom-sidebar'
+import { light } from './theme'
 import './manager.css'
 
+addons.register('my-custom-header', () => {
+  addons.add('my-custom-header/tool', {
+    type: types.TOOL,
+    title: 'Custom Header',
+    match: ({ viewMode }) => viewMode === 'story' || viewMode === 'docs',
+    render: () => <ManagerHeader />,
+  })
+})
+
 addons.setConfig({
-  theme: uiTheme,
+  theme: light,
   showNav: true,
   showPanel: true,
-  toolbar: {
-    fullscreen: { hidden: true },
-    zoom: { hidden: true },
-    eject: { hidden: true },
-    copy: { hidden: true },
-    'storybook/docs/panel': { hidden: false },
+  layoutCustomisations: {
+    showToolbar() {
+      return false
+    },
   },
-});
+  sidebar: customSidebar
+})

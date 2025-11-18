@@ -19,25 +19,27 @@
   --text-color-accent-blue-bolder: theme(colors.blue.900);
   --text-color-accent-violet: theme(colors.violet.800);
   --text-color-accent-violet-bolder: theme(colors.violet.900);
-  --text-color-accent-purple: theme(colors.purple.800);
-  --text-color-accent-purple-bolder: theme(colors.purple.900);
+  --text-color-accent-violet: theme(colors.violet.800);
+  --text-color-accent-violet-bolder: theme(colors.violet.900);
   --text-color-accent-magenta: theme(colors.fuchsia.800);
   --text-color-accent-magenta-bolder: theme(colors.fuchsia.900);
+  --text-color-accent-neutral: theme(colors.neutral.800);
+  --text-color-accent-neutral-bolder: theme(colors.neutral.900);
   --text-color-accent-gray: theme(colors.gray.800);
   --text-color-accent-gray-bolder: theme(colors.gray.900);
   --text-color-disabled: theme(colors.neutral.400);
   --text-color-inverse: theme(colors.neutral.50);
   --text-color-primary: theme(colors.violet.700);
-  --text-color-selected: theme(colors.violet.700);
+  --text-color-selected: theme(colors.violet.800);
   --text-color-brand: theme(colors.violet.700);
   --text-color-destructive: theme(colors.red.800);
   --text-color-warning: theme(colors.orange.800);
   --text-color-warning-inverse: theme(colors.neutral.900);
   --text-color-success: theme(colors.lime.800);
-  --text-color-discovery: theme(colors.purple.800);
+  --text-color-discovery: theme(colors.violet.800);
   --text-color-info: theme(colors.blue.800);
-  --text-color-subtlest: theme(colors.neutral.600);
   --text-color-subtle: theme(colors.neutral.700);
+  --text-color-subtlest: theme(colors.neutral.600);
 
   /* ===== LINK ===== */
   --link-color: theme(colors.teal.700);
@@ -46,29 +48,29 @@
   --link-color-visited-pressed: theme(colors.neutral.800);
 
   /* ===== ICON ===== */
-  --icon-color: theme(colors.neutral.950);
-  --icon-color-accent-lime: theme(colors.lime.600);
-  --icon-color-accent-red: theme(colors.red.700);
-  --icon-color-accent-orange: theme(colors.orange.600);
-  --icon-color-accent-yellow: theme(colors.yellow.600);
-  --icon-color-accent-green: theme(colors.green.600);
-  --icon-color-accent-teal: theme(colors.teal.600);
-  --icon-color-accent-blue: theme(colors.blue.600);
-  --icon-color-accent-purple: theme(colors.purple.600);
-  --icon-color-accent-fuchsia: theme(colors.fuchsia.600);
-  --icon-color-accent-gray: theme(colors.neutral.600);
-  --icon-color-disabled: theme(colors.neutral.400);
-  --icon-color-inverse: theme(colors.white);
-  --icon-color-selected: theme(colors.violet.700);
-  --icon-color-brand: theme(colors.violet.700);
-  --icon-color-danger: theme(colors.red.700);
-  --icon-color-warning: theme(colors.orange.600);
-  --icon-color-warning-inverse: theme(colors.neutral.950);
-  --icon-color-success: theme(colors.lime.600);
-  --icon-color-discovery: theme(colors.purple.600);
-  --icon-color-info: theme(colors.blue.600);
-  --icon-color-subtlest: theme(colors.neutral.700);
-  --icon-color-subtle: theme(colors.neutral.800);
+  --fill-color-icon: theme(colors.neutral.950);
+  --fill-color-icon-accent-lime: theme(colors.lime.600);
+  --fill-color-icon-accent-red: theme(colors.red.700);
+  --fill-color-icon-accent-orange: theme(colors.orange.600);
+  --fill-color-icon-accent-yellow: theme(colors.yellow.600);
+  --fill-color-icon-accent-green: theme(colors.green.600);
+  --fill-color-icon-accent-teal: theme(colors.teal.600);
+  --fill-color-icon-accent-blue: theme(colors.blue.600);
+  --fill-color-icon-accent-violet: theme(colors.violet.600);
+  --fill-color-icon-accent-fuchsia: theme(colors.fuchsia.600);
+  --fill-color-icon-accent-gray: theme(colors.neutral.600);
+  --fill-color-icon-disabled: theme(colors.neutral.400);
+  --fill-color-icon-inverse: rgb(255, 255, 255);
+  --fill-color-icon-selected: theme(colors.violet.700);
+  --fill-color-icon-brand: theme(colors.violet.700);
+  --fill-color-icon-danger: theme(colors.red.700);
+  --fill-color-icon-warning: theme(colors.orange.600);
+  --fill-color-icon-warning-inverse: theme(colors.neutral.950);
+  --fill-color-icon-success: theme(colors.lime.600);
+  --fill-color-icon-discovery: theme(colors.violet.600);
+  --fill-color-icon-info: theme(colors.blue.600);
+  --fill-color-icon-subtlest: theme(colors.neutral.700);
+  --fill-color-icon-subtle: theme(colors.neutral.800);
 
   /* ===== BORDER ===== */
   --border-color-default: theme(colors.neutral.200);
@@ -79,19 +81,19 @@
   --border-color-accent-green: theme(colors.green.600);
   --border-color-accent-teal: theme(colors.teal.600);
   --border-color-accent-blue: theme(colors.blue.600);
-  --border-color-accent-purple: theme(colors.purple.600);
+  --border-color-accent-violet: theme(colors.violet.600);
   --border-color-accent-fuchsia: theme(colors.fuchsia.600);
   --border-color-accent-gray: theme(colors.neutral.600);
   --border-color-disabled: theme(colors.neutral.300);
   --border-color-focused: theme(colors.blue.500);
-  --border-color-input: theme(colors.neutral.500);
+  --border-color-input: theme(colors.neutral.400);
   --border-color-inverse: theme(colors.neutral.50);
   --border-color-selected: theme(colors.violet.700);
   --border-color-brand: theme(colors.violet.700);
   --border-color-danger: theme(colors.red.600);
   --border-color-warning: theme(colors.orange.600);
   --border-color-success: theme(colors.lime.600);
-  --border-color-discovery: theme(colors.purple.600);
+  --border-color-discovery: theme(colors.violet.600);
   --border-color-info: theme(colors.blue.600);
   --border-color-bold: theme(colors.neutral.600);
 
@@ -104,7 +106,7 @@
   --background-color-accent-lime-subtler-pressed: theme(colors.lime.300);
   --background-color-accent-lime-subtle: theme(colors.lime.400);
   --background-color-accent-lime-subtle-hovered: theme(colors.lime.300);
-  --background-color-accent-lime-subtle-pressed: theme(colors.lime.300);
+  --background-color-accent-lime-subtle-pressed: theme(colors.lime.200);
   --background-color-accent-lime-bolder: theme(colors.lime.700);
   --background-color-accent-lime-bolder-hovered: theme(colors.lime.800);
   --background-color-accent-lime-bolder-pressed: theme(colors.lime.900);
@@ -187,18 +189,18 @@
   --background-color-accent-blue-bolder-hovered: theme(colors.blue.800);
   --background-color-accent-blue-bolder-pressed: theme(colors.blue.900);
 
-  --background-color-accent-purple-subtlest: theme(colors.purple.100);
-  --background-color-accent-purple-subtlest-hovered: theme(colors.purple.200);
-  --background-color-accent-purple-subtlest-pressed: theme(colors.purple.300);
-  --background-color-accent-purple-subtler: theme(colors.purple.200);
-  --background-color-accent-purple-subtler-hovered: theme(colors.purple.300);
-  --background-color-accent-purple-subtler-pressed: theme(colors.purple.300);
-  --background-color-accent-purple-subtle: theme(colors.purple.400);
-  --background-color-accent-purple-subtle-hovered: theme(colors.purple.300);
-  --background-color-accent-purple-subtle-pressed: theme(colors.purple.300);
-  --background-color-accent-purple-bolder: theme(colors.purple.700);
-  --background-color-accent-purple-bolder-hovered: theme(colors.purple.800);
-  --background-color-accent-purple-bolder-pressed: theme(colors.purple.900);
+  --background-color-accent-violet-subtlest: theme(colors.violet.100);
+  --background-color-accent-violet-subtlest-hovered: theme(colors.violet.200);
+  --background-color-accent-violet-subtlest-pressed: theme(colors.violet.300);
+  --background-color-accent-violet-subtler: theme(colors.violet.200);
+  --background-color-accent-violet-subtler-hovered: theme(colors.violet.300);
+  --background-color-accent-violet-subtler-pressed: theme(colors.violet.300);
+  --background-color-accent-violet-subtle: theme(colors.violet.400);
+  --background-color-accent-violet-subtle-hovered: theme(colors.violet.300);
+  --background-color-accent-violet-subtle-pressed: theme(colors.violet.300);
+  --background-color-accent-violet-bolder: theme(colors.violet.700);
+  --background-color-accent-violet-bolder-hovered: theme(colors.violet.800);
+  --background-color-accent-violet-bolder-pressed: theme(colors.violet.900);
 
   --background-color-accent-magenta-subtlest: theme(colors.fuchsia.100);
   --background-color-accent-magenta-subtlest-hovered: theme(colors.fuchsia.200);
@@ -227,9 +229,9 @@
   --background-color-accent-gray-bolder-pressed: theme(colors.neutral.900);
 
   --background-color-disabled: theme(colors.neutral.100);
-  --background-color-input: theme(colors.white);
+  --background-color-input: rgb(255, 255, 255);
   --background-color-input-hovered: theme(colors.neutral.100);
-  --background-color-input-pressed: theme(colors.white);
+  --background-color-input-pressed: rgb(255, 255, 255);
   --background-color-inverse-subtle: #00000029;
   --background-color-inverse-subtle-hovered: #0000003D;
   --background-color-inverse-subtle-pressed: #00000052;
@@ -237,15 +239,15 @@
   --background-color-neutral-hovered: theme(colors.neutral.200);
   --background-color-neutral-pressed: theme(colors.neutral.300);
   --background-color-neutral-subtle: transparent;
-  --background-color-neutral-subtle-hovered: theme(colors.neutral.200);
-  --background-color-neutral-subtle-pressed: theme(colors.neutral.300);
+  --background-color-neutral-subtle-hovered: theme(colors.neutral.100);
+  --background-color-neutral-subtle-pressed: theme(colors.neutral.200);
   --background-color-neutral-bold: theme(colors.neutral.950);
   --background-color-neutral-bold-hovered: theme(colors.neutral.900);
   --background-color-neutral-bold-pressed: theme(colors.neutral.800);
   
-  --background-color-selected: theme(colors.violet.100);
-  --background-color-selected-hovered: theme(colors.violet.200);
-  --background-color-selected-pressed: theme(colors.violet.300);
+  --background-color-selected: theme(colors.violet.50);
+  --background-color-selected-hovered: theme(colors.violet.100);
+  --background-color-selected-pressed: theme(colors.violet.200);
   --background-color-selected-bold: theme(colors.violet.700);
   --background-color-selected-bold-hovered: theme(colors.violet.800);
   --background-color-selected-bold-pressed: theme(colors.violet.900);
@@ -281,12 +283,12 @@
   --background-color-success-bold-hovered: theme(colors.lime.800);
   --background-color-success-bold-pressed: theme(colors.lime.900);
 
-  --background-color-discovery: theme(colors.purple.100);
-  --background-color-discovery-hovered: theme(colors.purple.200);
-  --background-color-discovery-pressed: theme(colors.purple.300);
-  --background-color-discovery-bold: theme(colors.purple.700);
-  --background-color-discovery-bold-hovered: theme(colors.purple.800);
-  --background-color-discovery-bold-pressed: theme(colors.purple.900);
+  --background-color-discovery: theme(colors.violet.100);
+  --background-color-discovery-hovered: theme(colors.violet.200);
+  --background-color-discovery-pressed: theme(colors.violet.300);
+  --background-color-discovery-bold: theme(colors.violet.700);
+  --background-color-discovery-bold-hovered: theme(colors.violet.800);
+  --background-color-discovery-bold-pressed: theme(colors.violet.900);
 
   --background-color-info: theme(colors.blue.100);
   --background-color-info-hovered: theme(colors.blue.200);
@@ -304,14 +306,14 @@
   --chart-categorical-1-hovered: theme(colors.blue.700);
   --chart-categorical-2: theme(colors.lime.500);
   --chart-categorical-2-hovered: theme(colors.lime.600);
-  --chart-categorical-3: theme(colors.purple.500);
-  --chart-categorical-3-hovered: theme(colors.purple.600);
+  --chart-categorical-3: theme(colors.violet.500);
+  --chart-categorical-3-hovered: theme(colors.violet.600);
   --chart-categorical-4: theme(colors.orange.500);
   --chart-categorical-4-hovered: theme(colors.orange.600);
   --chart-categorical-5: theme(colors.blue.800);
   --chart-categorical-5-hovered: theme(colors.blue.900);
-  --chart-categorical-6: theme(colors.purple.700);
-  --chart-categorical-6-hovered: theme(colors.purple.800);
+  --chart-categorical-6: theme(colors.violet.700);
+  --chart-categorical-6-hovered: theme(colors.violet.800);
   --chart-categorical-7: theme(colors.teal.500);
   --chart-categorical-7-hovered: theme(colors.teal.600);
   --chart-categorical-8: theme(colors.orange.700);
@@ -369,12 +371,12 @@
   --chart-blue-boldest: theme(colors.blue.800);
   --chart-blue-boldest-hovered: theme(colors.blue.900);
 
-  --chart-purple-bold: theme(colors.purple.500);
-  --chart-purple-bold-hovered: theme(colors.purple.600);
-  --chart-purple-bolder: theme(colors.purple.600);
-  --chart-purple-bolder-hovered: theme(colors.purple.700);
-  --chart-purple-boldest: theme(colors.purple.800);
-  --chart-purple-boldest-hovered: theme(colors.purple.900);
+  --chart-violet-bold: theme(colors.violet.500);
+  --chart-violet-bold-hovered: theme(colors.violet.600);
+  --chart-violet-bolder: theme(colors.violet.600);
+  --chart-violet-bolder-hovered: theme(colors.violet.700);
+  --chart-violet-boldest: theme(colors.violet.800);
+  --chart-violet-boldest-hovered: theme(colors.violet.900);
 
   --chart-magenta-bold: theme(colors.fuchsia.500);
   --chart-magenta-bold-hovered: theme(colors.fuchsia.600);
@@ -408,10 +410,10 @@
   --chart-success-bold: theme(colors.lime.700);
   --chart-success-bold-hovered: theme(colors.lime.800);
 
-  --chart-discovery: theme(colors.purple.500);
-  --chart-discovery-hovered: theme(colors.purple.600);
-  --chart-discovery-bold: theme(colors.purple.800);
-  --chart-discovery-bold-hovered: theme(colors.purple.700);
+  --chart-discovery: theme(colors.violet.500);
+  --chart-discovery-hovered: theme(colors.violet.600);
+  --chart-discovery-bold: theme(colors.violet.800);
+  --chart-discovery-bold-hovered: theme(colors.violet.700);
 
   --chart-info: theme(colors.blue.600);
   --chart-info-hovered: theme(colors.blue.700);
@@ -419,19 +421,20 @@
   --chart-info-bold-hovered: theme(colors.blue.900);
 
   /* ===== ELEVATION ===== */
-  --background-color-elevation-surface: theme(colors.white);
-  --background-color-elevation-surface-hovered: theme(colors.neutral.200);
-  --background-color-elevation-surface-pressed: theme(colors.neutral.300);
-
-  --background-color-elevation-surface-overlay: theme(colors.white);
-  --background-color-elevation-surface-overlay-hovered: theme(colors.neutral.200);
-  --background-color-elevation-surface-overlay-pressed: theme(colors.neutral.300);
-
-  --background-color-elevation-surface-raised: theme(colors.white);
-  --background-color-elevation-surface-raised-hovered: theme(colors.neutral.200);
-  --background-color-elevation-surface-raised-pressed: theme(colors.neutral.300);
-
   --background-color-elevation-surface-sunken: theme(colors.neutral.100);
+
+  --background-color-elevation-surface: rgb(255, 255, 255);
+  --background-color-elevation-surface-hovered: theme(colors.neutral.50);
+  --background-color-elevation-surface-pressed: theme(colors.neutral.100);
+  
+  --background-color-elevation-surface-raised: rgb(255, 255, 255);
+  --background-color-elevation-surface-raised-hovered: theme(colors.neutral.50);
+  --background-color-elevation-surface-raised-pressed: theme(colors.neutral.100);
+
+  
+  --background-color-elevation-surface-overlay: rgb(255, 255, 255);
+  --background-color-elevation-surface-overlay-hovered: rgb(255, 255, 255);
+  --background-color-elevation-surface-overlay-pressed: rgb(255, 255, 255);
 
   /* ===== ELEVATION SHADOWS ===== */
   --shadow-elevation-overflow: 0px 0px 8px rgba(30, 31, 33, 0.16), 0px 0px 1px rgba(30, 31, 33, 0.12);
@@ -448,7 +451,7 @@
     --theme: 'dark';
     
     /* ===== TEXT ===== */
-    --text-color-default: theme(colors.neutral.100);
+    --text-color-default: theme(colors.neutral.200);
     --text-color-accent-lime: theme(colors.lime.300);
     --text-color-accent-lime-bolder: theme(colors.lime.200);
     --text-color-accent-red: theme(colors.red.300);
@@ -465,25 +468,27 @@
     --text-color-accent-blue-bolder: theme(colors.blue.200);
     --text-color-accent-violet: theme(colors.violet.300);
     --text-color-accent-violet-bolder: theme(colors.violet.200);
-    --text-color-accent-purple: theme(colors.purple.300);
-    --text-color-accent-purple-bolder: theme(colors.purple.200);
+    --text-color-accent-violet: theme(colors.violet.300);
+    --text-color-accent-violet-bolder: theme(colors.violet.200);
     --text-color-accent-magenta: theme(colors.fuchsia.300);
     --text-color-accent-magenta-bolder: theme(colors.fuchsia.200);
-    --text-color-accent-gray: theme(colors.gray.100);
+    --text-color-accent-neutral: theme(colors.neutral.200);
+    --text-color-accent-neutral-bolder: theme(colors.neutral.100);
+    --text-color-accent-gray: theme(colors.gray.200);
     --text-color-accent-gray-bolder: theme(colors.gray.100);
     --text-color-disabled: theme(colors.neutral.400);
-    --text-color-inverse: theme(colors.neutral.900);
+    --text-color-inverse: theme(colors.neutral.800);
     --text-color-primary: theme(colors.violet.400);
-    --text-color-selected: theme(colors.violet.400);
+    --text-color-selected: theme(colors.violet.100);
     --text-color-brand: theme(colors.violet.400);
     --text-color-destructive: theme(colors.red.300);
     --text-color-warning: theme(colors.orange.300);
     --text-color-warning-inverse: theme(colors.neutral.100);
     --text-color-success: theme(colors.lime.300);
-    --text-color-discovery: theme(colors.purple.300);
+    --text-color-discovery: theme(colors.violet.300);
     --text-color-info: theme(colors.blue.300);
-    --text-color-subtlest: theme(colors.neutral.200);
-    --text-color-subtle: theme(colors.neutral.300);
+    --text-color-subtlest: theme(colors.neutral.300);
+    --text-color-subtle: theme(colors.neutral.400);
 
     /* ===== LINK ===== */
     --link-color: theme(colors.teal.400);
@@ -492,32 +497,32 @@
     --link-color-visited-pressed: theme(colors.neutral.300);
 
     /* ===== ICON ===== */
-    --icon-color: theme(colors.neutral.950);
-    --icon-color-accent-lime: theme(colors.lime.500);
-    --icon-color-accent-red: theme(colors.red.600);
-    --icon-color-accent-orange: theme(colors.orange.500);
-    --icon-color-accent-yellow: theme(colors.yellow.300);
-    --icon-color-accent-green: theme(colors.green.500);
-    --icon-color-accent-teal: theme(colors.teal.500);
-    --icon-color-accent-blue: theme(colors.blue.500);
-    --icon-color-accent-purple: theme(colors.purple.500);
-    --icon-color-accent-fuchsia: theme(colors.fuchsia.500);
-    --icon-color-accent-gray: theme(colors.neutral.600);
-    --icon-color-disabled: theme(colors.neutral.400);
-    --icon-color-inverse: theme(colors.neutral.100);
-    --icon-color-selected: theme(colors.violet.400);
-    --icon-color-brand: theme(colors.violet.400);
-    --icon-color-danger: theme(colors.red.500);
-    --icon-color-warning: theme(colors.orange.300);
-    --icon-color-warning-inverse: theme(colors.neutral.100);
-    --icon-color-success: theme(colors.lime.500);
-    --icon-color-discovery: theme(colors.purple.500);
-    --icon-color-info: theme(colors.blue.500);
-    --icon-color-subtlest: theme(colors.neutral.700);
-    --icon-color-subtle: theme(colors.neutral.800);
+    --fill-color-icon: theme(colors.neutral.50);
+    --fill-color-icon-accent-lime: theme(colors.lime.500);
+    --fill-color-icon-accent-red: theme(colors.red.600);
+    --fill-color-icon-accent-orange: theme(colors.orange.500);
+    --fill-color-icon-accent-yellow: theme(colors.yellow.300);
+    --fill-color-icon-accent-green: theme(colors.green.500);
+    --fill-color-icon-accent-teal: theme(colors.teal.500);
+    --fill-color-icon-accent-blue: theme(colors.blue.500);
+    --fill-color-icon-accent-violet: theme(colors.violet.500);
+    --fill-color-icon-accent-fuchsia: theme(colors.fuchsia.500);
+    --fill-color-icon-accent-gray: theme(colors.neutral.600);
+    --fill-color-icon-disabled: theme(colors.neutral.400);
+    --fill-color-icon-inverse: theme(colors.neutral.800);
+    --fill-color-icon-selected: theme(colors.violet.400);
+    --fill-color-icon-brand: theme(colors.violet.400);
+    --fill-color-icon-danger: theme(colors.red.500);
+    --fill-color-icon-warning: theme(colors.orange.300);
+    --fill-color-icon-warning-inverse: theme(colors.neutral.100);
+    --fill-color-icon-success: theme(colors.lime.500);
+    --fill-color-icon-discovery: theme(colors.violet.500);
+    --fill-color-icon-info: theme(colors.blue.500);
+    --fill-color-icon-subtlest: theme(colors.neutral.700);
+    --fill-color-icon-subtle: theme(colors.neutral.800);
 
     /* ===== BORDER ===== */
-    --border-color-default: theme(colors.neutral.600);
+    --border-color-default: theme(colors.neutral.700);
     --border-color-accent-lime: theme(colors.lime.500);
     --border-color-accent-red: theme(colors.red.500);
     --border-color-accent-orange: theme(colors.orange.500);
@@ -525,7 +530,7 @@
     --border-color-accent-green: theme(colors.green.500);
     --border-color-accent-teal: theme(colors.teal.500);
     --border-color-accent-blue: theme(colors.blue.500);
-    --border-color-accent-purple: theme(colors.purple.500);
+    --border-color-accent-violet: theme(colors.violet.500);
     --border-color-accent-fuchsia: theme(colors.fuchsia.500);
     --border-color-accent-gray: theme(colors.neutral.600);
     --border-color-disabled: theme(colors.neutral.700);
@@ -537,7 +542,7 @@
     --border-color-danger: theme(colors.red.500);
     --border-color-warning: theme(colors.orange.500);
     --border-color-success: theme(colors.lime.500);
-    --border-color-discovery: theme(colors.purple.500);
+    --border-color-discovery: theme(colors.violet.500);
     --border-color-info: theme(colors.blue.500);
     --border-color-bold: theme(colors.neutral.600);
 
@@ -633,18 +638,18 @@
     --background-color-accent-blue-bolder-hovered: theme(colors.blue.300);
     --background-color-accent-blue-bolder-pressed: theme(colors.blue.200);
 
-    --background-color-accent-purple-subtlest: theme(colors.purple.900);
-    --background-color-accent-purple-subtlest-hovered: theme(colors.purple.800);
-    --background-color-accent-purple-subtlest-pressed: theme(colors.purple.800);
-    --background-color-accent-purple-subtler: theme(colors.purple.900);
-    --background-color-accent-purple-subtler-hovered: theme(colors.purple.800);
-    --background-color-accent-purple-subtler-pressed: theme(colors.purple.800);
-    --background-color-accent-purple-subtle: theme(colors.purple.800);
-    --background-color-accent-purple-subtle-hovered: theme(colors.purple.800);
-    --background-color-accent-purple-subtle-pressed: theme(colors.purple.900);
-    --background-color-accent-purple-bolder: theme(colors.purple.400);
-    --background-color-accent-purple-bolder-hovered: theme(colors.purple.300);
-    --background-color-accent-purple-bolder-pressed: theme(colors.purple.200);
+    --background-color-accent-violet-subtlest: theme(colors.violet.900);
+    --background-color-accent-violet-subtlest-hovered: theme(colors.violet.800);
+    --background-color-accent-violet-subtlest-pressed: theme(colors.violet.800);
+    --background-color-accent-violet-subtler: theme(colors.violet.900);
+    --background-color-accent-violet-subtler-hovered: theme(colors.violet.800);
+    --background-color-accent-violet-subtler-pressed: theme(colors.violet.800);
+    --background-color-accent-violet-subtle: theme(colors.violet.800);
+    --background-color-accent-violet-subtle-hovered: theme(colors.violet.800);
+    --background-color-accent-violet-subtle-pressed: theme(colors.violet.900);
+    --background-color-accent-violet-bolder: theme(colors.violet.400);
+    --background-color-accent-violet-bolder-hovered: theme(colors.violet.300);
+    --background-color-accent-violet-bolder-pressed: theme(colors.violet.200);
 
     --background-color-accent-magenta-subtlest: theme(colors.fuchsia.900);
     --background-color-accent-magenta-subtlest-hovered: theme(colors.fuchsia.800);
@@ -680,18 +685,18 @@
     --background-color-inverse-subtle-hovered: #FFFFFF3D;
     --background-color-inverse-subtle-pressed: #FFFFFF52;
     --background-color-neutral: theme(colors.neutral.700);
-    --background-color-neutral-hovered: theme(colors.neutral.800);
-    --background-color-neutral-pressed: theme(colors.neutral.900);
+    --background-color-neutral-hovered: theme(colors.neutral.600);
+    --background-color-neutral-pressed: theme(colors.neutral.500);
     --background-color-neutral-subtle: transparent;
-    --background-color-neutral-subtle-hovered: theme(colors.neutral.700);
-    --background-color-neutral-subtle-pressed: theme(colors.neutral.800);
+    --background-color-neutral-subtle-hovered: theme(colors.neutral.800);
+    --background-color-neutral-subtle-pressed: theme(colors.neutral.700);
     --background-color-neutral-bold: theme(colors.neutral.200);
     --background-color-neutral-bold-hovered: theme(colors.neutral.300);
     --background-color-neutral-bold-pressed: theme(colors.neutral.400);
     
-    --background-color-selected: theme(colors.violet.950);
-    --background-color-selected-hovered: theme(colors.violet.900);
-    --background-color-selected-pressed: theme(colors.violet.800);
+    --background-color-selected: theme(colors.violet.900);
+    --background-color-selected-hovered: theme(colors.violet.800);
+    --background-color-selected-pressed: theme(colors.violet.700);
     --background-color-selected-bold: theme(colors.violet.400);
     --background-color-selected-bold-hovered: theme(colors.violet.300);
     --background-color-selected-bold-pressed: theme(colors.violet.200);
@@ -727,12 +732,12 @@
     --background-color-success-bold-hovered: theme(colors.lime.300);
     --background-color-success-bold-pressed: theme(colors.lime.200);
 
-    --background-color-discovery: theme(colors.purple.950);
-    --background-color-discovery-hovered: theme(colors.purple.900);
-    --background-color-discovery-pressed: theme(colors.purple.800);
-    --background-color-discovery-bold: theme(colors.purple.400);
-    --background-color-discovery-bold-hovered: theme(colors.purple.300);
-    --background-color-discovery-bold-pressed: theme(colors.purple.200);
+    --background-color-discovery: theme(colors.violet.950);
+    --background-color-discovery-hovered: theme(colors.violet.900);
+    --background-color-discovery-pressed: theme(colors.violet.800);
+    --background-color-discovery-bold: theme(colors.violet.400);
+    --background-color-discovery-bold-hovered: theme(colors.violet.300);
+    --background-color-discovery-bold-pressed: theme(colors.violet.200);
 
     --background-color-info: theme(colors.blue.950);
     --background-color-info-hovered: theme(colors.blue.900);
@@ -742,26 +747,26 @@
     --background-color-info-bold-pressed: theme(colors.blue.200);
 
     /* ===== SKELETON ===== */
-    --background-color-skeleton: theme(colors.neutral.700);
-    --background-color-skeleton-subtle: theme(colors.neutral.600);
+    --background-color-skeleton: color-mix(in srgb, theme(colors.neutral.800) 50%, theme(colors.neutral.700));
+    --background-color-skeleton-subtle: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));
 
     /* ===== CHART ===== */
     --chart-categorical-1: theme(colors.blue.500);
     --chart-categorical-1-hovered: theme(colors.blue.400);
     --chart-categorical-2: theme(colors.lime.400);
     --chart-categorical-2-hovered: theme(colors.lime.300);
-    --chart-categorical-3: theme(colors.purple.400);
-    --chart-categorical-3-hovered: theme(colors.purple.300);
+    --chart-categorical-3: theme(colors.violet.400);
+    --chart-categorical-3-hovered: theme(colors.violet.300);
     --chart-categorical-4: theme(colors.orange.400);
     --chart-categorical-4-hovered: theme(colors.orange.300);
-    --chart-categorical-5: theme(colors.blue.800);
-    --chart-categorical-5-hovered: theme(colors.blue.700);
-    --chart-categorical-6: theme(colors.purple.700);
-    --chart-categorical-6-hovered: theme(colors.purple.600);
+    --chart-categorical-5: theme(colors.blue.300);
+    --chart-categorical-5-hovered: theme(colors.blue.200);
+    --chart-categorical-6: theme(colors.violet.300);
+    --chart-categorical-6-hovered: theme(colors.violet.200);
     --chart-categorical-7: theme(colors.teal.500);
     --chart-categorical-7-hovered: theme(colors.teal.400);
     --chart-categorical-8: theme(colors.orange.600);
-    --chart-categorical-8-hovered: theme(colors.orange.200);
+    --chart-categorical-8-hovered: theme(colors.orange.500);
 
     --chart-lime-bold: theme(colors.lime.500);
     --chart-lime-bold-hovered: theme(colors.lime.400);
@@ -785,7 +790,7 @@
     --chart-orange-bolder: theme(colors.orange.400);
     --chart-orange-bolder-hovered: theme(colors.orange.300);
     --chart-orange-boldest: theme(colors.orange.200);
-    --chart-orange-boldest-hovered: theme(colors.orange.200);
+    --chart-orange-boldest-hovered: theme(colors.orange.100);
 
     --chart-yellow-bold: theme(colors.yellow.500);
     --chart-yellow-bold-hovered: theme(colors.yellow.400);
@@ -815,12 +820,12 @@
     --chart-blue-boldest: theme(colors.blue.300);
     --chart-blue-boldest-hovered: theme(colors.blue.200);
 
-    --chart-purple-bold: theme(colors.purple.600);
-    --chart-purple-bold-hovered: theme(colors.purple.500);
-    --chart-purple-bolder: theme(colors.purple.500);
-    --chart-purple-bolder-hovered: theme(colors.purple.400);
-    --chart-purple-boldest: theme(colors.purple.300);
-    --chart-purple-boldest-hovered: theme(colors.purple.200);
+    --chart-violet-bold: theme(colors.violet.600);
+    --chart-violet-bold-hovered: theme(colors.violet.500);
+    --chart-violet-bolder: theme(colors.violet.500);
+    --chart-violet-bolder-hovered: theme(colors.violet.400);
+    --chart-violet-boldest: theme(colors.violet.300);
+    --chart-violet-boldest-hovered: theme(colors.violet.200);
 
     --chart-magenta-bold: theme(colors.fuchsia.600);
     --chart-magenta-bold-hovered: theme(colors.fuchsia.500);
@@ -854,10 +859,10 @@
     --chart-success-bold: theme(colors.lime.300);
     --chart-success-bold-hovered: theme(colors.lime.200);
 
-    --chart-discovery: theme(colors.purple.500);
-    --chart-discovery-hovered: theme(colors.purple.400);
-    --chart-discovery-bold: theme(colors.purple.300);
-    --chart-discovery-bold-hovered: theme(colors.purple.200);
+    --chart-discovery: theme(colors.violet.500);
+    --chart-discovery-hovered: theme(colors.violet.400);
+    --chart-discovery-bold: theme(colors.violet.300);
+    --chart-discovery-bold-hovered: theme(colors.violet.200);
 
     --chart-info: theme(colors.blue.500);
     --chart-info-hovered: theme(colors.blue.400);
@@ -865,19 +870,21 @@
     --chart-info-bold-hovered: theme(colors.blue.200);
 
     /* ===== ELEVATION ===== */
-    --background-color-elevation-surface: theme(colors.neutral.900);
-    --background-color-elevation-surface-hovered: theme(colors.neutral.800);
-    --background-color-elevation-surface-pressed: color-mix(in srgb, theme(colors.neutral.800), theme(colors.neutral.700));
+    --background-color-elevation-surface-sunken: theme(colors.neutral.900);
 
-    --background-color-elevation-surface-overlay: color-mix(in srgb, theme(colors.neutral.800), theme(colors.neutral.700));
-    --background-color-elevation-surface-overlay-hovered: theme(colors.neutral.700);
-    --background-color-elevation-surface-overlay-pressed: color-mix(in srgb, theme(colors.neutral.700), theme(colors.neutral.600));
+    --background-color-elevation-surface: theme(colors.neutral.800);
 
-    --background-color-elevation-surface-raised: theme(colors.neutral.800);
-    --background-color-elevation-surface-raised-hovered: color-mix(in srgb, theme(colors.neutral.800), theme(colors.neutral.700));
-    --background-color-elevation-surface-raised-pressed: theme(colors.neutral.700);
+    --background-color-elevation-surface-hovered: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));
+    --background-color-elevation-surface-pressed: color-mix(in srgb, theme(colors.neutral.800) 50%, theme(colors.neutral.700));
 
-    --background-color-elevation-surface-sunken: theme(colors.neutral.950);
+    --background-color-elevation-surface-raised: theme(colors.neutral.700);
+    --background-color-elevation-surface-raised-hovered: color-mix(in srgb, theme(colors.neutral.700) 70%, theme(colors.neutral.600));
+    --background-color-elevation-surface-raised-pressed: color-mix(in srgb, theme(colors.neutral.700) 50%, theme(colors.neutral.600));
+
+
+    --background-color-elevation-surface-overlay: theme(colors.neutral.600);
+    --background-color-elevation-surface-overlay-hovered: color-mix(in srgb, theme(colors.neutral.600) 70%, theme(colors.neutral.500));
+    --background-color-elevation-surface-overlay-pressed: theme(colors.neutral.500);
 
     /* ===== ELEVATION SHADOWS ===== */
     --shadow-elevation-overflow: 0px 0px 12px rgba(1, 4, 4, 0.56), 0px 0px 1px rgba(1, 4, 4, 0.5);
@@ -885,7 +892,6 @@
     --shadow-elevation-overflow-spread: #0104048f;
     
     --shadow-elevation-overlay: 0px 8px 12px rgba(1, 4, 4, 0.36), 0px 0px 1px rgba(1, 4, 4, 0.5);
-    
     --shadow-elevation-raised: 0px 1px 1px rgba(1, 4, 4, 0.5), 0px 0px 1px rgba(1, 4, 4, 0.5);
   }
 }
