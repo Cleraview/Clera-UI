@@ -37,13 +37,13 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
     <div
       className={cn(
         'w-full rounded-lg overflow-hidden my-space-md border',
-        'bg-elevation-surface-sunken dark:bg-elevation-surface-raised border-default',
+        'bg-ds-elevation-surface-sunken dark:bg-ds-elevation-surface-raised border-ds-default',
         className
       )}
     >
-      <div className="flex items-center justify-between border-b border-default dark:border-accent-gray bg-neutral-subtle">
+      <div className="flex items-center justify-between border-b border-ds-default dark:border-accent-gray bg-ds-neutral-subtle">
         <div className="flex items-center">
-          <div className="px-space-sm text-subtle flex items-center justify-center h-full">
+          <div className="px-space-sm text-ds-subtle flex items-center justify-center h-full">
             <MdTerminal className="w-5 h-5" />
           </div>
 
@@ -58,11 +58,11 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
                   aria-selected={isActive}
                   className={cn(
                     'px-space-sm py-space-xs',
-                    'text-body-sm font-(font-family:--font-code) text-default transition-colors focus:outline-none rounded-md',
+                    'text-body-sm font-(font-family:--font-code) text-ds-default transition-colors focus:outline-none rounded-md',
                     'border border-transparent cursor-pointer',
                     isActive
-                      ? 'border-default! dark:border-accent-gray!'
-                      : 'hover:border-default dark:hover:border-accent-gray'
+                      ? 'border-ds-default! dark:border-accent-gray!'
+                      : 'hover:border-ds-default dark:hover:border-accent-gray'
                   )}
                 >
                   {item.label}
@@ -82,11 +82,11 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
           >
             <button
               onClick={handleCopy}
-              className="p-space-xs rounded text-subtle hover:bg-neutral-hovered hover:text-default transition-colors flex items-center justify-center cursor-pointer"
+              className="p-space-xs rounded text-ds-subtle hover:bg-ds-neutral-hovered hover:text-ds-default transition-colors flex items-center justify-center cursor-pointer"
               aria-label="Copy code"
             >
               {copied ? (
-                <MdCheck className="w-4 h-4 text-success" />
+                <MdCheck className="w-4 h-4 text-ds-success" />
               ) : (
                 <MdContentCopy className="w-4 h-4" />
               )}

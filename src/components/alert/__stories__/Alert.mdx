@@ -4,15 +4,17 @@ import * as AlertStories from "./Alert.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocContainer } from "@/stories/_components/DocContainer"
+
 
 <Meta title="UI/Alert" of={AlertStories} />
 
-<div className="flex gap-space-4xl">
+<DocContainer toc>
   <div>
     # Alert
 
     Displays an important, time-sensitive message to the user.
-    <DocInfo importStatement={`import { Alert } from 'clera-ui/alert'`} sourcePath={`components/alert`} />
+    <DocInfo importStatement={`import { Alert } from '@clera-ui/alert'`} sourcePath={`components/alert`} />
 
     <br />
 
@@ -25,7 +27,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     -   **Variant**: Choose a visual style that reflects the severity or purpose of the alert.
         -   *Success*: Indicates a successful action or state.
         -   *Warning*: Indicates a potential problem or something that requires attention.
-        -   *Error*: Indicates a critical error or failure.
+        -   *Destructive*: Indicates a critical error or failure.
         -   *Info*: Provides general information or context.
     -   **Title**: Use a title to provide more context and quickly grab the user's attention.
     -   **Description**: Provide a more detailed explanation or instructions within the alert.
@@ -55,22 +57,154 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       </Canvas.Story>
 
       <Canvas.Source>
-        <Source className="my-0!" dark code={`
-          import { Alert } from 'clera-ui/alert'
+        <Source className="my-0!" dark language="tsx" code={`
+          import { Alert } from '@clera-ui/alert'
 
-          const AlertBasicExample = () => {
+          const AlertPrimaryExample = () => {
             return (
               <Alert
-                message="This is an alert"
+                title="Brand"
+                description="Here is the description text for the alert."
+                variant="primary" 
+              />
+            )
+          }
+
+          const AlertPrimaryExample = () => {
+            return (
+              <Alert
+                title="Brand"
+                description="Here is the description text for the alert."
+                variant="primary" 
+              />
+            )
+          }
+          const AlertPrimaryExample = () => {
+            return (
+              <Alert
+                title="Brand"
+                description="Here is the description text for the alert."
+                variant="primary" 
+              />
+            )
+          }
+
+          export default AlertPrimaryExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+    
+    ### **Success**
+    **Positive Feedback:** Visualizes a confirmation message to reassure the user that a process went as planned.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertStories.Success} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Alert } from '@clera-ui/alert'
+
+          const AlertSuccessExample = () => {
+            return (
+              <Alert
+                title="This is an alert"
                 description="Here is the description text for the alert."
                 variant="success" 
-                title="Success"
               />
-              
             )
           }
 
           export default AlertSuccessExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Warning**
+    **Positive Feedback:** Visualizes a confirmation message to reassure the user that a process went as planned.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertStories.Warning} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Alert } from '@clera-ui/alert'
+
+          const AlertWarningExample = () => {
+            return (
+              <Alert
+                title="This is an alert"
+                description="Here is the description text for the alert."
+                variant="warning" 
+              />
+            )
+          }
+
+          export default AlertWarningExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    <br />
+
+    ### **Info**
+    **General Notice:** Displays informative content or announcements that do not require immediate interaction.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertStories.Info} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Alert } from '@clera-ui/alert'
+
+          const AlertInfoExample = () => {
+            return (
+              <Alert
+                description={(
+                  <p>
+                    We just updated our terms and condition, 
+                    <a href="javascript:void(0);" className="underline font-semibold">learn more</a>
+                  </p>
+                )}
+                variant="info"
+                closable
+              />
+            )
+          }
+
+          export default AlertInfoExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+    
+    ### **Destructive**
+    **Error State:** Indicates a critical issue, such as a disabled account or failed transaction, that often requires user intervention.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={AlertStories.Destructive} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Alert } from '@clera-ui/alert'
+
+          const AlertDestructiveExample = () => {
+            return (
+              <Alert
+                title="Your account has been disabled."
+                variant="destructive" 
+              />
+            )
+          }
+
+          export default AlertDestructiveExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -86,20 +220,19 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Alert } from 'clera-ui/alert'
+          import { Alert } from '@clera-ui/alert'
 
           const AlertWithIconExample = () => {
             return <Alert
-              message="This is an alert"
+              title="This is an alert"
               description="Here is the description text for the alert."
               variant="primary"
-              showIcon
-              closable
               action={(
                 <Button className="bg-primary-intense-pressed" size="sm">
                   Retry
                 </Button>
               )}
+              closable
             />
           }
 
@@ -119,7 +252,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Alert } from 'clera-ui/alert'
+          import { Alert } from '@clera-ui/alert'
 
           const AlertWithIconExample = () => {
             return <Alert
@@ -142,6 +275,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     Below is a comprehensive list of all the props available for the Alert component, along with their types, default values, and descriptions.
     <ArgTypes />
 
+    <br />
     #### **PresetVariants**
     > type PresetVariants = primary | outlinePrimary | secondary | outlineSecondary | success | outlineSuccess | info | outlineInfo | warning | outlineWarning | destructive | outlineDestructive | light | outlineLight | ghost
 
@@ -154,7 +288,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Alert variant="warning">This is a warning alert.</Alert>
+        <Alert
+          title="This is a warning alert."
+          variant="warning"
+        />
       `} />
     </Canvas.Source>
 
@@ -164,7 +301,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Alert title="Attention">This is an alert with a title.</Alert>
+        <Alert 
+          title="Attention"
+          variant="success"
+        />
       `} />
     </Canvas.Source>
 
@@ -174,7 +314,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Alert description="Please review your settings.">This alert has a description.</Alert>
+        <Alert 
+          description="Please review your settings."
+          variant="primary"
+        />
       `} />
     </Canvas.Source>
 
@@ -195,7 +338,12 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         import { FaCheckCircle } from 'react-icons/fa'
-        <Alert icon={<FaCheckCircle />} variant="success">Success!</Alert>
+        
+        <Alert
+          title="This is a warning alert."
+          icon={<FaCheckCircle />} 
+          variant="success"
+        />
       `} />
     </Canvas.Source>
 
@@ -205,70 +353,92 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
+        // inside your component...
         const handleClose = () => { console.log("Alert closed") }
-        <Alert closable onClose={handleClose}>This alert has a close handler.</Alert>
+        
+        return (
+          <Alert
+            title="This alert has a close handler."
+            onClose={handleClose}
+            closable 
+          />
+        )
       `} />
     </Canvas.Source>
   </div>
 
-  <div>
-    <TableOfContents
-      items={[
-        {
-          id: "when-to-use",
-          label: "When To Use"
-        },
-        {
-          id: "accesibility",
-          label: "Accessibility"
-        },
-        {
-          id: "examples",
-          label: "Examples",
-          children: [
-            {
-              id: "basic",
-              label: "Basic"
-            },
-            {
-              id: "with-icon",
-              label: "With Icon"
-            },
-            {
-              id: "banner",
-              label: "Banner"
-            }
-          ]
-        },
-        {
-          id: "api",
-          label: "API",
-          children: [
-            {
-              id: "presetvariants",
-              label: "Preset Variants"
-            }
-          ]
-        },
-        {
-          id: "faq",
-          label: "FAQ",
-          children: [
-            {
-              id: "what-are-the-different-alert-variants-available",
-              label: "What are the different..."
-            },
-            {
-              id: "how-do-i-add-a-title-to-an-alert",
-              label: "How do I add a title..."
-            },
-            {
-              id: "how-do-i-add-a-description-to-an-alert",
-              label: "How do I add..."
-            }
-          ]
-        },
-      ]}
-    />
-  </div>
-</div>
+  <TableOfContents
+    items={[
+      {
+        id: "when-to-use",
+        label: "When To Use"
+      },
+      {
+        id: "accesibility",
+        label: "Accessibility"
+      },
+      {
+        id: "examples",
+        label: "Examples",
+        children: [
+          {
+            id: "basic",
+            label: "Basic"
+          },
+          {
+            id: "success",
+            label: "Success"
+          },
+          {
+            id: "warning",
+            label: "Warning"
+          },
+          {
+            id: "info",
+            label: "Info"
+          },
+          {
+            id: "destructive",
+            label: "Dustructive"
+          },
+          {
+            id: "with-icon",
+            label: "With Icon"
+          },
+          {
+            id: "banner",
+            label: "Banner"
+          }
+        ]
+      },
+      {
+        id: "api",
+        label: "API",
+        children: [
+          {
+            id: "presetvariants",
+            label: "Preset Variants"
+          }
+        ]
+      },
+      {
+        id: "faq",
+        label: "FAQ",
+        children: [
+          {
+            id: "what-are-the-different-alert-variants-available",
+            label: "What are the different..."
+          },
+          {
+            id: "how-do-i-add-a-title-to-an-alert",
+            label: "How do I add a title..."
+          },
+          {
+            id: "how-do-i-add-a-description-to-an-alert",
+            label: "How do I add..."
+          }
+        ]
+      },
+    ]}
+  />
+</DocContainer>

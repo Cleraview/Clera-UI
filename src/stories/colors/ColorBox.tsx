@@ -11,8 +11,8 @@ export const ColorBox = ({ color, value, theme = 'light' }: ColorBoxProps) => {
   return (
     <div
       className={cn(
-        'w-full flex flex-col items-center gap-space-sm p-[6px] border rounded-md shadow-elevation-overflow/20 cursor-pointer',
-        theme === 'dark' ? 'bg-[#262626]' : 'bg-[#ffffff] border-default'
+        'w-full flex flex-col items-center gap-space-sm p-[6px] border rounded-md shadow-ds-elevation-overflow/20 cursor-pointer',
+        theme === 'dark' ? 'bg-[#262626]' : 'bg-[#ffffff] border-ds-default'
       )}
     >
       <div

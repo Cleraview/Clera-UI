@@ -58,7 +58,7 @@ export default meta
 type Story = StoryObj<typeof AlertDialog>
 
 export const Default: Story = {
-  tags: ['hidden'],
+  tags: [],
   render: args => (
     <AlertDialog
       {...args}

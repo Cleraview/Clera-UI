@@ -2,13 +2,13 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 
 export const THEME_STORAGE_KEY = 'theme'
 
-export type Theme = 'light' | 'dark'
+export type Theme = 'light' | 'dark' | 'system'
 
 export const getInitialTheme = (): Theme => {
   if (typeof window !== 'undefined') {
     try {
       const stored = localStorage.getItem(THEME_STORAGE_KEY)
-      return stored === 'dark' ? 'dark' : 'light'
+      return stored as Theme
     } catch (e) {
       return 'light'
     }

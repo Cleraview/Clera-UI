@@ -1,10 +1,10 @@
 @layer utilities {
   .heading-display {
-    @apply text-4xl md:text-5xl xl:text-6xl font-black leading-none text-default max-w-4xl;
+    @apply text-4xl md:text-5xl xl:text-6xl font-black leading-none text-ds-default max-w-4xl;
   }
 
   .heading-sub {
-    @apply text-lg md:text-xl lg:text-2xl leading-6 text-subtle;
+    @apply text-lg md:text-xl lg:text-2xl leading-6 text-ds-subtle;
   }
 
   /* === Headings === */
@@ -63,26 +63,26 @@
 
   /* === Code / Monospace === */
   .text-code {
-    @apply font-mono text-body-sm text-accent-violet;
+    @apply font-mono text-body-sm text-ds-accent-violet;
   }
 
   /* === Link / Action === */
   .text-link {
-    @apply font-medium text-accent-blue hover:underline;
+    @apply font-medium text-ds-accent-blue hover:underline;
   }
 
   /* === Muted / Subtle === */
   .text-muted {
-    @apply text-neutral-500;
+    @apply text-ds-subtlest;
   }
 
   /* === Strong / Emphasis === */
   .text-strong {
-    @apply font-semibold text-neutral-900;
+    @apply font-semibold text-ds-default;
   }
 
   .text-em {
-    @apply italic text-subtlest;
+    @apply italic text-ds-subtlest;
   }
 }
 

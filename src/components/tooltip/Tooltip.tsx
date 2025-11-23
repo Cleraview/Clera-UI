@@ -56,15 +56,15 @@ export const Tooltip = ({
             className={cn(
               tooltipVariants({ size }),
               theme === 'dark'
-                ? 'bg-neutral-bold text-inverse'
-                : 'bg-neutral text-default',
+                ? 'bg-ds-neutral-bold text-ds-inverse'
+                : 'bg-ds-neutral text-default',
               className
             )}
           >
             {content}
             <RadixTooltip.Arrow
               className={cn(
-                theme === 'dark' ? 'fill-gray-900' : 'fill-gray-50'
+                theme === 'dark' ? 'fill-ds-icon' : 'fill-ds-icon-inverse'
               )}
             />
           </RadixTooltip.Content>

@@ -102,7 +102,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           buttonVariants({ variant, fullWidth, rounded, disabled }),
           asChild && buttonSizes[size],
-          iconPosition === 'right' && 'flex-row-reverse',
           className
         )}
       >
@@ -131,6 +130,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                 'flex gap-space-sm items-center justify-center',
                 loading && 'invisible',
                 buttonSizes[size as keyof typeof buttonSizes],
+                iconPosition === 'right' && 'flex-row-reverse',
                 innerClassName
               )}
             >

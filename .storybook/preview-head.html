@@ -9,7 +9,7 @@
 
   body {
     font-size: 16px;
-    background-color: var(--background-color-elevation-surface);
+    background-color: var(--background-color-ds-elevation-surface);
   }
   
   div[class*="css-"] :where(h1:not(.sb-anchor, .sb-unstyled, .sb-unstyled h1)),
@@ -26,16 +26,28 @@
   div[class*="css-"] :where(b:not(.sb-anchor, .sb-unstyled, .sb-unstyled b)),
   div[class*="css-"] :where(i:not(.sb-anchor, .sb-unstyled, .sb-unstyled i)),
   div[class*="css-"] :where(span:not(.sb-anchor, .sb-unstyled, .sb-unstyled span)) {
-    color: var(--text-color-default);
+    color: var(--text-color-ds-default);
+  }
+  
+  div[class*="css-"] :where(a:not(.sb-anchor, .sb-unstyled, .sb-unstyled a)) {
+    margin-top: 10px;
+  }
+  
+  blockquote {
+    background-color: var(--background-color-ds-accent-yellow-subtlest);
+    border-left-color: var(--border-color-ds-accent-yellow)!important;
+  }
+  blockquote p {
+    padding: 8px 12px;
+    font-size: 10px;
   }
 
-  
   p kbd, 
   p samp, 
   p pre {
     font-size: 14px;
     font-family: var(--font-code);
-    background-color: var(--background-color-neutral);
+    background-color: var(--background-color-ds-neutral);
   }
 
   .sb-errordisplay.sb-wrapper {
@@ -44,68 +56,95 @@
 
   .sb-preparing-story, .sb-preparing-docs {
     padding-top: 6rem;
-    background-color: var(--background-color-elevation-surface);
+    background-color: var(--background-color-ds-elevation-surface);
   }
 
   .sbdocs.sbdocs-content {
-    margin-left: 300px;
-    max-width: unset;
-    padding: 0 4rem;
+    margin-left: 200px;
+    /* max-width: 900px; */
+    /* padding: 0 4rem; */
   }
 
   .sbdocs.sbdocs-wrapper {
-    background-color: var(--background-color-elevation-surface);
+    background-color: var(--background-color-ds-elevation-surface);
     padding-top: 6rem;
   }
 
   .sb-previewBlock {
-    background-color: var(--background-color-neutral);
+    background-color: var(--background-color-ds-neutral);
     box-shadow: unset;
   }
   .sb-previewBlock_icon {
-    background-color: var(--background-color-skeleton);
+    background-color: var(--background-color-ds-skeleton);
+  }
+
+  div:has(> .docblock-argstable.sb-unstyled) {
+    border: 1px solid var(--border-color-ds-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
   }
   .docblock-argstable.sb-unstyled {
-    color: var(--text-color-default)!important;
+    color: var(--text-color-ds-default)!important;
+    margin: 0!important;
+  }
+  .docblock-argstable.sb-unstyled .docblock-argstable-head, 
+  .docblock-argstable.sb-unstyled .docblock-argstable-body {
+    filter: unset;
   }
   .docblock-argstable-head tr th {
-    color: var(--text-color-default)!important;
+    color: var(--text-color-ds-default)!important;
   }
   .docblock-argstable-body tr td:nth-child(2) div:last-child span,
   .docblock-argstable-body tr td:nth-child(3) div span {
-    background-color: var(--background-color-neutral)!important;
+    background-color: var(--background-color-ds-neutral)!important;
     border: none!important;
-    color: var(--text-color-default)!important;
+    color: var(--text-color-ds-default)!important;
   }
   .docblock-argstable-head > tr > *,
   .docblock-argstable-body > tr > * {
-    border-color: var(--border-color-default)!important;
+    border-color: var(--border-color-ds-default)!important;
   }
   .docblock-argstable-body > tr > * {
-    background-color: var(--background-color-elevation-surface)!important;
+    background-color: var(--background-color-ds-elevation-surface)!important;
   }
+  .docblock-argstable.sb-unstyled tbody > tr > :first-of-type,
+  .docblock-argstable.sb-unstyled tbody > tr > :last-of-type {
+    border-inline-start: unset!important;
+    border-inline-end: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > * {
+    border-block-end: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > td:first-of-type,
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > td:last-of-type {
+    border-radius: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr > * {
+    border-top: 1px solid var(--border-color-ds-default);
+  }
+
   .sb-argstableBlock {
-    border: 1px solid var(--border-color-default)!important;
+    border: 1px solid var(--border-color-ds-default)!important;
   }
   .sb-argstableBlock-body {
     box-shadow: unset!important;
   }
   .sb-argstableBlock-head tr {
-    border-bottom: 1px solid var(--border-color-default);
+    border-bottom: 1px solid var(--border-color-ds-default);
   }
   .sb-argstableBlock-body tr {
-    border-color: var(--border-color-default)!important;
+    border-color: var(--border-color-ds-default)!important;
   }
   .sb-argstableBlock-head th,
   .sb-argstableBlock-body td {
-    background-color: var(--background-color-neutral)!important;
+    background-color: var(--background-color-ds-neutral)!important;
   }
   
   .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr th,
   .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr td {
-    background-color: var(--background-color-elevation-surface)!important;
-    border-color: var(--border-color-default)!important;
-    color: var(--text-color-default)!important;
+    background-color: var(--background-color-ds-elevation-surface)!important;
+    border-color: var(--border-color-ds-default)!important;
+    color: var(--text-color-ds-default)!important;
   }
 
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)),
@@ -118,18 +157,22 @@
   .sbdocs.sbdocs-content code,
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)) code,
   .sbdocs.sbdocs-content :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) code {
-    background-color: var(--background-color-neutral)!important;
-    border: 1px solid var(--border-color-default)!important;
-    color: var(--text-color-default)!important;
+    background-color: var(--background-color-ds-neutral)!important;
+    border: 1px solid var(--border-color-ds-default)!important;
+    color: var(--text-color-ds-default)!important;
     font-family: var(--font-code);
   }
-  
+
   .sbdocs.sbdocs-content .docblock-source {
     margin: 0!important;
     border-radius: 0!important;
-    background-color: var(--background-color-elevation-surface-sunken);
+    background-color: var(--background-color-ds-elevation-surface-sunken);
     border: none;
-    color: var(--text-color-default);
+    color: var(--text-color-ds-default);
+    box-shadow: unset!important;
+  }
+  .sbdocs.sbdocs-content .docblock-source div:nth-child(2) button {
+    display: none;
   }
   
   .sbdocs.sbdocs-content .docblock-source .token {
@@ -138,11 +181,11 @@
 
   /* DOCS BLOCK  SOURCE*/
   .token {
-    color: var(--text-color-default)!important;
+    color: var(--text-color-ds-default)!important;
   }
   span.token.imports,
   span.token.plain-text {
-    color: var(--text-color-default)!important;
+    color: var(--text-color-ds-default)!important;
   }
 
   /* e.g., { } ( ) [ ] , : = => < / > */
@@ -154,20 +197,20 @@
   span.token.tag.attr-value.punctuation.attr-equals,
   span.token.tag.attr-value.punctuation,
   span.token.tag.script.language-javascript.script-punctuation.punctuation {
-    color: var(--text-color-accent-neutral)!important;
+    color: var(--text-color-ds-accent-neutral)!important;
   }
 
   /* e.g., import, from, const, return, export, default */
   span.token.keyword.module,
   span.token.keyword,
   span.token.keyword.control-flow {
-    color: var(--text-color-accent-violet)!important;
+    color: var(--text-color-ds-accent-violet)!important;
   }
 
   /* e.g., 'react', "flex flex-col...", "xs" */
   span.token.string,
   span.token.tag.attr-value {
-    color: var(--text-color-accent-green)!important;
+    color: var(--text-color-ds-accent-green)!important;
   }
 
   /* e.g., Command, CommandMenu, FiCalendar, SizedItemsExample */
@@ -175,30 +218,30 @@
   span.token.function-variable.function.maybe-class-name,
   span.token.maybe-class-name,
   span.token.tag.class-name {
-    color: var(--text-color-accent-teal)!important;
+    color: var(--text-color-ds-accent-teal)!important;
   }
 
   /* e.g., useState, setSelectedValue, onSelect */
   span.token.function,
   span.token.function-variable.function {
-    color: var(--text-color-accent-blue)!important;
+    color: var(--text-color-ds-accent-blue)!important;
   }
 
   /* e.g., id, heading, items, onSelect, className, groups, menuGroups */
   span.token.literal-property.property,
   span.token.tag.attr-name,
   span.token.tag.script.language-javascript {
-    color: var(--text-color-accent-orange)!important;
+    color: var(--text-color-ds-accent-orange)!important;
   }
 
   /* e.g., the 'div' in <div ...> */
   span.token.tag {
-    color: var(--text-color-accent-red)!important;
+    color: var(--text-color-ds-accent-red)!important;
   }
 
   /* e.g., true, false */
   span.token.boolean {
-    color: var(--text-color-accent-magenta)!important;
+    color: var(--text-color-ds-accent-magenta)!important;
   }
 </style>
 <script>

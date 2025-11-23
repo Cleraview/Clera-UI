@@ -21,7 +21,7 @@ export const DynamicColorGroups = ({ groupKey }: DynamicColorGroupsProps) => {
     <div className="overflow-x-auto">
       <div className="inline-block min-w-full">
         <div className="">
-          <div className="grid grid-cols-[1fr_200px_200px] border-b border-default">
+          <div className="grid grid-cols-[1fr_200px_200px] border-b border-ds-default">
             <div className="py-space-sm px-space-sm">
               <span className="font-semibold">Token & Description</span>
             </div>

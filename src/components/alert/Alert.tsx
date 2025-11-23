@@ -11,7 +11,7 @@ import {
 } from '../_utils/variants'
 import { cva, VariantProps } from 'class-variance-authority'
 
-const alertVariants = cva('relative flex', {
+const alertVariants = cva('relative flex items-center', {
   variants: {
     variant: variantMap,
     rounded: roundedMap,
@@ -25,12 +25,12 @@ const alertVariants = cva('relative flex', {
 })
 
 export interface AlertProps extends VariantProps<typeof alertVariants> {
-  message: React.ReactNode
-  description?: React.ReactNode
+  title?: React.ReactNode | string
+  description?: React.ReactNode | string
   icon?: React.ReactNode
   action?: React.ReactNode
   variant?: VariantType
-  showIcon?: boolean
+  // showIcon?: boolean
   banner?: boolean
   closable?: boolean
   onClose?: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -39,14 +39,14 @@ export interface AlertProps extends VariantProps<typeof alertVariants> {
 }
 
 export const Alert: React.FC<AlertProps> = ({
-  message,
+  title,
   description,
   icon,
   action,
   variant = 'primary',
   rounded,
-  size,
-  showIcon = false,
+  size = 'md',
+  // showIcon = false,
   banner = false,
   closable = false,
   onClose,
@@ -67,30 +67,28 @@ export const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
+      role="alert"
       className={cn(
         alertVariants({ variant, rounded, size }),
         banner && 'w-full flex items-center',
         className
       )}
-      role="alert"
     >
-      {showIcon && icon && (
-        <div className="h-6 mr-space-sm self-start flex items-center text-xl">
+      {icon && (
+        <div className="h-6 mr-space-sm self-start flex items-center text-body-xl">
           {icon}
         </div>
       )}
-      <div className="flex-1">
-        <div className="text-heading-lg">{message}</div>
-        {description && (
-          <div className="text-body-md opacity-90">{description}</div>
-        )}
+      <div className="flex-1 flex flex-col gap-space-xs">
+        {title && <div className="font-semibold">{title}</div>}
+        {description && <div className="font-thin">{description}</div>}
       </div>
       {action && <div className="ml-4">{action}</div>}
       {closable && (
         <button
           className={cn(
-            'ml-space-sm text-body-lg opacity-70 hover:opacity-100 transition cursor-pointer',
-            !banner && 'self-start'
+            'ml-space-sm opacity-70 hover:opacity-100 transition cursor-pointer',
+            !banner && title && description && 'self-start'
           )}
           onClick={handleClose}
         >
