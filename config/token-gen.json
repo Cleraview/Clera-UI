@@ -1,0 +1,37 @@
+{
+  "tokensPath": "tokens/*.json",
+  "outputs": {
+    "nativeCss": {
+      "enabled": true,
+      "path": ".storybook",
+      "prefix": "_",
+      "suffix": ".css",
+      "includePaletteBlock": false
+    },
+    "tailwindCss": {
+      "enabled": true,
+      "path": "src/styles/themes",
+      "prefix": "",
+      "suffix": ".generated.css"
+    },
+    "runtimeJs": {
+      "enabled": false,
+      "path": "src/styles/themes",
+      "prefix": "",
+      "suffix": "-vars.js"
+    }
+  },
+  "paletteResolution": {
+    "strategy": "tailwind",
+    "requireTailwindPackage": true
+  },
+  "stops": {
+    "min": 50,
+    "max": 950,
+    "step": 50
+  },
+  "defaults": {
+    "themeRoot": ":root",
+    "darkSelector": "[data-theme='dark']"
+  }
+}

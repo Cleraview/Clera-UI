@@ -1,0 +1,24 @@
+{
+  "spacing": {
+    "space": {
+      "xs": { "$type": "spacing", "$value": "calc(var(--spacing) * 1)" },
+      "sm": { "$type": "spacing", "$value": "calc(var(--spacing) * 3)" },
+      "md": { "$type": "spacing", "$value": "calc(var(--spacing) * 5)" },
+      "lg": { "$type": "spacing", "$value": "calc(var(--spacing) * 7)" },
+      "xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 9)" },
+      "2xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 11)" },
+      "3xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 13)" },
+      "4xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 15)" }
+    },
+    "gap": {
+      "xs": { "$type": "spacing", "$value": "calc(var(--spacing) * 1)" },
+      "sm": { "$type": "spacing", "$value": "calc(var(--spacing) * 3)" },
+      "md": { "$type": "spacing", "$value": "calc(var(--spacing) * 5)" },
+      "lg": { "$type": "spacing", "$value": "calc(var(--spacing) * 7)" },
+      "xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 9)" },
+      "2xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 11)" },
+      "3xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 13)" },
+      "4xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 15)" }
+    }
+  }
+}
