@@ -3,7 +3,7 @@
     "$meta": {
       "outPath": {
         "native": ".storybook/_colors.css",
-        "theme": "src/styles/themes/color.generated.css"
+        "theme": "src/styles/themes/color.css"
       }
     },
     "theme": {
@@ -249,16 +249,16 @@
           "$value": "{color.violet.700}",
           "$extensions": {
             "mode": {
-              "dark": "{color.violet.400}"
+              "dark": "{color.violet.700}"
             }
           }
         },
         "selected": {
           "$type": "color",
-          "$value": "{color.violet.800}",
+          "$value": "{color.violet.700}",
           "$extensions": {
             "mode": {
-              "dark": "{color.violet.100}"
+              "dark": "{color.violet.500}"
             }
           }
         },
@@ -336,10 +336,10 @@
         },
         "subtlest": {
           "$type": "color",
-          "$value": "{color.neutral.600}",
+          "$value": "{color.neutral.500}",
           "$extensions": {
             "mode": {
-              "dark": "{color.neutral.300}"
+              "dark": "{color.neutral.400}"
             }
           }
         },
@@ -506,7 +506,7 @@
             "$value": "{color.violet.700}",
             "$extensions": {
               "mode": {
-                "dark": "{color.violet.400}"
+                "dark": "{color.violet.500}"
               }
             }
           },
@@ -519,7 +519,7 @@
               }
             }
           },
-          "danger": {
+          "destructive": {
             "$type": "color",
             "$value": "{color.red.700}",
             "$extensions": {
@@ -708,16 +708,16 @@
         },
         "focused": {
           "$type": "color",
-          "$value": "{color.blue.500}",
+          "$value": "{color.violet.500}",
           "$extensions": {
             "mode": {
-              "dark": "{color.blue.300}"
+              "dark": "{color.violet.300}"
             }
           }
         },
         "input": {
           "$type": "color",
-          "$value": "{color.neutral.400}",
+          "$value": "{color.neutral.200}",
           "$extensions": {
             "mode": {
               "dark": "{color.neutral.600}"
@@ -738,7 +738,7 @@
           "$value": "{color.violet.700}",
           "$extensions": {
             "mode": {
-              "dark": "{color.violet.400}"
+              "dark": "{color.violet.500}"
             }
           }
         },
@@ -751,7 +751,7 @@
             }
           }
         },
-        "danger": {
+        "destructive": {
           "$type": "color",
           "$value": "{color.red.600}",
           "$extensions": {
@@ -1584,6 +1584,11 @@
             "subtlest": {
               "$type": "color",
               "$value": "{color.violet.100}",
+              "$extensions": {
+                "mode": {
+                  "dark": "{color.violet.900}"
+                }
+              },
               "hovered": {
                 "$type": "color",
                 "$value": "{color.violet.200}",
@@ -1598,25 +1603,25 @@
                 "$value": "{color.violet.300}",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.violet.800}"
+                    "dark": "{color.violet.700}"
                   }
-                }
-              },
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.violet.900}"
                 }
               }
             },
             "subtler": {
               "$type": "color",
               "$value": "{color.violet.200}",
+              "$extensions": {
+                "mode": {
+                  "dark": "{color.violet.800}"
+                }
+              },
               "hovered": {
                 "$type": "color",
                 "$value": "{color.violet.300}",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.violet.800}"
+                    "dark": "{color.violet.700}"
                   }
                 }
               },
@@ -1625,25 +1630,25 @@
                 "$value": "{color.violet.300}",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.violet.800}"
+                    "dark": "{color.violet.600}"
                   }
-                }
-              },
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.violet.900}"
                 }
               }
             },
             "subtle": {
               "$type": "color",
               "$value": "{color.violet.400}",
+              "$extensions": {
+                "mode": {
+                  "dark": "{color.violet.600}"
+                }
+              },
               "hovered": {
                 "$type": "color",
                 "$value": "{color.violet.300}",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.violet.800}"
+                    "dark": "{color.violet.500}"
                   }
                 }
               },
@@ -1652,19 +1657,19 @@
                 "$value": "{color.violet.300}",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.violet.900}"
+                    "dark": "{color.violet.400}"
                   }
-                }
-              },
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.violet.800}"
                 }
               }
             },
             "bolder": {
               "$type": "color",
               "$value": "{color.violet.700}",
+              "$extensions": {
+                "mode": {
+                  "dark": "{color.violet.400}"
+                }
+              },
               "hovered": {
                 "$type": "color",
                 "$value": "{color.violet.800}",
@@ -1681,11 +1686,6 @@
                   "mode": {
                     "dark": "{color.violet.200}"
                   }
-                }
-              },
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.violet.400}"
                 }
               }
             }
@@ -2001,7 +2001,7 @@
               "$value": "{color.neutral.100}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.neutral.800}"
+                  "dark": "{color.neutral.900}"
                 }
               }
             },
@@ -2010,7 +2010,7 @@
               "$value": "{color.neutral.200}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.neutral.700}"
+                  "dark": "{color.neutral.800}"
                 }
               }
             },
@@ -2651,7 +2651,7 @@
             }
           }
         },
-        "danger": {
+        "destructive": {
           "$type": "color",
           "$value": "{color.red.100}",
           "$extensions": {
@@ -3069,10 +3069,10 @@
         },
         "selected": {
           "$type": "color",
-          "$value": "{color.violet.50}",
+          "$value": "{color.violet.200}",
           "hovered": {
             "$type": "color",
-            "$value": "{color.violet.100}",
+            "$value": "{color.violet.300}",
             "$extensions": {
               "mode": {
                 "dark": "{color.violet.800}"
@@ -3091,27 +3091,27 @@
           "bold": {
             "$type": "color",
             "$value": "{color.violet.700}",
+            "$extensions": {
+              "mode": {
+                "dark": "{color.violet.500}"
+              }
+            },
             "hovered": {
               "$type": "color",
               "$value": "{color.violet.800}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.violet.300}"
+                  "dark": "{color.violet.400}"
                 }
               }
             },
             "pressed": {
               "$type": "color",
-              "$value": "{color.violet.900}",
+              "$value": "{color.violet.700}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.violet.200}"
+                  "dark": "{color.violet.400}"
                 }
-              }
-            },
-            "$extensions": {
-              "mode": {
-                "dark": "{color.violet.400}"
               }
             }
           },
@@ -3129,7 +3129,7 @@
             "$value": "{color.neutral.100}",
             "$extensions": {
               "mode": {
-                "dark": "color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700))"
+                "dark": "color-mix(in srgb, theme(colors.neutral.900) 70%, theme(colors.neutral.800))"
               }
             }
           },
@@ -3196,30 +3196,30 @@
               }
             },
             "overlay": {
+              "$type": "color",
+              "$value": "rgba(255, 255, 255, .6)",
+              "$extensions": {
+                "mode": {
+                  "dark": "color-mix(in srgb, {color.neutral.600} 60%, transparent)"
+                }
+              },
               "hovered": {
                 "$type": "color",
-                "$value": "rgb(255, 255, 255)",
+                "$value": "rgba(255, 255, 255, .5)",
                 "$extensions": {
                   "mode": {
-                    "dark": "color-mix(in srgb, theme(colors.neutral.600) 70%, theme(colors.neutral.500))"
+                    "dark": "color-mix(in srgb, color-mix(in srgb, theme(colors.neutral.600) 70%, theme(colors.neutral.500)) 50%, transparent)"
                   }
                 }
               },
-              "$type": "color",
-              "$value": "rgb(255, 255, 255)",
               "pressed": {
                 "$type": "color",
-                "$value": "rgb(255, 255, 255)",
+                "$value": "rgba(255, 255, 255, .6)",
                 "$extensions": {
                   "mode": {
-                    "dark": "{color.neutral.500}"
+                    "dark": "color-mix(in srgb, {color.neutral.500} 60%, transparent)"
                   }
                 }
-              },
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.neutral.600}"
-                }
               }
             },
             "$type": "color",
@@ -3227,91 +3227,6 @@
             "$extensions": {
               "mode": {
                 "dark": "{color.neutral.800}"
-              }
-            }
-          }
-        }
-      }
-    },
-    "elevation": {
-      "ds": {
-        "surface": {
-          "$type": "color",
-          "$value": "rgb(255, 255, 255)",
-          "$extensions": {
-            "mode": {
-              "dark": "{color.neutral.800}"
-            }
-          },
-          "hovered": {
-            "$type": "color",
-            "$value": "{color.neutral.50}",
-            "$extensions": {
-              "mode": {
-                "dark": "{color.neutral.800}"
-              }
-            }
-          },
-          "pressed": {
-            "$type": "color",
-            "$value": "{color.neutral.100}",
-            "$extensions": {
-              "mode": {
-                "dark": "{color.neutral.800}"
-              }
-            }
-          },
-          "raised": {
-            "$type": "color",
-            "$value": "rgb(255, 255, 255)",
-            "$extensions": {
-              "mode": {
-                "dark": "{color.neutral.700}"
-              }
-            },
-            "hovered": {
-              "$type": "color",
-              "$value": "{color.neutral.50}",
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.neutral.700}"
-                }
-              }
-            },
-            "pressed": {
-              "$type": "color",
-              "$value": "{color.neutral.100}",
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.neutral.700}"
-                }
-              }
-            }
-          },
-          "overlay": {
-            "$type": "color",
-            "$value": "rgb(255, 255, 255)",
-            "$extensions": {
-              "mode": {
-                "dark": "{color.neutral.600}"
-              }
-            },
-            "hovered": {
-              "$type": "color",
-              "$value": "rgb(255, 255, 255)",
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.neutral.600}"
-                }
-              }
-            },
-            "pressed": {
-              "$type": "color",
-              "$value": "rgb(255, 255, 255)",
-              "$extensions": {
-                "mode": {
-                  "dark": "{color.neutral.500}"
-                }
               }
             }
           }
@@ -4113,7 +4028,7 @@
             }
           }
         },
-        "danger": {
+        "destructive": {
           "$type": "color",
           "$value": "{color.red.600}",
           "hovered": {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Drawer from '..'
 import { Button } from '@/components/button'
 import { Switch } from '@/components/form'
@@ -68,7 +68,7 @@ const meta: Meta<typeof Drawer> = {
     fullScreen: false,
     duration: 600,
     title: 'Menu',
-    children: '<h1 className="text-heading-lg mb-space-md">Drawer Content</h1>',
+    children: '<h1>Drawer Content</h1>',
   },
 }
 
@@ -92,7 +92,10 @@ export const Default: Story = {
           }}
         >
           <Drawer.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Drawer.Content>
         </Drawer>
       </div>
@@ -110,7 +113,9 @@ export const LeftPosition: Story = {
         <div className="flex items-center gap-space-sm">
           <Switch
             checked={position === 'left'}
-            onChange={checked => setPosition(checked ? 'left' : 'right')}
+            onChange={(checked: typeof position) =>
+              setPosition(checked ? 'left' : 'right')
+            }
             checkedChildren="Left"
             unCheckedChildren="Right"
           />
@@ -129,7 +134,10 @@ export const LeftPosition: Story = {
           }}
         >
           <Drawer.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Drawer.Content>
         </Drawer>
       </div>
@@ -153,7 +161,10 @@ export const FullScreen: Story = {
           }}
         >
           <Drawer.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Drawer.Content>
         </Drawer>
       </div>

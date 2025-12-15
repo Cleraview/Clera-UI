@@ -53,7 +53,7 @@ export const FormInputWrapper = ({
       <label
         htmlFor={inputId}
         className={cn(
-          'absolute -left-1 bg-default px-1 transition-all pointer-events-none whitespace-nowrap z-[1]',
+          'absolute -left-1 bg-ds-default transition-all pointer-events-none whitespace-nowrap z-[1]',
           labelClasses[inputSize],
           (focused || filled || readOnly || disabled) && [
             labelSizes[inputSize],

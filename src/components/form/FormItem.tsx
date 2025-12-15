@@ -55,7 +55,7 @@ export function FormItem<T extends FieldValues>({
         : children}
 
       {hasError && (
-        <p className="text-sm text-destructive">
+        <p className="text-body-sm text-ds-destructive">
           {fieldState.error?.message || 'This field is required'}
         </p>
       )}

@@ -1,9 +1,13 @@
+:root {
+  --header-height: 70px;
+}
+
 body {
   background-color: var(--background-color-ds-elevation-surface)!important;
 }
 
 svg {
-  fill: var(--icon-color-ds-default);
+  fill: var(--fill-ds-icon-subtlest);
 }
 
 button:has(> svg) {
@@ -11,20 +15,6 @@ button:has(> svg) {
 }
 #storybook-preview-iframe {
   background-color: transparent !important;
-}
-section:has(> div[role="toolbar"]) {
-  height: 70px;
-  position: fixed;
-  left: 0;
-}
-.container.sidebar-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  z-index: 4;
-  background: var(--background-color-ds-elevation-surface);
 }
 
 /* Header */
@@ -123,11 +113,23 @@ section:has(> div[role="toolbar"]) {
 }
 
 /* SIDEBAR */
-.sidebar-container {
-  padding-top: 69px!important;
+section:has(> div[role="toolbar"]) {
+  height: 70px;
+  position: fixed;
+  left: 0;
 }
 div:has(> .sidebar-header) {
   display: none;
+}
+.container.sidebar-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  z-index: 4;
+  background: var(--background-color-ds-elevation-surface);
+  padding-top: 69px!important;
 }
 div:has(> nav[aria-label="Global"]) {
   border-right: 0!important;
@@ -164,10 +166,6 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
   font-weight: 700;
   padding-left: 0;
 }
-.sidebar-item[data-nodetype="document"] > a > div[class*="css-"],
-.sidebar-item[data-nodetype="story"] > a > div[class*="css-"] {
-  margin-left: -5px;
-}
 .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="component"], 
 .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="group"] {
   background: unset!important;
@@ -191,7 +189,7 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
 .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="component"]:hover, 
 .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="group"]:hover,
 .sidebar-item:not([data-selected="true"]):hover {
-  background-color: var(--background-color-ds-neutral-hovered,oklch(0.44 0 0 / .2))!important;
+  background-color: var(--background-color-ds-neutral-subtle-hovered)!important;
 }
 .sidebar-item a,
 .sidebar-item button {
@@ -217,7 +215,14 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
   fill: var(--icon-color-ds-default);
 }
 
+main section[aria-labelledby="main-preview-heading"] {
+  margin-top: var(--header-height);
+}
+
 /* Panel Resize Toggle */
+div[orientation="vertical"] + section > #storybook-panel-root {
+  margin-top: var(--header-height);
+}
 div[orientation="horizontal"]::after {
   background-color: unset;
 }
@@ -225,7 +230,7 @@ div[orientation="horizontal"]::after {
   color: var(--text-color-ds-accent-violet)!important;
   border-bottom-color: var(--border-color-ds-selected)!important;
 }
-#tabbutton-addon-controls > div > div[class*="css-"] {
+div[data-key="addon-controls"] > div > div[class*="css-"] {
   background-color: var(--background-color-ds-selected);
   color: var(--text-color-ds-accent-violet);
 }

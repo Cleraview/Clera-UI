@@ -1,7 +1,6 @@
 import remarkGfm from 'remark-gfm'
 import path from 'path'
 import type { Configuration as WebpackConfiguration } from 'webpack'
-// import { fileURLToPath } from 'url'
 
 type StorybookConfig = Record<string, any>
 const config: StorybookConfig = {
@@ -11,8 +10,7 @@ const config: StorybookConfig = {
   ],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",
-    // import.meta.resolve("./addons/custom-header.ts"),
-    // "@storybook/addon-themes",
+    "storybook-addon-deep-controls",
     {
       name: "@storybook/addon-docs",
       options: {

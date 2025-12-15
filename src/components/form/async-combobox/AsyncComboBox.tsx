@@ -211,9 +211,9 @@ export const AsyncComboBox = React.forwardRef<
             aria-expanded={open}
             className={cn(
               'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-              '[&>[data-filled="false"]]:text-subtlest',
+              '[&>[data-filled="false"]]:text-ds-subtlest',
               sizeClasses[inputSize],
-              disabled ? 'text-subtlest' : 'text-default',
+              disabled ? 'text-ds-subtlest' : 'text-ds-default',
               className
             )}
             onBlur={onBlur}
@@ -224,7 +224,7 @@ export const AsyncComboBox = React.forwardRef<
               data-filled={filled}
               className={cn(
                 'truncate',
-                hasError ? 'text-destructive' : 'text-default',
+                hasError ? 'text-ds-destructive' : 'text-ds-default',
                 !value && 'invisible'
               )}
             >
@@ -233,15 +233,15 @@ export const AsyncComboBox = React.forwardRef<
 
             <FiChevronDown
               className={cn(
-                'w-4 h-4 ml-space-sm text-subtlest shrink-0',
-                hasError && 'text-destructive!'
+                'w-4 h-4 ml-space-sm text-ds-subtlest shrink-0',
+                hasError && 'text-ds-destructive!'
               )}
             />
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Content
-              className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md bg-default shadow-md border border-default"
+              className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md bg-ds-elevation-surface shadow-md border border-ds-default"
               sideOffset={4}
               side="bottom"
               align="start"
@@ -250,20 +250,21 @@ export const AsyncComboBox = React.forwardRef<
               <Command className="flex flex-col">
                 <CommandInput
                   className={cn(
-                    'w-full px-space-sm py-space-xs text-body-sm outline-none border-b border-default',
-                    sizeClasses[inputSize],
-                    'placeholder:text-subtlest'
+                    'w-full px-space-sm py-space-xs text-body-sm text-ds-default outline-none border-b border-ds-default',
+                    'placeholder:text-ds-subtlest',
+                    sizeClasses[inputSize]
                   )}
                   placeholder="Search..."
                   value={search}
                   onValueChange={handleValueChange}
+                  autoFocus
                 />
-                <CommandList className="p-space-xs max-h-60 overflow-y-auto">
+                <CommandList className="p-space-xs max-h-60 overflow-y-auto scrollbar">
                   {effectiveLoading ? (
                     renderLoadingState()
                   ) : (
                     <>
-                      <CommandEmpty className="text-body-sm p-space-sm">
+                      <CommandEmpty className="text-body-sm text-ds-default p-space-sm">
                         {notFoundContent ?? 'No results found.'}
                       </CommandEmpty>
 
@@ -271,7 +272,7 @@ export const AsyncComboBox = React.forwardRef<
                         <CommandGroup
                           key={group}
                           heading={group}
-                          className="[&_[cmdk-group-heading]]:p-space-sm [&_[cmdk-group-heading]]:text-body-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-subtle"
+                          className="[&_[cmdk-group-heading]]:p-space-sm [&_[cmdk-group-heading]]:text-body-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-ds-subtle"
                         >
                           {items.map(option => (
                             <CommandItem
@@ -279,8 +280,10 @@ export const AsyncComboBox = React.forwardRef<
                               value={option.value}
                               onSelect={handleChange}
                               className={cn(
-                                'rounded-sm p-0 text-body-sm cursor-pointer',
-                                'aria-selected:bg-primary/20 aria-selected:text-primary outline-none'
+                                'rounded-sm p-0 text-body-sm cursor-pointer text-ds-default',
+                                'aria-selected:[&>div:not([data-hover="false"])]:bg-ds-selected',
+                                'aria-selected:[&>div:not([data-hover="false"])]:text-ds-accent-violet',
+                                'outline-none'
                               )}
                             >
                               {renderItem(option)}

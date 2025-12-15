@@ -6,13 +6,10 @@
   :root {
     --font-code: "Google Sans Code", monospace;
   }
-  
-  html {
-    background-color: transparent !important;
-  }
 
   body {
     font-size: 16px;
+    background-color: var(--background-color-ds-elevation-surface);
   }
 
   
@@ -54,9 +51,9 @@
     background-color: var(--background-color-ds-neutral);
   }
 
-  .sb-errordisplay.sb-wrapper {
+  /* .sb-errordisplay.sb-wrapper {
     margin-left: 300px;
-  }
+  } */
 
   .sb-preparing-story, .sb-preparing-docs {
     padding-top: 6rem;
@@ -65,7 +62,7 @@
 
   .sbdocs.sbdocs-wrapper {
     background: var(--background-color-ds-elevation-surface);
-    padding-top: 6rem;
+    padding-top: 1rem;
   }
 
   .sb-previewBlock {
@@ -138,6 +135,9 @@
     background-color: var(--background-color-ds-neutral)!important;
   }
   
+  .sbdocs.sbdocs-content {
+    max-width: 1200px;
+  }
   .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr th,
   .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr td {
     background-color: var(--background-color-ds-elevation-surface)!important;

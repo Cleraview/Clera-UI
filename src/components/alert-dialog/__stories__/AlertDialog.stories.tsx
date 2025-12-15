@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import AlertDialog from '..'
 import { Button } from '@/components/button'
+import { variantMapKeys } from '@/components/_utils/variants'
 
 const meta: Meta<typeof AlertDialog> = {
-  title: 'UI/AlertDialog',
+  title: 'UI/Alert Dialog',
   component: AlertDialog,
-  tags: ['dev', 'v12.1.1'],
+  tags: ['dev'],
   parameters: {
     layout: 'centered',
   },
@@ -36,6 +37,24 @@ const meta: Meta<typeof AlertDialog> = {
         defaultValue: { summary: 'Confirm' },
       },
     },
+    okButtonVariant: {
+      control: 'select',
+      options: variantMapKeys,
+      description: 'Variant style for the confirm button',
+      table: {
+        type: { summary: 'VariantType' },
+        defaultValue: { summary: 'destructive' },
+      },
+    },
+    cancelButtonVariant: {
+      control: 'select',
+      options: variantMapKeys,
+      description: 'Variant style for the cancel button',
+      table: {
+        type: { summary: 'VariantType' },
+        defaultValue: { summary: 'ghost' },
+      },
+    },
     cancelText: {
       control: 'text',
       description: 'Label for the cancel button',
@@ -59,6 +78,13 @@ type Story = StoryObj<typeof AlertDialog>
 
 export const Default: Story = {
   tags: [],
+  args: {
+    trigger: (
+      <Button variant="destructive" size="sm">
+        Delete Project(s)
+      </Button>
+    ),
+  },
   render: args => (
     <AlertDialog
       {...args}
@@ -73,10 +99,13 @@ export const Default: Story = {
 
 export const WithTriggerButton: Story = {
   tags: ['hidden'],
+  args: {
+    trigger: <Button variant="outline">Delete Message</Button>,
+  },
   render: args => (
     <AlertDialog
       {...args}
-      trigger={<Button variant="outline">Open Alert Dialog</Button>}
+      trigger={args.trigger}
       onOk={() =>
         new Promise<void>(resolve => {
           setTimeout(resolve, 1000)

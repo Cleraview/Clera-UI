@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     A `Command` is a powerful and flexible component for building command palettes, keyboard shortcuts, command menus, and searchable lists. Built on top of the `cmdk` library, it provides an efficient way to filter and display items with keyboard navigation and search functionality.
     <DocInfo 
-      importStatement={`import { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandMenu } from 'clera-ui'`} 
+      importStatement={`import { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandMenu } from '@clera/ui'`} 
       sourcePath={`components/command`} 
     />
 
@@ -76,7 +76,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             CommandItem,
             CommandMenu,
             CommandMenuGroup,
-          } from 'clera-ui'
+          } from '@clera/ui'
           import { FiCalendar, FiHome, FiUser, FiSettings } from 'react-icons/fi'
 
           const CommandDialogExample = () => {
@@ -152,7 +152,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Button onClick={() => setOpen(true)}>
                   Open Command (⌘C)
                 </Button>
-                <p className="text-body-sm text-subtle">
+                <p className="text-body-sm text-ds-subtle">
                   Selected: {selectedValue || 'None'}
                 </p>
                 <CommandDialog
@@ -198,7 +198,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             CommandItem,
             CommandMenu,
             CommandMenuGroup,
-          } from 'clera-ui'
+          } from '@clera/ui'
           import { FiCalendar, FiHome } from 'react-icons/fi'
 
           const StaticCommandMenuExample = () => {
@@ -227,14 +227,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
             return (
               <div className="flex flex-col gap-space-md w-full max-w-sm">
-                <Command className="rounded-xl border border-default shadow-md">
+                <Command>
                   <CommandMenu
                     groups={menuGroups}
                     placeholder="Filter items..."
                     value={selectedValue}
                   />
                 </Command>
-                <p className="text-body-sm text-subtle">
+                <p className="text-body-sm text-ds-subtle">
                   Selected: {selectedValue || 'None'}
                 </p>
               </div>
@@ -264,7 +264,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             Command,
             CommandMenu,
             CommandMenuGroup,
-          } from 'clera-ui'
+          } from '@clera/ui'
           import { FiCalendar, FiHome } from 'react-icons/fi'
 
           const SizedItemsExample = () => {
@@ -294,7 +294,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
             return (
               <div className="flex flex-col gap-space-md w-full max-w-sm">
-                <Command className="rounded-xl border border-default shadow-md">
+                <Command>
                   <CommandMenu
                     groups={menuGroups}
                     placeholder="Small items (xs)..."
@@ -302,7 +302,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                     value={selectedValue}
                   />
                 </Command>
-                <Command className="rounded-xl border border-default shadow-md">
+                <Command>
                   <CommandMenu
                     groups={menuGroups}
                     placeholder="Medium items (sm)..."
@@ -310,7 +310,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                     value={selectedValue}
                   />
                 </Command>
-                <Command className="rounded-xl border border-default shadow-md">
+                <Command>
                   <CommandMenu
                     groups={menuGroups}
                     placeholder="Default items (md)..."
@@ -345,7 +345,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             Command,
             CommandMenu,
             CommandMenuGroup,
-          } from 'clera-ui'
+          } from '@clera/ui'
           import { FiCalendar, FiHome, FiUser } from 'react-icons/fi'
 
           const ControlledSelectionExample = () => {
@@ -386,14 +386,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
             return (
               <div className="flex flex-col gap-space-md w-full max-w-sm">
-                <Command className="rounded-xl border border-default shadow-md">
+                <Command>
                   <CommandMenu
                     groups={menuGroups}
                     placeholder="Filter items..."
                     value={selectedValue}
                   />
                 </Command>
-                <p className="text-body-sm text-subtle">
+                <p className="text-body-sm text-ds-subtle">
                   Selected: {selectedValue || 'None'}
                 </p>
               </div>
@@ -423,7 +423,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             CommandDialog,
             CommandMenu,
             CommandMenuGroup,
-          } from 'clera-ui'
+          } from '@clera/ui'
           import {
             FiFilePlus,
             FiFolder,
@@ -550,7 +550,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 <Button onClick={() => setOpen(true)}>
                   Open Command (⌘C)
                 </Button>
-                <p className="text-body-sm text-subtle">
+                <p className="text-body-sm text-ds-subtle">
                   Selected: {selectedValue || 'None'}
                 </p>
                 <CommandDialog
@@ -589,6 +589,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     | `className` | `string` | - | Optional CSS classes to customize styling |
     | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive>` | - | All standard HTML div props |
     | `ref` | `React.ForwardedRef` | - | Forwards ref to the underlying CommandPrimitive component |
+    | `withBorder` | `boolean` | `true` | Whether to display a border around the command component |
 
     <br />
 
@@ -961,7 +962,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <div className="w-full max-w-sm">
-          <Command className="rounded-lg border border-default shadow-lg">
+          <Command className="rounded-lg border border-ds-default shadow-lg">
             <CommandMenu
               groups={menuGroups}
               placeholder="Filter items..."

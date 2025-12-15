@@ -1,0 +1,459 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import * as DropdownStories from "./DropdownMenu.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Dropdown Menu" of={DropdownStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Dropdown Menu
+
+    A versatile menu that displays a list of actions or options to the user, triggered by a button or icon.
+    It supports nested drill-down navigation, selection states (checkbox/radio), and custom content.
+    <DocInfo 
+      importStatement={`import { Dropdown, DropdownMenu, DropdownMenuItem } from '@clera/ui'`} 
+      sourcePath={`components/dropdown-menu`} 
+    />
+    
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Dropdown` component is a high-level abstraction built on top of Radix UI primitives. It simplifies the creation of complex menus by using a data-driven approach.
+    It is commonly used to:
+
+    -   **Group Actions**: Hide secondary actions behind a "More" button (e.g., Edit, Delete, Share).
+    -   **Navigation**: Create user account menus or application settings menus.
+    -   **Filtering**: Allow users to toggle multiple options (checkboxes) or select a single mode (radios).
+    -   **Deep Hierarchies**: Navigate through multi-level categories using a mobile-friendly "drill-down" animation instead of flying out.
+
+    Unlike standard fly-out menus, the **Drill-Down** pattern keeps the UI compact, making it ideal for:
+    -   Complex settings panels.
+    -   Mobile interfaces where screen width is limited.
+    -   Menus with deep nesting (3+ levels).
+
+    <br />
+
+    ## **Component Structure**
+
+    The system offers two ways to build menus:
+
+    ### **1. The Smart `Dropdown` (Recommended)**
+    A single component that takes an `items` array and handles rendering, nesting, and animation automatically.
+    -   **`Dropdown`**: The smart wrapper. Accepts `trigger` and `items`.
+    -   **`DropdownItemDef`**: The configuration object for defining items.
+
+    ### **2. The Primitives (Advanced)**
+    Direct access to the underlying Radix UI components for manual composition.
+    -   **`DropdownMenu`**: Root component.
+    -   **`DropdownMenuTrigger`**: The button that toggles the menu.
+    -   **`DropdownMenuContent`**: The popover container.
+    -   **`DropdownMenuItem`**: Individual items.
+    -   **`DropdownMenuCheckboxItem`**: Items with selection state.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Simple**
+
+    A standard menu with icons, labels, shortcuts, and separators.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DropdownStories.Simple} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Dropdown } from '@clera/ui'
+          import { Button } from '@clera/ui/button'
+          import { FaUser, FaCreditCard, FaCog, FaGear } from 'react-icons/fa'
+
+          const SimpleExample = () => {
+            return (
+              <Dropdown
+                align="end"
+                trigger={
+                  <Button variant="ghost" icon={<FaGear />}>
+                    My Account
+                  </Button>
+                }
+                items={[
+                  { type: 'label', label: 'My Account' },
+                  { type: 'separator' },
+                  { label: 'Profile', icon: FaUser, shortcut: '⇧⌘P' },
+                  { label: 'Billing', icon: FaCreditCard, shortcut: '⌘B' },
+                  { label: 'Settings', icon: FaCog, shortcut: '⌘S' },
+                  { type: 'separator' },
+                  'Log out',
+                ]}
+              />
+            )
+          }
+
+          export default SimpleExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Drill-Down Navigation**
+
+    The `Dropdown` component automatically detects nested `children` in your items array and creates a drill-down navigation flow.
+    Instead of opening a side submenu, the menu slides to show the next level.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DropdownStories.DrillDownNavigation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Dropdown } from '@clera/ui'
+          import { Button } from '@clera/ui/button'
+          import { FaCog, FaGlobe, FaLock } from 'react-icons/fa'
+
+          const DrillDownExample = () => {
+            return (
+              <Dropdown
+                width={280}
+                trigger={<Button variant="primary">Open Settings</Button>}
+                items={[
+                  { type: 'label', label: 'Settings' },
+                  { type: 'separator' },
+                  {
+                    label: 'General',
+                    icon: FaCog,
+                    children: [
+                      { type: 'label', label: 'General Settings' },
+                      { type: 'separator' },
+                      { label: 'Display Name' },
+                      { label: 'Email Address' },
+                      {
+                        label: 'Language',
+                        icon: FaGlobe,
+                        children: [
+                          { label: 'English' },
+                          { label: 'Spanish' },
+                          { label: 'French' },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    label: 'Privacy',
+                    icon: FaLock,
+                    children: [
+                      { label: 'Change Password' },
+                      { label: 'Active Sessions' },
+                    ]
+                  }
+                ]}
+              />
+            )
+          }
+
+          export default DrillDownExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Checkboxes & Selection**
+
+    Use the `checkbox` or `radio` type to create stateful options within the menu.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DropdownStories.Checkboxes} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Dropdown } from '@clera/ui'
+          import { Button } from '@clera/ui/button'
+
+          const CheckboxExample = () => {
+            const [checked, setChecked] = useState(true)
+
+            return (
+              <Dropdown
+                trigger={<Button variant="outlinePrimary">View Options</Button>}
+                items={[
+                  { type: 'label', label: 'Toggle Features' },
+                  { type: 'separator' },
+                  {
+                    type: 'checkbox',
+                    label: 'Show Status Bar',
+                    checked: checked,
+                    onCheckedChange: setChecked,
+                  },
+                  {
+                    type: 'checkbox',
+                    label: 'Show Full Path',
+                    checked: false,
+                    disabled: true,
+                  },
+                ]}
+              />
+            )
+          }
+
+          export default CheckboxExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Advanced & Custom Content**
+
+    You can mix standard items with raw React nodes for completely custom layouts, or apply custom classes to specific items.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={DropdownStories.Advanced} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Dropdown } from '@clera/ui'
+          import { Button } from '@clera/ui/button'
+          import { FaSignOutAlt, FaPalette } from 'react-icons/fa'
+
+          const AdvancedExample = () => {
+            return (
+              <Dropdown
+                width={260}
+                trigger={<Button>Settings</Button>}
+                items={[
+                  { type: 'label', label: 'Appearance' },
+                  {
+                    label: 'Theme',
+                    icon: FaPalette,
+                    children: [
+                      { label: 'Light Mode' },
+                      { label: 'Dark Mode' },
+                    ],
+                  },
+                  { type: 'separator' },
+                  <div className="p-2 text-xs text-ds-subtle bg-ds-neutral-subtle rounded m-1 text-center">
+                    Version 2.0.1
+                  </div>,
+                  { type: 'separator' },
+                  {
+                    label: 'Delete Account',
+                    className: 'text-ds-destructive-bold hover:text-ds-destructive-bold focus:bg-ds-destructive-subtle',
+                    icon: FaSignOutAlt,
+                  },
+                ]}
+              />
+            )
+          }
+
+          export default AdvancedExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    ### **Dropdown Props**
+
+    The smart component that manages state and navigation history.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `items` | `DropdownItemDef[]` | `[]` | Array of items to render in the menu. |
+    | `trigger` | `ReactNode` | - | The element that toggles the menu (e.g., `<Button>`). |
+    | `align` | `'start' \| 'center' \| 'end'` | `'end'` | Alignment of the menu relative to the trigger. |
+    | `width` | `string \| number` | `240` | Width of the menu content. |
+    | `className` | `string` | - | Optional classes for the content container. |
+    | `onOpenChange` | `(open: boolean) => void` | - | Callback when the open state changes. |
+
+    <br />
+
+    ### **DropdownItemDef Type**
+
+    The configuration object for individual items. Can also be a simple `string` or `ReactElement`.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        type DropdownItemDef = 
+          | string 
+          | React.ReactElement 
+          | {
+              type?: 'item' | 'label' | 'separator' | 'checkbox' | 'radio'
+              label?: React.ReactNode
+              icon?: React.ElementType
+              shortcut?: string
+              disabled?: boolean
+              className?: string
+              children?: DropdownItemDef[] 
+              checked?: boolean
+              onCheckedChange?: (checked: boolean) => void
+              value?: string
+              onClick?: (e: Event) => void
+            }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. How does the drill-down animation work?**
+    The component internally maintains a history stack of the menu layers.
+    - When you click an item with `children`, it pushes that children array to the stack and animates **from right to left**.
+    - When you click the "Back" header, it pops the stack and animates **from left to right**.
+    - The `Dropdown` component handles the height and width constraints automatically.
+
+    <br />
+
+    #### **2. Can I use the primitives directly?**
+    Yes! If the data-driven `Dropdown` doesn't fit your exact needs (e.g., you need very specific layout control), you can import `DropdownMenu`, `DropdownMenuTrigger`, etc., and compose them manually just like in standard Radix UI.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@clera/ui'
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Manual Item</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **3. How do I disable items?**
+    Simply add the `disabled: true` property to your item object.
+    
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        items={[
+          { label: 'Enabled Item' },
+          { label: 'Disabled Item', disabled: true }
+        ]}
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **4. How do I control the menu state programmatically?**
+    You can use the `open` and `onOpenChange` props on the `Dropdown` component, which are passed down to the underlying Radix Root.
+    
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const [open, setOpen] = useState(false)
+        
+        <Dropdown
+          open={open}
+          onOpenChange={setOpen}
+          trigger={<button onClick={() => setOpen(true)}>Open</button>}
+          items={...}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **5. How do I change the menu width or alignment?**
+    Use the `width` prop (accepts string or number) and the `align` prop (`start`, `center`, `end`).
+    
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Dropdown
+          width={300}
+          align="start"
+          items={...}
+        />
+      `} />
+    </Canvas.Source>
+
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "component-structure",
+          label: "Component Structure"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "simple",
+              label: "Simple"
+            },
+            {
+              id: "drill-down-navigation",
+              label: "Drill-Down Navigation"
+            },
+            {
+              id: "checkboxes--selection",
+              label: "Checkboxes & Selection"
+            },
+            {
+              id: "advanced--custom-content",
+              label: "Advanced & Custom"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API",
+          children: [
+            {
+              id: "dropdown-props",
+              label: "Dropdown Props"
+            },
+            {
+              id: "dropdownitemdef-type",
+              label: "Item Definition Type"
+            }
+          ]
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "1-how-does-the-drill-down-animation-work",
+              label: "Drill-down animation..."
+            },
+            {
+              id: "2-can-i-use-the-primitives-directly",
+              label: "Using primitives..."
+            },
+            {
+              id: "3-how-do-i-disable-items",
+              label: "Disabling items..."
+            },
+            {
+              id: "4-how-do-i-control-the-menu-state-programmatically",
+              label: "Controlled state..."
+            },
+            {
+              id: "5-how-do-i-change-the-menu-width-or-alignment",
+              label: "Width & Alignment..."
+            }
+          ]
+        }
+      ]}
+    />
+  </div>
+</div>

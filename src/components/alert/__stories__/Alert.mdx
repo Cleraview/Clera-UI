@@ -70,25 +70,6 @@ import { DocContainer } from "@/stories/_components/DocContainer"
             )
           }
 
-          const AlertPrimaryExample = () => {
-            return (
-              <Alert
-                title="Brand"
-                description="Here is the description text for the alert."
-                variant="primary" 
-              />
-            )
-          }
-          const AlertPrimaryExample = () => {
-            return (
-              <Alert
-                title="Brand"
-                description="Here is the description text for the alert."
-                variant="primary" 
-              />
-            )
-          }
-
           export default AlertPrimaryExample
         `} />
       </Canvas.Source>
@@ -110,8 +91,7 @@ import { DocContainer } from "@/stories/_components/DocContainer"
           const AlertSuccessExample = () => {
             return (
               <Alert
-                title="This is an alert"
-                description="Here is the description text for the alert."
+                title="Your data has been successfully saved."
                 variant="success" 
               />
             )
@@ -138,8 +118,13 @@ import { DocContainer } from "@/stories/_components/DocContainer"
           const AlertWarningExample = () => {
             return (
               <Alert
-                title="This is an alert"
-                description="Here is the description text for the alert."
+                title="Account under review"
+                description={
+                  <p>
+                    Your account is being reviewd by our{' '}
+                    <strong className="font-bold">Technical Support.</strong>
+                  </p>
+                }
                 variant="warning" 
               />
             )
@@ -224,8 +209,8 @@ import { DocContainer } from "@/stories/_components/DocContainer"
 
           const AlertWithIconExample = () => {
             return <Alert
-              title="This is an alert"
-              description="Here is the description text for the alert."
+              title="Action Alert"
+              description="This alert includes an action button."
               variant="primary"
               action={(
                 <Button className="bg-primary-intense-pressed" size="sm">
@@ -236,7 +221,7 @@ import { DocContainer } from "@/stories/_components/DocContainer"
             />
           }
 
-          export default AlertSuccessExample
+          export default AlertWithIconExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -254,17 +239,16 @@ import { DocContainer } from "@/stories/_components/DocContainer"
         <Source className="my-0!" dark code={`
           import { Alert } from '@clera-ui/alert'
 
-          const AlertWithIconExample = () => {
+          const AlertBanner = () => {
             return <Alert
-              message="This is an alert"
-              description="Here is the description text for the alert."
+              message="Banner Alert"
               variant="outlinePrimary"
               banner
               colesable
             />
           }
 
-          export default AlertSuccessExample
+          export default AlertBanner
         `} />
       </Canvas.Source>
     </Canvas>
@@ -353,7 +337,6 @@ import { DocContainer } from "@/stories/_components/DocContainer"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // inside your component...
         const handleClose = () => { console.log("Alert closed") }
         
         return (

@@ -38,7 +38,7 @@ export const Switch = forwardRef<
         ref={ref}
         className={cn(
           'h-7 relative inline-flex cursor-pointer items-center rounded-full transition-colors',
-          checked ? 'bg-primary-intense' : 'bg-neutral-300 dark:bg-neutral-700',
+          checked ? 'bg-ds-selected-bold' : 'bg-ds-neutral-bold',
           disabled && 'opacity-50 cursor-not-allowed',
           className
         )}
@@ -52,8 +52,8 @@ export const Switch = forwardRef<
         {/* Inner container */}
         <div
           className={cn(
-            'h-full text-xs font-medium overflow-hidden',
-            'pointer-events-none select-none text-white',
+            'h-full text-body-xs font-medium overflow-hidden',
+            'pointer-events-none select-none text-ds-inverse',
             'transition-padding-inline-start transition-padding-inline-end duration-200 ease-in-out',
             !checked ? 'ps-[26px] pe-[9px]' : 'ps-[9px] pe-[32px]'
           )}
@@ -70,7 +70,7 @@ export const Switch = forwardRef<
           </span>
           <span
             className={cn(
-              'w-full h-full flex items-center justify-center mt-[-27px]',
+              'w-full h-full flex items-center justify-center mt-[-27px] text-ds-inverse',
               'transition-margin-inline-start transition-margin-inline-end duration-200 ease-in-out',
               checked
                 ? 'ms-[calc(100%-calc(4px+2px*2)+calc(24px*2))] me-[calc(-100%+calc(4px+2px*2)-calc(24px*2))]'
@@ -84,8 +84,10 @@ export const Switch = forwardRef<
         {/* Thumb (handle) */}
         <SwitchPrimitives.Thumb
           className={cn(
-            'w-5 h-5 absolute bg-white rounded-full shadow transition-all duration-200 ease-in-out',
-            checked ? 'start-[calc(100%-calc(23px))]' : 'start-[3px]'
+            'w-5 h-5 absolute bg-ds-input rounded-full shadow transition-all duration-200 ease-in-out',
+            checked
+              ? 'start-[calc(100%-calc(23px))] dark:bg-ds-neutral-bold'
+              : 'start-[3px]'
           )}
         />
       </SwitchPrimitives.Root>

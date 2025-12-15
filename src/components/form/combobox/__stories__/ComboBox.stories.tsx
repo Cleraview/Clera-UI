@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { ComboBox, ComboBoxOption } from '../ComboBox'
 import { Form } from '@/components/form'
@@ -104,7 +104,9 @@ export const Default: Story = {
     return (
       <div className="w-64">
         <ComboBox {...args} value={value} onChange={setValue} />
-        <p className="text-subtle text-body-xs mt-2">Selected Value: {value}</p>
+        <p className="text-ds-subtle text-body-xs mt-2">
+          Selected Value: {value}
+        </p>
       </div>
     )
   },

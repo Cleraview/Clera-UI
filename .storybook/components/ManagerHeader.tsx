@@ -17,10 +17,10 @@ export const ManagerHeader = () => {
   )
 
   const navMenus = useMemo(() => [
-    { label: 'Docs', url: 'overview--docs' },
-    { label: 'Foundation', url: 'foundation--docs' },
-    { label: 'Components', url: 'components--docs' },
-    { label: 'Changelog', url: 'changelog--docs' },
+    // { label: 'Docs', url: 'overview--docs' },
+    // { label: 'Foundation', url: 'foundation--docs' },
+    // { label: 'Components', url: 'components--docs' },
+    // { label: 'Changelog', url: 'changelog--docs' },
   ], [])
 
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {

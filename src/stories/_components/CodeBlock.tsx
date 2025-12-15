@@ -17,7 +17,6 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [copied, setCopied] = useState(false)
 
-  // 1. Add state to track the tooltip's open status
   const [isTooltipOpen, setIsTooltipOpen] = useState(false)
 
   const activeItem = data[activeIndex]
@@ -41,7 +40,7 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
         className
       )}
     >
-      <div className="flex items-center justify-between border-b border-ds-default dark:border-accent-gray bg-ds-neutral-subtle">
+      <div className="flex items-center justify-between border-b border-ds-default dark:border-ds-accent-gray bg-ds-neutral-subtle">
         <div className="flex items-center">
           <div className="px-space-sm text-ds-subtle flex items-center justify-center h-full">
             <MdTerminal className="w-5 h-5" />
@@ -61,8 +60,8 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
                     'text-body-sm font-(font-family:--font-code) text-ds-default transition-colors focus:outline-none rounded-md',
                     'border border-transparent cursor-pointer',
                     isActive
-                      ? 'border-ds-default! dark:border-accent-gray!'
-                      : 'hover:border-ds-default dark:hover:border-accent-gray'
+                      ? 'border-ds-accent-gray/10! dark:border-ds-accent-gray!'
+                      : 'hover:border-ds-default dark:hover:border-ds-accent-gray'
                   )}
                 >
                   {item.label}
@@ -73,10 +72,8 @@ export const CodeTabs = ({ data, className = '' }: CodeTabsProps) => {
         </div>
 
         <div className="px-space-sm">
-          {/* 2. Control the tooltip state */}
           <Tooltip
             content="Copy code"
-            // If copied is true, force closed (false). Otherwise, use hover state (isTooltipOpen).
             open={copied ? false : isTooltipOpen}
             onOpenChange={setIsTooltipOpen}
           >

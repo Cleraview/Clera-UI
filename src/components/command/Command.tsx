@@ -3,12 +3,11 @@
 import * as React from 'react'
 import { Command as CommandPrimitive } from 'cmdk'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { FiSearch } from 'react-icons/fi'
-
-import { cn } from '@/utils/tailwind'
 import Dialog, { DialogProps as CustomDialogProps } from '@/components/dialog'
+import { FiSearch } from 'react-icons/fi'
+import { cn } from '@/utils/tailwind'
 
-export interface CommandDialogProps extends CustomDialogProps {
+export type CommandDialogProps = CustomDialogProps & {
   autoFocusInput?: boolean
   children: React.ReactNode
   open: boolean
@@ -44,13 +43,33 @@ const CommandDialog = ({
   )
 }
 
+const commandVariants = cva(
+  'flex w-full flex-col overflow-hidden bg-ds-elevation-surface',
+  {
+    variants: {
+      withBorder: {
+        true: 'border border-ds-default shadow-md rounded-xl',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      withBorder: true,
+    },
+  }
+)
+
+export interface CommandProps
+  extends
+    React.ComponentPropsWithoutRef<typeof CommandPrimitive>,
+    VariantProps<typeof commandVariants> {}
+
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive>
->(({ className, ...props }, ref) => (
+  CommandProps
+>(({ className, withBorder, ...props }, ref) => (
   <CommandPrimitive
     ref={ref}
-    className={cn('flex w-full flex-col overflow-hidden bg-white', className)}
+    className={cn(commandVariants({ withBorder }), className)}
     {...props}
   />
 ))
@@ -58,7 +77,7 @@ Command.displayName = CommandPrimitive.displayName
 
 const commandInputVariants = cva(
   [
-    'w-full bg-transparent text-default placeholder:text-subtle',
+    'w-full bg-transparent text-ds-default placeholder:text-ds-subtlest',
     'ml-space-sm focus:outline-none focus:ring-0 border-none p-0',
   ],
   {
@@ -76,18 +95,16 @@ const commandInputVariants = cva(
 )
 
 export interface CommandInputProps
-  extends Omit<
-      React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>,
-      'size'
-    >,
+  extends
+    Omit<React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>, 'size'>,
     VariantProps<typeof commandInputVariants> {}
 
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   CommandInputProps
 >(({ className, size, ...props }, ref) => (
-  <div className="flex items-center border-b border-default p-space-sm">
-    <FiSearch className="h-5 w-5 text-subtle" />
+  <div className="flex items-center border-b border-ds-default p-space-sm">
+    <FiSearch className="h-5 w-5 text-(--fill-ds-icon-subtle)" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(commandInputVariants({ size, className }))}
@@ -104,7 +121,7 @@ const CommandList = React.forwardRef<
   <CommandPrimitive.List
     ref={ref}
     className={cn(
-      'max-h-[300px] overflow-y-auto overflow-x-hidden p-space-sm',
+      'max-h-[300px] overflow-y-auto overflow-x-hidden p-space-sm outline-none scrollbar',
       className
     )}
     {...props}
@@ -118,7 +135,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-space-md text-center text-body-sm text-subtle"
+    className="py-space-md text-center text-body-sm text-ds-subtle"
     {...props}
   />
 ))
@@ -126,8 +143,8 @@ CommandEmpty.displayName = CommandPrimitive.Empty.displayName
 
 const commandGroupVariants = cva(
   [
-    'overflow-hidden text-default',
-    '[&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-subtle',
+    'overflow-hidden text-ds-default',
+    '[&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-ds-subtle',
   ],
   {
     variants: {
@@ -148,7 +165,8 @@ const commandGroupVariants = cva(
 )
 
 export interface CommandGroupProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>,
+  extends
+    React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>,
     VariantProps<typeof commandGroupVariants> {}
 
 const CommandGroup = React.forwardRef<
@@ -177,8 +195,7 @@ CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
 const commandItemVariants = cva(
   [
-    'relative flex cursor-pointer select-none items-center rounded-md text-default outline-none transition-colors',
-    'aria-selected:bg-primary-intense-hovered aria-selected:text-inverse',
+    'relative flex cursor-pointer select-none items-center rounded-md text-ds-default outline-none transition-colors',
     'data-[disabled="true"]:pointer-events-none data-[disabled="true"]:opacity-50',
   ],
   {
@@ -189,8 +206,8 @@ const commandItemVariants = cva(
         md: 'text-body-md',
       },
       isSelected: {
-        true: 'bg-primary-intense-pressed text-inverse aria-selected:bg-primary-intense-pressed aria-selected:text-inverse',
-        false: '',
+        true: 'bg-ds-primary-bold text-ds-inverse [&>svg]:text-(--fill-ds-icon-inverse)',
+        false: 'aria-selected:bg-ds-neutral-subtle-hovered',
       },
     },
     compoundVariants: [
@@ -204,7 +221,8 @@ const commandItemVariants = cva(
 )
 
 export interface CommandItemProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>,
+  extends
+    React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>,
     VariantProps<typeof commandItemVariants> {
   isSelected: boolean
 }

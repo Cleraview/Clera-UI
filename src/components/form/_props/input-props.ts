@@ -26,16 +26,16 @@ export const sizeClasses: Record<InputSize, string> = {
 
 export const inputColors = {
   default: {
-    label: 'text-subtlest',
-    border: 'border-input',
+    label: 'text-ds-subtlest',
+    border: 'border-ds-input',
   },
   focused: {
-    label: 'text-primary',
-    border: 'border-focused',
+    label: 'text-ds-accent-violet',
+    border: 'border-[2px] border-ds-focused',
   },
   error: {
-    label: 'text-destructive',
-    border: 'border-error',
-    text: 'text-destructive',
+    label: 'text-ds-destructive',
+    border: 'border-ds-destructive',
+    text: 'text-ds-destructive',
   },
 }

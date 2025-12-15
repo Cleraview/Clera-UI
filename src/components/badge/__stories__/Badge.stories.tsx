@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Badge } from '..'
 import { FiUser, FiArrowRight } from 'react-icons/fi'
 import {

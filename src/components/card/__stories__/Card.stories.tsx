@@ -1,10 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Card } from '..'
-import { textSizeMap } from '../Card'
+import { textHeadingSizeMap, textSizeMap } from '../Card'
 
 import AgileImage from '@/assets/images/agile-methodology.jpg'
 import { sizeMapKeys } from '../../_utils/variants'
 
+const textHeadingSizeKeys = Object.keys(textHeadingSizeMap)
 const textSizeKeys = Object.keys(textSizeMap)
 
 const meta: Meta<typeof Card> = {
@@ -37,7 +38,10 @@ const meta: Meta<typeof Card> = {
     },
     thumbnail: {
       control: 'select',
-      options: [undefined, AgileImage],
+      options: ['Agile Image'],
+      mapping: {
+        'Agile Image': AgileImage,
+      },
       description: 'Image to display as a thumbnail',
       table: {
         type: { summary: 'string' },
@@ -79,6 +83,24 @@ const meta: Meta<typeof Card> = {
         defaultValue: { summary: 'lg' },
       },
     },
+    paddingAxis: {
+      control: 'radio',
+      options: ['all', 'y'],
+      description: 'Axis for applying content padding',
+      table: {
+        type: { summary: "'all' | 'y'" },
+        defaultValue: { summary: 'all' },
+      },
+    },
+    contentSpacing: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg'],
+      description: 'Spacing between content elements inside the card',
+      table: {
+        type: { summary: 'xs | sm | md | lg' },
+        defaultValue: { summary: 'sm' },
+      },
+    },
     link: {
       control: 'text',
       description: 'Link URL for the card',
@@ -105,10 +127,10 @@ const meta: Meta<typeof Card> = {
     },
     'textSize.title': {
       control: 'select',
-      options: textSizeKeys,
+      options: textHeadingSizeKeys,
       description: 'Text size for the title',
       table: {
-        type: { summary: textSizeKeys.join(' | ') },
+        type: { summary: textHeadingSizeKeys.join(' | ') },
         defaultValue: { summary: 'xl' },
       },
     },
@@ -155,13 +177,14 @@ const meta: Meta<typeof Card> = {
     padding: 'lg',
     className: 'gradient-pink',
     link: 'https://google.com',
-    thumbnail: undefined,
+    thumbnail: 'Agile Image',
+    paddingAxis: 'y',
     metaItems: [],
     footerActionLabel: '',
     'textSize.title': 'xl',
     'textSize.description': 'md',
-    'textSize.footerAction': 'md',
-    'badge.label': '',
+    'textSize.footerAction': 'sm',
+    'badge.label': 'Agile',
     'badge.size': 'md',
   },
 }
@@ -173,30 +196,43 @@ type Story = StoryObj<typeof Card>
 export const Playground: Story = {}
 
 export const WithImage: Story = {
-  render: args => <Card {...args} />,
   args: {
     thumbnail: AgileImage,
     description: 'Real-time metrics with a clear layout.',
     metaItems: ['Product', '28.2025'],
     footerActionLabel: 'Read more',
   },
+  render: args => {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+        <Card {...args} />
+        <Card {...args} />
+        <Card {...args} />
+      </div>
+    )
+  },
 }
 
 export const WithCustomContent: Story = {
-  render: args => (
-    <Card {...args}>
-      <Card.Content>
-        <h3 className="text-xl font-bold mb-2">Custom Title</h3>
-        <p className="text-gray-600">
-          This is a custom body. You can place any content you want here.
-        </p>
-      </Card.Content>
-    </Card>
-  ),
   args: {
     title: undefined,
     description: undefined,
     roundedSize: 'lg',
-    padding: 'lg',
+    padding: 'md',
+    paddingAxis: 'all',
+    className: 'bg-ds-elevation-surface',
+    shadow: 'md',
   },
+  render: args => (
+    <div className="max-w-xs mx-auto">
+      <Card {...args}>
+        <Card.Content>
+          <h3 className="text-heading-xl font-bold mb-2">Custom Title</h3>
+          <p className="text-ds-subtlest">
+            This is a custom body. You can place any content you want here.
+          </p>
+        </Card.Content>
+      </Card>
+    </div>
+  ),
 }

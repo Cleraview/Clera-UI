@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { Command as CommandPrimitive } from 'cmdk'
 import { FiCheck } from 'react-icons/fi'
 import {
-  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -35,20 +35,35 @@ export type CommandMenuProps = {
   size?: CommandItemProps['size']
   value?: string
   className?: string
+  selectable?: boolean
 }
 
 export const CommandMenu: React.FC<CommandMenuProps> = ({
   groups,
   placeholder = 'Type a command or search...',
   emptyState = 'No results found.',
-  size = 'md',
+  size = 'sm',
   value: selectedValue,
   className,
+  selectable = true,
 }) => {
+  const listRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.focus()
+    }
+  }, [])
+
   return (
-    <Command>
+    <CommandPrimitive>
       <CommandInput placeholder={placeholder} size={size} />
-      <CommandList>
+
+      <CommandList
+        ref={listRef}
+        tabIndex={-1}
+        className="bg-ds-elevation-surface"
+      >
         <CommandEmpty>{emptyState}</CommandEmpty>
         <div className={cn(className)}>
           {groups.map((group, index) => {
@@ -77,17 +92,19 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                         value={value ?? label}
                         size={size}
                         disabled={disabled}
-                        isSelected={Boolean(id === selectedValue)}
+                        isSelected={Boolean(id === selectedValue) && selectable}
                       >
-                        {Icon && <Icon className="mr-space-sm h-4 w-4" />}
+                        {Icon && (
+                          <Icon className="mr-space-sm h-4 w-4 text-(--fill-ds-icon-accent-gray)" />
+                        )}
                         <span>{label}</span>
                         <div className="ml-auto flex items-center gap-space-sm">
                           {shortcut && (
-                            <kbd className="hidden h-5 select-none items-center gap-1 rounded border border-default bg-inverse px-space-xs font-mono text-xs font-medium text-default sm:inline-flex">
+                            <kbd className="h-5 select-none items-center gap-1 rounded bg-ds-inverse-subtle px-space-xs font-mono text-body-xs font-medium text-ds-default sm:inline-flex">
                               {shortcut}
                             </kbd>
                           )}
-                          {id === selectedValue && (
+                          {id === selectedValue && selectable && (
                             <FiCheck className="h-4 w-4" />
                           )}
                         </div>
@@ -100,6 +117,6 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
           })}
         </div>
       </CommandList>
-    </Command>
+    </CommandPrimitive>
   )
 }

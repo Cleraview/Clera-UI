@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Button
 
     To trigger an operation.
-    <DocInfo importStatement={`import { Button } from 'clera-ui/button'`} sourcePath={`components/button`} />
+    <DocInfo importStatement={`import { Button } from '@clera-ui/button'`} sourcePath={`components/button`} />
 
     <br />
 
@@ -54,7 +54,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="primary">Selected button</Button>
@@ -75,7 +75,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary">Selected button</Button>
@@ -95,7 +95,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary" loading>Selected button</Button>
@@ -148,8 +148,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     You can add an icon to a button by passing a React element to the `icon` prop. Use the `iconPosition` prop to control whether the icon appears on the left or right side of the button label.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { FaStar } from 'react-icons/fa';
-        <Button icon={<FaStar />} iconPosition="left">Click me</Button>
+        import { FaStar } from 'react-icons/fa'
+
+        <Button 
+          icon={<FaStar />} 
+          iconPosition="left"
+        >
+          Click me
+        </Button>
       `} />
     </Canvas.Source>
 

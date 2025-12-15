@@ -12,7 +12,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     # Card
 
     A flexible container for grouping and displaying related content.
-    <DocInfo importStatement={`import { Card } from 'clera-ui/card'`} sourcePath={`components/card`} />
+    <DocInfo importStatement={`import { Card } from '@clera-ui/card'`} sourcePath={`components/card`} />
     
     <br />
 
@@ -54,7 +54,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from 'clera-ui/card'
+          import { Card } from '@clera-ui/card'
           import AgileImage from "@/assets/images/agile-methodology.jpg"
 
           const CardWithImageExample = () => {
@@ -87,14 +87,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from 'clera-ui/card'
+          import { Card } from '@clera-ui/card'
 
           const CardWithCustomContentExample = () => {
             return (
               <Card>
                 <Card.Content>
-                  <h3 className="text-xl font-bold mb-2">Custom Title</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-body-xl font-bold mb-2">Custom Title</h3>
+                  <p className="text-ds-subtle">
                     This is a custom body. You can place any content you want here.
                   </p>
                 </Card.Content>

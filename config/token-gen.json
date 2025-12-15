@@ -12,7 +12,7 @@
       "enabled": true,
       "path": "src/styles/themes",
       "prefix": "",
-      "suffix": ".generated.css"
+      "suffix": ".css"
     },
     "runtimeJs": {
       "enabled": false,

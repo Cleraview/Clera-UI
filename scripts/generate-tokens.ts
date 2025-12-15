@@ -200,7 +200,7 @@ async function build() {
         `src/styles/_${tokenName === 'color' ? 'colors' : tokenName}.css`
       )
       const defaultTheme = path.resolve(
-        `src/styles/themes/${tokenName}.generated.css`
+        `src/styles/themes/${tokenName}.css`
       )
 
       function resolveCfgPath(
@@ -463,7 +463,7 @@ async function build() {
     for (const topKey of Object.keys(parsed)) {
       const canonical = path.resolve(`src/styles/themes/${topKey}.css`)
       const generated = path.resolve(
-        `src/styles/themes/${topKey}.generated.css`
+        `src/styles/themes/${topKey}.css`
       )
       try {
         const a = (await fs.readFile(canonical, 'utf8'))

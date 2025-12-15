@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { AsyncComboBox, AsyncComboBoxOption } from '..'
 import { Skeleton } from '@/components/skeleton'
@@ -434,7 +434,7 @@ const ImageSlider = ({
   const prev = () => setIndex(i => (i - 1 + total) % total)
 
   return (
-    <div className="p-space-sm w-full">
+    <div className="p-space-sm w-full" data-hover="false">
       <div className="relative w-full h-24 overflow-hidden rounded-md">
         <div
           className="flex h-full transition-transform duration-300 ease-in-out"
@@ -456,7 +456,7 @@ const ImageSlider = ({
             e.stopPropagation()
             prev()
           }}
-          className="absolute left-1 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/30 text-white hover:bg-black/50"
+          className="absolute left-1 top-1/2 -translate-y-1/2 p-1 rounded-full bg-ds-neutral-bold/30 text-ds-inverse hover:bg-ds-neutral-bold/50"
         >
           <FiChevronsLeft className="w-4 h-4" />
         </button>
@@ -465,14 +465,14 @@ const ImageSlider = ({
             e.stopPropagation()
             next()
           }}
-          className="absolute right-1 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/30 text-white hover:bg-black/50"
+          className="absolute right-1 top-1/2 -translate-y-1/2 p-1 rounded-full bg-ds-neutral-bold/30 text-ds-inverse hover:bg-ds-neutral-bold/50"
         >
           <FiChevronsRight className="w-4 h-4" />
         </button>
       </div>
       <div className="mt-2 text-center">
         <p className="text-body-sm font-semibold">{categories[index].title}</p>
-        <p className="text-body-xs text-subtle">
+        <p className="text-body-xs text-ds-subtle">
           Shop all {categories[index].title}
         </p>
       </div>
@@ -491,7 +491,7 @@ export const ECommerceSearch: Story = {
         case 'text':
           return (
             <div className="flex items-center gap-3 p-space-sm">
-              <FiShoppingBag className="w-4 h-4 text-subtle shrink-0" />
+              <FiShoppingBag className="w-4 h-4 text-(--fill-ds-icon-subtle) shrink-0" />
               <span className="text-body-sm font-semibold">{option.label}</span>
             </div>
           )
@@ -511,7 +511,7 @@ export const ECommerceSearch: Story = {
         case 'trend':
           return (
             <div className="flex items-center gap-3 p-space-sm">
-              <FiTrendingUp className="w-4 h-4 text-subtle shrink-0" />
+              <FiTrendingUp className="w-4 h-4 text-ds-subtle shrink-0" />
               <span className="text-body-sm font-semibold">{option.label}</span>
             </div>
           )
@@ -536,10 +536,10 @@ export const ECommerceSearch: Story = {
                   {option.label}
                 </span>
                 <div className="flex justify-between w-full">
-                  <span className="text-body-xs text-subtle">
+                  <span className="text-body-xs text-ds-subtle">
                     {option.category as ReactNode}
                   </span>
-                  <span className="text-body-sm font-bold text-accent-green-intense">
+                  <span className="text-body-sm font-bold text-ds-accent-green-intense">
                     ${option.price as ReactNode}
                   </span>
                 </div>
@@ -566,17 +566,17 @@ export const CustomNotFound: Story = {
     }),
     renderItem: option => (
       <div className="flex items-center gap-3 p-space-sm">
-        <FiMapPin className="w-4 h-4 text-subtle shrink-0" />
+        <FiMapPin className="w-4 h-4 text-ds-subtle shrink-0" />
         <div className="flex flex-col">
           <span className="text-body-sm font-semibold">{option.label}</span>
-          <span className="text-body-xs text-subtle">
+          <span className="text-body-xs text-ds-subtle">
             {option.region as ReactNode}
           </span>
         </div>
       </div>
     ),
     notFoundContent: (
-      <div className="flex flex-col items-center justify-center p-space-lg text-subtle gap-2">
+      <div className="flex flex-col items-center justify-center p-space-lg text-ds-subtle gap-2">
         <FiDatabase className="w-8 h-8" />
         <span className="text-body-sm font-semibold">No Data</span>
         <p className="text-body-xs text-center">
@@ -609,7 +609,7 @@ export const CustomLoadingSkeletons: Story = {
         />
         <div className="flex flex-col">
           <span className="text-body-sm font-semibold">{option.label}</span>
-          <span className="text-body-xs text-subtle">
+          <span className="text-body-xs text-ds-subtle">
             {option.airline as ReactNode}
           </span>
         </div>

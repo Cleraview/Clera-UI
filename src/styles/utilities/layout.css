@@ -39,6 +39,20 @@
     @apply relative p-space-lg md:p-space-lg xl:p-space-xl rounded-4xl overflow-hidden;
   }
 
+  .scrollbar {
+    &::-webkit-scrollbar {
+      @apply w-2 h-2;
+    }
+
+    &::-webkit-scrollbar-track {
+      @apply bg-ds-elevation-surface;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply rounded-full bg-ds-accent-gray-subtlest;
+    }
+  }
+
   .no-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;

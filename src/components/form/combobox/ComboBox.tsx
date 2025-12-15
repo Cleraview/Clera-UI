@@ -103,9 +103,9 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
             aria-expanded={open}
             className={cn(
               'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-              '[&>[data-filled="false"]]:text-subtlest',
+              '[&>[data-filled="false"]]:text-ds-subtlest',
               sizeClasses[inputSize],
-              disabled ? 'text-subtlest' : 'text-default',
+              disabled ? 'text-ds-subtlest' : 'text-ds-default',
               className
             )}
             onBlur={() => {
@@ -118,7 +118,7 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
               data-filled={filled}
               className={cn(
                 'truncate',
-                hasError ? 'text-destructive' : 'text-default',
+                hasError ? 'text-ds-destructive' : 'text-ds-default',
                 !value && 'invisible'
               )}
             >
@@ -127,15 +127,15 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
 
             <FiChevronDown
               className={cn(
-                'w-4 h-4 ml-space-sm text-subtlest shrink-0',
-                hasError && 'text-destructive!'
+                'w-4 h-4 ml-space-sm text-ds-subtlest shrink-0',
+                hasError && 'text-ds-destructive!'
               )}
             />
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Content
-              className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md bg-default shadow-md border border-default"
+              className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md bg-default shadow-md border border-ds-default"
               sideOffset={4}
               side="bottom"
               align="start"
@@ -157,9 +157,9 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
               >
                 <CommandInput
                   className={cn(
-                    'w-full px-space-sm py-space-xs text-body-sm outline-none border-b border-default',
+                    'w-full px-space-sm py-space-xs text-body-sm outline-none border-b border-ds-default',
                     sizeClasses[inputSize],
-                    'placeholder:text-subtlest'
+                    'placeholder:text-ds-subtlest'
                   )}
                   placeholder="Search..."
                 />
@@ -175,13 +175,13 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
                       className={cn(
                         'flex items-center justify-between rounded-sm p-space-sm text-body-sm cursor-pointer',
                         value === option.value &&
-                          'bg-primary text-primary outline-none',
-                        'aria-selected:bg-primary aria-selected:text-primary'
+                          'bg-ds-primary text-ds-primary outline-none',
+                        'aria-selected:bg-ds-primary aria-selected:text-ds-primary'
                       )}
                     >
                       <span className="truncate">{option.label}</span>
                       {option.value === value && (
-                        <FiCheck className="w-4 h-4 ml-space-md text-primary" />
+                        <FiCheck className="w-4 h-4 ml-space-md text-ds-primary" />
                       )}
                     </CommandItem>
                   ))}

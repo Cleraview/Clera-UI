@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { cn } from '@/utils/tailwind'
+import { cva, VariantProps } from 'class-variance-authority'
 import { AiOutlineClose } from 'react-icons/ai'
 import {
   roundedMap,
@@ -9,7 +9,7 @@ import {
   variantMap,
   VariantType,
 } from '../_utils/variants'
-import { cva, VariantProps } from 'class-variance-authority'
+import { cn } from '@/utils/tailwind'
 
 const alertVariants = cva('relative flex items-center', {
   variants: {

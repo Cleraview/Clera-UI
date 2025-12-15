@@ -89,9 +89,9 @@ export const Select: React.FC<SelectProps> = ({
           id={inputId}
           className={cn(
             'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-            "[&>[data-filled='false']]:invisible [&>[data-has-error='true']]:text-destructive",
+            "[&>[data-filled='false']]:invisible [&>[data-has-error='true']]:text-ds-destructive",
             sizeClasses[inputSize],
-            disabled ? 'text-subtlest' : 'text-default',
+            disabled ? 'text-ds-subtlest' : 'text-ds-default',
             className
           )}
           onBlur={() => {
@@ -103,14 +103,14 @@ export const Select: React.FC<SelectProps> = ({
             placeholder={label}
             data-filled={filled}
             data-has-error={hasError}
-            className={cn(hasError ? 'text-destructive' : 'text-default')}
+            className={cn(hasError ? 'text-ds-destructive' : 'text-ds-default')}
           />
 
           <SelectPrimitive.Icon asChild>
             <GoChevronDown
               className={cn(
-                'w-4 h-4 ml-space-sm text-subtlest',
-                hasError && 'text-destructive!'
+                'w-4 h-4 ml-space-sm text-ds-subtlest',
+                hasError && 'text-ds-destructive!'
               )}
             />
           </SelectPrimitive.Icon>
@@ -118,7 +118,7 @@ export const Select: React.FC<SelectProps> = ({
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="w-[var(--radix-select-trigger-width)] z-50 rounded-md bg-default shadow-md border border-default"
+            className="w-[var(--radix-select-trigger-width)] z-50 rounded-md bg-default shadow-md border border-ds-default"
             sideOffset={4}
             position="popper"
             side="bottom"
@@ -132,7 +132,7 @@ export const Select: React.FC<SelectProps> = ({
                     value={o.value}
                     className={cn(
                       'flex items-center justify-between rounded-sm px-space-sm py-space-xs text-body-sm cursor-pointer',
-                      'focus:bg-primary focus:text-primary outline-none'
+                      'focus:bg-primary focus:text-ds-primary outline-none'
                     )}
                   >
                     <SelectPrimitive.ItemText>
@@ -140,7 +140,7 @@ export const Select: React.FC<SelectProps> = ({
                     </SelectPrimitive.ItemText>
 
                     <SelectPrimitive.ItemIndicator>
-                      <IoCheckmark className="w-4 h-4 ml-space-md text-primary" />
+                      <IoCheckmark className="w-4 h-4 ml-space-md text-ds-primary" />
                     </SelectPrimitive.ItemIndicator>
                   </SelectPrimitive.Item>
                 ))}

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Skeleton } from '..'
 
 const meta: Meta<typeof Skeleton> = {
@@ -55,7 +55,7 @@ export const RoundedVariants: Story = {
 
 export const CardExample: Story = {
   render: () => (
-    <div className="w-96 flex items-center space-x-gap-sm p-space-sm border border-default rounded-md">
+    <div className="w-96 flex items-center space-x-gap-sm p-space-sm border border-ds-default rounded-md">
       <Skeleton rounded="full" className="h-12 w-12" />
       <div className="space-y-2 w-full">
         <Skeleton className="h-4 w-3/4" />

@@ -4,8 +4,10 @@ import React from 'react'
 import { useRadioGroup } from './RadioGroup'
 import { cn } from '@/utils/tailwind'
 
-export interface RadioProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+export interface RadioProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'onChange'
+> {
   label: string | React.ReactNode
 }
 
@@ -30,7 +32,7 @@ export const Radio: React.FC<RadioProps> = ({ label, value, ...props }) => {
           name={group.name}
           onChange={handleChange}
           className={cn(
-            'peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-input checked:border-focused transition-all'
+            'peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-ds-input checked:border-ds-focused transition-all'
           )}
           {...props}
         />
@@ -38,7 +40,7 @@ export const Radio: React.FC<RadioProps> = ({ label, value, ...props }) => {
       </label>
       <label
         htmlFor={id}
-        className="ml-2 text-default cursor-pointer text-body-md font-semibold"
+        className="ml-2 text-ds-default cursor-pointer text-body-md font-semibold"
       >
         {label}
       </label>

@@ -5,11 +5,10 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { FiCheck } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 
-export interface CheckboxProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
-    'onChange'
-  > {
+export interface CheckboxProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
+  'onChange'
+> {
   label: React.ReactNode
   onChange?: (checked: boolean) => void
 }
@@ -27,8 +26,8 @@ export const Checkbox = forwardRef<
         ref={ref}
         id={id}
         className={cn(
-          'absolute left-0 peer h-5 w-5 cursor-pointer appearance-none rounded-sm border border-input transition-all',
-          'data-[state=checked]:bg-primary-intense data-[state=checked]:border-primary',
+          'absolute left-0 peer h-5 w-5 cursor-pointer appearance-none rounded-sm border border-ds-input transition-all',
+          'data-[state=checked]:bg-primary-intense data-[state=checked]:border-ds-primary',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           'disabled:cursor-not-allowed disabled:opacity-50',
           className
@@ -37,12 +36,12 @@ export const Checkbox = forwardRef<
         {...props}
       >
         <CheckboxPrimitive.Indicator>
-          <FiCheck className="pl-[2px] text-inverse" strokeWidth={3} />
+          <FiCheck className="pl-[2px] text-ds-inverse" strokeWidth={3} />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       <label
         htmlFor={id}
-        className="ml-space-lg text-default cursor-pointer text-body-md font-semibold"
+        className="ml-space-lg text-ds-default cursor-pointer text-body-md font-semibold"
       >
         {label}
       </label>

@@ -1,6 +1,6 @@
 export const variantMap = {
-  primary: 'bg-ds-brand-bold text-ds-inverse',
-  outlinePrimary: 'border border-ds-brand text-ds-brand bg-transparent',
+  primary: 'bg-ds-primary-bold text-ds-inverse',
+  outlinePrimary: 'border border-ds-primary text-ds-primary bg-transparent',
 
   secondary: 'bg-ds-neutral-bold text-ds-inverse',
   outlineSecondary: 'border border-ds-bold text-ds-default bg-transparent',
@@ -14,9 +14,9 @@ export const variantMap = {
   warning: 'bg-ds-warning-bold text-ds-warning-inverse',
   outlineWarning: 'border border-ds-warning text-ds-warning bg-transparent',
 
-  destructive: 'bg-ds-danger-bold text-ds-inverse',
+  destructive: 'bg-ds-destructive-bold text-ds-inverse',
   outlineDestructive:
-    'border border-ds-danger text-ds-destructive bg-transparent',
+    'border border-ds-destructive text-ds-destructive bg-transparent',
 
   light: 'bg-ds-neutral text-ds-default',
   outlineLight: 'border border-ds-default text-ds-subtle bg-transparent',

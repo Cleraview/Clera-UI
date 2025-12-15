@@ -1,17 +1,170 @@
-import { Meta } from '@storybook/addon-docs/blocks'
+import { Meta, Source } from '@storybook/addon-docs/blocks'
 import { CodeTabs } from './_components/CodeBlock'
+import { Canvas } from "@/stories/_components/Canvas"
+import config from '@/config/site'
+import { FiPackage, FiFeather, FiMoon, FiGrid, FiLayout, FiSmartphone } from "react-icons/fi"
 
-<Meta title="Getting Started" tags={['v12.3.0']} />
+<Meta title="Getting Started" />
 
-# Installation
-Using npm or yarn or pnpm or bun.<br />
-**We recommend using `npm` or `yarn` or `pnpm` or `bun` to install,** it not only makes development easier, but also allow you to take advantage of the rich ecosystem of Javascript packages and tooling.
+# {config.title}
+
+<p className="text-xl text-ds-subtle mb-8">{config.description}</p>
+
+Welcome to **{config.title}**, a comprehensive design system engineered to help you build consistent, accessible, and beautiful user interfaces with ease. It combines the flexibility of Tailwind CSS with the robustness of React.
+
+<br />
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-space-sm mb-space-sm font-bold text-ds-default">
+      <FiFeather className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Lightweight</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Built on top of Tailwind CSS for minimal bundle size and maximum performance.</p>
+  </div>
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-space-sm mb-space-sm font-bold text-ds-default">
+      <FiMoon className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Dark Mode Ready</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Automatic dark mode support with semantic color tokens and intelligent switching.</p>
+  </div>
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-space-sm mb-space-sm font-bold text-ds-default">
+      <FiPackage className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Modular</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Import only what you need. Each component is independently tree-shakeable.</p>
+  </div>
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-space-sm mb-space-sm font-bold text-ds-default">
+      <FiGrid className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Accessible</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Follows WAI-ARIA patterns to ensure your app is usable by everyone.</p>
+  </div>
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-2 space-sm-2 fonspace-sm-bold text-ds-default">
+      <FiLayout className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Composable</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Designed with composition in mind, allowing for infinite layout possibilities.</p>
+  </div>
+  <div className="p-4 border border-ds-default rounded-lg bg-ds-elevation-surface">
+    <div className="flex items-center gap-2 space-sm-2 fonspace-sm-bold text-ds-default">
+      <FiSmartphone className="w-5 h-5 text-(--fill-ds-icon)" />
+      <span>Responsive</span>
+    </div>
+    <p className="text-sm text-ds-subtle">Mobile-first approach ensuring a seamless experience across all devices.</p>
+  </div>
+</div>
+
+<br />
+
+## **Installation**
+
+Get up and running quickly by installing the package from your preferred package manager.
 
 <CodeTabs data={
   [
-    { label: 'npm', content: 'npm install @clera/ui' },
-    { label: 'yarn', content: 'yarn add @clera/ui' },
-    { label: 'pnpm', content: 'pnpm add @clera/ui' },
-    { label: 'bun', content: 'bun add @clera/ui' },
+    { label: 'npm', content: 'npm install @clera-ui' },
+    { label: 'yarn', content: 'yarn add @clera-ui' },
+    { label: 'pnpm', content: 'pnpm add @clera-ui' },
+    { label: 'bun', content: 'bun add @clera-ui' },
   ]
 } />
+
+<br />
+
+## **Configuration**
+
+To fully utilize the design system, you need to configure your application to load the necessary styles, fonts, and providers.
+
+### **1. Global Styles**
+
+Import the core CSS files at the root of your application (e.g., `pages/_app.tsx`, `app/layout.tsx`, or `src/main.tsx`).
+
+<Source language="css" dark code={`
+import '@clera-ui/styles/globals.css'
+`} />
+
+### **2. Typography**
+
+{config.title} relies on the **Satoshi** font family for its distinct look. Import the font CSS to ensure text renders correctly.
+
+<Source language="css" dark code={`
+/* Import the Satoshi font family (optional) */
+import '@clera-ui/styles/satoshi.css'
+`} />
+
+### **3. Theme Provider**
+
+Wrap your application with the `ThemeProvider` to enable dynamic theme switching and context access.
+
+<Source language="tsx" dark code={`
+import { ThemeProvider } from '@clera-ui'
+
+export default function RootLayout({ children }) {
+    return (
+      <ThemeProvider defaultTheme="system" enableSystem>
+        {children}
+      </ThemeProvider>
+    )
+}
+`} />
+
+---
+
+## **Usage**
+
+Once installed, you can import components individually. This example demonstrates how to build a simple card layout using {config.title} components.
+
+<Source language="tsx" dark code={`
+import { Card, Button, Badge, Text } from '@clera-ui'
+
+export default function FeatureCard() {
+    return (
+      <Card className="max-w-sm">
+        <Card.Thumbnail src="/images/cover.jpg" alt="Cover" />
+        <Card.Content>
+          <div className="flex justify-between items-center mb-2">
+            <Badge variant="success">New</Badge>
+            <span className="text-ds-subtle text-sm">March 10, 2024</span>
+          </div>
+          
+          <h3 className="text-heading-lg font-bold mb-2">
+            Supercharge your Workflow
+          </h3>
+          
+          <p className="text-ds-subtle mb-6">
+            Experience the power of our new automation tools designed to save you time.
+          </p>
+
+          <Button variant="primary" className="w-full">
+            Get Started
+          </Button>
+        </Card.Content>
+      </Card>
+    )
+}` }
+/>
+
+<br />
+
+## **Architecture**
+
+The design system is structured into three main layers:
+
+- **Primitives**: Low-level building blocks like `Box`, `Text`, and `Flex` that handle basic layout and typography.
+- **Components**: Atomic UI elements like `Button`, `Input`, and `Badge` that compose primitives.
+- **Patterns**: Complex compositions like `Card`, `Form`, and `Dialog` that solve specific user problems.
+
+---
+
+## **Community & Support**
+
+Need help? Have a bug report or feature request?
+
+- **GitHub Repository**: [View Source]({config.repoUrl})
+- **Issues**: [Report a Bug]({config.repoUrl}/issues)
+- **Changelog**: [View Changes](/docs/changelog)

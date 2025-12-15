@@ -12,26 +12,45 @@ const buttonSizes = {
 }
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-1.5 whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out',
+  'inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none',
   {
     variants: {
+      // variant: variantMap,
       variant: {
         primary:
-          'bg-primary-intense text-inverse hover:bg-primary-intense-hovered',
+          'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered text-ds-inverse',
         outlinePrimary:
-          'border border-primary text-primary hover:bg-primary-intense hover:border-primary-intense hover:text-inverse',
+          'bg-transparent hover:bg-ds-primary border-ds-primary text-ds-primary',
+
         secondary:
-          'bg-secondary-intense-pressed text-inverse hover:bg-secondary-intense-hovered',
+          'bg-ds-neutral-bold hover:bg-ds-neutral-bold-hovered text-ds-inverse',
         outlineSecondary:
-          'border border-secondary text-secondary hover:bg-secondary-intense hover:border-secondary-intense hover:text-inverse',
+          'bg-transparent hover:bg-ds-neutral border-ds-bold text-ds-default',
+
+        success:
+          'bg-ds-success-bold hover:bg-ds-success-bold-hovered text-ds-inverse',
+        outlineSuccess:
+          'bg-transparent hover:bg-ds-success border-ds-success text-ds-success',
+
+        info: 'bg-ds-info-bold hover:bg-ds-info-bold-hovered text-ds-inverse',
+        outlineInfo:
+          'bg-transparent hover:bg-ds-info border-ds-info text-ds-info',
+
+        warning:
+          'bg-ds-warning-bold hover:bg-ds-warning-bold-hovered text-ds-warning-inverse',
+        outlineWarning:
+          'bg-transparent hover:bg-ds-warning border-ds-warning text-ds-warning',
+
         destructive:
-          'bg-destructive-intense text-inverse hover:bg-destructive-intense-hovered',
+          'bg-ds-destructive-bold hover:bg-ds-destructive-bold-hovered text-ds-inverse',
         outlineDestructive:
-          'border border-destructive text-accent-red hover:bg-destructive-intense hover:border-destructive-intense hover:text-inverse',
-        light: 'bg-default text-default hover:bg-inverse-hovered',
+          'bg-transparent hover:bg-ds-destructive border-ds-destructive text-ds-destructive',
+
+        light: 'bg-ds-neutral hover:bg-ds-neutral-hovered text-ds-default',
         outlineLight:
-          'border border-disabled text-default hover:bg-default hover:text-default',
-        ghost: 'text-secondary',
+          'bg-transparent hover:bg-ds-neutral border-ds-default text-ds-subtle',
+
+        ghost: 'text-ds-default bg-transparent',
       },
       size: buttonSizes,
       rounded: {
@@ -41,7 +60,8 @@ const buttonVariants = cva(
         full: 'rounded-full',
       },
       disabled: {
-        true: 'bg-disabled! text-secondary disabled:cursor-not-allowed disabled:opacity-50',
+        true: 'bg-disabled! text-ds-disabled disabled:cursor-not-allowed disabled:opacity-50',
+        false: '',
       },
       fullWidth: {
         true: 'w-full',
@@ -51,17 +71,33 @@ const buttonVariants = cva(
       { disabled: false, rounded: 'none', className: 'hover:rounded-md' },
       { disabled: false, rounded: 'sm', className: 'hover:rounded-lg' },
       { disabled: false, rounded: 'md', className: 'hover:rounded-xl' },
+
+      {
+        variant: [
+          'primary',
+          'destructive',
+          'info',
+          'secondary',
+          'warning',
+          'success',
+          'ghost',
+          'light',
+        ],
+        className: 'border-transparent',
+      },
     ],
     defaultVariants: {
       variant: 'primary',
       fullWidth: false,
+      disabled: false,
       rounded: 'md',
     },
   }
 )
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
@@ -114,7 +150,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             )}
           >
             <div
-              className="w-4 h-4 rounded-full inline-block border-t-[2px] border-r-[2px] border-white border-r-transparent box-border animate-spin"
+              className="w-4 h-4 rounded-full inline-block border-t-[2px] border-r-[2px] border-r-transparent box-border animate-spin"
               data-testid="btn-loading-spinner"
               aria-hidden
             />

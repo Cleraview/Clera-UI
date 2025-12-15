@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Alert } from '../Alert'
 import { AiOutlineInfoCircle, AiFillAccountBook } from 'react-icons/ai'
 import { MdDisabledByDefault } from 'react-icons/md'
@@ -150,8 +150,13 @@ export const Warning: Story = {
   render: () => {
     return (
       <Alert
-        title="This is an alert"
-        description="Here is the description text for the alert."
+        title="Account under review"
+        description={
+          <p>
+            Your account is being reviewd by our{' '}
+            <strong className="font-bold">Technical Support.</strong>
+          </p>
+        }
         variant="warning"
         closable
       />

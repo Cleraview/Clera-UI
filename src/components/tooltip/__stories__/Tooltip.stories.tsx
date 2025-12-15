@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Tooltip } from '..'
 import { Button } from '@/components/button'
 
@@ -84,7 +84,7 @@ export const LightTheme: Story = {
 
 export const AllSides: Story = {
   render: () => (
-    <div className="flex gap-4 p-20">
+    <div className="flex gap-4 p-space-2xl justify-center">
       <Tooltip content="Top side" side="top">
         <Button>Top</Button>
       </Tooltip>

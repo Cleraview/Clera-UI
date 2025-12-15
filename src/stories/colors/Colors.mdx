@@ -48,12 +48,9 @@ import FoundationColor from "@/assets/docs/foundation-color.png"
     **Chart color tokens** provide a consistent and accessible palette for data visualization elements. They ensure clarity, distinction, and alignment with the overall design language.
     <ColorList prefix="chart-color" groupKey="chart" />
 
-    ## **Shadow Colors**
-    **Shadow color tokens** define the colors used for shadows and elevation effects in the UI. They enhance depth perception, highlight interactive elements, and maintain visual hierarchy.
-    <ColorList prefix="shadow-color" groupKey="shadow" />
-
     ## **Elevation**
     Elevation in our design system is represented through a series of shadow styles that create depth and hierarchy within the user interface. These elevation levels help distinguish between different layers of content, guiding users' attention and improving overall usability.
+    <ColorList prefix="background-color" groupKey="elevation" />
     
     ### **Surface**
     **Elevation Surface**: The base layer with no shadow, representing the default surface level. It provides a clean and neutral backdrop for content.
@@ -61,7 +58,7 @@ import FoundationColor from "@/assets/docs/foundation-color.png"
 
     ### **Shadow**
     **Elevation Shadow**: A set of shadow styles that indicate different levels of elevation. These shadows create a sense of depth, helping users understand the spatial relationships between UI elements.
-    <ColorList prefix="elevation" groupKey="shadow-elevation" />
+    <ColorList prefix="shadow-color" groupKey="shadow" />
 
     ## **Usage**
 
@@ -195,10 +192,6 @@ import FoundationColor from "@/assets/docs/foundation-color.png"
             {
               id: "chart-colors",
               label: "Chart",
-            },
-            {
-              id: "shadow-colors",
-              label: "Shadow",
             }
           ]
         },

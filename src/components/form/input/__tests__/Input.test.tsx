@@ -93,7 +93,7 @@ describe('components/form/Input', () => {
   it('applies error styles when hasError is true', () => {
     render(<Input id="email" label="Email" hasError />)
     const input = screen.getByLabelText('Email')
-    expect(input).toHaveClass('text-destructive')
+    expect(input).toHaveClass('text-ds-destructive')
   })
 
   it('renders with different types', () => {

@@ -21,7 +21,7 @@ export const SpacingList = () => (
         className="grid grid-cols-[100px_.5fr_1fr] gap-x-space-4xl items-center last:pb-0 py-space-sm px-space-md last:border-b-0 border-b border-ds-default"
       >
         <Badge
-          className="justify-self-start bg-ds-secondary text-ds-default border border-ds-default font-light [&>*]:text-sm! [&>*]:text-ds-default!"
+          className="justify-self-start bg-ds-secondary border border-ds-default font-light [&>*]:text-sm! [&>*]:text-ds-inverse!"
           size="sm"
           rounded="full"
         >

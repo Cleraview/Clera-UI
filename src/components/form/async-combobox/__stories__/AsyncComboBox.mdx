@@ -13,7 +13,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     An advanced `ComboBox` that fetches and filters options from a server as the user types.
     It is ideal for searching large, remote datasets.
     <DocInfo 
-      importStatement={`import { AsyncComboBox } from 'clera-ui/form'`} 
+      importStatement={`import { AsyncComboBox } from '@clera-ui/form'`} 
       sourcePath={`components/form/async-combobox`} 
     />
 
@@ -49,7 +49,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source className="my-0!" dark code={`
           import { useState } from 'react'
-          import { AsyncComboBox, AsyncComboBoxOption } from 'clera-ui/form'
+          import { AsyncComboBox, AsyncComboBoxOption } from '@clera-ui/form'
           import { FiShoppingBag, FiTrendingUp } from 'react-icons/fi'
           
           
@@ -80,14 +80,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               case 'text':
                 return (
                   <div className="flex items-center gap-3 p-space-sm">
-                    <FiShoppingBag className="w-4 h-4 text-subtle" />
+                    <FiShoppingBag className="w-4 h-4 text-ds-subtle" />
                     <span>{option.label}</span>
                   </div>
                 )
               case 'trend':
                 return (
                   <div className="flex items-center gap-3 p-space-sm">
-                    <FiTrendingUp className="w-4 h-4 text-subtle" />
+                    <FiTrendingUp className="w-4 h-4 text-ds-subtle" />
                     <span>{option.label}</span>
                   </div>
                 )
@@ -99,7 +99,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                     <img src={option.img} className="w-10 h-10 rounded-md" />
                     <div className="flex flex-col">
                       <span>{option.label}</span>
-                      <span className="text-xs text-subtle">{option.category}</span>
+                      <span className="text-body-xs text-ds-subtle">{option.category}</span>
                     </div>
                   </div>
                 )
@@ -140,11 +140,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AsyncComboBox } from 'clera-ui/form'
+          import { AsyncComboBox } from '@clera-ui/form'
           import { FiDatabase } from 'react-icons/fi'
 
           const MyCustomNotFound = () => (
-            <div className="flex flex-col items-center justify-center p-space-lg text-subtle gap-2">
+            <div className="flex flex-col items-center justify-center p-space-lg text-ds-subtle gap-2">
               <FiDatabase className="w-8 h-8" />
               <span className="text-body-sm font-semibold">No Data</span>
               <p className="text-body-xs text-center">
@@ -181,8 +181,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AsyncComboBox } from 'clera-ui/form'
-          import { Skeleton } from 'clera-ui/skeleton'
+          import { AsyncComboBox } from '@clera-ui/form'
+          import { Skeleton } from '@clera-ui/skeleton'
 
           const renderLoading = (count: number) => (
             Array.from({ length: count }, (_, i) => (

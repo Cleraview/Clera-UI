@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { MaskedInput } from '../MaskedInput'
 
@@ -131,7 +131,7 @@ export const ControlledExample: Story = {
           rawValue={raw}
           onRawChange={setRaw}
         />
-        <p className="text-xs text-gray-500">Raw: {raw}</p>
+        <p className="text-body-xs text-ds-subtlest">Raw: {raw}</p>
       </div>
     )
   },

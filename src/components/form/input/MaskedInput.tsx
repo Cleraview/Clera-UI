@@ -14,8 +14,7 @@ import { getMaskFromPreset, MaskPresetKey } from './_utils/mask-presets'
 import { InputSize, sizeClasses } from '../_props/input-props'
 import { FormInputWrapper } from '../FormInputWrapper'
 
-export interface MaskedInputProps
-  extends InputHTMLAttributes<HTMLInputElement> {
+export interface MaskedInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   mask?: MaskPattern
   maskPreset?: MaskPresetKey
@@ -184,7 +183,7 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
           className={cn(
             'peer w-full placeholder-transparent focus:outline-none',
             sizeClasses[inputSize],
-            disabled ? 'text-gray-400' : 'text-neutral-900'
+            disabled ? 'text-ds-subtlest' : 'text-ds-default'
           )}
           {...rest}
         />

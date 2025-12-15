@@ -7,7 +7,7 @@ import { FiX } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 
 const overlayVariants = cva(
-  'fixed inset-0 z-[9998] bg-black/50 transition-opacity duration-300',
+  'fixed inset-0 z-[9998] bg-ds-elevation-surface-overlay transition-opacity duration-300',
   {
     variants: {
       state: {
@@ -22,7 +22,7 @@ const overlayVariants = cva(
 )
 
 const contentVariants = cva(
-  'fixed z-[9999] bg-white rounded-xl shadow-2xl overflow-hidden transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
+  'fixed z-[9999] bg-ds-elevation-surface rounded-xl shadow-2xl overflow-hidden transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
   {
     variants: {
       size: {
@@ -95,6 +95,11 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
           }}
           className={cn(overlayVariants({ state: open ? 'open' : 'closed' }))}
         />
+
+        {/* <DialogPrimitive.DialogDescription>
+          {"-"}
+        </DialogPrimitive.DialogDescription> */}
+
         <DialogPrimitive.Content
           onOpenAutoFocus={onOpenAutoFocus}
           onInteractOutside={e => {
@@ -112,9 +117,9 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
           )}
         >
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between border-b border-default p-space-sm">
+            <div className="flex items-center justify-between border-b border-ds-default p-space-sm">
               {title && (
-                <DialogPrimitive.Title className="text-heading-lg font-semibold text-default">
+                <DialogPrimitive.Title className="text-heading-lg font-semibold text-ds-default">
                   {title}
                 </DialogPrimitive.Title>
               )}
@@ -127,17 +132,17 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
                       'p-space-xs rounded-full transition-colors',
                       loading
                         ? 'cursor-not-allowed opacity-50'
-                        : 'hover:bg-inverse-hovered cursor-pointer'
+                        : 'hover:bg-ds-inverse-subtle-hovered/20 cursor-pointer'
                     )}
                   >
-                    <FiX className="w-5 h-5" />
+                    <FiX className="w-5 h-5 text-(--fill-ds-icon-subtle)" />
                   </button>
                 </DialogPrimitive.Close>
               )}
             </div>
           )}
           {description && (
-            <DialogPrimitive.Description className="px-space-sm py-space-xs text-body-sm text-subtle border-b border-default">
+            <DialogPrimitive.Description className="px-space-sm py-space-xs text-body-sm text-ds-subtle border-b border-ds-default">
               {description}
             </DialogPrimitive.Description>
           )}
@@ -165,7 +170,7 @@ const DialogFooter: React.FC<{
 }> = ({ children, className }) => (
   <div
     className={cn(
-      'border-t border-default p-space-sm flex justify-end gap-space-sm bg-white',
+      'border-t border-ds-default p-space-sm flex justify-end gap-space-sm bg-ds-elevation-surface',
       className
     )}
   >

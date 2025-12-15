@@ -87,7 +87,7 @@ const componentsCommon: Partial<CustomComponents> = {
         'rdp-button_previous absolute p-space-xs ml-space-xs! rounded-full focus:bg-input-hovered focus-visible:outline-none transition-colors cursor-pointer'
       )}
     >
-      <FiChevronLeft className="h-6 w-6 text-subtle" />
+      <FiChevronLeft className="h-6 w-6 text-ds-subtle" />
     </button>
   ),
   NextMonthButton: (props: React.HTMLAttributes<HTMLButtonElement>) => (
@@ -97,7 +97,7 @@ const componentsCommon: Partial<CustomComponents> = {
         'rdp-button_next absolute p-space-xs mr-space-xs! rounded-full focus-visible:outline-none transition-colors cursor-pointer'
       )}
     >
-      <FiChevronRight className="h-6 w-6 text-subtle" />
+      <FiChevronRight className="h-6 w-6 text-ds-subtle" />
     </button>
   ),
   Dropdown: (props: {
@@ -162,7 +162,7 @@ const componentsCommon: Partial<CustomComponents> = {
         {...props}
         className={cn(
           'text-center font-medium text-body-sm',
-          isSun ? 'text-destructive' : 'text-subtle'
+          isSun ? 'text-ds-destructive' : 'text-ds-subtle'
         )}
       />
     )
@@ -174,24 +174,25 @@ const classNamesCommon = (
   isSameDayInRange?: boolean
 ): Partial<ClassNames> => ({
   chevron: 'hover:bg-input-hovered transition',
-  outside: 'text-subtlest',
+  outside: 'text-ds-subtlest',
   disabled:
-    'hover:bg-transparent text-subtle/30! [&>button]:cursor-not-allowed!',
+    'hover:bg-transparent text-ds-subtle/30! [&>button]:cursor-not-allowed!',
   day: cn(
     'h-9 w-9 text-body-sm hover:bg-input-hovered transition font-semibold',
     isSameDayInRange ? 'rounded-md!' : 'rounded-md'
   ),
-  today: 'text-accent-violet font-bold',
+  today: 'text-ds-accent-violet font-bold',
   month_grid: cn(
     'border-separate',
     mode === 'multiple' ? 'border-spacing-1' : 'border-spacing-y-1'
   ),
   range_start:
-    'bg-primary-intense hover:bg-primary-intense! text-inverse rounded-tr-none rounded-br-none',
+    'bg-primary-intense hover:bg-primary-intense! text-ds-inverse rounded-tr-none rounded-br-none',
   range_middle: 'bg-primary rounded-none',
   range_end:
-    'bg-primary-intense hover:bg-primary-intense! text-inverse rounded-tl-none rounded-bl-none',
-  selected: 'bg-primary text-accent-violet hover:bg-primary/90 font-semibold',
+    'bg-primary-intense hover:bg-primary-intense! text-ds-inverse rounded-tl-none rounded-bl-none',
+  selected:
+    'bg-primary text-ds-accent-violet hover:bg-primary/90 font-semibold',
 })
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -355,8 +356,8 @@ const Calendar: React.FC<CalendarProps> = ({
     mode,
     modifiers: { weekend: (date: Date) => isSunday(date) },
     modifiersClassNames: {
-      weekend: 'text-destructive',
-      outside: 'text-subtlest',
+      weekend: 'text-ds-destructive',
+      outside: 'text-ds-subtlest',
     },
     ...options,
   } as Partial<DayPickerProps>
@@ -383,7 +384,7 @@ const Calendar: React.FC<CalendarProps> = ({
               className={cn(
                 'peer w-full pr-space-lg! mr-space-lg placeholder-transparent focus:outline-none cursor-pointer',
                 sizeClasses[inputSize],
-                disabled ? 'text-subtlest' : 'text-default',
+                disabled ? 'text-ds-subtlest' : 'text-ds-default',
                 mode === 'multiple' && 'truncate max-w-[180px]'
               )}
               type="text"
@@ -398,7 +399,7 @@ const Calendar: React.FC<CalendarProps> = ({
         <Popover.Portal>
           <Popover.Content
             className={cn(
-              'z-[9999] bg-default p-space-sm rounded-xl shadow-2xl border border-default',
+              'z-[9999] bg-default p-space-sm rounded-xl shadow-2xl border border-ds-default',
               className
             )}
             side="bottom"

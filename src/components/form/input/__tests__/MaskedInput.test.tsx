@@ -116,10 +116,10 @@ describe('components/form/MaskedInput', () => {
     const fieldset = container.querySelector('fieldset')
 
     fireEvent.focus(input)
-    expect(fieldset).toHaveClass('border-focused')
+    expect(fieldset).toHaveClass('border-ds-focused')
 
     fireEvent.blur(input)
-    expect(fieldset).not.toHaveClass('border-focused')
+    expect(fieldset).not.toHaveClass('border-ds-focused')
     expect(onBlur).toHaveBeenCalled()
   })
 })

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import {
   FiFile,
   FiUser,
@@ -161,7 +161,7 @@ export const Playground: Story = {
         <Button onClick={() => setOpen(true)} className="mt-space-sm">
           Open Command
         </Button>
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected Value: {selectedValue || 'None'}
         </p>
         <CommandDialog
@@ -280,17 +280,17 @@ export const Default: Story = {
 
     return (
       <div className="flex flex-col items-center gap-space-sm">
-        <p className="text-body-md text-subtle">
+        <p className="text-body-md text-ds-subtle">
           Press{' '}
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-default bg-inverse px-space-xs font-mono text-body-xs font-medium text-default">
-            <span className="text-sm">⌘</span>C
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-ds-default bg-ds-inverse-subtle px-space-xs font-mono text-body-xs font-medium text-ds-default">
+            <span className="text-body-sm">⌘</span>C
           </kbd>{' '}
           or click button
         </p>
         <Button onClick={() => setOpen(true)} className="mt-space-sm">
           Open Command
         </Button>
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected Value: {selectedValue || 'None'}
         </p>
         <CommandDialog open={open} onOpenChange={setOpen} title="Command Menu">
@@ -340,14 +340,14 @@ export const AsStaticMenu: Story = {
 
     return (
       <div className="flex flex-col gap-space-md w-full max-w-sm">
-        <Command className="rounded-xl border border-default shadow-md">
+        <Command>
           <CommandMenu
             groups={menuGroups}
             placeholder="Filter items..."
             value={selectedValue}
           />
         </Command>
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected Value: {selectedValue || 'None'}
         </p>
       </div>
@@ -433,7 +433,7 @@ export const SizedItems: Story = {
 
     return (
       <div className="flex flex-col gap-space-md w-full max-w-sm">
-        <Command className="rounded-xl border border-default shadow-md">
+        <Command>
           <CommandMenu
             groups={sizedMenuGroups}
             placeholder="Small items (xs)..."
@@ -441,7 +441,7 @@ export const SizedItems: Story = {
             value={selectedValue}
           />
         </Command>
-        <Command className="rounded-xl border border-default shadow-md">
+        <Command>
           <CommandMenu
             groups={sizedMenuGroupsSm}
             placeholder="Medium items (sm)..."
@@ -449,7 +449,7 @@ export const SizedItems: Story = {
             value={selectedValue}
           />
         </Command>
-        <Command className="rounded-xl border border-default shadow-md">
+        <Command>
           <CommandMenu
             groups={sizedMenuGroupsMd}
             placeholder="Default items (md)..."
@@ -457,7 +457,7 @@ export const SizedItems: Story = {
             value={selectedValue}
           />
         </Command>
-        <p className="text-body-sm text-subtle text-center">
+        <p className="text-body-sm text-ds-subtle text-center">
           Selected Value: {selectedValue || 'None'}
         </p>
       </div>
@@ -512,14 +512,14 @@ export const ControlledSelection: Story = {
 
     return (
       <div className="flex flex-col gap-space-md w-full max-w-sm">
-        <Command className="rounded-xl border border-default shadow-md">
+        <Command>
           <CommandMenu
             groups={menuGroups}
             placeholder="Filter items..."
             value={selectedValue}
           />
         </Command>
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected Value: {selectedValue || 'None'}
         </p>
       </div>
@@ -718,29 +718,31 @@ export const KeyboardShortcuts: Story = {
 
     return (
       <div className="flex flex-col items-center gap-space-sm">
-        <p className="text-body-md text-subtle">
+        <p className="text-body-md text-ds-subtle">
           Press{' '}
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-default bg-inverse px-space-xs font-mono text-body-xs font-medium text-default">
-            <span className="text-sm">⌘</span>C
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-ds-default bg-inverse px-space-xs font-mono text-body-xs font-medium text-ds-default">
+            <span className="text-body-sm">⌘</span>C
           </kbd>{' '}
           or click button
         </p>
         <Button onClick={() => setOpen(true)} className="mt-space-sm">
           Open Command
         </Button>
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected Value: {selectedValue || 'None'}
         </p>
+
         <CommandDialog
           open={open}
           onOpenChange={setOpen}
-          title="Keyboard Shortcuts"
           size="lg"
+          showCloseButton={false}
         >
           <CommandMenu
             key={open.toString()}
             groups={menuGroups}
             value={selectedValue}
+            selectable={false}
             placeholder="Search for shortcuts..."
             className="columns-2 [&_[cmdk-group]]:break-inside-avoid"
           />

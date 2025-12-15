@@ -7,11 +7,8 @@ import {
   RiArrowUpSLine,
 } from 'react-icons/ri'
 import { GoChevronDown } from 'react-icons/go'
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from '@/components/dropdown-menu'
+// 1. Import the smart component
+import { Dropdown } from '@/components/dropdown-menu'
 import { Button } from '@/components/button'
 import { Tooltip } from '@/components/tooltip'
 import { useTheme } from '@root/.storybook/context/ThemeContext'
@@ -69,7 +66,6 @@ export const Canvas = ({ children }: CanvasProps) => {
   useEffect(() => {
     setTimeout(() => {
       if (sourceRef.current) {
-        console.log(sourceRef.current.scrollHeight)
         if (sourceRef.current.scrollHeight > 230) {
           setShowExpandButton(true)
         } else {
@@ -93,6 +89,57 @@ export const Canvas = ({ children }: CanvasProps) => {
     }
   }
 
+  const themeSelectionItem = (
+    <div key="theme-selector" className="min-w-[230px] p-space-sm">
+      <h2 className="text-body-sm text-ds-default font-semibold">
+        Color Theme
+      </h2>
+
+      <div className="flex items-center justify-stretch gap-space-xs mt-space-sm">
+        <Button
+          onClick={() => setCanvasTheme('light')}
+          variant={
+            (theme === 'light' && !canvasTheme) || canvasTheme === 'light'
+              ? 'primary'
+              : 'outlineLight'
+          }
+          size="sm"
+          fullWidth
+          asChild
+        >
+          <span className="text-ds-default">Light</span>
+        </Button>
+
+        <Button
+          onClick={() => setCanvasTheme('dark')}
+          variant={
+            (theme === 'dark' && !canvasTheme) || canvasTheme === 'dark'
+              ? 'primary'
+              : 'outlineLight'
+          }
+          size="sm"
+          fullWidth
+          asChild
+        >
+          <span className="text-ds-default">Dark</span>
+        </Button>
+        <Button
+          onClick={() => setCanvasTheme('system')}
+          variant={
+            (theme === 'system' && !canvasTheme) || canvasTheme === 'system'
+              ? 'primary'
+              : 'outlineLight'
+          }
+          size="sm"
+          fullWidth
+          asChild
+        >
+          <span className="text-ds-default">System</span>
+        </Button>
+      </div>
+    </div>
+  )
+
   return (
     <div className="my-space-sm border border-ds-default rounded-lg overflow-hidden">
       <div
@@ -109,78 +156,24 @@ export const Canvas = ({ children }: CanvasProps) => {
         <div className="w-full">{story}</div>
       </div>
 
-      {/* Controls */}
       <div className="flex justify-between items-center px-space-sm py-space-xs bg-ds-elevation-surface-sunken! text-ds-default! border-y border-ds-default">
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            className={cn(
-              'px-space-sm py-space-xs bg-ds-transparent outline-none rounded cursor-pointer flex items-center gap-space-xs font-semibold',
-              'hover:bg-ds-neutral-hovered data-[state=open]:bg-ds-selected-pressed/40 text-ds-default data-[state=open]:text-ds-accent-violet border border-transparent data-[state=open]:border-selected'
-            )}
-          >
-            <RiListSettingsLine />
-            Preferences
-            <GoChevronDown className="ml-space-sm" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="min-w-[400px] bg-ds-elevation-surface! shadow-ds-elevation-overflow border-0!"
-            align="start"
-          >
-            <div className="min-w-[230px] p-space-sm">
-              <h2 className="text-body-sm text-ds-default font-semibold">
-                Color Theme
-              </h2>
-
-              <div className="flex items-center justify-stretch gap-space-xs mt-space-sm">
-                <Button
-                  className={cn(
-                    'min-w-[120px] border',
-                    (theme === 'light' && !canvasTheme) ||
-                      canvasTheme === 'light'
-                      ? 'bg-ds-selected-pressed/40! border-ds-selected text-ds-accent-violet!'
-                      : 'border-ds-default text-ds-accent-neutral! hover:bg-ds-neutral-hovered/20'
-                  )}
-                  onClick={() => setCanvasTheme('light')}
-                  size="sm"
-                  fullWidth
-                  asChild
-                >
-                  <span className="text-ds-default">Light</span>
-                </Button>
-
-                <Button
-                  className={cn(
-                    'border',
-                    (theme === 'dark' && !canvasTheme) || canvasTheme === 'dark'
-                      ? 'bg-ds-selected-pressed/40! border-ds-selected text-ds-accent-violet!'
-                      : 'border-ds-default text-ds-accent-neutral! hover:bg-ds-neutral-hovered/20'
-                  )}
-                  onClick={() => setCanvasTheme('dark')}
-                  size="sm"
-                  fullWidth
-                  asChild
-                >
-                  <span className="text-ds-default">Dark</span>
-                </Button>
-                <Button
-                  className={cn(
-                    'border',
-                    (theme === 'system' && !canvasTheme) ||
-                      canvasTheme === 'system'
-                      ? 'bg-ds-selected-pressed/40! border-ds-selected text-ds-accent-violet!'
-                      : 'border-ds-default text-ds-accent-neutral! hover:bg-ds-neutral-hovered/20'
-                  )}
-                  onClick={() => setCanvasTheme('system')}
-                  size="sm"
-                  fullWidth
-                  asChild
-                >
-                  <span className="text-ds-default">System</span>
-                </Button>
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dropdown
+          align="start"
+          className="min-w-[400px] bg-ds-elevation-surface! shadow-ds-elevation-overflow border-0!"
+          trigger={
+            <button
+              className={cn(
+                'px-space-sm py-space-xs bg-ds-transparent outline-none rounded cursor-pointer flex items-center gap-space-xs font-semibold',
+                'hover:bg-ds-neutral-hovered data-[state=open]:bg-ds-selected-pressed/40 text-ds-default data-[state=open]:text-ds-accent-violet border border-transparent data-[state=open]:border-selected'
+              )}
+            >
+              <RiListSettingsLine />
+              Preferences
+              <GoChevronDown className="ml-space-sm" />
+            </button>
+          }
+          items={[themeSelectionItem]}
+        />
 
         <Tooltip
           open={isCopied ? true : undefined}
@@ -200,7 +193,7 @@ export const Canvas = ({ children }: CanvasProps) => {
         </Tooltip>
       </div>
 
-      <div className="bg-[#232323]">
+      <div className="bg-ds-elevation-surface-sunken">
         <div
           ref={sourceRef}
           className={cn(
@@ -209,14 +202,14 @@ export const Canvas = ({ children }: CanvasProps) => {
           )}
         >
           {source}
-          {!isExpanded && (
+          {!isExpanded && showExpandButton && (
             <div className="absolute -bottom-10 left-0 w-full h-18 blur-lg bg-ds-elevation-surface-sunken"></div>
           )}
         </div>
         {showExpandButton && (
           <div className="relative">
             <Button
-              className="bg-ds-elevation-surface-sunken hover:bg-ds-elevation-surface-sunken/97 dark:hover:bg-ds-neutral-hovered/10 border-2 border-transparent focus:border-ds-selected rounded-tl-none rounded-tr-none"
+              className="hover:bg-ds-neutral-hovered/30! border-2 border-transparent focus:border-ds-selected rounded-tl-none rounded-tr-none"
               innerClassName="py-space-xs [&>*]:text-body-sm!"
               onClick={() => setIsExpanded(!isExpanded)}
               variant="ghost"

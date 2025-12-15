@@ -1,5 +1,4 @@
-@theme inline {
-  /* ===== SPACE ===== */
+:root {
   --spacing-space-xs: calc(var(--spacing) * 1);
   --spacing-space-sm: calc(var(--spacing) * 3);
   --spacing-space-md: calc(var(--spacing) * 5);
@@ -8,7 +7,6 @@
   --spacing-space-2xl: calc(var(--spacing) * 11);
   --spacing-space-3xl: calc(var(--spacing) * 13);
   --spacing-space-4xl: calc(var(--spacing) * 15);
-  /* ===== GAP ===== */
   --spacing-gap-xs: calc(var(--spacing) * 1);
   --spacing-gap-sm: calc(var(--spacing) * 3);
   --spacing-gap-md: calc(var(--spacing) * 5);

@@ -57,7 +57,7 @@ export const Tooltip = ({
               tooltipVariants({ size }),
               theme === 'dark'
                 ? 'bg-ds-neutral-bold text-ds-inverse'
-                : 'bg-ds-neutral text-default',
+                : 'bg-ds-neutral text-ds-default',
               className
             )}
           >

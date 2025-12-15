@@ -34,6 +34,12 @@ const cardVariants = cva('', {
       lg: 'rounded-2xl',
       xl: 'rounded-4xl',
     },
+    thunmbnailRoundedSize: {
+      sm: 'rounded-sm',
+      md: 'rounded-md',
+      lg: 'rounded-2xl',
+      xl: 'rounded-4xl',
+    },
     titleSize: textHeadingSizeMap,
     descriptionSize: textSizeMap,
     footerActionSize: textSizeMap,
@@ -48,6 +54,12 @@ const cardVariants = cva('', {
       lg: 'shadow-lg',
       xl: 'shadow-xl',
     },
+    contentSpacing: {
+      xs: 'space-y-gap-xs',
+      sm: 'space-y-gap-sm',
+      md: 'space-y-gap-md',
+      lg: 'space-y-gap-lg',
+    },
     padding: {
       sm: null,
       md: null,
@@ -56,13 +68,14 @@ const cardVariants = cva('', {
     },
   },
   compoundVariants: [
-    // sm
-    // { padding: 'sm', paddingAxis: 'all', class: 'p-space-sm' },
-    // { padding: 'sm', paddingAxis: 'y', class: 'py-space-sm' },
     {
       shadow: ['sm', 'md', 'lg', 'xl'],
       class: 'shadow-default',
     },
+
+    // sm
+    { padding: 'sm', paddingAxis: 'all', class: 'p-space-sm' },
+    { padding: 'sm', paddingAxis: 'y', class: 'py-space-sm' },
 
     // md
     { padding: 'md', paddingAxis: 'all', class: 'p-space-md' },
@@ -76,13 +89,9 @@ const cardVariants = cva('', {
     { padding: 'xl', paddingAxis: 'all', class: 'p-space-xl' },
     { padding: 'xl', paddingAxis: 'y', class: 'py-space-xl' },
 
-    // {
-    //   footerActionSize: 'sm',
-    //   className: 'h-[1rem] group-hover:-translate-y-5',
-    // },
     {
       footerActionSize: ['sm'],
-      className: 'h-[1rem] group-hover:-translate-y-4',
+      className: 'h-[1rem] group-hover:-translate-y-6',
     },
     {
       footerActionSize: ['md'],
@@ -92,21 +101,14 @@ const cardVariants = cva('', {
       footerActionSize: ['lg'],
       className: 'h-[1.7rem] group-hover:-translate-y-7',
     },
-    // {
-    //   footerActionSize: '4xl',
-    //   className: 'h-[2rem] group-hover:-translate-y-9',
-    // },
   ],
 })
 
 type TextSizes = 'description' | 'footerAction'
-type ExcludeVariants =
-  | 'titleSize'
-  | 'descriptionSize'
-  | 'footerActionSize'
-  | 'paddingAxis'
+type ExcludeVariants = 'titleSize' | 'descriptionSize' | 'footerActionSize'
 export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     Omit<VariantProps<typeof cardVariants>, ExcludeVariants> {
   title?: string
   description?: string
@@ -133,12 +135,15 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
       roundedSize = 'md',
       padding = 'md',
       shadow = 'none',
+      contentSpacing = 'sm',
+      paddingAxis = 'y',
       title,
       textSize,
       description,
       thumbnail,
       thumbnailMeta,
       thumbnailSize,
+      thunmbnailRoundedSize,
       badge,
       link,
       metaItems,
@@ -149,14 +154,14 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const { slots } = extractSlots(children, {
-      Content: CardContentSlot,
+      Content: CardContentSlot as React.FC,
       Thumbnail: CardThumbnailSlot as React.FC,
     })
     const hasMetaItems = Boolean(metaItems?.length)
     const hasThumbnail = Boolean(slots.Thumbnail || thumbnail)
     const {
       title: titleSize = 'lg',
-      footerAction: footerActionSize = 'md',
+      footerAction: footerActionSize = 'sm',
       description: descriptionSize = 'md',
     } = textSize ?? {}
 
@@ -181,26 +186,30 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
               <CardThumbnailSlot
                 src={thumbnail}
                 alt={thumbnailMeta as string}
-                roundedSize={roundedSize}
+                roundedSize={
+                  shadow !== 'none' ? thunmbnailRoundedSize : roundedSize
+                }
                 {...thumbnailSize}
               />
             )}
 
         {slots.Content ? (
-          slots.Content
+          <div className={cardVariants({ padding, paddingAxis })}>
+            {slots.Content}
+          </div>
         ) : (
           <div
             className={cn(
               'h-full transition-all space-y-gap-md pointer-events-none',
-              hasThumbnail && cardVariants({ padding, paddingAxis: 'y' })
+              hasThumbnail && cardVariants({ padding, paddingAxis })
             )}
           >
-            <div className="space-y-gap-md">
+            <div className={cardVariants({ contentSpacing })}>
               {badge?.label && (
                 <Badge
                   size={badge.size}
                   variant={badge.variant ?? 'ghost'}
-                  className="p-0! text-primary!"
+                  className="p-0! text-ds-primary!"
                 >
                   {badge.label}
                 </Badge>
@@ -209,7 +218,12 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
               {(title || description) && (
                 <div className="space-y-gap-xs">
                   {title && (
-                    <h1 className={cn(cardVariants({ titleSize }), 'clamp-2')}>
+                    <h1
+                      className={cn(
+                        cardVariants({ titleSize }),
+                        'text-ds-default clamp-2'
+                      )}
+                    >
                       {title}
                     </h1>
                   )}
@@ -218,7 +232,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                     <p
                       className={cn(
                         cardVariants({ descriptionSize }),
-                        'text-subtle clamp-3'
+                        'text-ds-subtle clamp-3'
                       )}
                     >
                       {description}
@@ -239,7 +253,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                   )}
                 >
                   {hasMetaItems && (
-                    <div className="flex gap-space-sm text-subtlest">
+                    <div className="flex gap-space-sm text-ds-subtlest">
                       {metaItems?.map((item, index) => (
                         <Fragment key={index}>
                           <p>{item}</p>
@@ -251,7 +265,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
 
                   {footerActionLabel && (
                     <div className="relative">
-                      <p className="text-primary">{footerActionLabel}</p>
+                      <p className="text-ds-primary">{footerActionLabel}</p>
                     </div>
                   )}
                 </div>
@@ -265,7 +279,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
 )
 
 export const CardContentSlot: React.FC<PropsWithChildren> = ({ children }) => {
-  return <div className="relative">{children}</div>
+  return children
 }
 
 type CardThumbnailSlotProps = Pick<CardProps, 'roundedSize'> & {

@@ -90,7 +90,7 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
 
       <div
         ref={drawerRef}
-        className="absolute bg-default shadow-2xl flex flex-col"
+        className="absolute bg-ds-elevation-surface shadow-2xl flex flex-col"
         style={{
           ...getPositionStyles(position, fullScreen),
           ...getTransformStyles(position, isVisible),
@@ -100,18 +100,22 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
         onTransitionEnd={handleTransitionEnd}
       >
         {(title || showCloseButton) && (
-          <div className="flex items-center gap-2 p-4 border-b border-default">
+          <div className="flex items-center gap-2 p-4 border-b border-ds-default">
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="rounded-full hover:bg-accent-gray-hovered transition-colors cursor-pointer"
+                className="p-space-xs rounded-full hover:bg-ds-inverse-subtle-hovered/20 transition-colors cursor-pointer"
                 aria-label="Close drawer"
               >
-                {closeIcon ? closeIcon : <FiX className="w-5 h-5" />}
+                {closeIcon ? (
+                  closeIcon
+                ) : (
+                  <FiX className="w-5 h-5 text-(--fill-ds-icon-subtle)" />
+                )}
               </button>
             )}
             {title && (
-              <h1 className="text-heading-lg font-semibold text-default">
+              <h1 className="text-heading-lg font-semibold text-ds-default">
                 {title}
               </h1>
             )}

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Select } from '../Select'
 import { useState } from 'react'
 
@@ -161,7 +161,7 @@ export const Controlled: Story = {
     return (
       <div className="flex flex-col gap-space-sm">
         <Select {...args} value={value} onChange={setValue} />
-        <p className="text-subtle text-body-xs">Chose: {value}</p>
+        <p className="text-ds-subtle text-body-xs">Chose: {value}</p>
       </div>
     )
   },
