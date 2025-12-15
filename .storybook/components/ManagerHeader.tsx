@@ -1,14 +1,16 @@
 import React, { useState, useLayoutEffect, useMemo, useEffect } from 'react'
 import type { MouseEvent, ChangeEvent } from 'react'
-import { useStorybookApi, useStorybookState } from 'storybook/manager-api'
-import { FiSearch, FiMoon, FiSun } from 'react-icons/fi'
+import { useStorybookApi } from 'storybook/manager-api'
+import { FiMoon, FiSun } from 'react-icons/fi'
 import { FaGithub, FaStar } from 'react-icons/fa'
 import { light, dark } from '../theme'
 import { cn } from '../../src/utils'
 
+export const ADDON_ID = 'custom-header'
+export const TOOL_ID = `${ADDON_ID}/tool`
+
 export const ManagerHeader = () => {
   const api = useStorybookApi()
-  const { searchQuery } = useStorybookState()
   const [ currentStoryId, setCurrentStoryId ] = useState<string | null>(null)
   const [ isDark, setIsDark ] = useState<boolean>(
     window.localStorage.getItem('theme') === 'dark'
@@ -36,9 +38,7 @@ export const ManagerHeader = () => {
           document.documentElement.removeAttribute('data-theme')
         }
       }
-    } catch (e) {
-      // noop
-    }
+    } catch (e) {}
   }
 
   const onThemeToggle = () => {

@@ -1,8 +1,9 @@
 import remarkGfm from 'remark-gfm'
 import path from 'path'
-type StorybookConfig = Record<string, any>
 import type { Configuration as WebpackConfiguration } from 'webpack'
+// import { fileURLToPath } from 'url'
 
+type StorybookConfig = Record<string, any>
 const config: StorybookConfig = {
   stories: [
     "../@(src|docs)/**/*.mdx",
@@ -10,7 +11,8 @@ const config: StorybookConfig = {
   ],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",
-    "@storybook/addon-themes",
+    // import.meta.resolve("./addons/custom-header.ts"),
+    // "@storybook/addon-themes",
     {
       name: "@storybook/addon-docs",
       options: {
@@ -35,7 +37,7 @@ const config: StorybookConfig = {
   webpackFinal: async (config: WebpackConfiguration) => {
     config.module = config.module || {}
     config.module.rules = (config.module.rules || []) as any[]
- 
+
     const imageRule = config.module.rules.find((rule: any) =>
       !!rule && typeof rule === 'object' && rule.test instanceof RegExp && rule.test.test('.svg')
     )

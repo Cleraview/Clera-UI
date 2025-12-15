@@ -6,11 +6,15 @@
   :root {
     --font-code: "Google Sans Code", monospace;
   }
+  
+  html {
+    background-color: transparent !important;
+  }
 
   body {
     font-size: 16px;
-    background-color: var(--background-color-ds-elevation-surface);
   }
+
   
   div[class*="css-"] :where(h1:not(.sb-anchor, .sb-unstyled, .sb-unstyled h1)),
   div[class*="css-"] :where(h2:not(.sb-anchor, .sb-unstyled, .sb-unstyled h2)),
@@ -59,14 +63,8 @@
     background-color: var(--background-color-ds-elevation-surface);
   }
 
-  .sbdocs.sbdocs-content {
-    margin-left: 200px;
-    /* max-width: 900px; */
-    /* padding: 0 4rem; */
-  }
-
   .sbdocs.sbdocs-wrapper {
-    background-color: var(--background-color-ds-elevation-surface);
+    background: var(--background-color-ds-elevation-surface);
     padding-top: 6rem;
   }
 
@@ -188,7 +186,7 @@
     color: var(--text-color-ds-default)!important;
   }
 
-  /* e.g., { } ( ) [ ] , : = => < / > */
+  /* { } ( ) [ ] , : = => < / > */
   span.token.imports.punctuation,
   span.token.operator,
   span.token.punctuation,
@@ -200,20 +198,20 @@
     color: var(--text-color-ds-accent-neutral)!important;
   }
 
-  /* e.g., import, from, const, return, export, default */
+  /* import, from, const, return, export, default */
   span.token.keyword.module,
   span.token.keyword,
   span.token.keyword.control-flow {
     color: var(--text-color-ds-accent-violet)!important;
   }
 
-  /* e.g., 'react', "flex flex-col...", "xs" */
+  /* 'react', "flex flex-col...", "xs" */
   span.token.string,
   span.token.tag.attr-value {
     color: var(--text-color-ds-accent-green)!important;
   }
 
-  /* e.g., Command, CommandMenu, FiCalendar, SizedItemsExample */
+  /* Command, CommandMenu, FiCalendar, SizedItemsExample */
   span.token.imports.maybe-class-name,
   span.token.function-variable.function.maybe-class-name,
   span.token.maybe-class-name,
@@ -221,25 +219,25 @@
     color: var(--text-color-ds-accent-teal)!important;
   }
 
-  /* e.g., useState, setSelectedValue, onSelect */
+  /* useState, setSelectedValue, onSelect */
   span.token.function,
   span.token.function-variable.function {
     color: var(--text-color-ds-accent-blue)!important;
   }
 
-  /* e.g., id, heading, items, onSelect, className, groups, menuGroups */
+  /* id, heading, items, onSelect, className, groups, menuGroups */
   span.token.literal-property.property,
   span.token.tag.attr-name,
   span.token.tag.script.language-javascript {
     color: var(--text-color-ds-accent-orange)!important;
   }
 
-  /* e.g., the 'div' in <div ...> */
+  /* the 'div' in <div ...> */
   span.token.tag {
     color: var(--text-color-ds-accent-red)!important;
   }
 
-  /* e.g., true, false */
+  /* true, false */
   span.token.boolean {
     color: var(--text-color-ds-accent-magenta)!important;
   }

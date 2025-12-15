@@ -14,41 +14,41 @@ const badges: Badge  = {
   'status:new': {
     label: 'New',
     style: {
-      color: 'var(--text-color-brand)', 
-      backgroundColor: 'var(--background-color-brand-subtlest)',
-      borderColor: 'var(--border-color-brand)',
+      color: 'var(--text-color-ds-brand)', 
+      backgroundColor: 'var(--background-color-ds-brand-subtlest)',
+      borderColor: 'var(--border-color-ds-brand)',
     },
   },
   'status:beta': {
     label: 'Beta',
     style: {
-      color: 'var(--text-color-warning)', 
-      backgroundColor: 'var(--background-color-warning)', 
-      borderColor: 'var(--border-color-warning)',
+      color: 'var(--text-color-ds-warning)', 
+      backgroundColor: 'var(--background-color-ds-warning)', 
+      borderColor: 'var(--border-color-ds-warning)',
     },
   },
   'status:stable': {
     label: 'Stable',
     style: {
-      color: 'var(--text-color-success)', 
-      backgroundColor: 'var(--background-color-success)',
-      borderColor: 'var(--border-color-success)',
+      color: 'var(--text-color-ds-success)', 
+      backgroundColor: 'var(--background-color-ds-success)',
+      borderColor: 'var(--border-color-ds-success)',
     },
   },
   'status:deprecated': {
     label: 'Deprecated',
     style: {
-      color: 'var(--text-color-destructive)', 
-      backgroundColor: 'var(--background-color-danger)',
-      borderColor: 'var(--border-color-danger)',
+      color: 'var(--text-color-ds-destructive)', 
+      backgroundColor: 'var(--background-color-ds-danger)',
+      borderColor: 'var(--border-color-ds-danger)',
     },
   },
   'status:experimental': {
     label: 'Experimental',
     style: {
-      color: 'var(--text-color-info)', 
-      backgroundColor: 'var(--background-color-info)',
-      borderColor: 'var(--border-color-info)',
+      color: 'var(--text-color-ds-info)', 
+      backgroundColor: 'var(--background-color-ds-info)',
+      borderColor: 'var(--border-color-ds-info)',
     },
   },
 }

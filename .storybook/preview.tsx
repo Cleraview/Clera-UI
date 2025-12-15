@@ -15,6 +15,12 @@ type PreviewConfig = {
 const preview: PreviewConfig = {
   decorators: [withThemeProvider],
   parameters: {
+    backgrounds: {
+      disable: true,
+      grid: {
+        disable: true,
+      },
+    },
     layout: 'centered',
     controls: {
       sort: 'alpha',
