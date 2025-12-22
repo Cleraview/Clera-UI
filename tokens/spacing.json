@@ -10,6 +10,11 @@
       "3xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 13)" },
       "4xl": { "$type": "spacing", "$value": "calc(var(--spacing) * 15)" }
     },
+    "menu-item": {
+      "xs": { "$type": "spacing", "$value": "4px" },
+      "sm": { "$type": "spacing", "$value": "6px" },
+      "md": { "$type": "spacing", "$value": "8px" }
+    },
     "gap": {
       "xs": { "$type": "spacing", "$value": "calc(var(--spacing) * 1)" },
       "sm": { "$type": "spacing", "$value": "calc(var(--spacing) * 3)" },

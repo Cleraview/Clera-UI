@@ -20,7 +20,8 @@ import type {
 } from 'react'
 
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
-import { FaChevronRight, FaChevronLeft, FaCircle } from 'react-icons/fa'
+import { GoChevronRight, GoChevronLeft } from 'react-icons/go'
+import { FaCircle } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { cn } from '@/utils/tailwind'
 
@@ -48,7 +49,7 @@ const DropdownMenuSubTrigger = forwardRef<
     {...props}
   >
     {children}
-    <FaChevronRight className="ml-auto h-4 w-4 text-ds-subtle" />
+    <GoChevronRight className="ml-auto h-4 w-4 text-ds-subtle" />
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName =
@@ -97,7 +98,7 @@ const DropdownMenuItem = forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm p-[8px] text-body-sm text-ds-default outline-none cursor-pointer transition-colors',
+      'relative flex cursor-default select-none items-center rounded-sm p-menu-item-md text-body-sm text-ds-default outline-none cursor-pointer transition-colors',
       'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
       'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -176,7 +177,7 @@ const DropdownMenuLabel = forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      'p-[8px] text-body-sm font-semibold text-ds-default',
+      'p-menu-item-md text-body-sm font-semibold text-ds-default',
       inset && 'pl-8',
       className
     )}
@@ -328,7 +329,7 @@ const Dropdown = ({
             {Icon && <Icon className="mr-2 h-4 w-4" />}
             <span>{label}</span>
           </div>
-          <FaChevronRight className="h-3 w-3 text-ds-subtle" />
+          <GoChevronRight className="h-3 w-3 text-ds-subtle" />
         </DropdownMenuItem>
       )
     }
@@ -401,7 +402,7 @@ const Dropdown = ({
                 onClick={navigateBack}
                 className="p-1 rounded-sm hover:bg-ds-neutral-subtle-hovered text-ds-subtle hover:text-ds-default transition-colors cursor-pointer outline-none focus:ring-2 focus:ring-ds-brand/20"
               >
-                <FaChevronLeft className="h-3 w-3" />
+                <GoChevronLeft className="h-3 w-3" />
               </button>
               <span className="ml-2 text-body-sm font-semibold text-ds-default">
                 {currentLayer.title}

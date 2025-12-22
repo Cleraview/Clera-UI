@@ -211,8 +211,9 @@ const commandItemVariants = cva(
       },
     },
     compoundVariants: [
-      { size: 'xs', className: 'p-space-xs' },
-      { size: ['sm', 'md'], className: 'py-space-xs px-space-sm' },
+      { size: 'xs', className: 'p-menu-item-xs' },
+      { size: 'sm', className: 'p-menu-item-sm' },
+      { size: 'md', className: 'p-menu-item-md' },
     ],
     defaultVariants: {
       size: 'md',

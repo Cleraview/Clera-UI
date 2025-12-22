@@ -797,7 +797,7 @@
   --background-color-ds-selected-bold-hovered: oklch(70.2% 0.183 293.541);
   --background-color-ds-selected-bold-pressed: oklch(70.2% 0.183 293.541);
   --background-color-ds-skeleton: color-mix(in srgb, theme(colors.neutral.800) 50%, theme(colors.neutral.700));
-  --background-color-ds-skeleton-subtle: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));
+  --background-color-ds-skeleton-subtle: color-mix(in srgb, theme(colors.neutral.900) 70%, theme(colors.neutral.800));
   --background-color-ds-elevation-surface: oklch(26.9% 0 0);
   --background-color-ds-elevation-surface-sunken: oklch(20.5% 0 0);
   --background-color-ds-elevation-surface-hovered: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));

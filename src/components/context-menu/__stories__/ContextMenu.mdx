@@ -1,0 +1,352 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import * as ContextMenuStories from "./ContextMenu.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+
+<Meta title="UI/Context Menu" of={ContextMenuStories} />
+
+<div className="flex gap-space-4xl">
+  <div>
+    # Context Menu
+
+    A menu displayed at the pointer's location when a user right-clicks a trigger element. 
+    It supports nested submenus, selection states (checkbox/radio), and keyboard shortcuts.
+    <DocInfo 
+      importStatement={`import { ContextMenu, ContextMenuItem } from '@clera/ui'`} 
+      sourcePath={`components/context-menu`} 
+    />
+    
+    <br />
+
+    ## **Purpose and Context**
+
+    The `ContextMenu` component is a high-level abstraction built on top of Radix UI primitives.
+    It simplifies the creation of right-click interactions using a data-driven approach.
+    It is commonly used to:
+
+    -   **Secondary Actions**: Provide actions relevant to a specific object (e.g., "Open in New Tab", "Properties").
+    -   **Data-Dense UI**: Offer options in tables, file trees, or canvas elements without cluttering the visible interface.
+    -   **Desktop-Like Experience**: Mimic native operating system behaviors in web applications.
+
+    Unlike the `Dropdown` which is triggered by a left-click on a button, the **Context Menu** is triggered by a right-click (or long press) on a specific area.
+
+    <br />
+
+    ## **Component Structure**
+
+    The system offers two ways to build menus:
+
+    ### **1. The Smart `ContextMenu` (Recommended)**
+    A single component that takes an `items` array and handles rendering, nesting, and positioning automatically.
+    -   **`ContextMenu`**: The smart wrapper. Accepts `trigger` and `items`.
+    -   **`ContextMenuItemDef`**: The configuration object for defining items.
+
+    ### **2. The Primitives (Advanced)**
+    Direct access to the underlying Radix UI components for manual composition.
+    -   **`ContextMenuRoot`**: Root component.
+    -   **`ContextMenuTrigger`**: The area that listens for the right-click.
+    -   **`ContextMenuContent`**: The popover container.
+    -   **`ContextMenuItem`**: Individual items.
+    -   **`ContextMenuCheckboxItem`**: Items with selection state.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Simple**
+
+    A standard menu with icons, labels, shortcuts, and separators.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ContextMenuStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { ContextMenu } from '@clera/ui'
+          
+          const SimpleExample = () => {
+            return (
+              <ContextMenu
+                trigger={
+                  <div className="h-32 w-64 border border-dashed rounded flex items-center justify-center">
+                    Right click here
+                  </div>
+                }
+                items={[
+                  { label: 'Back', shortcut: '⌘[' },
+                  { label: 'Forward', shortcut: '⌘]', disabled: true },
+                  { label: 'Reload', shortcut: '⌘R' },
+                  { type: 'separator' },
+                  { label: 'Save As...', shortcut: '⌘S' },
+                  { label: 'Print...', shortcut: '⌘P' },
+                ]}
+              />
+            )
+          }
+
+          export default SimpleExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Icons & Nested Submenus**
+
+    The `ContextMenu` component automatically detects nested `children` in your items array and renders them as cascading submenus.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ContextMenuStories.WithIconsAndSubmenu} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { ContextMenu } from '@clera/ui'
+          import { FaCopy, FaPaste, FaTrash, FaCog } from 'react-icons/fa'
+
+          const NestedExample = () => {
+            return (
+              <ContextMenu
+                trigger={<div className="h-32 border border-dashed rounded flex items-center justify-center">Right click here</div>}
+                items={[
+                  { label: 'Copy', icon: FaCopy, shortcut: '⌘C' },
+                  { label: 'Paste', icon: FaPaste, shortcut: '⌘V' },
+                  { type: 'separator' },
+                  {
+                    label: 'More Tools',
+                    icon: FaCog,
+                    children: [
+                      { label: 'Developer Tools' },
+                      { label: 'Task Manager' },
+                      {
+                        label: 'Extensions',
+                        children: [
+                          { label: 'Manage Extensions' },
+                          { label: 'Visit Web Store' },
+                        ],
+                      },
+                    ],
+                  },
+                  { type: 'separator' },
+                  { label: 'Delete', icon: FaTrash, className: 'text-ds-destructive' },
+                ]}
+              />
+            )
+          }
+
+          export default NestedExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Checkboxes & Radios**
+
+    Use the `checkbox` or `radio` type to create stateful options within the menu.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ContextMenuStories.CheckboxesAndRadios} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { ContextMenu } from '@clera/ui'
+
+          const CheckboxExample = () => {
+            const [showStatus, setShowStatus] = useState(true)
+
+            return (
+              <ContextMenu
+                trigger={<div className="h-32 border border-dashed rounded flex items-center justify-center">Right click here</div>}
+                items={[
+                  { type: 'label', label: 'View Options' },
+                  {
+                    type: 'checkbox',
+                    label: 'Show Status Bar',
+                    checked: showStatus,
+                    onCheckedChange: setShowStatus,
+                  },
+                  { type: 'separator' },
+                  { type: 'label', label: 'People' },
+                  {
+                    type: 'radio',
+                    value: 'pedro',
+                    label: 'Darwin Nunez',
+                    id: 'pedro',
+                  },
+                  {
+                    type: 'radio',
+                    value: 'colm',
+                    label: 'Harry Kane',
+                    id: 'colm',
+                  },
+                ]}
+              />
+            )
+          }
+
+          export default CheckboxExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    ### **ContextMenu Props**
+
+    The smart component that manages state and configuration.
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `items` | `ContextMenuItemDef[]` | `[]` | Array of items to render in the menu. |
+    | `trigger` | `ReactNode` | - | The element area that triggers the menu on right-click. |
+    | `width` | `string \| number` | `240` | Width of the menu content. |
+    | `className` | `string` | - | Optional classes for the content container. |
+    | `onOpenChange` | `(open: boolean) => void` | - | Callback when the open state changes. |
+
+    <br />
+
+    ### **ContextMenuItemDef Type**
+
+    The configuration object for individual items.
+    Can also be a simple `string` or `ReactElement`.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        type ContextMenuItemDef = 
+          | string 
+          | ReactElement 
+          | {
+              type?: 'item' | 'label' | 'separator' | 'checkbox' | 'radio'
+              label?: ReactNode
+              icon?: ElementType
+              shortcut?: string
+              disabled?: boolean
+              onClick?: (e: MouseEvent<HTMLDivElement> | Event) => void
+              className?: string
+              children?: ContextMenuItemDef[]
+              checked?: boolean
+              onCheckedChange?: (checked: boolean) => void
+              value?: string
+              id?: string
+            }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. Why isn't my trigger working?**
+    If you are passing a custom component as the `trigger`, it must support `forwardRef` and spread `...props`.
+    The `ContextMenu` component uses Radix's `asChild` feature, which requires the underlying DOM element to receive event listeners.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const Trigger = forwardRef((props, ref) => (
+          <div {...props} ref={ref}>Right click me</div>
+        ))
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **2. Can I use the primitives directly?**
+    Yes! If you need very specific layout control, you can import `ContextMenuRoot`, `ContextMenuTrigger`, etc., and compose them manually.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { ContextMenuRoot, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from '@clera/ui'
+
+        <ContextMenuRoot>
+          <ContextMenuTrigger>Right Click Me</ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem>Manual Item</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenuRoot>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **3. How do I disable items?**
+    Simply add the `disabled: true` property to your item object.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        items={[
+          { label: 'Enabled Item' },
+          { label: 'Disabled Item', disabled: true }
+        ]}
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "component-structure",
+          label: "Component Structure"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "simple",
+              label: "Simple"
+            },
+            {
+              id: "icons--nested-submenus",
+              label: "Icons & Submenus"
+            },
+            {
+              id: "checkboxes--radios",
+              label: "Checkboxes & Radios"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API",
+          children: [
+            {
+              id: "contextmenu-props",
+              label: "ContextMenu Props"
+            },
+            {
+              id: "contextmenuitemdef-type",
+              label: "Item Definition Type"
+            }
+          ]
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "1-why-isnt-my-trigger-working",
+              label: "Trigger issues..."
+            },
+            {
+              id: "2-can-i-use-the-primitives-directly",
+              label: "Using primitives..."
+            },
+            {
+              id: "3-how-do-i-disable-items",
+              label: "Disabling items..."
+            }
+          ]
+        }
+      ]}
+    />
+  </div>
+</div>

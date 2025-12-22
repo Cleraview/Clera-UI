@@ -7,6 +7,9 @@
   --spacing-space-2xl: calc(var(--spacing) * 11);
   --spacing-space-3xl: calc(var(--spacing) * 13);
   --spacing-space-4xl: calc(var(--spacing) * 15);
+  --spacing-menu-item-xs: 4px;
+  --spacing-menu-item-sm: 6px;
+  --spacing-menu-item-md: 8px;
   --spacing-gap-xs: calc(var(--spacing) * 1);
   --spacing-gap-sm: calc(var(--spacing) * 3);
   --spacing-gap-md: calc(var(--spacing) * 5);

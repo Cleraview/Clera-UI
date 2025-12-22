@@ -154,6 +154,7 @@
     "zod": "^4.0.10"
   },
   "dependencies": {
+    "@radix-ui/react-context-menu": "^2.2.16",
     "clera-ui": "link:"
   }
 }

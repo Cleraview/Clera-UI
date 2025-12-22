@@ -810,7 +810,7 @@
   --background-color-ds-selected-bold-hovered: theme(colors.violet.400);
   --background-color-ds-selected-bold-pressed: theme(colors.violet.400);
   --background-color-ds-skeleton: color-mix(in srgb, theme(colors.neutral.800) 50%, theme(colors.neutral.700));
-  --background-color-ds-skeleton-subtle: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));
+  --background-color-ds-skeleton-subtle: color-mix(in srgb, theme(colors.neutral.900) 70%, theme(colors.neutral.800));
   --background-color-ds-elevation-surface: theme(colors.neutral.800);
   --background-color-ds-elevation-surface-sunken: theme(colors.neutral.900);
   --background-color-ds-elevation-surface-hovered: color-mix(in srgb, theme(colors.neutral.800) 70%, theme(colors.neutral.700));
