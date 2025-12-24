@@ -2,14 +2,15 @@
 
 import React, { useId, useState } from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
-import { cn } from '@/utils/tailwind'
-import {
-  sizeClasses,
-  type InputSize,
-} from '@/components/form/_props/input-props'
 import { FormInputWrapper } from '../FormInputWrapper'
 import { GoChevronDown } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
+import {
+  type FieldSize,
+  floatingLabelBaseText,
+  fieldPaddings,
+} from '@/components/_core/field-config'
+import { cn } from '@/utils/tailwind'
 
 export type SelectOption = {
   value: string
@@ -24,7 +25,7 @@ export type SelectProps = {
   readOnly?: boolean
   disabled?: boolean
   required?: boolean
-  inputSize?: InputSize
+  inputSize?: FieldSize
   value?: string
   defaultValue?: string
   hasError?: boolean
@@ -78,6 +79,7 @@ export const Select: React.FC<SelectProps> = ({
       focused={focused}
       filled={filled}
       fullWidth={fullWidth}
+      inputType="select"
     >
       <SelectPrimitive.Root
         value={value}
@@ -88,10 +90,14 @@ export const Select: React.FC<SelectProps> = ({
         <SelectPrimitive.Trigger
           id={inputId}
           className={cn(
-            'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-            "[&>[data-filled='false']]:invisible [&>[data-has-error='true']]:text-ds-destructive",
-            sizeClasses[inputSize],
-            disabled ? 'text-ds-subtlest' : 'text-ds-default',
+            'w-full flex items-center justify-between border border-transparent bg-transparent',
+            '[&>[data-filled="false"]]:invisible',
+            fieldPaddings[inputSize],
+            floatingLabelBaseText[inputSize],
+            hasError && '[&>[data-has-error="true"]]:text-ds-destructive',
+            disabled
+              ? 'text-ds-subtlest'
+              : 'outline-none text-ds-default cursor-pointer',
             className
           )}
           onBlur={() => {
@@ -103,7 +109,10 @@ export const Select: React.FC<SelectProps> = ({
             placeholder={label}
             data-filled={filled}
             data-has-error={hasError}
-            className={cn(hasError ? 'text-ds-destructive' : 'text-ds-default')}
+            className={cn(
+              hasError ? 'text-ds-destructive' : 'text-ds-default',
+              floatingLabelBaseText[inputSize]
+            )}
           />
 
           <SelectPrimitive.Icon asChild>
@@ -118,29 +127,31 @@ export const Select: React.FC<SelectProps> = ({
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="w-[var(--radix-select-trigger-width)] z-50 rounded-md bg-default shadow-md border border-ds-default"
+            className="w-[var(--radix-select-trigger-width)] z-50 bg-ds-elevation-surface rounded-md bg-default shadow-md border border-ds-default"
             sideOffset={4}
             position="popper"
             side="bottom"
           >
             <SelectPrimitive.Viewport className="p-space-xs">
               {options
-                .filter(o => o.value && o.value.trim() !== '')
-                .map(o => (
+                .filter(option => option.value && option.value.trim() !== '')
+                .map(option => (
                   <SelectPrimitive.Item
-                    key={o.value}
-                    value={o.value}
+                    key={option.value}
+                    value={option.value}
                     className={cn(
-                      'flex items-center justify-between rounded-sm px-space-sm py-space-xs text-body-sm cursor-pointer',
-                      'focus:bg-primary focus:text-ds-primary outline-none'
+                      'flex items-center justify-between rounded-sm cursor-pointer',
+                      'focus:bg-ds-primary focus:text-ds-primary outline-none',
+                      fieldPaddings[inputSize],
+                      floatingLabelBaseText[inputSize]
                     )}
                   >
                     <SelectPrimitive.ItemText>
-                      {o.label}
+                      {option.label}
                     </SelectPrimitive.ItemText>
 
                     <SelectPrimitive.ItemIndicator>
-                      <IoCheckmark className="w-4 h-4 ml-space-md text-ds-primary" />
+                      <IoCheckmark className="w-4 h-4 ml-space-md text-(--fill-ds-icon-primary)" />
                     </SelectPrimitive.ItemIndicator>
                   </SelectPrimitive.Item>
                 ))}

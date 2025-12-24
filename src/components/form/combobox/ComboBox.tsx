@@ -1,21 +1,9 @@
 'use client'
 
-import * as React from 'react'
-import * as Popover from '@radix-ui/react-popover'
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from 'cmdk'
-import { FiCheck, FiChevronDown } from 'react-icons/fi'
-import { cn } from '@/utils/tailwind'
-import {
-  type InputSize,
-  sizeClasses,
-} from '@/components/form/_props/input-props'
-import { FormInputWrapper } from '../FormInputWrapper'
+import React, { forwardRef, useState } from 'react'
+import { FiCheck } from 'react-icons/fi'
+import { type FieldSize } from '@/components/_core/field-config'
+import { BaseComboBox, ComboBoxItem, ComboBoxEmpty } from './BaseComboBox'
 
 export type ComboBoxOption = {
   value: string
@@ -30,7 +18,7 @@ export type ComboBoxProps = {
   readOnly?: boolean
   disabled?: boolean
   required?: boolean
-  inputSize?: InputSize
+  inputSize?: FieldSize
   value?: string
   defaultValue?: string
   hasError?: boolean
@@ -40,10 +28,10 @@ export type ComboBoxProps = {
   onBlur?: () => void
 }
 
-export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
+export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
   (
     {
-      id: idProp,
+      id,
       label,
       options,
       fullWidth,
@@ -53,146 +41,76 @@ export const ComboBox = React.forwardRef<HTMLButtonElement, ComboBoxProps>(
       className,
       inputSize = 'md',
       value,
-      hasError = false,
+      hasError,
       defaultValue,
-      placeholder = 'Select an option...',
+      placeholder,
       onChange,
       onBlur,
     },
     ref
   ) => {
-    const autoId = React.useId()
-    const inputId = idProp ?? autoId
+    // ... State logic remains same ...
+    const [open, setOpen] = useState(false)
+    const [search, setSearch] = useState('')
 
-    const [open, setOpen] = React.useState(false)
-    const [filled, setFilled] = React.useState(
-      value !== undefined
-        ? String(value) !== ''
-        : defaultValue !== undefined
-          ? String(defaultValue) !== ''
-          : false
-    )
+    const [internalValue, setInternalValue] = useState(defaultValue ?? '')
+    const isControlled = value !== undefined
+    const activeValue = isControlled ? value : internalValue
 
-    const displayLabel =
-      options.find(option => option.value === value)?.label ?? ''
+    const displayLabel = options.find(o => o.value === activeValue)?.label
 
-    const handleChange = (val: string) => {
-      setFilled(val !== '')
+    const handleSelect = (val: string) => {
+      if (!isControlled) setInternalValue(val)
       onChange?.(val)
       setOpen(false)
+      setSearch('')
     }
 
     return (
-      <FormInputWrapper
-        id={inputId}
+      <BaseComboBox
+        ref={ref}
+        id={id}
         label={label}
+        value={activeValue}
+        displayValue={displayLabel}
+        placeholder={placeholder}
+        open={open}
+        onOpenChange={isOpen => {
+          setOpen(isOpen)
+          if (!isOpen) onBlur?.()
+        }}
+        searchValue={search}
+        onSearchChange={setSearch}
         inputSize={inputSize}
-        hasError={hasError}
-        required={required}
-        disabled={disabled}
-        readOnly={readOnly}
-        focused={open}
-        filled={filled}
         fullWidth={fullWidth}
+        readOnly={readOnly}
+        disabled={disabled}
+        required={required}
+        hasError={hasError}
+        className={className}
+        shouldFilter={true}
       >
-        <Popover.Root open={open} onOpenChange={setOpen}>
-          <Popover.Trigger
-            ref={ref}
-            id={inputId}
-            role="combobox"
-            aria-expanded={open}
-            className={cn(
-              'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-              '[&>[data-filled="false"]]:text-ds-subtlest',
-              sizeClasses[inputSize],
-              disabled ? 'text-ds-subtlest' : 'text-ds-default',
-              className
-            )}
-            onBlur={() => {
-              onBlur?.()
-            }}
-            disabled={disabled || readOnly}
-            onClick={() => !readOnly && setOpen(o => !o)}
+        <ComboBoxEmpty>No results found.</ComboBoxEmpty>
+
+        {options.map(option => (
+          <ComboBoxItem
+            key={option.value}
+            value={option.value}
+            onSelect={handleSelect}
+            inputSize={inputSize}
+            isSelected={option.value === activeValue}
           >
-            <span
-              data-filled={filled}
-              className={cn(
-                'truncate',
-                hasError ? 'text-ds-destructive' : 'text-ds-default',
-                !value && 'invisible'
-              )}
-            >
-              {value ? displayLabel : placeholder}
-            </span>
-
-            <FiChevronDown
-              className={cn(
-                'w-4 h-4 ml-space-sm text-ds-subtlest shrink-0',
-                hasError && 'text-ds-destructive!'
-              )}
-            />
-          </Popover.Trigger>
-
-          <Popover.Portal>
-            <Popover.Content
-              className="w-[var(--radix-popover-trigger-width)] z-50 rounded-md bg-default shadow-md border border-ds-default"
-              sideOffset={4}
-              side="bottom"
-              align="start"
-              onOpenAutoFocus={e => e.preventDefault()}
-              // onMouseDown={(e) => e.preventDefault()}
-            >
-              <Command
-                className="flex flex-col"
-                filter={(value: string, search: string) => {
-                  const option = options.find(o => o.value === value)
-                  const label = option?.label ?? ''
-                  if (typeof label === 'string') {
-                    return label.toLowerCase().includes(search.toLowerCase())
-                      ? 1
-                      : 0
-                  }
-                  return 0
-                }}
-              >
-                <CommandInput
-                  className={cn(
-                    'w-full px-space-sm py-space-xs text-body-sm outline-none border-b border-ds-default',
-                    sizeClasses[inputSize],
-                    'placeholder:text-ds-subtlest'
-                  )}
-                  placeholder="Search..."
-                />
-                <CommandList className="p-space-xs max-h-60 overflow-y-auto">
-                  <CommandEmpty className="text-body-sm p-space-sm">
-                    No results found.
-                  </CommandEmpty>
-                  {options.map(option => (
-                    <CommandItem
-                      key={option.value}
-                      value={option.value}
-                      onSelect={handleChange}
-                      className={cn(
-                        'flex items-center justify-between rounded-sm p-space-sm text-body-sm cursor-pointer',
-                        value === option.value &&
-                          'bg-ds-primary text-ds-primary outline-none',
-                        'aria-selected:bg-ds-primary aria-selected:text-ds-primary'
-                      )}
-                    >
-                      <span className="truncate">{option.label}</span>
-                      {option.value === value && (
-                        <FiCheck className="w-4 h-4 ml-space-md text-ds-primary" />
-                      )}
-                    </CommandItem>
-                  ))}
-                </CommandList>
-              </Command>
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
-      </FormInputWrapper>
+            <span className="truncate flex-1">{option.label}</span>
+            {option.value === activeValue && (
+              <FiCheck
+                className="w-4 h-4 ml-2 text-(--fill-ds-icon-primary)"
+                aria-hidden="true"
+              />
+            )}
+          </ComboBoxItem>
+        ))}
+      </BaseComboBox>
     )
   }
 )
-
 ComboBox.displayName = 'ComboBox'

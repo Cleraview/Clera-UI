@@ -229,20 +229,22 @@ export const ControlledExample: Story = {
     const format = args.formatDate!
 
     return (
-      <div className="flex flex-col items-center gap-space-md">
+      <div className="flex flex-col items-center gap-space-md py-space-sm">
         <div className="flex gap-space-sm">
-          <Button onClick={() => setDate(new Date('2025-10-19T12:00:00'))}>
-            Set Date
-          </Button>
-          <Button variant="outlinePrimary" onClick={() => setDate(undefined)}>
-            Clear
-          </Button>
+          <div className="flex gap-space-sm">
+            <Button onClick={() => setDate(new Date('2025-10-19T12:00:00'))}>
+              Set Date
+            </Button>
+            <Button variant="outlinePrimary" onClick={() => setDate(undefined)}>
+              Clear
+            </Button>
+          </div>
+          <Calendar
+            {...args}
+            selected={date}
+            onSelect={val => setDate(val as Date | undefined)}
+          />
         </div>
-        <Calendar
-          {...args}
-          selected={date}
-          onSelect={val => setDate(val as Date | undefined)}
-        />
         <p className="text-body-md text-ds-subtle">
           Current: {date ? formatDateFns(date, format) : 'None'}
         </p>

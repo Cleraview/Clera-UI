@@ -1,47 +1,39 @@
-export const variantMap = {
+import { tokenRadii, tokenPaddings, tokenTextSizes } from './tokens'
+
+export const elementVariants = {
   primary: 'bg-ds-primary-bold text-ds-inverse',
   outlinePrimary: 'border border-ds-primary text-ds-primary bg-transparent',
-
   secondary: 'bg-ds-neutral-bold text-ds-inverse',
   outlineSecondary: 'border border-ds-bold text-ds-default bg-transparent',
-
   success: 'bg-ds-success-bold text-ds-inverse',
   outlineSuccess: 'border border-ds-success text-ds-success bg-transparent',
-
   info: 'bg-ds-info-bold text-ds-inverse',
   outlineInfo: 'border border-ds-info text-ds-info bg-transparent',
-
   warning: 'bg-ds-warning-bold text-ds-warning-inverse',
   outlineWarning: 'border border-ds-warning text-ds-warning bg-transparent',
-
   destructive: 'bg-ds-destructive-bold text-ds-inverse',
   outlineDestructive:
     'border border-ds-destructive text-ds-destructive bg-transparent',
-
   light: 'bg-ds-neutral text-ds-default',
   outlineLight: 'border border-ds-default text-ds-subtle bg-transparent',
-
   ghost: 'text-ds-default hover:bg-ds-neutral-subtle-hovered bg-transparent',
 } as const
 
-export const roundedMap = {
-  none: 'rounded-none',
-  sm: 'rounded-sm',
-  md: 'rounded-md',
-  full: 'rounded-full',
+export const elementRadius = tokenRadii
+
+export const elementPaddings = tokenPaddings
+
+export const elementTextSizes = {
+  xs: tokenTextSizes.xs,
+  sm: tokenTextSizes.xs,
+  md: tokenTextSizes.sm,
+  lg: tokenTextSizes.md,
 } as const
 
-export const sizeMap = {
-  xs: 'p-1 text-body-xs leading-3',
-  sm: 'p-2 text-body-sm leading-4',
-  md: 'px-3 py-2 text-body-md leading-5',
-  lg: 'px-4 py-3 text-body-lg leading-6',
-} as const
+export const elementVariantKeys = Object.keys(elementVariants)
+export const elementRadiusKeys = Object.keys(elementRadius)
+export const elementPaddingKeys = Object.keys(elementPaddings)
 
-export const variantMapKeys = Object.keys(variantMap)
-export const roundedMapKeys = Object.keys(roundedMap)
-export const sizeMapKeys = Object.keys(sizeMap)
-
-export type VariantType = keyof typeof variantMap
-export type RoundedType = keyof typeof roundedMap
-export type SizeType = keyof typeof sizeMap
+export type ElementVariant = keyof typeof elementVariants
+export type ElementRadius = keyof typeof elementRadius
+export type ElementSize = keyof typeof elementPaddings

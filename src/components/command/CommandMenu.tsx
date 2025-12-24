@@ -10,6 +10,7 @@ import {
   CommandSeparator,
   CommandItemProps,
 } from './Command'
+import { FieldSize, floatingLabelBaseText } from '../_core/field-config'
 import { cn } from '@/utils/tailwind'
 
 export type CommandMenuItem = {
@@ -95,7 +96,12 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                         isSelected={Boolean(id === selectedValue) && selectable}
                       >
                         {Icon && (
-                          <Icon className="mr-space-sm h-4 w-4 text-(--fill-ds-icon-accent-gray)" />
+                          <Icon
+                            className={cn(
+                              'mr-space-sm text-(--fill-ds-icon-accent-gray)',
+                              floatingLabelBaseText[size as FieldSize]
+                            )}
+                          />
                         )}
                         <span>{label}</span>
                         <div className="ml-auto flex items-center gap-space-sm">
@@ -105,7 +111,11 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                             </kbd>
                           )}
                           {id === selectedValue && selectable && (
-                            <FiCheck className="h-4 w-4" />
+                            <FiCheck
+                              className={cn(
+                                floatingLabelBaseText[size as FieldSize]
+                              )}
+                            />
                           )}
                         </div>
                       </CommandItem>

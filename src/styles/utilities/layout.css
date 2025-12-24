@@ -1,44 +1,4 @@
 @layer utilities {
-  .layout-wrapper {
-    @apply max-w-7xl lg:mx-auto px-space-md overflow-hidden;
-  }
-
-  .section-stack {
-    @apply pt-20 md:pt-28 pb-20 md:pb-28;
-  }
-
-  .section-stack > * + * {
-    @apply mt-16 md:mt-32;
-  }
-
-  .content-block {
-    @apply w-full;
-  }
-
-  .content-block--p {
-    @apply p-4 md:p-8;
-  }
-
-  .content-block--px {
-    @apply px-4 md:px-8;
-  }
-
-  .content-block--py {
-    @apply py-8 md:py-16;
-  }
-
-  .content-block--pt {
-    @apply pt-8 md:pt-16;
-  }
-
-  .content-block--pb {
-    @apply pb-8 md:pb-16;
-  }
-
-  .content-card {
-    @apply relative p-space-lg md:p-space-lg xl:p-space-xl rounded-4xl overflow-hidden;
-  }
-
   .scrollbar {
     &::-webkit-scrollbar {
       @apply w-2 h-2;

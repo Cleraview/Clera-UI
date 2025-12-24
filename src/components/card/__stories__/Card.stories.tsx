@@ -3,7 +3,7 @@ import { Card } from '..'
 import { textHeadingSizeMap, textSizeMap } from '../Card'
 
 import AgileImage from '@/assets/images/agile-methodology.jpg'
-import { sizeMapKeys } from '../../_utils/variants'
+import { elementPaddingKeys } from '@/components/_core/element-config'
 
 const textHeadingSizeKeys = Object.keys(textHeadingSizeMap)
 const textSizeKeys = Object.keys(textSizeMap)
@@ -162,10 +162,10 @@ const meta: Meta<typeof Card> = {
     },
     'badge.size': {
       control: 'select',
-      options: sizeMapKeys,
+      options: elementPaddingKeys,
       description: 'Size of the badge',
       table: {
-        type: { summary: sizeMapKeys.join(' | ') },
+        type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
       },
     },

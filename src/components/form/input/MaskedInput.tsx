@@ -11,7 +11,11 @@ import {
   extractRawForMask,
 } from './_utils/mask-format'
 import { getMaskFromPreset, MaskPresetKey } from './_utils/mask-presets'
-import { InputSize, sizeClasses } from '../_props/input-props'
+import {
+  type FieldSize,
+  floatingLabelBaseText,
+  fieldPaddings,
+} from '@/components/_core/field-config'
 import { FormInputWrapper } from '../FormInputWrapper'
 
 export interface MaskedInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -22,7 +26,7 @@ export interface MaskedInputProps extends InputHTMLAttributes<HTMLInputElement> 
   onRawChange?: (raw: string) => void
   onBlur?: () => void
   fullWidth?: boolean
-  inputSize?: InputSize
+  inputSize?: FieldSize
   hasError?: boolean
   floatLabel?: boolean
   maxRawLength?: number
@@ -181,9 +185,10 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
           onFocus={() => setFocused(true)}
           onBlur={handleBlur}
           className={cn(
-            'peer w-full placeholder-transparent focus:outline-none',
-            sizeClasses[inputSize],
-            disabled ? 'text-ds-subtlest' : 'text-ds-default'
+            'peer w-full placeholder-transparent focus:outline-none border border-transparent',
+            disabled ? 'text-ds-subtlest' : 'text-ds-default',
+            fieldPaddings[inputSize],
+            floatingLabelBaseText[inputSize]
           )}
           {...rest}
         />

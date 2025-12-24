@@ -3,7 +3,10 @@ import { Alert } from '../Alert'
 import { AiOutlineInfoCircle, AiFillAccountBook } from 'react-icons/ai'
 import { MdDisabledByDefault } from 'react-icons/md'
 import { Button } from '@/components/button'
-import { sizeMapKeys, variantMapKeys } from '../../_utils/variants'
+import {
+  elementPaddingKeys,
+  elementVariantKeys,
+} from '@/components/_core/element-config'
 
 const meta: Meta<typeof Alert> = {
   title: 'UI/Alert',
@@ -81,21 +84,21 @@ const meta: Meta<typeof Alert> = {
     },
     size: {
       control: { type: 'select' },
-      options: sizeMapKeys,
+      options: elementPaddingKeys,
       description:
         'Visual size of the alert, reflecting different semantic purposes.',
       table: {
-        type: { summary: sizeMapKeys.join(' | ') },
+        type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
       },
     },
     variant: {
       control: { type: 'select' },
-      options: variantMapKeys,
+      options: elementVariantKeys,
       description:
         'Visual style of the alert, reflecting different semantic purposes (e.g., primary for main actions, destructive for dangerous actions).',
       table: {
-        type: { summary: variantMapKeys.join(' | ') },
+        type: { summary: elementVariantKeys.join(' | ') },
         defaultValue: { summary: 'primary' },
       },
     },

@@ -4,18 +4,18 @@ import React, { useState } from 'react'
 import { cva, VariantProps } from 'class-variance-authority'
 import { AiOutlineClose } from 'react-icons/ai'
 import {
-  roundedMap,
-  sizeMap,
-  variantMap,
-  VariantType,
-} from '../_utils/variants'
+  type ElementVariant,
+  elementRadius,
+  elementPaddings,
+  elementVariants,
+} from '@/components/_core/element-config'
 import { cn } from '@/utils/tailwind'
 
 const alertVariants = cva('relative flex items-center', {
   variants: {
-    variant: variantMap,
-    rounded: roundedMap,
-    size: sizeMap,
+    variant: elementVariants,
+    rounded: elementRadius,
+    size: elementPaddings,
   },
   defaultVariants: {
     variant: 'primary',
@@ -29,7 +29,7 @@ export interface AlertProps extends VariantProps<typeof alertVariants> {
   description?: React.ReactNode | string
   icon?: React.ReactNode
   action?: React.ReactNode
-  variant?: VariantType
+  variant?: ElementVariant
   // showIcon?: boolean
   banner?: boolean
   closable?: boolean

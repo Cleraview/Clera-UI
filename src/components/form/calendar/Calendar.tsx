@@ -20,15 +20,11 @@ import {
   format as formatDateFns,
   isValid as isValidDate,
 } from 'date-fns'
-import {
-  FiCalendar,
-  FiChevronDown,
-  FiChevronLeft,
-  FiChevronRight,
-} from 'react-icons/fi'
+import { GoChevronRight, GoChevronLeft, GoChevronDown } from 'react-icons/go'
+import { FiCalendar } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 import { FormInputWrapper } from '@/components/form/FormInputWrapper'
-import { InputSize, sizeClasses } from '../_props/input-props'
+import { type FieldSize, fieldPaddings } from '@/components/_core/field-config'
 import { safeParse } from './_utils/parse'
 import 'react-day-picker/dist/style.css'
 
@@ -52,7 +48,7 @@ export type CalendarProps = {
   required?: boolean
   readOnly?: boolean
   hasError?: boolean
-  inputSize?: InputSize
+  inputSize?: FieldSize
   fullWidth?: boolean
   className?: string
   options?: Partial<DayPickerProps>
@@ -84,10 +80,10 @@ const componentsCommon: Partial<CustomComponents> = {
     <button
       {...props}
       className={cn(
-        'rdp-button_previous absolute p-space-xs ml-space-xs! rounded-full focus:bg-input-hovered focus-visible:outline-none transition-colors cursor-pointer'
+        'rdp-button_previous absolute p-space-xs ml-space-xs! rounded-full focus:bg-ds-input-hovered focus-visible:outline-none transition-colors cursor-pointer'
       )}
     >
-      <FiChevronLeft className="h-6 w-6 text-ds-subtle" />
+      <GoChevronLeft className="h-6 w-6 text-(--fill-ds-icon-subtle)" />
     </button>
   ),
   NextMonthButton: (props: React.HTMLAttributes<HTMLButtonElement>) => (
@@ -97,7 +93,7 @@ const componentsCommon: Partial<CustomComponents> = {
         'rdp-button_next absolute p-space-xs mr-space-xs! rounded-full focus-visible:outline-none transition-colors cursor-pointer'
       )}
     >
-      <FiChevronRight className="h-6 w-6 text-ds-subtle" />
+      <GoChevronRight className="h-6 w-6 text-(--fill-ds-icon-subtle)" />
     </button>
   ),
   Dropdown: (props: {
@@ -113,12 +109,12 @@ const componentsCommon: Partial<CustomComponents> = {
         data-disabled={selectProps.disabled}
         className={cn(
           classNames?.[UI.DropdownRoot],
-          'relative border border-input rounded-md overflow-hidden'
+          'relative border border-ds-input rounded-md overflow-hidden'
         )}
       >
         <components.Select
           className={cn(
-            'py-space-xs pl-space-sm pr-space-lg appearance-none hover:bg-input-hovered transition-all duration-200'
+            'py-space-xs pl-space-sm pr-space-lg appearance-none hover:bg-ds-neutral-subtle-hovered transition-all duration-200'
           )}
           {...selectProps}
         >
@@ -135,7 +131,7 @@ const componentsCommon: Partial<CustomComponents> = {
           )}
         </components.Select>
         <span className="absolute inset-y-0 right-1 my-auto flex items-center pointer-events-none">
-          <FiChevronDown />
+          <GoChevronDown />
         </span>
       </div>
     )
@@ -153,7 +149,7 @@ const componentsCommon: Partial<CustomComponents> = {
     />
   ),
   Option: (props: React.OptionHTMLAttributes<HTMLOptionElement>) => (
-    <option {...props} className="bg-default" />
+    <option {...props} className="bg-ds-default" />
   ),
   Weekday: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => {
     const isSun = props['aria-label'] === 'Sunday'
@@ -173,12 +169,14 @@ const classNamesCommon = (
   mode: string,
   isSameDayInRange?: boolean
 ): Partial<ClassNames> => ({
-  chevron: 'hover:bg-input-hovered transition',
-  outside: 'text-ds-subtlest',
+  chevron: 'hover:bg-ds-input-hovered transition',
+  outside: 'text-ds-subtlest/20 font-thin',
   disabled:
     'hover:bg-transparent text-ds-subtle/30! [&>button]:cursor-not-allowed!',
   day: cn(
-    'h-9 w-9 text-body-sm hover:bg-input-hovered transition font-semibold',
+    'h-9 w-9 text-body-sm transition font-semibold',
+    'hover:bg-ds-input-hovered',
+    // "data-[outside=true]:hover:bg-transparent data-[outside=true]:cursor-not-allowed",
     isSameDayInRange ? 'rounded-md!' : 'rounded-md'
   ),
   today: 'text-ds-accent-violet font-bold',
@@ -187,12 +185,14 @@ const classNamesCommon = (
     mode === 'multiple' ? 'border-spacing-1' : 'border-spacing-y-1'
   ),
   range_start:
-    'bg-primary-intense hover:bg-primary-intense! text-ds-inverse rounded-tr-none rounded-br-none',
-  range_middle: 'bg-primary rounded-none',
+    'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered! text-ds-inverse rounded-tr-none rounded-br-none',
+  range_middle: 'bg-ds-primary rounded-none',
   range_end:
-    'bg-primary-intense hover:bg-primary-intense! text-ds-inverse rounded-tl-none rounded-bl-none',
-  selected:
-    'bg-primary text-ds-accent-violet hover:bg-primary/90 font-semibold',
+    'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered! text-ds-inverse rounded-tl-none rounded-bl-none',
+  selected: cn(
+    'bg-ds-primary hover:bg-ds-primary/90 font-semibold',
+    mode === 'single' && 'text-ds-accent-violet'
+  ),
 })
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -357,7 +357,8 @@ const Calendar: React.FC<CalendarProps> = ({
     modifiers: { weekend: (date: Date) => isSunday(date) },
     modifiersClassNames: {
       weekend: 'text-ds-destructive',
-      outside: 'text-ds-subtlest',
+      outside:
+        '[&:not([data-selected="true"])]:text-ds-subtlest/40 [&:not([data-selected="true"])]:font-thin',
     },
     ...options,
   } as Partial<DayPickerProps>
@@ -382,8 +383,8 @@ const Calendar: React.FC<CalendarProps> = ({
           <div className="relative">
             <input
               className={cn(
-                'peer w-full pr-space-lg! mr-space-lg placeholder-transparent focus:outline-none cursor-pointer',
-                sizeClasses[inputSize],
+                'peer w-full pr-space-lg! placeholder-transparent focus:outline-none cursor-pointer leading-5',
+                fieldPaddings[inputSize],
                 disabled ? 'text-ds-subtlest' : 'text-ds-default',
                 mode === 'multiple' && 'truncate max-w-[180px]'
               )}
@@ -392,14 +393,14 @@ const Calendar: React.FC<CalendarProps> = ({
               disabled={disabled}
               readOnly
             />
-            <FiCalendar className="absolute top-3.5 right-3 h-4 w-4 flex-shrink-0 opacity-70 pointer-events-none" />
+            <FiCalendar className="h-4 w-4 absolute inset-y-0 right-3 my-auto flex-shrink-0 opacity-70 pointer-events-none" />
           </div>
         </Popover.Trigger>
 
         <Popover.Portal>
           <Popover.Content
             className={cn(
-              'z-[9999] bg-default p-space-sm rounded-xl shadow-2xl border border-ds-default',
+              'z-[9999] bg-ds-elevation-surface p-space-sm rounded-xl shadow-2xl border border-ds-default',
               className
             )}
             side="bottom"

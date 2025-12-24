@@ -44,7 +44,6 @@
     @apply text-base font-semibold leading-normal;
   }
 
-  /* === UI Text / Labels === */
   .text-caption {
     @apply text-xs leading-tight;
   }
@@ -61,22 +60,18 @@
     @apply text-xs font-medium;
   }
 
-  /* === Code / Monospace === */
   .text-code {
     @apply font-mono text-body-sm text-ds-accent-violet;
   }
 
-  /* === Link / Action === */
   .text-link {
     @apply font-medium text-ds-accent-blue hover:underline;
   }
 
-  /* === Muted / Subtle === */
   .text-muted {
     @apply text-ds-subtlest;
   }
 
-  /* === Strong / Emphasis === */
   .text-strong {
     @apply font-semibold text-ds-default;
   }
@@ -86,23 +81,24 @@
   }
 }
 
-/* === Body === */
-@utility text-body-xl {
-  @apply text-xl leading-relaxed;
-}
-
 @utility text-body-lg {
-  @apply text-lg leading-relaxed;
+  @apply text-lg leading-6;
 }
 
 @utility text-body-md {
-  @apply text-base leading-normal;
+  @apply text-base leading-5;
 }
 
 @utility text-body-sm {
-  @apply text-sm leading-normal;
+  @apply text-sm leading-4;
 }
 
 @utility text-body-xs {
-  @apply text-xs leading-normal;
+  @apply text-xs leading-3;
 }
+
+@utility text-body-xxs {
+  @apply text-[10px] leading-3;
+}
+
+

@@ -2,15 +2,19 @@
 
 import { InputHTMLAttributes, useId, useState } from 'react'
 import { cn } from '@/utils/tailwind'
-import { inputColors, sizeClasses } from '@/components/form/_props/input-props'
-import type { InputSize } from '@/components/form/_props/input-props'
+import {
+  type FieldSize,
+  fieldStateStyles,
+  floatingLabelBaseText,
+  fieldPaddings,
+} from '@/components/_core/field-config'
 import { FormInputWrapper } from '../FormInputWrapper'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
   fullWidth?: boolean
   defaultValue?: string
-  inputSize?: InputSize
+  inputSize?: FieldSize
   hasError?: boolean
   onBlur?: () => void
 }
@@ -58,10 +62,11 @@ export const Input: React.FC<InputProps> = ({
       <input
         id={inputId}
         className={cn(
-          'peer w-full placeholder-transparent focus:outline-none',
-          sizeClasses[inputSize],
+          'peer w-full placeholder-transparent focus:outline-none border border-transparent bg-transparent',
+          fieldPaddings[inputSize],
+          floatingLabelBaseText[inputSize],
           disabled ? 'text-ds-subtlest' : 'text-ds-default',
-          hasError && inputColors.error.text
+          hasError && fieldStateStyles.error.text
         )}
         type={type}
         value={value}

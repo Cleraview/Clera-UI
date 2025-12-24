@@ -25,7 +25,7 @@ export const DocInfo: React.FC<DocInfoProps> = ({
   }
 
   return (
-    <div className="my-space-md! p-space-sm bg-ds-elevation-surface-sunken dark:bg-ds-elevation-surface-raised rounded-md">
+    <div className="flex flex-col gap-space-sm my-space-md! p-space-sm bg-ds-elevation-surface-sunken dark:bg-ds-elevation-surface-raised rounded-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-space-md [&>*]:font-(family-name:--font-code)!">
           <span className="text-body-xs! text-ds-subtle">Import</span>
@@ -53,7 +53,7 @@ export const DocInfo: React.FC<DocInfoProps> = ({
           <span className="text-body-xs! text-ds-subtle">Source</span>
           <a
             href={`${githubRepoUrl}/${sourcePath}`}
-            className="flex items-center gap-space-sm hover:underline! py-space-xs px-space-sm rounded-md"
+            className="flex items-center m-0! gap-space-sm hover:underline! px-space-sm rounded-md"
             target="_blank"
             rel="noreferrer"
           >

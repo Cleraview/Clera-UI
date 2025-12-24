@@ -1,21 +1,24 @@
 'use client'
 
-import { type ReactNode, ButtonHTMLAttributes, forwardRef } from 'react'
+import {
+  type ReactNode,
+  ButtonHTMLAttributes,
+  forwardRef,
+  useMemo,
+} from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot, Slottable } from '@radix-ui/react-slot'
-import { cn } from '@/utils/tailwind'
-
-const buttonSizes = {
-  sm: 'px-2.5 py-1.5 text-body-sm',
-  md: 'px-3.5 py-2.5 text-body-md',
-  lg: 'px-4.5 py-3.5 text-body-lg',
-}
+import { cn, composeStyles } from '@/utils/tailwind'
+import {
+  type ElementSize,
+  elementPaddings,
+  elementTextSizes,
+} from '@/components/_core/element-config'
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none',
   {
     variants: {
-      // variant: variantMap,
       variant: {
         primary:
           'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered text-ds-inverse',
@@ -52,7 +55,7 @@ const buttonVariants = cva(
 
         ghost: 'text-ds-default bg-transparent',
       },
-      size: buttonSizes,
+      size: composeStyles(elementPaddings, elementTextSizes),
       rounded: {
         none: 'rounded-none',
         sm: 'rounded-sm',
@@ -101,7 +104,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
-  size?: keyof typeof buttonSizes
+  size?: ElementSize
   innerClassName?: string
   disabled?: boolean
   loading?: boolean
@@ -129,6 +132,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : 'button'
 
+    const childContentStyles = useMemo(
+      () => [
+        elementPaddings[size as ElementSize],
+        elementTextSizes[size as ElementSize],
+      ],
+      [size]
+    )
+
     return (
       <Comp
         {...props}
@@ -137,7 +148,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         className={cn(
           buttonVariants({ variant, fullWidth, rounded, disabled }),
-          asChild && buttonSizes[size],
+          asChild && childContentStyles,
           className
         )}
       >
@@ -145,7 +156,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           <div
             className={cn(
               'absolute flex gap-space-sm items-center justify-center cursor-not-allowed',
-              buttonSizes[size as keyof typeof buttonSizes],
+              childContentStyles,
               innerClassName
             )}
           >
@@ -165,8 +176,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               className={cn(
                 'flex gap-space-sm items-center justify-center',
                 loading && 'invisible',
-                buttonSizes[size as keyof typeof buttonSizes],
                 iconPosition === 'right' && 'flex-row-reverse',
+                childContentStyles,
                 innerClassName
               )}
             >

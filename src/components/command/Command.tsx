@@ -5,7 +5,8 @@ import { Command as CommandPrimitive } from 'cmdk'
 import { cva, type VariantProps } from 'class-variance-authority'
 import Dialog, { DialogProps as CustomDialogProps } from '@/components/dialog'
 import { FiSearch } from 'react-icons/fi'
-import { cn } from '@/utils/tailwind'
+import { cn, composeStyles } from '@/utils/tailwind'
+import { elementPaddings, elementTextSizes } from '../_core/element-config'
 
 export type CommandDialogProps = CustomDialogProps & {
   autoFocusInput?: boolean
@@ -86,6 +87,7 @@ const commandInputVariants = cva(
         xs: 'text-body-xs',
         sm: 'text-body-sm',
         md: 'text-body-md',
+        lg: 'text-body-lg',
       },
     },
     defaultVariants: {
@@ -152,6 +154,7 @@ const commandGroupVariants = cva(
         xs: '[&_[cmdk-group-heading]]:text-body-xs',
         sm: '[&_[cmdk-group-heading]]:text-body-xs',
         md: '[&_[cmdk-group-heading]]:text-body-sm',
+        lg: '[&_[cmdk-group-heading]]:text-body-md',
       },
     },
     compoundVariants: [
@@ -200,21 +203,12 @@ const commandItemVariants = cva(
   ],
   {
     variants: {
-      size: {
-        xs: 'text-body-xs',
-        sm: 'text-body-sm',
-        md: 'text-body-md',
-      },
+      size: composeStyles(elementPaddings, elementTextSizes),
       isSelected: {
         true: 'bg-ds-primary-bold text-ds-inverse [&>svg]:text-(--fill-ds-icon-inverse)',
         false: 'aria-selected:bg-ds-neutral-subtle-hovered',
       },
     },
-    compoundVariants: [
-      { size: 'xs', className: 'p-menu-item-xs' },
-      { size: 'sm', className: 'p-menu-item-sm' },
-      { size: 'md', className: 'p-menu-item-md' },
-    ],
     defaultVariants: {
       size: 'md',
     },

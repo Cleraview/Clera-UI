@@ -24,6 +24,7 @@ import { GoChevronRight, GoChevronLeft } from 'react-icons/go'
 import { FaCircle } from 'react-icons/fa'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { cn } from '@/utils/tailwind'
+import { elementPaddings, elementTextSizes } from '../_core/element-config'
 
 const DropdownMenuRoot = DropdownMenuPrimitive.Root
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
@@ -98,11 +99,13 @@ const DropdownMenuItem = forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm p-menu-item-md text-body-sm text-ds-default outline-none cursor-pointer transition-colors',
+      'relative flex cursor-default select-none items-center rounded-sm text-ds-default outline-none cursor-pointer transition-colors',
       'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
       'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-space-md',
+      elementPaddings['md'],
+      elementTextSizes['md'],
       className
     )}
     {...props}
@@ -327,7 +330,7 @@ const Dropdown = ({
         >
           <div className="flex items-center">
             {Icon && <Icon className="mr-2 h-4 w-4" />}
-            <span>{label}</span>
+            <span className={cn(elementTextSizes['md'])}>{label}</span>
           </div>
           <GoChevronRight className="h-3 w-3 text-ds-subtle" />
         </DropdownMenuItem>
@@ -376,9 +379,9 @@ const Dropdown = ({
             disabled={itemProps.disabled}
           >
             {Icon && <Icon className="mr-2 h-4 w-4" />}
-            <span>{label}</span>
+            <span className={cn(elementTextSizes['md'])}>{label}</span>
             {shortcut && (
-              <span className="ml-auto text-xs tracking-widest opacity-60">
+              <span className="ml-auto text-body-xs tracking-widest opacity-60">
                 {shortcut}
               </span>
             )}
@@ -404,7 +407,7 @@ const Dropdown = ({
               >
                 <GoChevronLeft className="h-3 w-3" />
               </button>
-              <span className="ml-2 text-body-sm font-semibold text-ds-default">
+              <span className={cn('ml-2 font-semibold text-ds-default')}>
                 {currentLayer.title}
               </span>
             </div>

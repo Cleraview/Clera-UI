@@ -2,7 +2,6 @@ import fs from 'fs/promises'
 import { createRequire } from 'module'
 import path from 'path'
 
-// Stronger types to avoid `any`
 type TailwindColors = Record<string, Record<string, string>>
 type StopCfg = { min?: number; max?: number; step?: number }
 type OutputCfg = {

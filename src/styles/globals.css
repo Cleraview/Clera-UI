@@ -4,7 +4,3 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
-
-/* @theme {
-  --text-*: initial;
-} */

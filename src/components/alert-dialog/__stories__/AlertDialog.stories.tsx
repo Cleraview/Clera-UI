@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import AlertDialog from '..'
 import { Button } from '@/components/button'
-import { variantMapKeys } from '@/components/_utils/variants'
+import { elementVariantKeys } from '@/components/_core/element-config'
 
 const meta: Meta<typeof AlertDialog> = {
   title: 'UI/Alert Dialog',
@@ -39,7 +39,7 @@ const meta: Meta<typeof AlertDialog> = {
     },
     okButtonVariant: {
       control: 'select',
-      options: variantMapKeys,
+      options: elementVariantKeys,
       description: 'Variant style for the confirm button',
       table: {
         type: { summary: 'VariantType' },
@@ -48,7 +48,7 @@ const meta: Meta<typeof AlertDialog> = {
     },
     cancelButtonVariant: {
       control: 'select',
-      options: variantMapKeys,
+      options: elementVariantKeys,
       description: 'Variant style for the cancel button',
       table: {
         type: { summary: 'VariantType' },
