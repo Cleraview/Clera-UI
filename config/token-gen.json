@@ -25,6 +25,13 @@
     "strategy": "tailwind",
     "requireTailwindPackage": true
   },
+  "overrides": {
+    "typography": {
+      "mode": "utility",
+      "prefix": "text-",
+      "outPath": "src/styles/utilities/typography.css"
+    }
+  },
   "stops": {
     "min": 50,
     "max": 950,

@@ -17,3 +17,13 @@ export function composeStyles<K extends string>(...objs: Record<K, string>[]) {
 
   return result
 }
+
+export function mapTokenGroup(group: string, tokens: Record<string, string>) {
+  return Object.keys(tokens).reduce(
+    (acc, key) => {
+      acc[`${group}-${key}`] = `text-${group}-${key}`
+      return acc
+    },
+    {} as Record<string, string>
+  )
+}

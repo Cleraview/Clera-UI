@@ -24,6 +24,8 @@ import {
   FiBox,
 } from 'react-icons/fi'
 import {
+  type CommandDialogProps,
+  type CommandMenuProps,
   Command,
   CommandDialog,
   CommandInput,
@@ -96,15 +98,15 @@ const meta: Meta<typeof Command> = {
         defaultValue: { summary: 'No results found.' },
       },
     },
-    componentSize: {
-      control: 'select',
-      options: ['xs', 'sm', 'md'],
-      description: 'Size of the input, group headings, and items',
-      table: {
-        type: { summary: "'xs' | 'sm' | 'md'" },
-        defaultValue: { summary: 'md' },
-      },
-    },
+    // componentSize: {
+    //   control: 'select',
+    //   options: ['xs', 'sm', 'md'],
+    //   description: 'Size of the input, group headings, and items',
+    //   table: {
+    //     type: { summary: "'xs' | 'sm' | 'md'" },
+    //     defaultValue: { summary: 'md' },
+    //   },
+    // },
   },
 }
 
@@ -168,16 +170,15 @@ export const Playground: Story = {
           open={open}
           onOpenChange={setOpen}
           title={args.title}
-          size={args.dialogSize}
-          autoFocusInput={args.autoFocusInput}
+          size={(args as CommandDialogProps).dialogSize}
+          autoFocusInput={(args as CommandDialogProps).autoFocusInput}
         >
           <CommandMenu
             key={open.toString()}
             groups={menuGroups}
             value={selectedValue}
-            placeholder={args.placeholder}
-            emptyState={args.emptyState}
-            size={args.componentSize}
+            placeholder={(args as CommandMenuProps).placeholder}
+            emptyState={(args as CommandMenuProps).emptyState}
           />
         </CommandDialog>
       </div>

@@ -73,7 +73,7 @@ export const FormInputWrapper = ({
           'absolute -left-1 transition-all whitespace-nowrap z-[1] pointer-events-none',
           focused || filled || readOnly || disabled
             ? [floatingLabelActive[inputSize]]
-            : floatingLabelBase[inputSize],
+            : [floatingLabelBase[inputSize], floatingLabelBaseText[inputSize]],
           disabled && 'cursor-not-allowed',
           inputType === 'select' && !disabled && 'cursor-pointer'
         )}

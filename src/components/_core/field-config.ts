@@ -3,8 +3,8 @@ import { tokenPaddings, tokenTextSizes } from './tokens'
 export type FieldSize = 'sm' | 'md' | 'lg'
 
 export const floatingLabelBase: Record<FieldSize, string> = {
-  sm: 'translate-x-[14px] translate-y-[4px]',
-  md: 'translate-x-[16px] translate-y-[6px]',
+  sm: 'translate-x-[14px] translate-y-[8px]',
+  md: 'translate-x-[16px] translate-y-[10px]',
   lg: 'translate-x-[20px] translate-y-[12px]',
 }
 

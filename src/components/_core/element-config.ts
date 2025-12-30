@@ -1,4 +1,9 @@
-import { tokenRadii, tokenPaddings, tokenTextSizes } from './tokens'
+import {
+  tokenRadii,
+  tokenPaddings,
+  tokenTextSizes,
+  tokenHeadingSizes,
+} from './tokens'
 
 export const elementVariants = {
   primary: 'bg-ds-primary-bold text-ds-inverse',
@@ -23,8 +28,22 @@ export const elementRadius = tokenRadii
 
 export const elementPaddings = tokenPaddings
 
+export const elementTextHeadingSizes = {
+  xs: tokenHeadingSizes.sm,
+  sm: tokenHeadingSizes.sm,
+  md: tokenHeadingSizes.sm,
+  lg: tokenHeadingSizes.md,
+} as const
+
 export const elementTextSizes = {
-  xs: tokenTextSizes.xs,
+  xs: tokenTextSizes.xxs,
+  sm: tokenTextSizes.xs,
+  md: tokenTextSizes.sm,
+  lg: tokenTextSizes.md,
+} as const
+
+export const elementIconSizes = {
+  xs: tokenTextSizes.xxs,
   sm: tokenTextSizes.xs,
   md: tokenTextSizes.sm,
   lg: tokenTextSizes.md,

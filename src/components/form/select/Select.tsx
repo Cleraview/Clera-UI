@@ -90,7 +90,7 @@ export const Select: React.FC<SelectProps> = ({
         <SelectPrimitive.Trigger
           id={inputId}
           className={cn(
-            'w-full flex items-center justify-between border border-transparent bg-transparent',
+            'w-full flex items-center justify-between bg-transparent',
             '[&>[data-filled="false"]]:invisible',
             fieldPaddings[inputSize],
             floatingLabelBaseText[inputSize],

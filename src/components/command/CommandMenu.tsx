@@ -8,10 +8,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandItemProps,
 } from './Command'
-import { FieldSize, floatingLabelBaseText } from '../_core/field-config'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 export type CommandMenuItem = {
   id: string
@@ -33,7 +32,6 @@ export type CommandMenuProps = {
   groups: CommandMenuGroup[]
   placeholder?: string
   emptyState?: string
-  size?: CommandItemProps['size']
   value?: string
   className?: string
   selectable?: boolean
@@ -43,7 +41,6 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
   groups,
   placeholder = 'Type a command or search...',
   emptyState = 'No results found.',
-  size = 'sm',
   value: selectedValue,
   className,
   selectable = true,
@@ -58,13 +55,9 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
 
   return (
     <CommandPrimitive>
-      <CommandInput placeholder={placeholder} size={size} />
+      <CommandInput placeholder={placeholder} />
 
-      <CommandList
-        ref={listRef}
-        tabIndex={-1}
-        className="bg-ds-elevation-surface"
-      >
+      <CommandList ref={listRef} tabIndex={-1} className={styles.menu.list}>
         <CommandEmpty>{emptyState}</CommandEmpty>
         <div className={cn(className)}>
           {groups.map((group, index) => {
@@ -76,7 +69,7 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
               <React.Fragment key={group.id}>
                 {index > 0 && <CommandSeparator />}
 
-                <CommandGroup heading={group.heading} size={size}>
+                <CommandGroup heading={group.heading}>
                   {group.items.map(
                     ({
                       id,
@@ -91,31 +84,19 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                         key={id}
                         onSelect={onSelect}
                         value={value ?? label}
-                        size={size}
                         disabled={disabled}
                         isSelected={Boolean(id === selectedValue) && selectable}
                       >
-                        {Icon && (
-                          <Icon
-                            className={cn(
-                              'mr-space-sm text-(--fill-ds-icon-accent-gray)',
-                              floatingLabelBaseText[size as FieldSize]
-                            )}
-                          />
-                        )}
+                        {Icon && <Icon className={styles.menu.itemIcon} />}
                         <span>{label}</span>
-                        <div className="ml-auto flex items-center gap-space-sm">
+                        <div className={styles.menu.itemContent}>
                           {shortcut && (
-                            <kbd className="h-5 select-none items-center gap-1 rounded bg-ds-inverse-subtle px-space-xs font-mono text-body-xs font-medium text-ds-default sm:inline-flex">
+                            <kbd className={styles.menu.shortcut}>
                               {shortcut}
                             </kbd>
                           )}
                           {id === selectedValue && selectable && (
-                            <FiCheck
-                              className={cn(
-                                floatingLabelBaseText[size as FieldSize]
-                              )}
-                            />
+                            <FiCheck className={styles.menu.checkIcon} />
                           )}
                         </div>
                       </CommandItem>

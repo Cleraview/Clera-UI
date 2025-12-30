@@ -1,115 +1,26 @@
 import { forwardRef, Fragment, type PropsWithChildren } from 'react'
 import Link from 'next/link'
 import Image, { StaticImageData } from 'next/image'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { type VariantProps } from 'class-variance-authority'
 import { Badge, BadgeProps } from '../badge'
 import { cn } from '@/utils/tailwind'
 import { extractSlots } from '@/utils/slots'
+import { styles, textHeadingSizeMap, textSizeMap } from './styles'
 
-export const textHeadingSizeMap = {
-  md: 'text-heading-base',
-  lg: 'text-heading-lg',
-  xl: 'text-heading-xl',
-  '2xl': 'text-heading-2xl',
-  '3xl': 'text-heading-3xl',
-  '4xl': 'text-heading-4xl',
-}
-
-export const textSizeMap = {
-  sm: 'text-body-sm',
-  md: 'text-body-md',
-  lg: 'text-body-lg',
-}
+// Re-export for backward compatibility with stories
+export { textHeadingSizeMap, textSizeMap }
 
 type TextHeadingSizeMap = typeof textHeadingSizeMap
 type TextSizeMap = typeof textSizeMap
 type TextHeadingSizeKeys = keyof TextHeadingSizeMap
 type TextSizeKeys = keyof TextSizeMap
 
-const cardVariants = cva('', {
-  variants: {
-    roundedSize: {
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-2xl',
-      xl: 'rounded-4xl',
-    },
-    thunmbnailRoundedSize: {
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-2xl',
-      xl: 'rounded-4xl',
-    },
-    titleSize: textHeadingSizeMap,
-    descriptionSize: textSizeMap,
-    footerActionSize: textSizeMap,
-    paddingAxis: {
-      all: 'axis-all',
-      y: 'axis-y',
-    },
-    shadow: {
-      none: 'shadow-none',
-      sm: 'shadow-sm',
-      md: 'shadow-md',
-      lg: 'shadow-lg',
-      xl: 'shadow-xl',
-    },
-    contentSpacing: {
-      xs: 'space-y-gap-xs',
-      sm: 'space-y-gap-sm',
-      md: 'space-y-gap-md',
-      lg: 'space-y-gap-lg',
-    },
-    padding: {
-      sm: null,
-      md: null,
-      lg: null,
-      xl: null,
-    },
-  },
-  compoundVariants: [
-    {
-      shadow: ['sm', 'md', 'lg', 'xl'],
-      class: 'shadow-default',
-    },
-
-    // sm
-    { padding: 'sm', paddingAxis: 'all', class: 'p-space-sm' },
-    { padding: 'sm', paddingAxis: 'y', class: 'py-space-sm' },
-
-    // md
-    { padding: 'md', paddingAxis: 'all', class: 'p-space-md' },
-    { padding: 'md', paddingAxis: 'y', class: 'py-space-md' },
-
-    // lg
-    { padding: 'lg', paddingAxis: 'all', class: 'p-space-lg' },
-    { padding: 'lg', paddingAxis: 'y', class: 'py-space-lg' },
-
-    // xl
-    { padding: 'xl', paddingAxis: 'all', class: 'p-space-xl' },
-    { padding: 'xl', paddingAxis: 'y', class: 'py-space-xl' },
-
-    {
-      footerActionSize: ['sm'],
-      className: 'h-[1rem] group-hover:-translate-y-6',
-    },
-    {
-      footerActionSize: ['md'],
-      className: 'h-[1.7rem] group-hover:-translate-y-6',
-    },
-    {
-      footerActionSize: ['lg'],
-      className: 'h-[1.7rem] group-hover:-translate-y-7',
-    },
-  ],
-})
-
 type TextSizes = 'description' | 'footerAction'
 type ExcludeVariants = 'titleSize' | 'descriptionSize' | 'footerActionSize'
 export interface CardProps
   extends
     React.HTMLAttributes<HTMLDivElement>,
-    Omit<VariantProps<typeof cardVariants>, ExcludeVariants> {
+    Omit<VariantProps<typeof styles.card>, ExcludeVariants> {
   title?: string
   description?: string
   thumbnail?: StaticImageData
@@ -169,16 +80,16 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'group w-full relative overflow-hidden',
-          cardVariants({ roundedSize, shadow }),
+          styles.root,
+          styles.card({ roundedSize, shadow }),
           !hasThumbnail &&
             padding &&
-            cardVariants({ padding, paddingAxis: 'all' }),
+            styles.card({ padding, paddingAxis: 'all' }),
           className
         )}
         {...props}
       >
-        {link && <Link href={link} className="absolute inset-0" />}
+        {link && <Link href={link} className={styles.link} />}
 
         {slots.Thumbnail
           ? slots.Thumbnail
@@ -194,17 +105,17 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
             )}
 
         {slots.Content ? (
-          <div className={cardVariants({ padding, paddingAxis })}>
+          <div className={styles.card({ padding, paddingAxis })}>
             {slots.Content}
           </div>
         ) : (
           <div
             className={cn(
-              'h-full transition-all space-y-gap-md pointer-events-none',
-              hasThumbnail && cardVariants({ padding, paddingAxis })
+              styles.contentWrapper,
+              hasThumbnail && styles.card({ padding, paddingAxis })
             )}
           >
-            <div className={cardVariants({ contentSpacing })}>
+            <div className={styles.card({ contentSpacing })}>
               {badge?.label && (
                 <Badge
                   size={badge.size}
@@ -216,13 +127,10 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
               )}
 
               {(title || description) && (
-                <div className="space-y-gap-xs">
+                <div className={styles.titleDescriptionContainer}>
                   {title && (
                     <h1
-                      className={cn(
-                        cardVariants({ titleSize }),
-                        'text-ds-default clamp-2'
-                      )}
+                      className={cn(styles.card({ titleSize }), styles.title)}
                     >
                       {title}
                     </h1>
@@ -231,8 +139,8 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                   {description && (
                     <p
                       className={cn(
-                        cardVariants({ descriptionSize }),
-                        'text-ds-subtle clamp-3'
+                        styles.card({ descriptionSize }),
+                        styles.description
                       )}
                     >
                       {description}
@@ -243,17 +151,17 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
             </div>
 
             {(hasMetaItems || footerActionLabel) && (
-              <div className="overflow-hidden">
+              <div className={styles.footerContainer}>
                 <div
                   className={cn(
                     hasMetaItems &&
                       footerActionLabel &&
-                      'transition-translate duration-300 ease-in-out',
-                    cardVariants({ footerActionSize })
+                      styles.footerActionWrapper,
+                    styles.card({ footerActionSize })
                   )}
                 >
                   {hasMetaItems && (
-                    <div className="flex gap-space-sm text-ds-subtlest">
+                    <div className={styles.metaItemsContainer}>
                       {metaItems?.map((item, index) => (
                         <Fragment key={index}>
                           <p>{item}</p>
@@ -264,8 +172,10 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                   )}
 
                   {footerActionLabel && (
-                    <div className="relative">
-                      <p className="text-ds-primary">{footerActionLabel}</p>
+                    <div className={styles.footerActionLabelWrapper}>
+                      <p className={styles.footerActionLabel}>
+                        {footerActionLabel}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -293,17 +203,9 @@ export const CardThumbnailSlot: React.FC<CardThumbnailSlotProps> = ({
   roundedSize,
   ...imageProps
 }) => (
-  <div
-    className={cn(
-      'relative w-full aspect-[16/9] overflow-hidden pointer-events-none',
-      cardVariants({ roundedSize })
-    )}
-  >
+  <div className={cn(styles.thumbnailWrapper, styles.card({ roundedSize }))}>
     {}
-    <Image
-      className="w-full h-full absolute inset-0 m-auto object-cover"
-      {...imageProps}
-    />
+    <Image className={styles.thumbnailImage} {...imageProps} />
   </div>
 )
 

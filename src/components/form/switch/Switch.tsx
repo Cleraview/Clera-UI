@@ -1,8 +1,7 @@
 import { forwardRef } from 'react'
 import * as SwitchPrimitives from '@radix-ui/react-switch'
 import { cn } from '@/utils/tailwind'
-import { FaCheck } from 'react-icons/fa'
-import { HiXMark } from 'react-icons/hi2'
+import { styles } from './styles'
 
 export type SwitchProps = {
   checked?: boolean
@@ -25,21 +24,31 @@ export const Switch = forwardRef<
       checked,
       defaultChecked,
       disabled,
-      checkedChildren = <FaCheck />,
-      unCheckedChildren = <HiXMark />,
+      checkedChildren,
+      unCheckedChildren,
       autoFocus,
       onChange,
       ...props
     },
     ref
   ) => {
+    const hasCheckedChild =
+      checkedChildren !== undefined && checkedChildren !== null
+    const hasUncheckedChild =
+      unCheckedChildren !== undefined && unCheckedChildren !== null
+    const fixedWidth = !hasCheckedChild || !hasUncheckedChild
+    const hasBothChildren = hasCheckedChild && hasUncheckedChild
+
     return (
       <SwitchPrimitives.Root
         ref={ref}
         className={cn(
-          'h-7 relative inline-flex cursor-pointer items-center rounded-full transition-colors',
-          checked ? 'bg-ds-selected-bold' : 'bg-ds-neutral-bold',
-          disabled && 'opacity-50 cursor-not-allowed',
+          styles.root({
+            checked: checked ?? false,
+            disabled: disabled ?? false,
+            fixedWidth,
+            hasBothChildren,
+          }),
           className
         )}
         checked={checked}
@@ -49,46 +58,26 @@ export const Switch = forwardRef<
         onCheckedChange={state => onChange?.(state)}
         {...props}
       >
-        {/* Inner container */}
         <div
-          className={cn(
-            'h-full text-body-xs font-medium overflow-hidden',
-            'pointer-events-none select-none text-ds-inverse',
-            'transition-padding-inline-start transition-padding-inline-end duration-200 ease-in-out',
-            !checked ? 'ps-[26px] pe-[9px]' : 'ps-[9px] pe-[32px]'
-          )}
+          className={styles.innerContainer({
+            checked: checked ?? false,
+            hasBothChildren,
+          })}
         >
           <span
-            className={cn(
-              'w-full h-full flex items-center justify-center',
-              'transition-margin-inline-start transition-margin-inline-end duration-200 ease-in-out',
-              !checked &&
-                'ms-[calc(-100%+calc(10px*2)-calc(24px*2))] me-[calc(100%-calc(10px*2)+calc(24px*2))]'
-            )}
+            className={styles.checkedChildren({ checked: checked ?? false })}
           >
             {checkedChildren}
           </span>
           <span
-            className={cn(
-              'w-full h-full flex items-center justify-center mt-[-27px] text-ds-inverse',
-              'transition-margin-inline-start transition-margin-inline-end duration-200 ease-in-out',
-              checked
-                ? 'ms-[calc(100%-calc(4px+2px*2)+calc(24px*2))] me-[calc(-100%+calc(4px+2px*2)-calc(24px*2))]'
-                : 'ms-[0px] me-[0px]'
-            )}
+            className={styles.unCheckedChildren({ checked: checked ?? false })}
           >
             {unCheckedChildren}
           </span>
         </div>
 
-        {/* Thumb (handle) */}
         <SwitchPrimitives.Thumb
-          className={cn(
-            'w-5 h-5 absolute bg-ds-input rounded-full shadow transition-all duration-200 ease-in-out',
-            checked
-              ? 'start-[calc(100%-calc(23px))] dark:bg-ds-neutral-bold'
-              : 'start-[3px]'
-          )}
+          className={styles.thumb({ checked: checked ?? false })}
         />
       </SwitchPrimitives.Root>
     )

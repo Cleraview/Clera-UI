@@ -1,7 +1,5 @@
 @theme static {
-  /* ===== THEME ===== */
   --theme: 'light';
-  /* ===== TEXT ===== */
   --text-color-ds-default: theme(colors.neutral.900);
   --text-color-ds-accent-lime: theme(colors.lime.800);
   --text-color-ds-accent-lime-bolder: theme(colors.lime.900);
@@ -42,7 +40,6 @@
   --text-color-ds-link-pressed: theme(colors.teal.800);
   --text-color-ds-link-visited: theme(colors.neutral.700);
   --text-color-ds-link-visited-pressed: theme(colors.neutral.800);
-  /* ===== ICON ===== */
   --fill-ds-icon: theme(colors.neutral.950);
   --fill-ds-icon-accent-lime: theme(colors.lime.600);
   --fill-ds-icon-accent-red: theme(colors.red.700);
@@ -66,7 +63,6 @@
   --fill-ds-icon-info: theme(colors.blue.600);
   --fill-ds-icon-subtlest: theme(colors.neutral.700);
   --fill-ds-icon-subtle: theme(colors.neutral.800);
-  /* ===== BORDER ===== */
   --border-color-ds-default: theme(colors.neutral.200);
   --border-color-ds-accent-lime: theme(colors.lime.600);
   --border-color-ds-accent-red: theme(colors.red.600);
@@ -90,7 +86,6 @@
   --border-color-ds-discovery: theme(colors.purple.600);
   --border-color-ds-info: theme(colors.blue.600);
   --border-color-ds-bold: theme(colors.neutral.600);
-  /* ===== BACKGROUND ===== */
   --background-color-ds-accent-lime-subtlest: theme(colors.lime.100);
   --background-color-ds-accent-lime-subtlest-hovered: theme(colors.lime.200);
   --background-color-ds-accent-lime-subtlest-pressed: theme(colors.lime.300);
@@ -355,13 +350,11 @@
   --background-color-ds-elevation-surface-overlay: rgba(255, 255, 255, .6);
   --background-color-ds-elevation-surface-overlay-hovered: rgba(255, 255, 255, .5);
   --background-color-ds-elevation-surface-overlay-pressed: rgba(255, 255, 255, .6);
-  /* ===== ELEVATION SHADOWS ===== */
   --shadow-ds-elevation-overflow: 0px 0px 8px rgba(30, 31, 33, 0.16), 0px 0px 1px rgba(30, 31, 33, 0.12);
   --shadow-ds-elevation-overflow-perimeter: #1E1F211f;
   --shadow-ds-elevation-overflow-spread: #1E1F2129;
   --shadow-ds-elevation-overlay: 0px 8px 12px rgba(30, 31, 33, 0.15), 0px 0px 1px rgba(30, 31, 33, 0.31);
   --shadow-ds-elevation-raised: 0px 1px 1px rgba(30, 31, 33, 0.25), 0px 0px 1px rgba(30, 31, 33, 0.31);
-  /* ===== CHART ===== */
   --chart-ds-categorical-1: theme(colors.blue.600);
   --chart-ds-categorical-1-hovered: theme(colors.blue.700);
   --chart-ds-categorical-2: theme(colors.lime.500);
@@ -465,9 +458,7 @@
 }
 @layer base {
 [data-theme='dark'] {
-  /* ===== THEME ===== */
   --theme: 'dark';
-  /* ===== TEXT ===== */
   --text-color-ds-default: theme(colors.neutral.200);
   --text-color-ds-accent-lime: theme(colors.lime.300);
   --text-color-ds-accent-lime-bolder: theme(colors.lime.200);
@@ -508,7 +499,6 @@
   --text-color-ds-link-pressed: theme(colors.teal.300);
   --text-color-ds-link-visited: theme(colors.neutral.400);
   --text-color-ds-link-visited-pressed: theme(colors.neutral.300);
-  /* ===== ICON ===== */
   --fill-ds-icon: theme(colors.neutral.50);
   --fill-ds-icon-accent-lime: theme(colors.lime.500);
   --fill-ds-icon-accent-red: theme(colors.red.600);
@@ -532,7 +522,6 @@
   --fill-ds-icon-info: theme(colors.blue.500);
   --fill-ds-icon-subtlest: theme(colors.neutral.200);
   --fill-ds-icon-subtle: theme(colors.neutral.100);
-  /* ===== BORDER ===== */
   --border-color-ds-default: theme(colors.neutral.700);
   --border-color-ds-accent-lime: theme(colors.lime.500);
   --border-color-ds-accent-red: theme(colors.red.500);
@@ -556,7 +545,6 @@
   --border-color-ds-discovery: theme(colors.purple.500);
   --border-color-ds-info: theme(colors.blue.500);
   --border-color-ds-bold: theme(colors.neutral.600);
-  /* ===== BACKGROUND ===== */
   --background-color-ds-accent-lime-subtlest: theme(colors.lime.900);
   --background-color-ds-accent-lime-subtlest-hovered: theme(colors.lime.800);
   --background-color-ds-accent-lime-subtlest-pressed: theme(colors.lime.800);
@@ -821,13 +809,11 @@
   --background-color-ds-elevation-surface-overlay: color-mix(in srgb, theme(colors.neutral.600) 60%, transparent);
   --background-color-ds-elevation-surface-overlay-hovered: color-mix(in srgb, color-mix(in srgb, theme(colors.neutral.600) 70%, theme(colors.neutral.500)) 50%, transparent);
   --background-color-ds-elevation-surface-overlay-pressed: color-mix(in srgb, theme(colors.neutral.500) 60%, transparent);
-  /* ===== ELEVATION SHADOWS ===== */
   --shadow-ds-elevation-overflow: 0px 0px 12px rgba(1, 4, 4, 0.56), 0px 0px 1px rgba(1, 4, 4, 0.5);
   --shadow-ds-elevation-overflow-perimeter: #01040480;
   --shadow-ds-elevation-overflow-spread: #0104048f;
   --shadow-ds-elevation-overlay: 0px 8px 12px rgba(1, 4, 4, 0.36), 0px 0px 1px rgba(1, 4, 4, 0.5);
   --shadow-ds-elevation-raised: 0px 1px 1px rgba(1, 4, 4, 0.5), 0px 0px 1px rgba(1, 4, 4, 0.5);
-  /* ===== CHART ===== */
   --chart-ds-categorical-1: theme(colors.blue.500);
   --chart-ds-categorical-1-hovered: theme(colors.blue.400);
   --chart-ds-categorical-2: theme(colors.lime.400);

@@ -62,7 +62,7 @@ export const Input: React.FC<InputProps> = ({
       <input
         id={inputId}
         className={cn(
-          'peer w-full placeholder-transparent focus:outline-none border border-transparent bg-transparent',
+          'peer w-full placeholder-transparent focus:outline-none bg-transparent',
           fieldPaddings[inputSize],
           floatingLabelBaseText[inputSize],
           disabled ? 'text-ds-subtlest' : 'text-ds-default',

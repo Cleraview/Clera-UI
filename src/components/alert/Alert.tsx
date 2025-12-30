@@ -1,36 +1,18 @@
 'use client'
 
 import React, { useState } from 'react'
-import { cva, VariantProps } from 'class-variance-authority'
+import { type VariantProps } from 'class-variance-authority'
 import { AiOutlineClose } from 'react-icons/ai'
-import {
-  type ElementVariant,
-  elementRadius,
-  elementPaddings,
-  elementVariants,
-} from '@/components/_core/element-config'
+import { type ElementVariant } from '@/components/_core/element-config'
 import { cn } from '@/utils/tailwind'
+import { alertStyles } from './styles'
 
-const alertVariants = cva('relative flex items-center', {
-  variants: {
-    variant: elementVariants,
-    rounded: elementRadius,
-    size: elementPaddings,
-  },
-  defaultVariants: {
-    variant: 'primary',
-    rounded: 'md',
-    size: 'md',
-  },
-})
-
-export interface AlertProps extends VariantProps<typeof alertVariants> {
+export interface AlertProps extends VariantProps<typeof alertStyles.root> {
   title?: React.ReactNode | string
   description?: React.ReactNode | string
   icon?: React.ReactNode
   action?: React.ReactNode
   variant?: ElementVariant
-  // showIcon?: boolean
   banner?: boolean
   closable?: boolean
   onClose?: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -46,7 +28,6 @@ export const Alert: React.FC<AlertProps> = ({
   variant = 'primary',
   rounded,
   size = 'md',
-  // showIcon = false,
   banner = false,
   closable = false,
   onClose,
@@ -65,31 +46,32 @@ export const Alert: React.FC<AlertProps> = ({
 
   if (!visible) return null
 
+  const shouldAlignCloseStart = !banner && title && description
+
   return (
     <div
       role="alert"
       className={cn(
-        alertVariants({ variant, rounded, size }),
-        banner && 'w-full flex items-center',
+        alertStyles.root({ variant, rounded, size, banner }),
         className
       )}
     >
-      {icon && (
-        <div className="h-6 mr-space-sm self-start flex items-center text-body-xl">
-          {icon}
-        </div>
-      )}
-      <div className="flex-1 flex flex-col gap-space-xs">
-        {title && <div className="font-semibold">{title}</div>}
-        {description && <div className="font-thin">{description}</div>}
+      {icon && <div className={alertStyles.icon}>{icon}</div>}
+
+      <div className={alertStyles.content}>
+        {title && <div className={alertStyles.title}>{title}</div>}
+        {description && (
+          <div className={alertStyles.description}>{description}</div>
+        )}
       </div>
-      {action && <div className="ml-4">{action}</div>}
+
+      {action && <div className={alertStyles.action}>{action}</div>}
+
       {closable && (
         <button
-          className={cn(
-            'ml-space-sm opacity-70 hover:opacity-100 transition cursor-pointer',
-            !banner && title && description && 'self-start'
-          )}
+          className={alertStyles.close({
+            aligned: shouldAlignCloseStart ? 'start' : 'center',
+          })}
           onClick={handleClose}
         >
           <AiOutlineClose />

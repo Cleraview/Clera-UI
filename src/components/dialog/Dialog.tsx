@@ -5,6 +5,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { cva } from 'class-variance-authority'
 import { FiX } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
+import { ElementSize, elementTextHeadingSizes } from '../_core/element-config'
 
 const overlayVariants = cva(
   'fixed inset-0 z-[9998] bg-ds-elevation-surface-overlay transition-opacity duration-300',
@@ -119,7 +120,12 @@ const Dialog: React.FC<DialogProps> & DialogSubcomponents = ({
           {(title || showCloseButton) && (
             <div className="flex items-center justify-between border-b border-ds-default p-space-sm">
               {title && (
-                <DialogPrimitive.Title className="text-heading-lg font-semibold text-ds-default">
+                <DialogPrimitive.Title
+                  className={cn(
+                    'font-semibold text-ds-default',
+                    elementTextHeadingSizes[size as ElementSize]
+                  )}
+                >
                   {title}
                 </DialogPrimitive.Title>
               )}

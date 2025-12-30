@@ -24,7 +24,11 @@ import { GoChevronRight, GoChevronLeft, GoChevronDown } from 'react-icons/go'
 import { FiCalendar } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 import { FormInputWrapper } from '@/components/form/FormInputWrapper'
-import { type FieldSize, fieldPaddings } from '@/components/_core/field-config'
+import {
+  type FieldSize,
+  fieldPaddings,
+  floatingLabelBaseText,
+} from '@/components/_core/field-config'
 import { safeParse } from './_utils/parse'
 import 'react-day-picker/dist/style.css'
 
@@ -383,8 +387,9 @@ const Calendar: React.FC<CalendarProps> = ({
           <div className="relative">
             <input
               className={cn(
-                'peer w-full pr-space-lg! placeholder-transparent focus:outline-none cursor-pointer leading-5',
+                'peer w-full pr-space-lg! placeholder-transparent focus:outline-none cursor-pointer',
                 fieldPaddings[inputSize],
+                floatingLabelBaseText[inputSize],
                 disabled ? 'text-ds-subtlest' : 'text-ds-default',
                 mode === 'multiple' && 'truncate max-w-[180px]'
               )}

@@ -85,7 +85,7 @@ exports[`components/Button renders contents correctly 1`] = `
         data-testid="btn"
       >
         <div
-          class="flex gap-space-sm items-center justify-center px-3 py-2 text-body-sm"
+          class="flex gap-space-sm items-center justify-center p-2.5 text-label-sm"
         >
           <span>
             Click me!
@@ -100,7 +100,7 @@ exports[`components/Button renders contents correctly 1`] = `
       data-testid="btn"
     >
       <div
-        class="flex gap-space-sm items-center justify-center px-3 py-2 text-body-sm"
+        class="flex gap-space-sm items-center justify-center p-2.5 text-label-sm"
       >
         <span>
           Click me!

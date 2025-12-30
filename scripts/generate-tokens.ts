@@ -19,9 +19,16 @@ type Outputs = {
 }
 type Defaults = { themeRoot?: string; darkSelector?: string }
 
+type FileOverride = {
+  mode?: 'theme' | 'utility'
+  prefix?: string
+  excludePrefixFor?: string[]
+  outPath?: string
+}
+
 type TokenMeta = { outPath?: { native?: string; theme?: string }; themeKind?: string }
 type TokenValue = {
-  $value?: string
+  $value?: string | Record<string, string>
   $type?: string
   $extensions?: { mode?: { dark?: string } }
   $meta?: TokenMeta
@@ -35,6 +42,7 @@ type Config = {
   paletteResolution?: { strategy: string; requireTailwindPackage: boolean }
   stops?: StopCfg
   defaults?: Defaults
+  overrides?: Record<string, FileOverride>
 }
 
 async function readConfig(
@@ -44,6 +52,7 @@ async function readConfig(
     const cfgRaw = await fs.readFile(path.resolve(configPath), 'utf8')
     return JSON.parse(cfgRaw) as Config
   } catch (err) {
+    console.error(`Failed to read or parse config at ${configPath}`, err)
     return {} as Config
   }
 }
@@ -136,6 +145,90 @@ function flattenTokens(
   return out
 }
 
+const cssPropMap: Record<string, string> = {
+  fontSize: 'font-size',
+  fontWeight: 'font-weight',
+  lineHeight: 'line-height',
+  letterSpacing: 'letter-spacing',
+  textDecoration: 'text-decoration',
+  textTransform: 'text-transform',
+  fontFamily: 'font-family',
+}
+
+function generateUtilityCss(
+  flattened: Record<string, TokenValue>,
+  override: FileOverride
+): string[] {
+  const lines: string[] = []
+  const utilities: Record<string, Record<string, string>> = {}
+
+  for (const [key, def] of Object.entries(flattened)) {
+    const parts = key.split('.')
+    let propIndex = -1
+    let cssProp = ''
+    
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const part = parts[i]
+      if (cssPropMap[part]) {
+        propIndex = i
+        cssProp = cssPropMap[part]
+        break
+      }
+    }
+
+    const nameParts = []
+    if (propIndex !== -1) {
+      if (parts.length > 1) {
+        const parentParts = parts.slice(1, propIndex)
+        const modifierParts = parts.slice(propIndex + 1)
+        nameParts.push(...parentParts, ...modifierParts)
+      } else {
+        nameParts.push(parts[0])
+      }
+    } else {
+      nameParts.push(...parts)
+    }
+    
+    const rawName = nameParts.join('-')
+    
+    let className = rawName
+    if (override.prefix) {
+       if (!rawName.startsWith(override.prefix)) {
+         const shouldExclude = override.excludePrefixFor?.some(ex => rawName.startsWith(ex))
+         if (!shouldExclude) {
+            className = `${override.prefix}${rawName}`
+         }
+       }
+    }
+
+    if (!utilities[className]) {
+      utilities[className] = {}
+    }
+
+    const finalProp = propIndex !== -1 ? cssProp : '@apply'
+
+    if (typeof def.$value === 'string' || typeof def.$value === 'number') {
+       utilities[className][finalProp] = String(def.$value)
+    }
+  }
+
+  // --- CHANGED: Removed @layer utilities wrapper and used @utility syntax ---
+  for (const [className, styles] of Object.entries(utilities)) {
+    lines.push(`@utility ${className} {`)
+    for (const [prop, val] of Object.entries(styles)) {
+      if (prop === '@apply') {
+        lines.push(`  @apply ${val};`)
+      } else {
+        lines.push(`  ${prop}: ${val};`)
+      }
+    }
+    lines.push(`}`)
+  }
+  // -------------------------------------------------------------------------
+
+  return lines
+}
+
 async function build() {
   const argv = process.argv.slice(2)
   let configPath = 'config/token-gen.json'
@@ -185,6 +278,11 @@ async function build() {
     const raw = await fs.readFile(filePath, 'utf8')
     const parsed = JSON.parse(raw)
     const tokenName = path.basename(file, '.json')
+    
+    const override = cfg.overrides?.[tokenName]
+    const mode = override?.mode || 'theme'
+
+    console.log(`Processing ${tokenName}.json -> Mode: ${mode}`)
 
     for (const topKey of Object.keys(parsed)) {
       const tree = parsed[topKey]
@@ -209,6 +307,18 @@ async function build() {
         opts?: { prefix?: string; suffix?: string }
       ) {
         if (metaPath) return path.resolve(metaPath)
+        
+        if (override?.outPath) {
+          const overridePath = path.resolve(override.outPath)
+          const ext = path.extname(overridePath)
+          if (!ext) {
+             const prefix = opts?.prefix ?? ''
+             const suffix = opts?.suffix ?? '.css'
+             return path.join(overridePath, `${prefix}${tokenName}${suffix}`)
+          }
+          return overridePath
+        }
+        
         if (!cfgPath) return defaultPath
         if (cfgPath.includes('{token}'))
           return path.resolve(cfgPath.replace('{token}', tokenName))
@@ -274,7 +384,7 @@ async function build() {
         }
       }
 
-      if (outNativeCfg?.enabled ?? true) {
+      if ((outNativeCfg?.enabled ?? true) && mode !== 'utility') {
         const linesRoot: string[] = []
         const linesDark: string[] = []
         for (const key of Object.keys(flattened)) {
@@ -291,7 +401,9 @@ async function build() {
               cfg.stops ?? { min: 50, max: 900, step: 50 }
             )
           }
-          linesRoot.push(`  ${cssName}: ${resolved};`)
+          if (typeof val === 'string' || typeof val === 'number') {
+            linesRoot.push(`  ${cssName}: ${resolved};`)
+          }
           if (darkVal) {
             let resolvedDark = String(darkVal)
             if (topKey === 'color' && Object.keys(tailwindOutput).length) {
@@ -327,69 +439,25 @@ async function build() {
       }
 
       if (outThemeCfg?.enabled ?? true) {
-        const linesTheme: string[] = []
-        const linesThemeDark: string[] = []
-        let lastGroup: string | null = null
-        let lastGroupDark: string | null = null
+        let outPartsTheme: string[] = []
 
-        function groupForParts(parts: string[]) {
-          const g = parts[0]
-          switch (g) {
-            case 'text':
-              return 'TEXT'
-            case 'link':
-              return 'LINK'
-            case 'icon':
-              return 'ICON'
-            case 'border':
-              return 'BORDER'
-            case 'background':
-              return 'BACKGROUND'
-            case 'skeleton':
-              return 'SKELETON'
-            case 'chart':
-              return 'CHART'
-            case 'elevation':
-              return 'ELEVATION'
-            case 'shadow':
-              return 'ELEVATION SHADOWS'
-            default:
-              return g.toUpperCase()
-          }
-        }
-        for (const key of Object.keys(flattened)) {
-          const parts = key.split('.')
-          const cssName = `--${varNameFromPath(topKey, parts)}`
-          const def = flattened[key]
-          const val = def.$value ?? ''
-          const darkVal = def.$extensions?.mode?.dark ?? null
+        if (mode === 'utility') {
+           const utilityLines = generateUtilityCss(flattened, override!)
+           outPartsTheme.push(...utilityLines)
+        } else {
+          const linesTheme: string[] = []
+          const linesThemeDark: string[] = []
+          
+          for (const key of Object.keys(flattened)) {
+            const parts = key.split('.')
+            const cssName = `--${varNameFromPath(topKey, parts)}`
+            const def = flattened[key]
+            const val = def.$value ?? ''
+            const darkVal = def.$extensions?.mode?.dark ?? null
 
-          let outVal = String(val)
-          if (topKey === 'color') {
-            outVal = String(val).replace(
-              /\{color\.([a-zA-Z0-9_-]+)\.(\d+)\}/g,
-              (_full, palette, stopStr) => {
-                const n = normalizeStop(
-                  Number(stopStr),
-                  cfg.stops?.min ?? 50,
-                  cfg.stops?.max ?? 900,
-                  cfg.stops?.step ?? 50
-                )
-                return `theme(colors.${palette}.${n})`
-              }
-            )
-          }
-          const grp = groupForParts(parts)
-          if (grp !== lastGroup) {
-            linesTheme.push(`  /* ===== ${grp} ===== */`)
-            lastGroup = grp
-          }
-          linesTheme.push(`  ${cssName}: ${outVal};`)
-
-          if (darkVal) {
-            let outDark = String(darkVal)
+            let outVal = String(val)
             if (topKey === 'color') {
-              outDark = String(darkVal).replace(
+              outVal = String(val).replace(
                 /\{color\.([a-zA-Z0-9_-]+)\.(\d+)\}/g,
                 (_full, palette, stopStr) => {
                   const n = normalizeStop(
@@ -402,28 +470,41 @@ async function build() {
                 }
               )
             }
-            const grpD = groupForParts(parts)
-            if (grpD !== lastGroupDark) {
-              linesThemeDark.push(`  /* ===== ${grpD} ===== */`)
-              lastGroupDark = grpD
+            linesTheme.push(`  ${cssName}: ${outVal};`)
+
+            if (darkVal) {
+              let outDark = String(darkVal)
+              if (topKey === 'color') {
+                outDark = String(darkVal).replace(
+                  /\{color\.([a-zA-Z0-9_-]+)\.(\d+)\}/g,
+                  (_full, palette, stopStr) => {
+                    const n = normalizeStop(
+                      Number(stopStr),
+                      cfg.stops?.min ?? 50,
+                      cfg.stops?.max ?? 900,
+                      cfg.stops?.step ?? 50
+                    )
+                    return `theme(colors.${palette}.${n})`
+                  }
+                )
+              }
+              linesThemeDark.push(`  ${cssName}: ${outDark};`)
             }
-            linesThemeDark.push(`  ${cssName}: ${outDark};`)
           }
-        }
-
-        const outPartsTheme: string[] = []
-        outPartsTheme.push(`@theme ${themeKind} {`)
-        outPartsTheme.push(...linesTheme)
-        outPartsTheme.push(`}`)
-
-        if (linesThemeDark.length) {
-          outPartsTheme.push(`@layer base {`)
-          outPartsTheme.push(
-            `${cfg.defaults?.darkSelector ?? "[data-theme='dark']"} {`
-          )
-          outPartsTheme.push(...linesThemeDark)
+          
+          outPartsTheme.push(`@theme ${themeKind} {`)
+          outPartsTheme.push(...linesTheme)
           outPartsTheme.push(`}`)
-          outPartsTheme.push(`}`)
+
+          if (linesThemeDark.length) {
+            outPartsTheme.push(`@layer base {`)
+            outPartsTheme.push(
+              `${cfg.defaults?.darkSelector ?? "[data-theme='dark']"} {`
+            )
+            outPartsTheme.push(...linesThemeDark)
+            outPartsTheme.push(`}`)
+            outPartsTheme.push(`}`)
+          }
         }
 
         if (!dryRun) {
@@ -451,42 +532,6 @@ async function build() {
           console.log(`[dry-run] Would write ${outTw}`)
         }
       }
-    }
-  }
-
-  for (const file of files) {
-    if (!file.endsWith('.json')) continue
-    const parsed = JSON.parse(
-      await fs.readFile(path.join(tokensDir, file), 'utf8')
-    )
-    for (const topKey of Object.keys(parsed)) {
-      const canonical = path.resolve(`src/styles/themes/${topKey}.css`)
-      const generated = path.resolve(
-        `src/styles/themes/${topKey}.css`
-      )
-      try {
-        const a = (await fs.readFile(canonical, 'utf8'))
-          .split(/\r?\n/)
-          .map(l => l.trim())
-          .filter(Boolean)
-          .filter(l => l.startsWith('--'))
-        const b = (await fs.readFile(generated, 'utf8'))
-          .split(/\r?\n/)
-          .map(l => l.trim())
-          .filter(Boolean)
-          .filter(l => l.startsWith('--'))
-        const setB = new Set(b)
-        const setA = new Set(a)
-        const missing = a.filter(l => !setB.has(l))
-        const extra = b.filter(l => !setA.has(l))
-        if (missing.length || extra.length) {
-          console.log(
-            `DIFF for ${topKey}: missing ${missing.length} lines, extra ${extra.length} lines`
-          )
-        } else {
-          console.log(`No differences for ${topKey}`)
-        }
-      } catch (err) {}
     }
   }
 }

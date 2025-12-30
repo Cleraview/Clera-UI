@@ -1,104 +1,96 @@
-@layer utilities {
-  .heading-display {
-    @apply text-4xl md:text-5xl xl:text-6xl font-black leading-none text-ds-default max-w-4xl;
-  }
-
-  .heading-sub {
-    @apply text-lg md:text-xl lg:text-2xl leading-6 text-ds-subtle;
-  }
-
-  /* === Headings === */
-  .text-display {
-    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight;
-  }
-
-  .text-heading-6xl {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-snug;
-  }
-
-  .text-heading-5xl {
-    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug;
-  }
-
-  .text-heading-4xl {
-    @apply text-3xl lg:text-4xl font-semibold tracking-tight leading-snug;
-  }
-
-  .text-heading-3xl {
-    @apply text-2xl lg:text-3xl font-semibold leading-snug;
-  }
-
-  .text-heading-2xl {
-    @apply text-xl lg:text-2xl font-semibold leading-snug;
-  }
-
-  .text-heading-xl {
-    @apply text-base md:text-lg lg:text-xl font-semibold leading-normal;
-  }
-
-  .text-heading-lg {
-    @apply text-base lg:text-lg font-semibold leading-normal;
-  }
-
-  .text-heading-base {
-    @apply text-base font-semibold leading-normal;
-  }
-
-  .text-caption {
-    @apply text-xs leading-tight;
-  }
-
-  .text-overline {
-    @apply text-[10px] uppercase tracking-wider font-semibold;
-  }
-
-  .text-label-lg {
-    @apply text-sm md:text-base font-medium;
-  }
-
-  .text-label-sm {
-    @apply text-xs font-medium;
-  }
-
-  .text-code {
-    @apply font-mono text-body-sm text-ds-accent-violet;
-  }
-
-  .text-link {
-    @apply font-medium text-ds-accent-blue hover:underline;
-  }
-
-  .text-muted {
-    @apply text-ds-subtlest;
-  }
-
-  .text-strong {
-    @apply font-semibold text-ds-default;
-  }
-
-  .text-em {
-    @apply italic text-ds-subtlest;
-  }
+@utility text-display-2xl {
+  @apply text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none;
 }
-
+@utility text-display-xl {
+  @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none;
+}
+@utility text-display-lg {
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1];
+}
+@utility text-display-md {
+  @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
+}
+@utility text-heading-3xl {
+  @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-snug;
+}
+@utility text-heading-2xl {
+  @apply text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-snug;
+}
+@utility text-heading-xl {
+  @apply text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight leading-snug;
+}
+@utility text-heading-lg {
+  @apply text-lg sm:text-xl md:text-2xl font-semibold leading-snug;
+}
+@utility text-heading-md {
+  @apply text-base sm:text-lg md:text-xl font-semibold leading-normal;
+}
+@utility text-heading-sm {
+  @apply text-sm sm:text-base font-semibold leading-normal;
+}
+@utility text-body-2xl {
+  @apply text-2xl leading-relaxed;
+}
+@utility text-body-xl {
+  @apply text-xl leading-relaxed;
+}
 @utility text-body-lg {
-  @apply text-lg leading-6;
+  @apply text-lg leading-relaxed;
 }
-
 @utility text-body-md {
+  @apply text-base leading-relaxed;
+}
+@utility text-body-sm {
+  @apply text-sm leading-relaxed;
+}
+@utility text-body-xs {
+  @apply text-xs leading-normal;
+}
+@utility text-label-xl {
+  @apply text-xl leading-7 tracking-tight;
+}
+@utility text-label-lg {
+  @apply text-lg leading-6 tracking-tight;
+}
+@utility text-label-md {
   @apply text-base leading-5;
 }
-
-@utility text-body-sm {
+@utility text-label-sm {
   @apply text-sm leading-4;
 }
-
-@utility text-body-xs {
+@utility text-label-xs {
   @apply text-xs leading-3;
 }
-
-@utility text-body-xxs {
-  @apply text-[10px] leading-3;
+@utility text-label-xxs {
+  @apply text-[10px] leading-[10px];
 }
-
-
+@utility text-helper-text {
+  @apply text-xs text-ds-subtle leading-normal;
+}
+@utility text-helper-error {
+  @apply text-xs font-medium text-ds-destructive leading-normal;
+}
+@utility text-code-lg {
+  @apply font-mono text-base text-ds-accent-violet bg-ds-neutral-subtle px-1.5 py-0.5 rounded-md;
+}
+@utility text-code-md {
+  @apply font-mono text-sm text-ds-accent-violet bg-ds-neutral-subtle px-1 py-0.5 rounded-sm;
+}
+@utility text-code-sm {
+  @apply font-mono text-xs text-ds-accent-violet bg-ds-neutral-subtle px-1 py-0 rounded-sm;
+}
+@utility text-link-default {
+  @apply font-medium text-ds-accent-blue underline-offset-4 hover:underline cursor-pointer;
+}
+@utility text-link-subtle {
+  @apply font-medium text-ds-subtle underline-offset-4 hover:text-ds-default hover:underline cursor-pointer;
+}
+@utility text-muted {
+  @apply text-ds-subtlest;
+}
+@utility text-strong {
+  @apply font-bold;
+}
+@utility text-italic {
+  @apply italic text-ds-subtle;
+}
