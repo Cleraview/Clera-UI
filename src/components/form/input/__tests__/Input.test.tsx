@@ -32,9 +32,6 @@ describe('components/form/Input', () => {
     })
 
     expect(input).toHaveValue('test@example.com')
-
-    // const label = container.querySelector('label')
-    // expect(label).toHaveClass('translate-y-[10px]')
   })
 
   it('resets label position on blur when input is empty', () => {
@@ -48,9 +45,6 @@ describe('components/form/Input', () => {
     })
 
     expect(input).toHaveValue('')
-
-    // const label = container.querySelector('label')
-    // expect(label).toHaveClass('translate-y-[10px]')
   })
 
   it('applies disabled state', () => {

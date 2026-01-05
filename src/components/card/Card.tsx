@@ -7,7 +7,6 @@ import { cn } from '@/utils/tailwind'
 import { extractSlots } from '@/utils/slots'
 import { styles, textHeadingSizeMap, textSizeMap } from './styles'
 
-// Re-export for backward compatibility with stories
 export { textHeadingSizeMap, textSizeMap }
 
 type TextHeadingSizeMap = typeof textHeadingSizeMap
@@ -19,24 +18,29 @@ type TextSizes = 'description' | 'footerAction'
 type ExcludeVariants = 'titleSize' | 'descriptionSize' | 'footerActionSize'
 export interface CardProps
   extends
-    React.HTMLAttributes<HTMLDivElement>,
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>,
     Omit<VariantProps<typeof styles.card>, ExcludeVariants> {
-  title?: string
+  title?: React.ReactNode
   description?: string
   thumbnail?: StaticImageData
   thumbnailMeta?: string
   thumbnailSize?: Pick<StaticImageData, 'width' | 'height'>
-  link?: string
-  footerActionLabel?: string
+  link?: string | null
   metaItems?: string[]
   badge?: Pick<BadgeProps, 'size' | 'variant'> & {
     label: string
+    spacing?: 'xs' | 'sm' | 'md' | 'lg'
   }
   textSize?: Partial<{
     [key in TextSizes]: TextSizeKeys
   }> & {
     title: TextHeadingSizeKeys
   }
+  titleSpacing?: 'xs' | 'sm' | 'md' | 'lg'
+  contentSpacing?: 'xs' | 'sm' | 'md' | 'lg'
+  extended?: React.ReactNode
+  footer?: React.ReactNode
+  metaLinkLabel?: string
 }
 
 export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
@@ -44,13 +48,15 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
     {
       className,
       roundedSize = 'md',
-      padding = 'md',
+      padding = 'sm',
       shadow = 'none',
-      contentSpacing = 'sm',
+      titleSpacing = 'sm',
       paddingAxis = 'y',
+      contentSpacing = 'sm',
       title,
       textSize,
       description,
+      extended,
       thumbnail,
       thumbnailMeta,
       thumbnailSize,
@@ -58,7 +64,8 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
       badge,
       link,
       metaItems,
-      footerActionLabel,
+      footer,
+      metaLinkLabel,
       children,
       ...props
     },
@@ -68,12 +75,14 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
       Content: CardContentSlot as React.FC,
       Thumbnail: CardThumbnailSlot as React.FC,
     })
+
     const hasMetaItems = Boolean(metaItems?.length)
     const hasThumbnail = Boolean(slots.Thumbnail || thumbnail)
+
     const {
-      title: titleSize = 'lg',
+      title: titleSize = 'md',
       footerAction: footerActionSize = 'sm',
-      description: descriptionSize = 'md',
+      description: descriptionSize = 'sm',
     } = textSize ?? {}
 
     return (
@@ -115,26 +124,45 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
               hasThumbnail && styles.card({ padding, paddingAxis })
             )}
           >
-            <div className={styles.card({ contentSpacing })}>
+            <div
+              className={cn(
+                styles.contentInner,
+                styles.contentSpacingMap[
+                  contentSpacing as keyof typeof styles.contentSpacingMap
+                ]
+              )}
+            >
               {badge?.label && (
                 <Badge
                   size={badge.size}
                   variant={badge.variant ?? 'ghost'}
-                  className="p-0! text-ds-primary!"
+                  className={cn(
+                    styles.badgeInline,
+                    badge.variant === 'ghost' ? styles.badgeOverride : undefined
+                  )}
                 >
                   {badge.label}
                 </Badge>
               )}
 
               {(title || description) && (
-                <div className={styles.titleDescriptionContainer}>
-                  {title && (
-                    <h1
-                      className={cn(styles.card({ titleSize }), styles.title)}
-                    >
-                      {title}
-                    </h1>
+                <div
+                  className={cn(
+                    styles.titleSpacingMap[
+                      titleSpacing as keyof typeof styles.titleSpacingMap
+                    ]
                   )}
+                >
+                  {title &&
+                    (typeof title === 'string' ? (
+                      <h1
+                        className={cn(styles.card({ titleSize }), styles.title)}
+                      >
+                        {title}
+                      </h1>
+                    ) : (
+                      title
+                    ))}
 
                   {description && (
                     <p
@@ -148,16 +176,19 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                   )}
                 </div>
               )}
+
+              {extended && <div className={styles.extended}>{extended}</div>}
             </div>
 
-            {(hasMetaItems || footerActionLabel) && (
+            {(hasMetaItems || metaLinkLabel) && (
               <div className={styles.footerContainer}>
                 <div
                   className={cn(
-                    hasMetaItems &&
-                      footerActionLabel &&
-                      styles.footerActionWrapper,
-                    styles.card({ footerActionSize })
+                    styles.card({ footerActionSize }),
+                    styles.footerActionWrapper({
+                      footerActionSize,
+                      hasFooterAction: Boolean(metaLinkLabel && hasMetaItems),
+                    })
                   )}
                 >
                   {hasMetaItems && (
@@ -171,16 +202,18 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
                     </div>
                   )}
 
-                  {footerActionLabel && (
+                  {metaLinkLabel && (
                     <div className={styles.footerActionLabelWrapper}>
                       <p className={styles.footerActionLabel}>
-                        {footerActionLabel}
+                        {metaLinkLabel}
                       </p>
                     </div>
                   )}
                 </div>
               </div>
             )}
+
+            {footer && footer}
           </div>
         )}
       </div>

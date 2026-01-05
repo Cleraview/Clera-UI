@@ -1,16 +1,14 @@
 import { cva } from 'class-variance-authority'
 import {
   elementRadius,
-  elementPaddings,
   elementVariants,
 } from '@/components/_core/element-config'
 
 export const alertStyles = {
-  root: cva('relative flex items-center', {
+  root: cva('relative flex items-center p-space-sm', {
     variants: {
       variant: elementVariants,
       rounded: elementRadius,
-      size: elementPaddings,
       banner: {
         true: 'w-full flex items-center',
         false: '',
@@ -19,11 +17,16 @@ export const alertStyles = {
     defaultVariants: {
       variant: 'primary',
       rounded: 'md',
-      size: 'md',
       banner: false,
     },
+    compoundVariants: [
+      {
+        variant: ['primary', 'success', 'info', 'destructive'],
+        className: 'text-ds-inverse dark:text-ds-default',
+      },
+    ],
   }),
-  icon: 'h-6 mr-space-sm self-start flex items-center text-body-xl',
+  icon: 'h-6 mr-space-sm self-start flex items-center text-label-xl',
   content: 'flex-1 flex flex-col gap-space-xs',
   title: 'font-semibold',
   description: 'font-thin',

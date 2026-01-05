@@ -19,11 +19,13 @@ export const styles = {
     },
   }),
   input: {
-    wrapper: 'flex items-center border-b border-ds-default p-space-sm',
+    wrapper:
+      'flex items-center border-b border-ds-default py-space-sm px-space-md',
     icon: 'h-5 w-5 text-(--fill-ds-icon-subtle)',
     field: cn(
       'w-full bg-transparent placeholder:text-ds-subtlest',
       'ml-space-sm focus:outline-none focus:ring-0 border-none p-0',
+      'caret-(--fill-ds-icon-subtle) text-ds-default',
       elementTextSizes.md
     ),
   },
@@ -39,15 +41,15 @@ export const styles = {
   item: cva(
     [
       'relative flex cursor-pointer select-none items-center rounded-md text-ds-default outline-none transition-colors',
-      'data-[disabled="true"]:pointer-events-none data-[disabled="true"]:opacity-50',
       elementPaddings.md,
       elementTextSizes.md,
     ],
     {
       variants: {
         isSelected: {
-          true: 'bg-ds-primary-bold text-ds-inverse [&>svg]:text-(--fill-ds-icon-inverse)',
-          false: 'aria-selected:bg-ds-neutral-subtle-hovered',
+          true: 'bg-ds-primary-bold text-ds-inverse dark:text-ds-default [&>svg]:text-(--fill-ds-icon-inverse) dark:[&>svg]:text-(--fill-ds-icon-default)',
+          false:
+            'aria-selected:bg-ds-neutral-subtle-hovered dark:aria-selected:bg-ds-neutral-hovered',
         },
       },
       defaultVariants: {
@@ -58,12 +60,12 @@ export const styles = {
   menu: {
     list: 'bg-ds-elevation-surface',
     itemIcon: cn(
-      'mr-space-sm text-(--fill-ds-icon-accent-gray)',
+      'mr-space-sm text-(--fill-ds-icon-accent-gray) dark:text-(--fill-ds-icon-default)',
       elementTextSizes.md
     ),
     itemContent: 'ml-auto flex items-center gap-space-sm',
     shortcut:
-      'h-5 select-none items-center gap-1 rounded bg-ds-inverse-subtle px-space-xs font-mono text-label-xs font-medium text-ds-default sm:inline-flex',
+      'h-5 select-none items-center gap-1 rounded bg-ds-inverse-subtle px-space-xs font-mono text-label-xs text-ds-default sm:inline-flex',
     checkIcon: elementIconSizes.md,
   },
 }

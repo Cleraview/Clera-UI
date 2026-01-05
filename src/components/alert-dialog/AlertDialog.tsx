@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { FiX } from 'react-icons/fi'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 import { Button, ButtonProps } from '@/components/button'
 import { alertDialogStyles } from './styles'
 
@@ -73,7 +73,7 @@ const BaseAlertDialog: React.FC<AlertDialogProps> &
                       disabled: loading,
                     })}
                   >
-                    <FiX className={alertDialogStyles.closeIcon} />
+                    {FiX && <FiX className={alertDialogStyles.closeIcon} />}
                   </button>
                 </AlertDialogPrimitive.Cancel>
               )}
@@ -162,7 +162,6 @@ const AlertDialog: React.FC<AlertDialogWrapperProps> = ({
       >
         <BaseAlertDialog.Footer>
           <Button
-            // size="sm"
             variant={cancelButtonVariant}
             disabled={loading}
             onClick={() => setOpen(false)}
@@ -170,7 +169,6 @@ const AlertDialog: React.FC<AlertDialogWrapperProps> = ({
             {cancelText}
           </Button>
           <Button
-            // size="sm"
             variant={okButtonVariant}
             loading={loading}
             onClick={handleConfirm}

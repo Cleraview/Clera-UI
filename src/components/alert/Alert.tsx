@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { type VariantProps } from 'class-variance-authority'
 import { AiOutlineClose } from 'react-icons/ai'
 import { type ElementVariant } from '@/components/_core/element-config'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 import { alertStyles } from './styles'
 
 export interface AlertProps extends VariantProps<typeof alertStyles.root> {
@@ -27,7 +27,6 @@ export const Alert: React.FC<AlertProps> = ({
   action,
   variant = 'primary',
   rounded,
-  size = 'md',
   banner = false,
   closable = false,
   onClose,
@@ -51,10 +50,7 @@ export const Alert: React.FC<AlertProps> = ({
   return (
     <div
       role="alert"
-      className={cn(
-        alertStyles.root({ variant, rounded, size, banner }),
-        className
-      )}
+      className={cn(alertStyles.root({ variant, rounded, banner }), className)}
     >
       {icon && <div className={alertStyles.icon}>{icon}</div>}
 
@@ -74,7 +70,7 @@ export const Alert: React.FC<AlertProps> = ({
           })}
           onClick={handleClose}
         >
-          <AiOutlineClose />
+          {AiOutlineClose && <AiOutlineClose />}
         </button>
       )}
     </div>

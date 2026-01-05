@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useState } from 'react'
 import { FiCheck } from 'react-icons/fi'
+import { styles } from './styles'
 import { type FieldSize } from '@/components/_core/field-config'
 import { BaseComboBox, ComboBoxItem, ComboBoxEmpty } from './BaseComboBox'
 
@@ -49,7 +50,6 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
     },
     ref
   ) => {
-    // ... State logic remains same ...
     const [open, setOpen] = useState(false)
     const [search, setSearch] = useState('')
 
@@ -100,12 +100,9 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
             inputSize={inputSize}
             isSelected={option.value === activeValue}
           >
-            <span className="truncate flex-1">{option.label}</span>
-            {option.value === activeValue && (
-              <FiCheck
-                className="w-4 h-4 ml-2 text-(--fill-ds-icon-primary)"
-                aria-hidden="true"
-              />
+            <span className={styles.optionLabel}>{option.label}</span>
+            {option.value === activeValue && FiCheck && (
+              <FiCheck className={styles.optionCheck} aria-hidden="true" />
             )}
           </ComboBoxItem>
         ))}

@@ -1,11 +1,11 @@
 import { cva } from 'class-variance-authority'
 import {
   elementRadius,
-  elementPaddings,
+  elementBadgePaddings,
   elementVariants,
   elementTextSizes,
 } from '@/components/_core/element-config'
-import { composeStyles } from '@/utils/tailwind'
+import { composeStyles } from '@/utils/tailwind/tailwind'
 
 export const styles = {
   badge: cva(
@@ -14,12 +14,12 @@ export const styles = {
       variants: {
         variant: elementVariants,
         rounded: elementRadius,
-        size: composeStyles(elementPaddings, elementTextSizes),
+        size: composeStyles(elementBadgePaddings, elementTextSizes),
       },
       defaultVariants: {
         variant: 'primary',
-        size: 'md',
-        rounded: 'md',
+        size: 'xs',
+        rounded: 'sm',
       },
       compoundVariants: [
         {
@@ -35,7 +35,15 @@ export const styles = {
           ],
           className: 'border-transparent',
         },
+
+        {
+          variant: ['primary', 'success', 'info', 'destructive'],
+          className: 'text-ds-inverse dark:text-ds-default',
+        },
       ],
     }
   ),
+  reverse: 'flex-row-reverse',
 }
+
+export default styles

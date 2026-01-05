@@ -1,34 +1,35 @@
 {
   "typography": {
     "display": {
-      "2xl": { "$value": "text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none" },
-      "xl": { "$value": "text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none" },
-      "lg": { "$value": "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]" },
-      "md": { "$value": "text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight" }
+      "2xl": { "$value": "text-5xl md:text-7xl font-black tracking-tighter leading-none" },
+      "xl": { "$value": "text-4xl md:text-6xl font-extrabold tracking-tight leading-none" },
+      "lg": { "$value": "text-3xl md:text-5xl font-bold tracking-tight leading-[1.1]" },
+      "md": { "$value": "text-2xl md:text-4xl font-bold tracking-tight leading-tight" }
     },
     "heading": {
-      "3xl": { "$value": "text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-snug" },
-      "2xl": { "$value": "text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-snug" },
-      "xl": { "$value": "text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight leading-snug" },
-      "lg": { "$value": "text-lg sm:text-xl md:text-2xl font-semibold leading-snug" },
-      "md": { "$value": "text-base sm:text-lg md:text-xl font-semibold leading-normal" },
-      "sm": { "$value": "text-sm sm:text-base font-semibold leading-normal" }
+      "4xl": { "$value": "text-3xl md:text-5xl font-bold tracking-tight leading-snug" },
+      "3xl": { "$value": "text-2xl md:text-4xl font-bold tracking-tight leading-snug" },
+      "2xl": { "$value": "text-xl md:text-3xl font-bold tracking-tight leading-snug" },
+      "xl": { "$value": "text-lg md:text-2xl font-semibold tracking-tight leading-snug" },
+      "lg": { "$value": "text-base md:text-xl font-semibold leading-snug" },
+      "md": { "$value": "text-base md:text-lg font-semibold leading-normal" },
+      "sm": { "$value": "text-sm md:text-base font-semibold leading-normal" }
     },
     "body": {
-      "2xl": { "$value": "text-2xl leading-relaxed" },
-      "xl": { "$value": "text-xl leading-relaxed" },
-      "lg": { "$value": "text-lg leading-relaxed" },
-      "md": { "$value": "text-base leading-relaxed" },
-      "sm": { "$value": "text-sm leading-relaxed" },
-      "xs": { "$value": "text-xs leading-normal" }
+      "2xl": { "$value": "text-2xl md:text-2xl leading-relaxed" },
+      "xl": { "$value": "text-xl md:text-xl leading-relaxed" },
+      "lg": { "$value": "text-lg md:text-lg leading-relaxed" },
+      "md": { "$value": "text-base md:text-base leading-relaxed" },
+      "sm": { "$value": "text-sm md:text-sm leading-relaxed" },
+      "xs": { "$value": "text-xs md:text-xs leading-normal" }
     },
     "label": {
-      "xl": { "$value": "text-xl leading-7 tracking-tight" },
-      "lg": { "$value": "text-lg leading-6 tracking-tight" },
-      "md": { "$value": "text-base leading-5" },
-      "sm": { "$value": "text-sm leading-4" },
-      "xs": { "$value": "text-xs leading-3" },
-      "xxs": { "$value": "text-[10px] leading-[10px]" }
+      "xl": { "$value": "text-xl md:text-xl leading-7 tracking-tight" },
+      "lg": { "$value": "text-lg md:text-lg leading-6 tracking-tight" },
+      "md": { "$value": "text-base md:text-base leading-5" },
+      "sm": { "$value": "text-sm md:text-sm leading-4" },
+      "xs": { "$value": "text-xs md:text-xs leading-3" },
+      "xxs": { "$value": "text-[10px] md:text-[10px] leading-[10px]" }
     },
     "helper": {
       "text": { "$value": "text-xs text-ds-subtle leading-normal" },

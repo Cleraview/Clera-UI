@@ -4,10 +4,11 @@ import * as DropdownStories from "./DropdownMenu.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Dropdown Menu" of={DropdownStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Dropdown Menu
 
@@ -117,41 +118,77 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           import { FaCog, FaGlobe, FaLock } from 'react-icons/fa'
 
           const DrillDownExample = () => {
-            return (
-              <Dropdown
-                width={280}
-                trigger={<Button variant="primary">Open Settings</Button>}
-                items={[
-                  { type: 'label', label: 'Settings' },
+            const [open, setOpen] = useState(false)
+            const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
+
+            const items: DropdownItemDef[] = [
+              { type: 'label', label: 'Settings' },
+              { type: 'separator' },
+              {
+                label: 'General',
+                icon: FaCog,
+                children: [
+                  { type: 'label', label: 'General Settings' },
                   { type: 'separator' },
+                  { label: 'Display Name', value: 'displayName' },
+                  { label: 'Email Address', value: 'emailAddress' },
                   {
-                    label: 'General',
-                    icon: FaCog,
+                    label: 'Language',
+                    icon: FaGlobe,
                     children: [
-                      { type: 'label', label: 'General Settings' },
-                      { type: 'separator' },
-                      { label: 'Display Name' },
-                      { label: 'Email Address' },
-                      {
-                        label: 'Language',
-                        icon: FaGlobe,
-                        children: [
-                          { label: 'English' },
-                          { label: 'Spanish' },
-                          { label: 'French' },
-                        ],
-                      },
+                      { label: 'English', value: 'lang-en' },
+                      { label: 'Spanish', value: 'lang-es' },
+                      { label: 'French', value: 'lang-fr' },
+                      { label: 'German', value: 'lang-de' },
                     ],
                   },
+                ],
+              },
+              {
+                label: 'Privacy & Security',
+                icon: FaLock,
+                children: [
                   {
-                    label: 'Privacy',
-                    icon: FaLock,
+                    label: 'Two-Factor Auth',
+                    icon: FaShieldAlt,
                     children: [
-                      { label: 'Change Password' },
-                      { label: 'Active Sessions' },
-                    ]
-                  }
-                ]}
+                      { label: 'Enable via SMS', value: 'tfa-sms' },
+                      { label: 'Enable via App', value: 'tfa-app' },
+                    ],
+                  },
+                  { label: 'Change Password', value: 'change-password' },
+                  { label: 'Active Sessions', value: 'active-sessions' },
+                ],
+              },
+              {
+                label: 'Appearance',
+                icon: FaPalette,
+                children: [
+                  { label: 'Light Mode', value: 'appearance-light' },
+                  { label: 'Dark Mode', value: 'appearance-dark' },
+                  { label: 'System Default', value: 'appearance-system' },
+                ],
+              },
+              { type: 'separator' },
+              {
+                label: 'Log out',
+                icon: FaSignOutAlt,
+                value: 'logout',
+                className:
+                  'text-ds-destructive hover:text-ds-destructive hover:bg-ds-destructive! focus:bg-ds-destructive! focus:text-ds-destructive',
+              },
+            ]
+
+            return (
+              <Dropdown
+                open={open}
+                onOpenChange={setOpen}
+                onSelect={(value) => {
+                  setSelectedLabel(value)
+                }}
+                width={280}
+                items={items}
+                trigger={<Button variant="primary">Open Settings</Button>}
               />
             )
           }
@@ -162,13 +199,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     </Canvas>
 
     <br />
+    <br />
 
-    ### **Checkboxes & Selection**
+    ### **Controls (Controlled example)**
 
-    Use the `checkbox` or `radio` type to create stateful options within the menu.
+    Example showing centralized handling via `onGroupSelect` and `onSelect`. Each checkbox has a `value` and `groupId` so the parent `Dropdown` can toggle state for a whole group.
     <Canvas>
       <Canvas.Story>
-        <Story of={DropdownStories.Checkboxes} />
+        <Story of={DropdownStories.Controls} />
       </Canvas.Story>
 
       <Canvas.Source>
@@ -177,33 +215,67 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           import { Dropdown } from '@clera/ui'
           import { Button } from '@clera/ui/button'
 
-          const CheckboxExample = () => {
-            const [checked, setChecked] = useState(true)
+          const ControlsExample = () => {
+            const [statusBar, setStatusBar] = useState(true)
+            const [fullPath, setFullPath] = useState(false)
+            const [notifEmail, setNotifEmail] = useState(true)
+            const [notifPush, setNotifPush] = useState(false)
+            const [notifSMS, setNotifSMS] = useState(true)
+            const [layoutGrid, setLayoutGrid] = useState(true)
+            const [layoutRulers, setLayoutRulers] = useState(false)
+            const [layoutGuides, setLayoutGuides] = useState(true)
+            const [theme, setTheme] = useState('light')
+
+            const items = [
+              { type: 'label', label: 'General' },
+              { type: 'checkbox', label: 'Show Status Bar', value: 'statusBar', checked: statusBar, groupId: 'general' },
+              { type: 'checkbox', label: 'Show Full Path', value: 'fullPath', checked: fullPath, disabled: true, groupId: 'general' },
+              { type: 'separator' },
+              { type: 'label', label: 'Notifications' },
+              { type: 'checkbox', label: 'Email', value: 'email', checked: notifEmail, groupId: 'notifications' },
+              { type: 'checkbox', label: 'Push', value: 'push', checked: notifPush, groupId: 'notifications' },
+              { type: 'checkbox', label: 'SMS', value: 'sms', checked: notifSMS, groupId: 'notifications' },
+              { type: 'separator' },
+              { type: 'label', label: 'Layout' },
+              { type: 'checkbox', label: 'Grid', value: 'grid', checked: layoutGrid, groupId: 'layout' },
+              { type: 'checkbox', label: 'Rulers', value: 'rulers', checked: layoutRulers, groupId: 'layout' },
+              { type: 'checkbox', label: 'Guides', value: 'guides', checked: layoutGuides, groupId: 'layout' },
+              { type: 'separator' },
+              { type: 'label', label: 'Theme' },
+              { type: 'radio', label: 'Light', value: 'light', checked: theme === 'light' },
+              { type: 'radio', label: 'Dark', value: 'dark', checked: theme === 'dark' },
+              { type: 'radio', label: 'System', value: 'system', checked: theme === 'system' },
+            ]
 
             return (
               <Dropdown
-                trigger={<Button variant="outlinePrimary">View Options</Button>}
-                items={[
-                  { type: 'label', label: 'Toggle Features' },
-                  { type: 'separator' },
-                  {
-                    type: 'checkbox',
-                    label: 'Show Status Bar',
-                    checked: checked,
-                    onCheckedChange: setChecked,
-                  },
-                  {
-                    type: 'checkbox',
-                    label: 'Show Full Path',
-                    checked: false,
-                    disabled: true,
-                  },
-                ]}
+                trigger={<Button variant="outlinePrimary">Controls</Button>}
+                items={items}
+                closeOnSelect={false}
+                onGroupSelect={(groupId, value) => {
+                  switch (groupId) {
+                    case 'general':
+                      if (value === 'statusBar') setStatusBar(prevState => !prevState)
+                      if (value === 'fullPath') setFullPath(prevState => !prevState)
+                      break
+                    case 'notifications':
+                      if (value === 'email') setNotifEmail(prevState => !prevState)
+                      if (value === 'push') setNotifPush(prevState => !prevState)
+                      if (value === 'sms') setNotifSMS(prevState => !prevState)
+                      break
+                    case 'layout':
+                      if (value === 'grid') setLayoutGrid(prevState => !prevState)
+                      if (value === 'rulers') setLayoutRulers(prevState => !prevState)
+                      if (value === 'guides') setLayoutGuides(prevState => !prevState)
+                      break
+                  }
+                }}
+                onSelect={(value) => setTheme(value)}
               />
             )
           }
 
-          export default CheckboxExample
+          export default ControlsExample
         `} />
       </Canvas.Source>
     </Canvas>
@@ -456,4 +528,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

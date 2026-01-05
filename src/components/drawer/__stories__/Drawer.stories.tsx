@@ -77,11 +77,14 @@ export default meta
 type Story = StoryObj<typeof Drawer>
 
 export const Default: Story = {
+  parameters: {
+    layout: 'centered',
+  },
   render: args => {
     const [open, setOpen] = useState(args.open)
 
     return (
-      <div>
+      <div className="flex justify-center items-center">
         <Button onClick={() => setOpen(true)}>Open Drawer</Button>
 
         <Drawer

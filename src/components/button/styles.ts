@@ -12,41 +12,45 @@ export const styles = {
       variants: {
         variant: {
           primary:
-            'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered text-ds-inverse',
+            'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered active:bg-ds-primary-bold-pressed',
           outlinePrimary:
-            'bg-transparent hover:bg-ds-primary border-ds-primary text-ds-primary',
+            'bg-transparent hover:bg-ds-primary active:bg-ds-primary-pressed/40 border-ds-primary text-ds-primary',
 
           secondary:
-            'bg-ds-neutral-bold hover:bg-ds-neutral-bold-hovered text-ds-inverse',
+            'bg-ds-neutral-bold hover:bg-ds-neutral-bold-hovered active:bg-ds-neutral-bold-pressed text-ds-inverse',
           outlineSecondary:
-            'bg-transparent hover:bg-ds-neutral border-ds-bold text-ds-default',
+            'bg-transparent hover:bg-ds-neutral active:bg-ds-neutral/40 border-ds-bold text-ds-default',
 
           success:
-            'bg-ds-success-bold hover:bg-ds-success-bold-hovered text-ds-inverse',
+            'bg-ds-success-bold hover:bg-ds-success-bold-hovered active:bg-ds-success-bold-pressed',
           outlineSuccess:
-            'bg-transparent hover:bg-ds-success border-ds-success text-ds-success',
+            'bg-transparent hover:bg-ds-success active:bg-ds-success/40 border-ds-success text-ds-success',
 
-          info: 'bg-ds-info-bold hover:bg-ds-info-bold-hovered text-ds-inverse',
+          info: 'bg-ds-info-bold hover:bg-ds-info-bold-hovered active:bg-ds-info-bold-pressed',
           outlineInfo:
-            'bg-transparent hover:bg-ds-info border-ds-info text-ds-info',
+            'bg-transparent hover:bg-ds-info active:bg-ds-info/40 border-ds-info text-ds-info',
 
           warning:
-            'bg-ds-warning-bold hover:bg-ds-warning-bold-hovered text-ds-warning-inverse',
+            'bg-ds-warning-bold hover:bg-ds-warning-bold-hovered active:bg-ds-warning-bold-pressed text-ds-warning-inverse',
           outlineWarning:
-            'bg-transparent hover:bg-ds-warning border-ds-warning text-ds-warning',
+            'bg-transparent hover:bg-ds-warning active:bg-ds-warning/40 border-ds-warning text-ds-warning',
 
           destructive:
-            'bg-ds-destructive-bold hover:bg-ds-destructive-bold-hovered text-ds-inverse',
+            'bg-ds-destructive-bold hover:bg-ds-destructive-bold-hovered active:bg-ds-destructive-bold-pressed',
           outlineDestructive:
-            'bg-transparent hover:bg-ds-destructive border-ds-destructive text-ds-destructive',
+            'bg-transparent hover:bg-ds-destructive active:bg-ds-destructive/40 border-ds-destructive text-ds-destructive',
 
-          light: 'bg-ds-neutral hover:bg-ds-neutral-hovered text-ds-default',
+          light:
+            'bg-ds-neutral hover:bg-ds-neutral-hovered active:bg-ds-neutral-hovered/60 text-ds-default',
           outlineLight:
-            'bg-transparent hover:bg-ds-neutral border-ds-default text-ds-subtle',
+            'bg-transparent hover:bg-ds-neutral active:bg-ds-neutral/40 border-ds-default text-ds-subtle',
 
           ghost: 'text-ds-default bg-transparent',
         },
-        size: composeStyles(elementPaddings, elementTextSizes),
+        size: composeStyles(elementPaddings, elementTextSizes) as Record<
+          string,
+          string
+        >,
         rounded: {
           none: 'rounded-none',
           sm: 'rounded-sm',
@@ -65,6 +69,11 @@ export const styles = {
         { disabled: false, rounded: 'none', className: 'hover:rounded-md' },
         { disabled: false, rounded: 'sm', className: 'hover:rounded-lg' },
         { disabled: false, rounded: 'md', className: 'hover:rounded-xl' },
+
+        {
+          variant: ['primary', 'success', 'info', 'destructive'],
+          className: 'text-ds-inverse dark:text-ds-default',
+        },
 
         {
           variant: [
@@ -93,4 +102,7 @@ export const styles = {
   loadingSpinner:
     'w-4 h-4 rounded-full inline-block border-t-[2px] border-r-[2px] border-r-transparent box-border animate-spin',
   contentWrapper: 'flex gap-space-sm items-center justify-center',
+  contentHidden: 'invisible',
+  contentReverse: 'flex-row-reverse',
+  iconSpan: 'contents self-stretch',
 }

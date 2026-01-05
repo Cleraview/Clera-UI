@@ -193,12 +193,12 @@ function generateUtilityCss(
     
     let className = rawName
     if (override.prefix) {
-       if (!rawName.startsWith(override.prefix)) {
-         const shouldExclude = override.excludePrefixFor?.some(ex => rawName.startsWith(ex))
-         if (!shouldExclude) {
+      if (!rawName.startsWith(override.prefix)) {
+        const shouldExclude = override.excludePrefixFor?.some(ex => rawName.startsWith(ex))
+        if (!shouldExclude) {
             className = `${override.prefix}${rawName}`
-         }
-       }
+        }
+      }
     }
 
     if (!utilities[className]) {
@@ -208,11 +208,10 @@ function generateUtilityCss(
     const finalProp = propIndex !== -1 ? cssProp : '@apply'
 
     if (typeof def.$value === 'string' || typeof def.$value === 'number') {
-       utilities[className][finalProp] = String(def.$value)
+      utilities[className][finalProp] = String(def.$value)
     }
   }
 
-  // --- CHANGED: Removed @layer utilities wrapper and used @utility syntax ---
   for (const [className, styles] of Object.entries(utilities)) {
     lines.push(`@utility ${className} {`)
     for (const [prop, val] of Object.entries(styles)) {
@@ -224,7 +223,6 @@ function generateUtilityCss(
     }
     lines.push(`}`)
   }
-  // -------------------------------------------------------------------------
 
   return lines
 }
@@ -312,9 +310,9 @@ async function build() {
           const overridePath = path.resolve(override.outPath)
           const ext = path.extname(overridePath)
           if (!ext) {
-             const prefix = opts?.prefix ?? ''
-             const suffix = opts?.suffix ?? '.css'
-             return path.join(overridePath, `${prefix}${tokenName}${suffix}`)
+            const prefix = opts?.prefix ?? ''
+            const suffix = opts?.suffix ?? '.css'
+            return path.join(overridePath, `${prefix}${tokenName}${suffix}`)
           }
           return overridePath
         }

@@ -19,15 +19,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: [
-        'primary',
-        'outlinePrimary',
-        'secondary',
-        'outlineSecondary',
-        'destructive',
-        'outlineDestructive',
-        'ghost',
-      ],
+      options: elementVariantKeys,
       description:
         'Visual style of the button, reflecting different semantic purposes (e.g., primary for main actions, destructive for dangerous actions).',
       table: {
@@ -231,7 +223,7 @@ export const Loading: Story = {
 
         <div className="self-start">
           <Button variant="primary" loading={isLoading}>
-            Outline Primary
+            Change State
           </Button>
         </div>
       </div>

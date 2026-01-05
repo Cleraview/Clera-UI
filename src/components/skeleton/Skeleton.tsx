@@ -1,22 +1,8 @@
 'use client'
 
-import { cva, type VariantProps } from 'class-variance-authority'
+import { type VariantProps } from 'class-variance-authority'
 import { cn } from '@/utils/tailwind'
-
-const skeletonVariants = cva('animate-pulse bg-ds-skeleton shrink-0', {
-  variants: {
-    rounded: {
-      none: 'rounded-none',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      full: 'rounded-full',
-    },
-  },
-  defaultVariants: {
-    rounded: 'md',
-  },
-})
+import { skeletonVariants } from './styles'
 
 export interface SkeletonProps
   extends

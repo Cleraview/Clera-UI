@@ -140,7 +140,6 @@ export const Playground: Story = {
         selected={selected}
         onSelect={val => {
           setSelected(val as Date | Date[] | DateRange | undefined)
-          // Also call the storybook action
           args.onSelect?.(val)
         }}
       />
@@ -232,8 +231,14 @@ export const ControlledExample: Story = {
       <div className="flex flex-col items-center gap-space-md py-space-sm">
         <div className="flex gap-space-sm">
           <div className="flex gap-space-sm">
-            <Button onClick={() => setDate(new Date('2025-10-19T12:00:00'))}>
-              Set Date
+            <Button onClick={() => setDate(new Date())}>
+              Set Current Date
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setDate(new Date('2025-10-19T12:00:00'))}
+            >
+              Set (19 Oct 2025)
             </Button>
             <Button variant="outlinePrimary" onClick={() => setDate(undefined)}>
               Clear
@@ -243,6 +248,7 @@ export const ControlledExample: Story = {
             {...args}
             selected={date}
             onSelect={val => setDate(val as Date | undefined)}
+            formatDate="dd, MMM yyyy"
           />
         </div>
         <p className="text-body-md text-ds-subtle">

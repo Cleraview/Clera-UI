@@ -14,22 +14,30 @@ import {
   UI,
 } from 'react-day-picker'
 import * as Popover from '@radix-ui/react-popover'
-import {
-  isSameDay,
-  isSunday,
-  format as formatDateFns,
-  isValid as isValidDate,
-} from 'date-fns'
+import { isSameDay, isSunday, format as formatDateFns } from 'date-fns'
 import { GoChevronRight, GoChevronLeft, GoChevronDown } from 'react-icons/go'
 import { FiCalendar } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 import { FormInputWrapper } from '@/components/form/FormInputWrapper'
+import { type FieldSize } from '@/components/_core/field-config'
 import {
-  type FieldSize,
-  fieldPaddings,
-  floatingLabelBaseText,
-} from '@/components/_core/field-config'
-import { safeParse } from './_utils/parse'
+  triggerWrapper,
+  inputClass,
+  prevButton,
+  nextButton,
+  dropdownRoot,
+  dropdownSelect,
+  weekday as weekdayClass,
+  iconClass,
+  monthCaption,
+  dropdownNav,
+  chevronIcon,
+  selectBase,
+  optionClass,
+  getClassNamesCommon,
+  content as contentClass,
+} from './styles'
+import { parseSelected } from './_utils/parse'
 import 'react-day-picker/dist/style.css'
 
 type CalendarMode = 'single' | 'range' | 'multiple'
@@ -72,32 +80,18 @@ const componentsCommon: Partial<CustomComponents> = {
   }: {
     className?: string
     children?: React.ReactNode
-  }) => (
-    <div className={cn('flex items-center justify-between', className)}>
-      {children}
-    </div>
-  ),
+  }) => <div className={cn(monthCaption(className))}>{children}</div>,
   DropdownNav: ({ children }: { children?: React.ReactNode }) => (
-    <div className="flex items-center gap-2">{children}</div>
+    <div className={dropdownNav()}>{children}</div>
   ),
   PreviousMonthButton: (props: React.HTMLAttributes<HTMLButtonElement>) => (
-    <button
-      {...props}
-      className={cn(
-        'rdp-button_previous absolute p-space-xs ml-space-xs! rounded-full focus:bg-ds-input-hovered focus-visible:outline-none transition-colors cursor-pointer'
-      )}
-    >
-      <GoChevronLeft className="h-6 w-6 text-(--fill-ds-icon-subtle)" />
+    <button {...props} className={cn(prevButton)}>
+      <GoChevronLeft className={chevronIcon} />
     </button>
   ),
   NextMonthButton: (props: React.HTMLAttributes<HTMLButtonElement>) => (
-    <button
-      {...props}
-      className={cn(
-        'rdp-button_next absolute p-space-xs mr-space-xs! rounded-full focus-visible:outline-none transition-colors cursor-pointer'
-      )}
-    >
-      <GoChevronRight className="h-6 w-6 text-(--fill-ds-icon-subtle)" />
+    <button {...props} className={cn(nextButton)}>
+      <GoChevronRight className={chevronIcon} />
     </button>
   ),
   Dropdown: (props: {
@@ -106,22 +100,18 @@ const componentsCommon: Partial<CustomComponents> = {
     classNames: ClassNames
     [key: string]: unknown
   }) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { options, className, components, classNames, ...selectProps } = props
+    const cnMap = classNames as Record<string, string> | undefined
+    const rawDropdown = cnMap?.[UI.DropdownRoot]
+    const dropdownClass =
+      typeof rawDropdown === 'string' ? rawDropdown : undefined
+    const safeClassName = typeof className === 'string' ? className : undefined
     return (
       <div
         data-disabled={selectProps.disabled}
-        className={cn(
-          classNames?.[UI.DropdownRoot],
-          'relative border border-ds-input rounded-md overflow-hidden'
-        )}
+        className={cn(dropdownClass, dropdownRoot(safeClassName))}
       >
-        <components.Select
-          className={cn(
-            'py-space-xs pl-space-sm pr-space-lg appearance-none hover:bg-ds-neutral-subtle-hovered transition-all duration-200'
-          )}
-          {...selectProps}
-        >
+        <components.Select className={cn(dropdownSelect)} {...selectProps}>
           {options?.map(
             ({ value, label, disabled: optDisabled }: DropdownOption) => (
               <components.Option
@@ -135,7 +125,7 @@ const componentsCommon: Partial<CustomComponents> = {
           )}
         </components.Select>
         <span className="absolute inset-y-0 right-1 my-auto flex items-center pointer-events-none">
-          <GoChevronDown />
+          <GoChevronDown className={chevronIcon} />
         </span>
       </div>
     )
@@ -144,60 +134,19 @@ const componentsCommon: Partial<CustomComponents> = {
     className,
     ...props
   }: React.SelectHTMLAttributes<HTMLSelectElement>) => (
-    <select
-      {...props}
-      className={cn(
-        'bg-transparent text-body-sm focus:outline-none cursor-pointer',
-        className
-      )}
-    />
+    <select {...props} className={cn(selectBase(className))} />
   ),
   Option: (props: React.OptionHTMLAttributes<HTMLOptionElement>) => (
-    <option {...props} className="bg-ds-default" />
+    <option {...props} className={optionClass} />
   ),
   Weekday: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => {
     const isSun = props['aria-label'] === 'Sunday'
-    return (
-      <th
-        {...props}
-        className={cn(
-          'text-center font-medium text-body-sm',
-          isSun ? 'text-ds-destructive' : 'text-ds-subtle'
-        )}
-      />
-    )
+    return <th {...props} className={weekdayClass(isSun)} />
   },
 }
 
-const classNamesCommon = (
-  mode: string,
-  isSameDayInRange?: boolean
-): Partial<ClassNames> => ({
-  chevron: 'hover:bg-ds-input-hovered transition',
-  outside: 'text-ds-subtlest/20 font-thin',
-  disabled:
-    'hover:bg-transparent text-ds-subtle/30! [&>button]:cursor-not-allowed!',
-  day: cn(
-    'h-9 w-9 text-body-sm transition font-semibold',
-    'hover:bg-ds-input-hovered',
-    // "data-[outside=true]:hover:bg-transparent data-[outside=true]:cursor-not-allowed",
-    isSameDayInRange ? 'rounded-md!' : 'rounded-md'
-  ),
-  today: 'text-ds-accent-violet font-bold',
-  month_grid: cn(
-    'border-separate',
-    mode === 'multiple' ? 'border-spacing-1' : 'border-spacing-y-1'
-  ),
-  range_start:
-    'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered! text-ds-inverse rounded-tr-none rounded-br-none',
-  range_middle: 'bg-ds-primary rounded-none',
-  range_end:
-    'bg-ds-primary-bold hover:bg-ds-primary-bold-hovered! text-ds-inverse rounded-tl-none rounded-bl-none',
-  selected: cn(
-    'bg-ds-primary hover:bg-ds-primary/90 font-semibold',
-    mode === 'single' && 'text-ds-accent-violet'
-  ),
-})
+const classNamesCommon = (mode: string, isSameDayInRange?: boolean) =>
+  getClassNamesCommon(mode, isSameDayInRange)
 
 const Calendar: React.FC<CalendarProps> = ({
   label,
@@ -218,51 +167,25 @@ const Calendar: React.FC<CalendarProps> = ({
   const [isSameDayInRange, setSameDayInRange] = useState(false)
   const [filled, setFilled] = useState(false)
 
-  const parsedValue = useMemo(() => {
-    if (!selected) return undefined
+  const parsedValue = useMemo(
+    () => parseSelected(selected, mode, formatDate),
+    [selected, mode, formatDate]
+  )
 
-    if (mode === 'single') {
-      if (typeof selected === 'string') {
-        return safeParse(selected, formatDate)
-      }
-      if (selected instanceof Date) return selected
-      return undefined
-    }
-
-    if (mode === 'multiple') {
-      if (Array.isArray(selected)) {
-        const arr = selected.map(s =>
-          typeof s === 'string' ? safeParse(s, formatDate) : s
-        ) as Date[]
-        return arr?.length ? arr.filter(isValidDate) : undefined
-      }
-
-      if (selected instanceof Date) return [selected]
-      return undefined
-    }
-
+  const displayMonth = useMemo(() => {
+    if (!parsedValue) return undefined
+    if (mode === 'single' && parsedValue instanceof Date) return parsedValue
+    if (mode === 'multiple' && Array.isArray(parsedValue)) return parsedValue[0]
     if (
-      typeof selected === 'object' &&
-      selected !== null &&
-      ('from' in (selected as DateRange) || 'to' in (selected as DateRange))
+      mode === 'range' &&
+      typeof parsedValue === 'object' &&
+      parsedValue !== null
     ) {
-      const sel = selected as DateRange
-      const fromRaw = sel.from
-      const toRaw = sel.to
-      const from =
-        typeof fromRaw === 'string'
-          ? safeParse(fromRaw, formatDate)
-          : (fromRaw as Date | undefined)
-      const to =
-        typeof toRaw === 'string'
-          ? safeParse(toRaw, formatDate)
-          : (toRaw as Date | undefined)
-
-      return from || to ? ({ from, to } as DateRange) : undefined
+      const pr = parsedValue as DateRange
+      return pr.from ?? pr.to ?? undefined
     }
-
     return undefined
-  }, [selected, mode, formatDate])
+  }, [parsedValue, mode])
 
   const displayValue = useMemo(() => {
     if (!selected && !parsedValue) return ''
@@ -384,30 +307,21 @@ const Calendar: React.FC<CalendarProps> = ({
         onOpenChange={handleOpenChange}
       >
         <Popover.Trigger asChild>
-          <div className="relative">
+          <div className={triggerWrapper}>
             <input
-              className={cn(
-                'peer w-full pr-space-lg! placeholder-transparent focus:outline-none cursor-pointer',
-                fieldPaddings[inputSize],
-                floatingLabelBaseText[inputSize],
-                disabled ? 'text-ds-subtlest' : 'text-ds-default',
-                mode === 'multiple' && 'truncate max-w-[180px]'
-              )}
+              className={inputClass(inputSize, disabled, mode)}
               type="text"
               value={displayValue}
               disabled={disabled}
               readOnly
             />
-            <FiCalendar className="h-4 w-4 absolute inset-y-0 right-3 my-auto flex-shrink-0 opacity-70 pointer-events-none" />
+            {FiCalendar && <FiCalendar className={iconClass} />}
           </div>
         </Popover.Trigger>
 
         <Popover.Portal>
           <Popover.Content
-            className={cn(
-              'z-[9999] bg-ds-elevation-surface p-space-sm rounded-xl shadow-2xl border border-ds-default',
-              className
-            )}
+            className={contentClass(className)}
             side="bottom"
             align="center"
             sideOffset={8}
@@ -417,6 +331,7 @@ const Calendar: React.FC<CalendarProps> = ({
             {mode === 'single' && (
               <DayPicker
                 {...(merged as PropsSingle)}
+                month={displayMonth}
                 selected={parsedValue as Date | undefined}
                 onSelect={(v: Date | undefined) => handleSelectGenericSingle(v)}
                 components={componentsCommon as Partial<CustomComponents>}
@@ -428,6 +343,7 @@ const Calendar: React.FC<CalendarProps> = ({
             {mode === 'multiple' && (
               <DayPicker
                 {...(merged as PropsMulti)}
+                month={displayMonth}
                 selected={parsedValue as Date[] | undefined}
                 onSelect={(v: Date[] | undefined) =>
                   handleSelectGenericMultiple(v)
@@ -442,6 +358,7 @@ const Calendar: React.FC<CalendarProps> = ({
             {mode === 'range' && (
               <DayPicker
                 {...(merged as PropsRange)}
+                month={displayMonth}
                 selected={parsedValue as DateRange | undefined}
                 onSelect={(v: DateRange | undefined) =>
                   handleSelectGenericRange(v)

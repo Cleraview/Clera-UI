@@ -3,10 +3,11 @@ import * as MaskedInputStories from "./MaskedInput.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Form/MaskedInput" of={MaskedInputStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # MaskedInput
 
@@ -162,7 +163,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     </Canvas>
 
     <br />
-    
+
+    ### **Implementation Notes**
+
+    - Card brand detection: when using `maskPreset="card16"` the demo `MaskedInput` can attempt to detect the card brand (Visa/MasterCard/Amex) from the entered BIN prefix and render a matching brand icon. Icons are dynamically imported to avoid bundling unless used.
+    - CVC handling: treat CVC like a sensitive value. The `CVCCode` story demonstrates masking with a show/hide toggle; prefer masking by default and never persist or log CVC values.
+    - Controlled usage: `MaskedInput` supports a `rawValue` + `onRawChange` controlled API for cases where you need the unformatted value.
+
     ## **API**
     Below is a comprehensive list of all the props available for the Input component, along with their types, default values, and descriptions.
 
@@ -238,4 +245,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

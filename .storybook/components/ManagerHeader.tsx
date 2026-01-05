@@ -111,7 +111,7 @@ export const ManagerHeader = () => {
             className="icon-link"
             title="Repository"
           >
-            <FaGithub className="icon-github" />
+            {FaGithub && <FaGithub className="icon-github" />}
           </a>
 
           {/* <div className="star-badge" title="Stars">
@@ -122,7 +122,7 @@ export const ManagerHeader = () => {
           <div className="divider" aria-hidden="true" />
 
           <button className="theme-toggle" onClick={onThemeToggle} aria-pressed={isDark}>
-            {isDark ? <FiSun className="theme-icon" /> : <FiMoon className="theme-icon" />}
+            {isDark ? (FiSun && <FiSun className="theme-icon" />) : (FiMoon && <FiMoon className="theme-icon" />)}
           </button>
         </div>
       </div>

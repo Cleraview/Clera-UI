@@ -29,7 +29,7 @@ const meta: Meta<typeof Badge> = {
       control: { type: 'radio' },
       options: elementPaddingKeys,
       description:
-        'Defines the badge’s size to match different contexts (small, medium, or large).',
+        "Defines the badge's size to match different contexts (small, medium, or large).",
       table: {
         type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
@@ -114,12 +114,24 @@ export const Variants: Story = {
 export const OutlineVariants: Story = {
   render: () => (
     <div className="grid grid-cols-3 gap-2">
-      <Badge variant="outlinePrimary">Outline Primary</Badge>
-      <Badge variant="outlineSecondary">Outline Secondary</Badge>
-      <Badge variant="outlineSuccess">Outline Success</Badge>
-      <Badge variant="outlineInfo">Outline Info</Badge>
-      <Badge variant="outlineWarning">Outline Warning</Badge>
-      <Badge variant="outlineDestructive">Outline Destructive</Badge>
+      <Badge variant="outlinePrimary" size="sm">
+        Outline Primary
+      </Badge>
+      <Badge variant="outlineSecondary" size="sm">
+        Outline Secondary
+      </Badge>
+      <Badge variant="outlineSuccess" size="sm">
+        Outline Success
+      </Badge>
+      <Badge variant="outlineInfo" size="sm">
+        Outline Info
+      </Badge>
+      <Badge variant="outlineWarning" size="sm">
+        Outline Warning
+      </Badge>
+      <Badge variant="outlineDestructive" size="sm">
+        Outline Destructive
+      </Badge>
     </div>
   ),
 }

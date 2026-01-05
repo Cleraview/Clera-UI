@@ -3,23 +3,8 @@
 import { type ReactNode } from 'react'
 import * as RadixTooltip from '@radix-ui/react-tooltip'
 import { cn } from '@/utils/tailwind'
-import { cva, VariantProps } from 'class-variance-authority'
-
-const tooltipVariants = cva(
-  'z-50 rounded-md shadow-md animate-in fade-in-0 zoom-in-95',
-  {
-    variants: {
-      size: {
-        xs: 'px-space-sm py-space-xs text-body-xs',
-        sm: 'px-space-sm py-space-xs text-body-sm',
-        md: 'px-space-md py-space-sm text-body-md',
-      },
-    },
-    defaultVariants: {
-      size: 'sm',
-    },
-  }
-)
+import { VariantProps } from 'class-variance-authority'
+import { tooltipVariants, styles } from './styles'
 
 export interface TooltipProps extends VariantProps<typeof tooltipVariants> {
   children: ReactNode
@@ -55,16 +40,14 @@ export const Tooltip = ({
             sideOffset={sideOffset}
             className={cn(
               tooltipVariants({ size }),
-              theme === 'dark'
-                ? 'bg-ds-neutral-bold text-ds-inverse'
-                : 'bg-ds-neutral text-ds-default',
+              theme === 'dark' ? styles.themeDark : styles.themeLight,
               className
             )}
           >
             {content}
             <RadixTooltip.Arrow
               className={cn(
-                theme === 'dark' ? 'fill-ds-icon' : 'fill-ds-icon-inverse'
+                theme === 'dark' ? styles.arrowDark : styles.arrowLight
               )}
             />
           </RadixTooltip.Content>

@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 import { TypographyPrinciples } from "./TypographyPrinciples"
 import { 
   TypographyHeadingList, 
@@ -13,7 +14,7 @@ import {
 
 <Meta title="Foundations/Typography" />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Overview
     We've introduced a modernized typography system for our app suite. By using our product typeface, **Nunito**, we ensure a cohesive, polished reading experience across all browsers and platforms.  
@@ -150,4 +151,4 @@ import {
       ]}
     />
   </div>
-</div>
+</DocsLayout>

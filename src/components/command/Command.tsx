@@ -58,7 +58,7 @@ export const CommandInput = forwardRef<
   CommandInputProps
 >(({ className, ...props }, ref) => (
   <div className={styles.input.wrapper}>
-    <FiSearch className={styles.input.icon} />
+    {FiSearch && <FiSearch className={styles.input.icon} />}
     <CommandPrimitive.Input
       ref={ref}
       className={cn(styles.input.field, className)}

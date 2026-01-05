@@ -91,6 +91,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-storybook": "^10.1.8",
+    "eslint-plugin-unused-imports": "^4.3.0",
     "execa": "^9.6.1",
     "glob": "^11.1.0",
     "husky": "^9.1.7",
@@ -154,7 +155,6 @@
     "zod": "^4.0.10"
   },
   "dependencies": {
-    "@radix-ui/react-context-menu": "^2.2.16",
-    "clera-ui": "link:"
+    "@radix-ui/react-context-menu": "^2.2.16"
   }
 }

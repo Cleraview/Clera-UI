@@ -11,6 +11,7 @@ import {
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go'
 import { FaEllipsis } from 'react-icons/fa6'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 type PaginationRange = (number | 'ellipsis')[]
 
@@ -89,7 +90,7 @@ const PaginationRoot = forwardRef<HTMLElement, ComponentProps<'nav'>>(
       ref={ref}
       role="navigation"
       aria-label="pagination"
-      className={cn('mx-auto flex w-full justify-center', className)}
+      className={cn(styles.root, className)}
       {...props}
     />
   )
@@ -98,11 +99,7 @@ PaginationRoot.displayName = 'PaginationRoot'
 
 const PaginationContent = forwardRef<HTMLUListElement, ComponentProps<'ul'>>(
   ({ className, ...props }, ref) => (
-    <ul
-      ref={ref}
-      className={cn('flex flex-row items-center gap-1', className)}
-      {...props}
-    />
+    <ul ref={ref} className={cn(styles.content, className)} {...props} />
   )
 )
 PaginationContent.displayName = 'PaginationContent'
@@ -138,15 +135,14 @@ const PaginationLink = forwardRef<HTMLAnchorElement, PaginationLinkProps>(
         aria-current={isActive ? 'page' : undefined}
         onClick={handleClick}
         className={cn(
-          'flex items-center justify-center rounded-md text-body-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ds-brand/20 select-none',
-          'text-ds-default',
-          size === 'default' && 'h-9 w-9',
-          size === 'sm' && 'h-8 w-8 text-body-xs',
-          size === 'lg' && 'h-10 w-10 text-body-md',
-          isActive &&
-            'bg-ds-selected-bold text-ds-inverse dark:text-ds-default cursor-default',
-          isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
-          !isActive && !isDisabled && 'hover:bg-ds-neutral-subtle-hovered',
+          styles.linkBase,
+          styles.linkTextDefault,
+          size === 'default' && styles.linkSizeDefault,
+          size === 'sm' && styles.linkSizeSm,
+          size === 'lg' && styles.linkSizeLg,
+          isActive && styles.linkActive,
+          isDisabled ? styles.linkDisabled : 'cursor-pointer',
+          !isActive && !isDisabled && styles.linkHover,
           className
         )}
         {...props}
@@ -161,13 +157,10 @@ const PaginationEllipsis = forwardRef<HTMLSpanElement, ComponentProps<'span'>>(
     <span
       ref={ref}
       aria-hidden
-      className={cn(
-        'flex h-9 w-9 items-center justify-center text-ds-subtle',
-        className
-      )}
+      className={cn(styles.ellipsis, className)}
       {...props}
     >
-      <FaEllipsis className="h-4 w-4" />
+      <FaEllipsis className={styles.ellipsisIcon} />
       <span className="sr-only">More pages</span>
     </span>
   )
@@ -237,10 +230,10 @@ const Pagination = ({
           <PaginationLink
             onClick={onPrevious}
             aria-disabled={currentPage === 1 || disabled}
-            className="gap-1 pl-2.5 pr-3 w-auto"
+            className={cn(styles.linkPrevExtra)}
             aria-label="Go to previous page"
           >
-            <GoChevronLeft className="h-3.5 w-3.5 mt-[2px]" />
+            <GoChevronLeft className={styles.chevronIcon} />
             <span>{previousLabel}</span>
           </PaginationLink>
         </PaginationItem>
@@ -271,11 +264,11 @@ const Pagination = ({
           <PaginationLink
             onClick={onNext}
             aria-disabled={currentPage === lastPage || disabled}
-            className="gap-1 pl-3 pr-2.5 w-auto"
+            className={cn(styles.linkNextExtra)}
             aria-label="Go to next page"
           >
             <span>{nextLabel}</span>
-            <GoChevronRight className="h-3.5 w-3.5 mt-[2px]" />
+            <GoChevronRight className={styles.chevronIcon} />
           </PaginationLink>
         </PaginationItem>
       </PaginationContent>

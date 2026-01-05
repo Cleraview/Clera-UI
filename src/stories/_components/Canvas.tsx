@@ -7,7 +7,6 @@ import {
   RiArrowUpSLine,
 } from 'react-icons/ri'
 import { GoChevronDown } from 'react-icons/go'
-// 1. Import the smart component
 import { Dropdown } from '@/components/dropdown-menu'
 import { Button } from '@/components/button'
 import { Tooltip } from '@/components/tooltip'
@@ -169,7 +168,7 @@ export const Canvas = ({ children }: CanvasProps) => {
             >
               <RiListSettingsLine />
               Preferences
-              <GoChevronDown className="ml-space-sm" />
+              {GoChevronDown && <GoChevronDown className="ml-space-sm" />}
             </button>
           }
           items={[themeSelectionItem]}
@@ -188,7 +187,7 @@ export const Canvas = ({ children }: CanvasProps) => {
             aria-label="Copy code"
           >
             Copy code
-            <RiFileCopyLine />
+            {RiFileCopyLine && <RiFileCopyLine />}
           </button>
         </Tooltip>
       </div>

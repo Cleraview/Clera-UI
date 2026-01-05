@@ -3,10 +3,7 @@ import { Alert } from '../Alert'
 import { AiOutlineInfoCircle, AiFillAccountBook } from 'react-icons/ai'
 import { MdDisabledByDefault } from 'react-icons/md'
 import { Button } from '@/components/button'
-import {
-  elementPaddingKeys,
-  elementVariantKeys,
-} from '@/components/_core/element-config'
+import { elementVariantKeys } from '@/components/_core/element-config'
 
 const meta: Meta<typeof Alert> = {
   title: 'UI/Alert',
@@ -18,7 +15,6 @@ const meta: Meta<typeof Alert> = {
   args: {
     variant: 'primary',
     icon: 'info',
-    size: 'md',
   },
   argTypes: {
     title: {
@@ -82,16 +78,6 @@ const meta: Meta<typeof Alert> = {
         defaultValue: { summary: '() => {}' },
       },
     },
-    size: {
-      control: { type: 'select' },
-      options: elementPaddingKeys,
-      description:
-        'Visual size of the alert, reflecting different semantic purposes.',
-      table: {
-        type: { summary: elementPaddingKeys.join(' | ') },
-        defaultValue: { summary: 'md' },
-      },
-    },
     variant: {
       control: { type: 'select' },
       options: elementVariantKeys,
@@ -124,9 +110,10 @@ export default meta
 type Story = StoryObj<typeof Alert>
 
 export const Solid: Story = {
-  render: () => {
+  render: args => {
     return (
       <Alert
+        {...args}
         title="This is an alert"
         description="Here is the description text for the alert."
         variant="primary"
@@ -137,9 +124,10 @@ export const Solid: Story = {
 }
 
 export const Success: Story = {
-  render: () => {
+  render: args => {
     return (
       <Alert
+        {...args}
         title="Your data has been successfully saved."
         variant="success"
         icon={<AiFillAccountBook />}
@@ -150,14 +138,15 @@ export const Success: Story = {
 }
 
 export const Warning: Story = {
-  render: () => {
+  render: args => {
     return (
       <Alert
+        {...args}
         title="Account under review"
         description={
           <p>
             Your account is being reviewd by our{' '}
-            <strong className="font-bold">Technical Support.</strong>
+            <strong className="font-bold underline">Technical Support.</strong>
           </p>
         }
         variant="warning"
@@ -187,9 +176,10 @@ export const Info: Story = {
 }
 
 export const Destructive: Story = {
-  render: () => {
+  render: args => {
     return (
       <Alert
+        {...args}
         title="Your account has been disabled"
         variant="destructive"
         icon={<MdDisabledByDefault />}

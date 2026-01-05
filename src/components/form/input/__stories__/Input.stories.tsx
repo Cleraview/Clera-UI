@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Input } from '../Input'
+import { FiSearch, FiUser } from 'react-icons/fi'
 
 const meta: Meta<typeof Input> = {
   title: 'UI/Form/Input',
   component: Input,
   tags: ['dev'],
+  parameters: {},
   argTypes: {
     fullWidth: {
       control: 'boolean',
@@ -72,6 +74,20 @@ const meta: Meta<typeof Input> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: '' },
+      },
+    },
+    icon: {
+      control: false,
+      description: 'Icon node to render inside the input',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    iconPosition: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon relative to the input',
+      table: {
+        type: { summary: 'left | right' },
+        defaultValue: { summary: 'left' },
       },
     },
   },
@@ -175,6 +191,24 @@ export const Disabled: Story = {
   },
 }
 
-export const Playground: Story = {
-  args: {},
+export const WithIconLeft: Story = {
+  args: {
+    icon: <FiSearch />,
+    iconPosition: 'left' as 'left' | 'right',
+    label: 'Search',
+    placeholder: 'Search...',
+  },
+  render: args => <Input {...args} />,
+}
+
+export const WithIconRight: Story = {
+  args: {
+    icon: <FiUser />,
+    iconPosition: 'right' as 'left' | 'right',
+    label: 'User',
+    placeholder: 'Username',
+  },
+  render: args => (
+    <Input {...args} label="User" placeholder="Username" icon={<FiUser />} />
+  ),
 }

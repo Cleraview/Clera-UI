@@ -4,10 +4,11 @@ import * as InputStories from "./Input.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Form/Input" of={InputStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Input
 
@@ -37,6 +38,13 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     -   **ReadOnly**: Prevent users from editing the input's value.
     -   **Disabled**: Disable the input, preventing any interaction.
     -   **Placeholder**: Display a hint to guide users on what to enter.
+
+    ## **Implementation Notes**
+
+    - Icon rendering: the visual icon inside inputs is owned by `FormInputWrapper`. Pass `icon` and `iconPosition` to `Input` and `MaskedInput`; the wrapper handles spacing and label adjustments.
+    - Accessibility: labels are linked to inputs via `id` and floating labels are announced appropriately when focused.
+    - Controlled vs uncontrolled: components support both controlled (`value`) and uncontrolled modes. Prefer controlled mode when validating or managing values externally.
+
 
     ## **Examples**
 
@@ -301,6 +309,33 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
         `} />
       </Canvas.Source>
     </Canvas>
+    
+    <br />
+
+    ### **With Icon**
+    An input with an icon inside. This example shows an input with a user icon on the left.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.WithIconLeft} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+          import { FiUser } from 'react-icons/fi'
+
+          const InputWithIconExample = () => {
+            return <Input 
+              placeholder="Username" 
+              icon={<FiUser />} 
+              iconPosition="left" 
+            />
+          }
+
+          export default InputWithIconExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
 
     <br />
 
@@ -455,4 +490,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

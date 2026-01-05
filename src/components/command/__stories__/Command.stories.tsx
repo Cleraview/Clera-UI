@@ -98,15 +98,6 @@ const meta: Meta<typeof Command> = {
         defaultValue: { summary: 'No results found.' },
       },
     },
-    // componentSize: {
-    //   control: 'select',
-    //   options: ['xs', 'sm', 'md'],
-    //   description: 'Size of the input, group headings, and items',
-    //   table: {
-    //     type: { summary: "'xs' | 'sm' | 'md'" },
-    //     defaultValue: { summary: 'md' },
-    //   },
-    // },
   },
 }
 
@@ -209,7 +200,7 @@ export const Default: Story = {
 
     useEffect(() => {
       const down = (e: KeyboardEvent) => {
-        if (e.key === 'c' && (e.metaKey || e.ctrlKey)) {
+        if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
           e.preventDefault()
           setOpen(open => !open)
         }
@@ -284,7 +275,7 @@ export const Default: Story = {
         <p className="text-body-md text-ds-subtle">
           Press{' '}
           <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-ds-default bg-ds-inverse-subtle px-space-xs font-mono text-body-xs font-medium text-ds-default">
-            <span className="text-body-sm">⌘</span>C
+            <span className="text-body-sm">⌘</span>K
           </kbd>{' '}
           or click button
         </p>

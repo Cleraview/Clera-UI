@@ -16,6 +16,7 @@ import {
   ComboBoxEmpty,
   ComboBoxLoading,
 } from './BaseComboBox'
+import { styles } from './styles'
 import { type FieldSize } from '@/components/_core/field-config'
 
 export type AsyncComboBoxOption = {
@@ -153,9 +154,11 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
     const renderLoading = () => {
       if (typeof loadingProp === 'function')
         return loadingProp(loadingItemCount)
+
       if (React.isValidElement(loadingProp)) return loadingProp
+
       return Array.from({ length: loadingItemCount }).map((_, i) => (
-        <div key={i} className="flex items-center space-x-2 px-2 py-2">
+        <div key={i} className={styles.loadingRow}>
           <Skeleton rounded="sm" className="h-6 w-6" />
           <Skeleton className="h-4 w-3/4" />
         </div>

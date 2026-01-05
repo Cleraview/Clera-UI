@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@root/src/utils/tailwind/tailwind'
 
 export const styles = {
   root: cva(
@@ -33,8 +33,8 @@ export const styles = {
   ),
   innerContainer: cva(
     cn(
-      'w-full h-full text-body-xs font-medium overflow-hidden',
-      'pointer-events-none select-none text-ds-inverse',
+      'w-full h-full text-center text-label-xs font-semibold overflow-hidden',
+      'pointer-events-none select-none',
       'transition-padding-inline-start transition-padding-inline-end duration-200 ease-in-out'
     ),
     {
@@ -56,7 +56,7 @@ export const styles = {
   ),
   checkedChildren: cva(
     cn(
-      'w-full h-full block leading-[28px] text-center [&>*]:inline-flex [&>*]:self-center',
+      'w-full h-full block leading-[28px] text-ds-inverse dark:text-ds-default! [&>*]:inline-flex [&>*]:self-center',
       'transition-margin-inline-start transition-margin-inline-end duration-200 ease-in-out'
     ),
     {
@@ -74,7 +74,7 @@ export const styles = {
   ),
   unCheckedChildren: cva(
     cn(
-      'w-full h-full block mt-[-28px] leading-[28px] text-center text-ds-inverse [&>*]:inline-flex [&>*]:self-center',
+      'w-full h-full block mt-[-28px] leading-[28px] text-ds-inverse [&>*]:inline-flex [&>*]:self-center',
       'transition-margin-inline-start transition-margin-inline-end duration-200 ease-in-out'
     ),
     {

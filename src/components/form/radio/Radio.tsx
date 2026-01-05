@@ -2,7 +2,13 @@
 
 import React from 'react'
 import { useRadioGroup } from './RadioGroup'
-import { cn } from '@/utils/tailwind'
+import {
+  root,
+  wrapper,
+  inputClass,
+  innerDot,
+  label as labelClass,
+} from './styles'
 
 export interface RadioProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -22,8 +28,8 @@ export const Radio: React.FC<RadioProps> = ({ label, value, ...props }) => {
   }
 
   return (
-    <div className="inline-flex items-center">
-      <label htmlFor={id} className="relative flex items-center cursor-pointer">
+    <div className={root}>
+      <label htmlFor={id} className={wrapper}>
         <input
           id={id}
           type="radio"
@@ -31,17 +37,12 @@ export const Radio: React.FC<RadioProps> = ({ label, value, ...props }) => {
           checked={checked}
           name={group.name}
           onChange={handleChange}
-          className={cn(
-            'peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-ds-input checked:border-ds-selected hover:border-ds-selected/40 transition-all'
-          )}
+          className={inputClass()}
           {...props}
         />
-        <span className="absolute bg-ds-selected-bold w-3 h-3 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+        <span className={innerDot} />
       </label>
-      <label
-        htmlFor={id}
-        className="ml-2 text-ds-default cursor-pointer text-body-md"
-      >
+      <label htmlFor={id} className={labelClass}>
         {label}
       </label>
     </div>

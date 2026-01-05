@@ -2,8 +2,8 @@ import { Meta, Canvas } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import { ColorList } from "./ColorList"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 import FoundationColor from "@/assets/docs/foundation-color.png"
-// dynamic tokens: ColorList will scan stylesheets at runtime; no static token manifest imported
 
 <Meta title="Foundations/Colors" />
 
@@ -15,7 +15,7 @@ import FoundationColor from "@/assets/docs/foundation-color.png"
   />
 </div>
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Colors
     **{config.title}** is a highly visual tool, and our color system plays a critical role in enhancing usability. Colors help users quickly identify statuses, recognize actionable elements, find guidance, and understand the next steps.
@@ -224,4 +224,4 @@ import FoundationColor from "@/assets/docs/foundation-color.png"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

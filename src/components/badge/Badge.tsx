@@ -1,7 +1,7 @@
 'use client'
 
 import { type VariantProps } from 'class-variance-authority'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 import { styles } from './styles'
 
 export interface BadgeProps
@@ -27,7 +27,7 @@ export const Badge: React.FC<BadgeProps> = ({
     <div
       className={cn(
         styles.badge({ variant, size, rounded }),
-        iconPosition === 'right' && 'flex-row-reverse',
+        iconPosition === 'right' && styles.reverse,
         className
       )}
       {...props}

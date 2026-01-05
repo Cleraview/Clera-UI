@@ -8,7 +8,7 @@ import {
 } from 'react'
 import { type VariantProps } from 'class-variance-authority'
 import { Slot, Slottable } from '@radix-ui/react-slot'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 import {
   type ElementSize,
   elementPaddings,
@@ -93,14 +93,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <div
               className={cn(
                 styles.contentWrapper,
-                loading && 'invisible',
-                iconPosition === 'right' && 'flex-row-reverse',
+                loading && styles.contentHidden,
+                iconPosition === 'right' && styles.contentReverse,
                 childContentStyles,
                 innerClassName
               )}
             >
               {!loading && icon && (
-                <span className="contents self-stretch">{icon}</span>
+                <span className={styles.iconSpan}>{icon}</span>
               )}
               <span>{children}</span>
             </div>

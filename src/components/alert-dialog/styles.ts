@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 import { elementPaddings } from '../_core/element-config'
 
 export const alertDialogStyles = {
@@ -20,7 +20,7 @@ export const alertDialogStyles = {
   content: cva(
     cn(
       'fixed z-[9999] bg-ds-elevation-surface rounded-xl shadow-2xl overflow-hidden transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]',
-      elementPaddings.md
+      elementPaddings.xl
     ),
     {
       variants: {

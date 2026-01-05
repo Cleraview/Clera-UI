@@ -3,10 +3,11 @@ import * as CommandStories from "./Command.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Command" of={CommandStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Command
 
@@ -83,7 +84,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             const [open, setOpen] = useState(false)
             const [selectedValue, setSelectedValue] = useState('')
 
-            // Global keyboard shortcut
             useEffect(() => {
               const down = (e: KeyboardEvent) => {
                 if (e.key === 'c' && (e.metaKey || e.ctrlKey)) {
@@ -758,7 +758,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // Use ComboBox for forms
         <Form.Item name="framework">
           <ComboBox
             label="Select Framework"
@@ -766,7 +765,6 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           />
         </Form.Item>
 
-        // Use Command for navigation/actions
         <CommandDialog open={open} onOpenChange={setOpen}>
           <CommandMenu groups={menuGroups} />
         </CommandDialog>
@@ -827,9 +825,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 label: 'Calendar',
                 icon: FiCalendar,
                 onSelect: () => {
-                  // Handle selection
                   router.push('/calendar')
-                  // Close dialog
                   setOpen(false)
                 },
               },
@@ -856,7 +852,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 id: 'save',
                 label: 'Save',
                 icon: FiSave,
-                disabled: !canSave, // Conditionally disable
+                disabled: !canSave,
                 onSelect: () => handleSave(),
               },
             ],
@@ -1018,13 +1014,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        // Small text
         <CommandMenu groups={menuGroups} size="xs" />
 
-        // Medium text (default)
         <CommandMenu groups={menuGroups} size="sm" />
 
-        // Larger text
         <CommandMenu groups={menuGroups} size="md" />
       `} />
     </Canvas.Source>
@@ -1047,11 +1040,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 label: 'Create Post',
                 icon: FiFilePlus,
                 onSelect: () => {
-                  // Perform action
                   openCreatePostModal()
-                  // Close dialog
                   setOpen(false)
-                  // Show notification
                   showNotification('Creating post...')
                 },
               },
@@ -1183,4 +1173,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

@@ -1,3 +1,4 @@
+export type { DropdownItemDef, DropdownObjectItem } from './_lib/types'
 export {
   Dropdown,
   DropdownMenu,

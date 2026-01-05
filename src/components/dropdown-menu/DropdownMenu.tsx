@@ -7,7 +7,9 @@ import {
   forwardRef,
   isValidElement,
   cloneElement,
+  useRef,
 } from 'react'
+
 import type {
   MouseEvent,
   ReactNode,
@@ -16,15 +18,15 @@ import type {
   ComponentPropsWithoutRef,
   ElementRef,
   Attributes,
-  MouseEventHandler,
 } from 'react'
 
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import { GoChevronRight, GoChevronLeft } from 'react-icons/go'
-import { FaCircle } from 'react-icons/fa'
-import { FaCircleCheck } from 'react-icons/fa6'
+import { FaCircle, FaCircleCheck } from 'react-icons/fa6'
+
 import { cn } from '@/utils/tailwind'
-import { elementPaddings, elementTextSizes } from '../_core/element-config'
+import { elementTextSizes } from '../_core/element-config'
+import { styles } from './styles'
 
 const DropdownMenuRoot = DropdownMenuPrimitive.Root
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
@@ -42,15 +44,14 @@ const DropdownMenuSubTrigger = forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      'flex cursor-default select-none items-center rounded-sm p-space-xs text-body-sm outline-none',
-      'hover:bg-ds-neutral-subtle-hovered focus:bg-ds-neutral-subtle-hovered data-[state=open]:bg-ds-neutral-subtle-hovered',
-      inset && 'pl-8',
+      styles.subTrigger,
+      inset && styles.subTriggerInset,
       className
     )}
     {...props}
   >
     {children}
-    <GoChevronRight className="ml-auto h-4 w-4 text-ds-subtle" />
+    {GoChevronRight && <GoChevronRight className={styles.chevronLarge} />}
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName =
@@ -60,14 +61,13 @@ const DropdownMenuSubContent = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.SubContent>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubContent
-    ref={ref}
-    className={cn(
-      'z-50 min-w-[8rem] overflow-hidden rounded-md border border-ds-default bg-ds-elevation-surface p-1 shadow-ds-elevation-overlay animate-in slide-in-from-left-1',
-      className
-    )}
-    {...props}
-  />
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.SubContent
+      ref={ref}
+      className={cn(styles.subContent, className)}
+      {...props}
+    />
+  </DropdownMenuPrimitive.Portal>
 ))
 DropdownMenuSubContent.displayName =
   DropdownMenuPrimitive.SubContent.displayName
@@ -80,10 +80,7 @@ const DropdownMenuContent = forwardRef<
     <DropdownMenuPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
-      className={cn(
-        'z-50 min-w-[8rem] overflow-hidden rounded-md border border-ds-default bg-ds-elevation-surface p-1 shadow-ds-elevation-overlay animate-in fade-in-80',
-        className
-      )}
+      className={cn(styles.content, className)}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>
@@ -98,16 +95,7 @@ const DropdownMenuItem = forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
-    className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm text-ds-default outline-none cursor-pointer transition-colors',
-      'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-      'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      inset && 'pl-space-md',
-      elementPaddings['md'],
-      elementTextSizes['md'],
-      className
-    )}
+    className={cn(styles.item, inset && styles.itemInset, className)}
     {...props}
   />
 ))
@@ -115,34 +103,33 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 
 const DropdownMenuCheckboxItem = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
-  ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+  ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> & {
+    checked?: boolean
+  }
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-body-sm text-ds-default cursor-pointer outline-none transition-colors',
-      !checked && [
-        'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-        'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      ],
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      checked && 'bg-ds-primary',
+      styles.checkboxItem,
+      checked && styles.itemSelected,
       className
     )}
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <FaCircleCheck
-        className={cn(
-          'h-4 w-4',
-          checked
-            ? 'text-(--fill-ds-icon-accent-violet)'
-            : 'text-(--fill-ds-icon)'
-        )}
-      />
+    <span className={styles.iconWrapper}>
+      {FaCircleCheck && (
+        <FaCircleCheck
+          className={cn(
+            styles.checkboxIcon,
+            checked ? styles.checkboxIconChecked : styles.checkboxIconDefault
+          )}
+        />
+      )}
     </span>
-    {children}
+    <div className={styles.labelGroup}>
+      <span>{children}</span>
+    </div>
   </DropdownMenuPrimitive.CheckboxItem>
 ))
 DropdownMenuCheckboxItem.displayName =
@@ -150,23 +137,21 @@ DropdownMenuCheckboxItem.displayName =
 
 const DropdownMenuRadioItem = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
-  ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> & {
+    checked?: boolean
+  }
+>(({ className, children, checked, ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
-    className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-body-sm text-ds-default outline-none transition-colors',
-      'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-      'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      className
-    )}
+    className={cn(styles.radioItem, checked && styles.itemSelected, className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <FaCircle className="h-2 w-2 fill-current text-ds-default" />
+    <span className={styles.iconWrapperRadio}>
+      {FaCircle && <FaCircle className={styles.radioIcon} />}
     </span>
-    {children}
+    <div className={styles.labelGroup}>
+      <span>{children}</span>
+    </div>
   </DropdownMenuPrimitive.RadioItem>
 ))
 DropdownMenuRadioItem.displayName = DropdownMenuPrimitive.RadioItem.displayName
@@ -179,11 +164,7 @@ const DropdownMenuLabel = forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn(
-      'p-menu-item-md text-body-sm font-semibold text-ds-default',
-      inset && 'pl-8',
-      className
-    )}
+    className={cn(styles.label, inset && styles.labelInset, className)}
     {...props}
   />
 ))
@@ -195,7 +176,7 @@ const DropdownMenuSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn('my-1 h-px bg-ds-neutral-subtle-pressed', className)}
+    className={cn(styles.separator, className)}
     {...props}
   />
 ))
@@ -216,8 +197,20 @@ export type DropdownItemDef =
       checked?: boolean
       onCheckedChange?: (checked: boolean) => void
       value?: string
+      groupId?: string
       id?: string
     }
+
+type RadioItemDef = {
+  type?: 'radio'
+  label?: ReactNode
+  value?: string
+  groupId?: string
+  checked?: boolean
+  className?: string
+  disabled?: boolean
+  id?: string
+}
 
 interface DropdownProps extends ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Root
@@ -229,6 +222,13 @@ interface DropdownProps extends ComponentPropsWithoutRef<
   >['align']
   width?: string | number
   className?: string
+  closeOnSelect?: boolean
+  onSelect?: (value: string, item?: DropdownItemDef) => void
+  onGroupSelect?: (
+    groupId: string,
+    value: string,
+    item?: DropdownItemDef
+  ) => void
 }
 
 interface MenuState {
@@ -243,6 +243,9 @@ const Dropdown = ({
   align = 'end',
   width = 240,
   className,
+  closeOnSelect = true,
+  onSelect,
+  onGroupSelect,
   ...props
 }: DropdownProps) => {
   const [history, setHistory] = useState<MenuState[]>([
@@ -268,10 +271,47 @@ const Dropdown = ({
       }, 300)
     }
     props.onOpenChange?.(open)
+
+    if (open) {
+      const node = triggerRef.current
+      if (node) {
+        const rect = node.getBoundingClientRect()
+        const spaceBelow = window.innerHeight - rect.bottom
+        const spaceAbove = rect.top
+        const approxItemHeight = 40
+        const headerHeight = isRoot ? 0 : 48
+        const estimatedHeight = Math.min(
+          Math.max(
+            approxItemHeight * (currentLayer.items?.length ?? 3) + headerHeight,
+            120
+          ),
+          window.innerHeight * 0.6
+        )
+        if (spaceBelow < estimatedHeight && spaceAbove > spaceBelow)
+          setSide('top')
+        else setSide('bottom')
+      } else {
+        setSide('bottom')
+      }
+    }
   }
+
+  const [side, setSide] =
+    useState<
+      ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>['side']
+    >('bottom')
+  const contentRef = useRef<HTMLDivElement | null>(null)
+  const triggerRef = useRef<HTMLSpanElement | null>(null)
 
   const currentLayer = history[history.length - 1]
   const isRoot = history.length === 1
+
+  const _placement =
+    align === 'start'
+      ? 'bottom-start'
+      : align === 'end'
+        ? 'bottom-end'
+        : 'bottom'
 
   const navigateToSubmenu = (
     e: MouseEvent | Event,
@@ -291,14 +331,89 @@ const Dropdown = ({
     setHistory(prev => prev.slice(0, -1))
   }
 
+  type ItemProps = {
+    onClick?: (e: MouseEvent<HTMLDivElement> | Event) => void
+    onCheckedChange?: (checked: boolean) => void
+    disabled?: boolean
+  }
+
+  const invokeOnClick = (props: ItemProps | undefined, e: MouseEvent) => {
+    props?.onClick?.(e as unknown as MouseEvent<HTMLDivElement>)
+  }
+
   const animationClass = useMemo(() => {
-    if (isRoot && direction === 'forward') {
+    const localIsRoot = history.length === 1
+    if (localIsRoot && direction === 'forward') {
       return ''
     }
     return direction === 'forward'
       ? 'animate-in slide-in-from-right-8 fade-in-0 duration-200'
       : 'animate-in slide-in-from-left-8 fade-in-0 duration-200'
-  }, [isRoot, direction])
+  }, [history.length, direction])
+
+  const makeCheckboxClickHandler = (
+    itemNode: DropdownItemDef & {
+      checked?: boolean
+      value?: string
+      groupId?: string
+    },
+    propsObj: ItemProps | undefined
+  ) => {
+    return (e: MouseEvent) => {
+      const nextCheckedState = !Boolean(itemNode.checked)
+      if (propsObj?.onCheckedChange) {
+        propsObj.onCheckedChange(nextCheckedState)
+      } else if (itemNode.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode.value) {
+        onSelect(itemNode.value, itemNode)
+      }
+      invokeOnClick(propsObj, e)
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
+
+  const makeRadioClickHandler = (
+    itemNode: DropdownItemDef & { value?: string; groupId?: string },
+    propsObj: ItemProps | undefined
+  ) => {
+    return (e: MouseEvent) => {
+      if (propsObj?.onClick) {
+        propsObj.onClick(e as unknown as MouseEvent<HTMLDivElement>)
+      } else if (itemNode.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode.value) {
+        onSelect(itemNode.value, itemNode)
+      }
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
+
+  const makeClickHandler = (
+    propsObj: ItemProps | undefined,
+    itemNode?: DropdownItemDef & { value?: string; groupId?: string }
+  ) => {
+    return (e: MouseEvent) => {
+      if (propsObj?.onClick) {
+        propsObj.onClick(e as unknown as MouseEvent<HTMLDivElement>)
+      } else if (itemNode?.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode?.value) {
+        onSelect(itemNode.value, itemNode)
+      }
+
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
 
   const renderItem = (item: DropdownItemDef, index: number) => {
     if (typeof item === 'string') {
@@ -324,15 +439,15 @@ const Dropdown = ({
       return (
         <DropdownMenuItem
           key={key}
-          className={cn('justify-between', className)}
+          className={cn(styles.item, styles.itemWithChildren, className)}
           disabled={itemProps.disabled}
           onClick={e => navigateToSubmenu(e, children, label as string)}
         >
-          <div className="flex items-center">
-            {Icon && <Icon className="mr-2 h-4 w-4" />}
+          <div className={styles.itemContent}>
+            {Icon && <Icon className={styles.itemIcon} />}
             <span className={cn(elementTextSizes['md'])}>{label}</span>
           </div>
-          <GoChevronRight className="h-3 w-3 text-ds-subtle" />
+          {GoChevronRight && <GoChevronRight className={styles.chevronSmall} />}
         </DropdownMenuItem>
       )
     }
@@ -353,6 +468,16 @@ const Dropdown = ({
             className={className}
             checked={item.checked}
             onCheckedChange={item.onCheckedChange}
+            onClick={makeCheckboxClickHandler(
+              item as DropdownItemDef & { checked?: boolean },
+              itemProps as ItemProps
+            )}
+            onSelect={e => {
+              if (!closeOnSelect) {
+                e.preventDefault()
+                e.stopPropagation()
+              }
+            }}
             disabled={itemProps.disabled}
           >
             {label}
@@ -364,6 +489,17 @@ const Dropdown = ({
             key={key}
             className={className}
             value={item.value!}
+            checked={item.checked}
+            onClick={makeRadioClickHandler(
+              item as DropdownItemDef & { value?: string },
+              itemProps as ItemProps
+            )}
+            onSelect={e => {
+              if (!closeOnSelect) {
+                e.preventDefault()
+                e.stopPropagation()
+              }
+            }}
             disabled={itemProps.disabled}
           >
             {label}
@@ -375,46 +511,152 @@ const Dropdown = ({
           <DropdownMenuItem
             key={key}
             className={className}
-            onClick={itemProps.onClick as MouseEventHandler<HTMLDivElement>}
+            onClick={makeClickHandler(
+              itemProps as ItemProps,
+              item as DropdownItemDef & { value?: string; groupId?: string }
+            )}
             disabled={itemProps.disabled}
           >
-            {Icon && <Icon className="mr-2 h-4 w-4" />}
+            {Icon && <Icon className={styles.itemIcon} />}
             <span className={cn(elementTextSizes['md'])}>{label}</span>
-            {shortcut && (
-              <span className="ml-auto text-body-xs tracking-widest opacity-60">
-                {shortcut}
-              </span>
-            )}
+            {shortcut && <span className={styles.shortcut}>{shortcut}</span>}
           </DropdownMenuItem>
         )
     }
   }
 
+  const _triggerElement = trigger ?? children
+
   return (
     <DropdownMenuRoot {...props} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger asChild>{trigger || children}</DropdownMenuTrigger>
+      <span ref={triggerRef} style={{ display: 'inline-block' }}>
+        <DropdownMenuTrigger asChild>{trigger ?? children}</DropdownMenuTrigger>
+      </span>
       <DropdownMenuContent
+        ref={contentRef}
+        side={side}
         align={align}
-        className={cn('p-1 overflow-hidden', className)}
+        className={cn(styles.contentPadding, className)}
         style={{ width }}
       >
-        <div key={currentLayer.title} className={cn('w-full', animationClass)}>
+        <div
+          key={currentLayer.title}
+          className={cn(styles.container, animationClass)}
+        >
           {!isRoot && (
-            <div className="flex items-center px-1 py-1 mb-1 border-b border-ds-default/50">
-              <button
-                onClick={navigateBack}
-                className="p-1 rounded-sm hover:bg-ds-neutral-subtle-hovered text-ds-subtle hover:text-ds-default transition-colors cursor-pointer outline-none focus:ring-2 focus:ring-ds-brand/20"
-              >
-                <GoChevronLeft className="h-3 w-3" />
+            <div className={styles.header}>
+              <button onClick={navigateBack} className={styles.navBackButton}>
+                {GoChevronLeft && (
+                  <GoChevronLeft className={styles.chevronSmall} />
+                )}
               </button>
-              <span className={cn('ml-2 font-semibold text-ds-default')}>
-                {currentLayer.title}
-              </span>
+              <span className={styles.backTitle}>{currentLayer.title}</span>
             </div>
           )}
 
-          <div className="flex flex-col">
-            {currentLayer.items.map(renderItem)}
+          <div className={styles.itemsContainer}>
+            {(() => {
+              const nodes: ReactNode[] = []
+              const itemsList = currentLayer.items
+              for (let i = 0; i < itemsList.length; i++) {
+                const item = itemsList[i]
+
+                if (typeof item === 'string' || isValidElement(item)) {
+                  nodes.push(renderItem(item, i))
+                  continue
+                }
+
+                if (item.type === 'radio') {
+                  const groupId = item.groupId
+                  const groupItems: Array<RadioItemDef & { __idx?: number }> =
+                    []
+                  let idx = i
+                  if (groupId) {
+                    while (idx < itemsList.length) {
+                      const candidate = itemsList[idx]
+                      if (
+                        typeof candidate !== 'string' &&
+                        !isValidElement(candidate) &&
+                        candidate.type === 'radio' &&
+                        candidate.groupId === groupId
+                      ) {
+                        groupItems.push({
+                          ...(candidate as RadioItemDef),
+                          __idx: idx,
+                        })
+                        idx++
+                      } else break
+                    }
+                  } else {
+                    while (idx < itemsList.length) {
+                      const candidate = itemsList[idx]
+                      if (
+                        typeof candidate !== 'string' &&
+                        !isValidElement(candidate) &&
+                        candidate.type === 'radio' &&
+                        !candidate.groupId
+                      ) {
+                        groupItems.push({
+                          ...(candidate as RadioItemDef),
+                          __idx: idx,
+                        })
+                        idx++
+                      } else break
+                    }
+                  }
+
+                  const groupValue =
+                    groupItems.find(itm => Boolean(itm.checked))?.value ??
+                    undefined
+
+                  const handleValueChange = (value: string) => {
+                    const matchedItem = groupItems.find(
+                      itm => itm.value === value
+                    )
+                    if (!matchedItem) return
+                    if (matchedItem.groupId && onGroupSelect) {
+                      onGroupSelect(matchedItem.groupId, value, matchedItem)
+                    } else if (onSelect) {
+                      onSelect(value, matchedItem)
+                    }
+                  }
+
+                  nodes.push(
+                    <DropdownMenuRadioGroup
+                      key={`radio-group-${i}-${groupId ?? ''}`}
+                      value={groupValue}
+                      onValueChange={handleValueChange}
+                    >
+                      {groupItems.map(groupItem => (
+                        <DropdownMenuRadioItem
+                          key={groupItem.id ?? groupItem.__idx}
+                          className={groupItem.className}
+                          value={groupItem.value!}
+                          checked={groupItem.checked}
+                          disabled={groupItem.disabled}
+                          onClick={makeRadioClickHandler(groupItem, groupItem)}
+                          onSelect={e => {
+                            if (!closeOnSelect) {
+                              e.preventDefault()
+                              e.stopPropagation()
+                            }
+                          }}
+                        >
+                          {groupItem.label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  )
+
+                  i = idx - 1
+                  continue
+                }
+
+                nodes.push(renderItem(item, i))
+              }
+
+              return nodes
+            })()}
           </div>
         </div>
       </DropdownMenuContent>

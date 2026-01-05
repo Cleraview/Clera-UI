@@ -75,7 +75,7 @@ const meta: Meta<typeof Dialog> = {
     open: false,
     title: 'Dialog Title',
     description: 'This is an example dialog description.',
-    size: 'md',
+    size: 'lg',
     position: 'center',
     showCloseButton: true,
     children: '<p>This is a sample dialog content body.</p>',
@@ -118,7 +118,9 @@ export const PositionVariants: Story = {
         <div className="flex items-center gap-space-sm">
           <Switch
             checked={position === 'top'}
-            onChange={checked => setPosition(checked ? 'top' : 'bottom')}
+            onChange={(checked: boolean) =>
+              setPosition(checked ? 'top' : 'bottom')
+            }
             checkedChildren="Top"
             unCheckedChildren="Bottom"
           />

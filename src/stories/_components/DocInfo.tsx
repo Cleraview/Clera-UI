@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import config from '@/config/site'
 import { FiGithub, FiCopy } from 'react-icons/fi'
-import { cn } from '@/utils'
+import { cn } from '@/utils/tailwind'
 
 type DocInfoProps = {
   importStatement: string
@@ -43,9 +43,9 @@ export const DocInfo: React.FC<DocInfoProps> = ({
         >
           {importCopied ? (
             <span className="text-body-xs!">Copied!</span>
-          ) : (
+          ) : FiCopy ? (
             <FiCopy />
-          )}
+          ) : null}
         </button>
       </div>
       <div className="flex items-center justify-between">
@@ -57,7 +57,7 @@ export const DocInfo: React.FC<DocInfoProps> = ({
             target="_blank"
             rel="noreferrer"
           >
-            <FiGithub />
+            {FiGithub ? <FiGithub /> : null}
             <span className="text-body-sm">{sourcePath}</span>
           </a>
         </div>

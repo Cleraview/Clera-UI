@@ -2,14 +2,21 @@
 
 import { ReactNode, useId } from 'react'
 import type { FieldSize } from '@/components/_core/field-config'
+import { cn } from '@/utils/tailwind'
 import {
   fieldStateStyles,
-  floatingLabelBase,
-  floatingLabelActive,
   floatingLabelBaseText,
   floatingLabelActiveText,
 } from '@/components/_core/field-config'
-import { cn } from '@/utils/tailwind'
+
+import {
+  root as formRoot,
+  labelClass,
+  container as formContainer,
+  fieldset as fieldsetClass,
+  legendClass,
+  iconClass,
+} from './styles'
 
 export type FormInputWrapperProps = {
   id?: string
@@ -20,10 +27,14 @@ export type FormInputWrapperProps = {
   required?: boolean
   disabled?: boolean
   readOnly?: boolean
+  hasIcon?: boolean
+  icon?: ReactNode
+  iconPosition?: 'left' | 'right'
   filled?: boolean
   focused?: boolean
   fullWidth?: boolean
   children: ReactNode
+  className?: string
 }
 
 export const FormInputWrapper = ({
@@ -39,6 +50,10 @@ export const FormInputWrapper = ({
   filled,
   fullWidth,
   children,
+  className,
+  hasIcon,
+  icon,
+  iconPosition = 'right',
 }: FormInputWrapperProps) => {
   const customId = useId()
   const inputId = id ?? customId
@@ -60,54 +75,43 @@ export const FormInputWrapper = ({
   )
 
   return (
-    <div
-      className={cn(
-        'relative bg-ds-elevation-surface',
-        fullWidth && 'w-full',
-        disabled && 'opacity-60'
-      )}
-    >
+    <div className={cn(formRoot(fullWidth, disabled), className)}>
       <label
         htmlFor={inputId}
-        className={cn(
-          'absolute -left-1 transition-all whitespace-nowrap z-[1] pointer-events-none',
-          focused || filled || readOnly || disabled
-            ? [floatingLabelActive[inputSize]]
-            : [floatingLabelBase[inputSize], floatingLabelBaseText[inputSize]],
-          disabled && 'cursor-not-allowed',
-          inputType === 'select' && !disabled && 'cursor-pointer'
-        )}
+        className={labelClass({
+          focused,
+          filled,
+          readOnly,
+          disabled,
+          inputSize,
+          inputType,
+          hasIcon,
+        })}
       >
         {displayLabel}
       </label>
 
-      <div className={cn('relative', disabled && '[&>*]:cursor-not-allowed!')}>
-        {children}
-
-        <fieldset
-          className={cn(
-            'absolute inset-0 rounded-sm px-space-xs pointer-events-none border transition-all duration-200',
-            fieldStateStyles[state].border
+      <div className={formContainer(disabled)}>
+        <div className="relative flex items-center w-full">
+          {icon && iconPosition === 'left' && (
+            <span className={iconClass(inputSize, 'left')}>{icon}</span>
           )}
-        >
+
+          {children}
+
+          {icon && iconPosition === 'right' && (
+            <span className={iconClass(inputSize, 'right')}>{icon}</span>
+          )}
+        </div>
+
+        <fieldset className={fieldsetClass(fieldStateStyles[state].border)}>
           <legend
-            className={cn(
-              'w-auto h-0 p-0 transition-all duration-200 invisible whitespace-nowrap',
-              floatingLabelBaseText[inputSize],
+            className={legendClass(
+              inputSize,
               focused || filled || readOnly || disabled
-                ? 'max-w-full px-1'
-                : 'max-w-[0.01px] px-0'
             )}
           >
-            <span
-              className={cn(
-                floatingLabelBase[inputSize],
-                (focused || filled || readOnly || disabled) && [
-                  floatingLabelBaseText[inputSize],
-                  floatingLabelActive[inputSize],
-                ]
-              )}
-            >
+            <span className={cn(floatingLabelBaseText[inputSize])}>
               {displayLabel}
             </span>
           </legend>

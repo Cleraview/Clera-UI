@@ -1,0 +1,51 @@
+{
+  "display": [
+    "text-display-2xl",
+    "text-display-xl",
+    "text-display-lg",
+    "text-display-md"
+  ],
+  "heading": [
+    "text-heading-4xl",
+    "text-heading-3xl",
+    "text-heading-2xl",
+    "text-heading-xl",
+    "text-heading-lg",
+    "text-heading-md",
+    "text-heading-sm"
+  ],
+  "body": [
+    "text-body-2xl",
+    "text-body-xl",
+    "text-body-lg",
+    "text-body-md",
+    "text-body-sm",
+    "text-body-xs"
+  ],
+  "label": [
+    "text-label-xl",
+    "text-label-lg",
+    "text-label-md",
+    "text-label-sm",
+    "text-label-xs",
+    "text-label-xxs"
+  ],
+  "helper": [
+    "text-helper-text",
+    "text-helper-error"
+  ],
+  "code": [
+    "text-code-lg",
+    "text-code-md",
+    "text-code-sm"
+  ],
+  "link": [
+    "text-link-default",
+    "text-link-subtle"
+  ],
+  "text": [
+    "text-text-muted",
+    "text-text-strong",
+    "text-text-italic"
+  ]
+}

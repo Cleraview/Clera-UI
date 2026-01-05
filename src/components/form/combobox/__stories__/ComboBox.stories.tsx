@@ -74,6 +74,7 @@ const meta: Meta<typeof ComboBox> = {
     placeholder: 'Select a country...',
     inputSize: 'md',
   },
+  decorators: [Story => <div className="min-w-[200px]">{Story()}</div>],
 }
 
 export default meta
@@ -146,28 +147,5 @@ export const WithError: Story = {
   args: {
     hasError: true,
     value: 'my',
-  },
-}
-
-export const Playground: Story = {
-  render: args => {
-    const [value, setValue] = useState(args.defaultValue || '')
-    return (
-      <div className="w-64">
-        <ComboBox
-          {...args}
-          value={args.value !== undefined ? args.value : value}
-          onChange={val => {
-            if (args.value === undefined) {
-              setValue(val)
-            }
-            args.onChange?.(val)
-          }}
-        />
-      </div>
-    )
-  },
-  args: {
-    options: countryOptions,
   },
 }

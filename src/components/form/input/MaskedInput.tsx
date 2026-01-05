@@ -1,8 +1,19 @@
 'use client'
 
-import { forwardRef, useId, useMemo, useState } from 'react'
+import React, {
+  forwardRef,
+  useId,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+import { FiCreditCard } from 'react-icons/fi'
 import type { ChangeEvent, KeyboardEvent, InputHTMLAttributes } from 'react'
-import { cn } from '@/utils/tailwind'
+import {
+  isCardField as _isCardField,
+  detectCardBrand,
+} from './_utils/card-detect'
+import { inputClasses } from './styles'
 import {
   formatWithMask,
   buildMaskIndexMap,
@@ -11,15 +22,13 @@ import {
   extractRawForMask,
 } from './_utils/mask-format'
 import { getMaskFromPreset, MaskPresetKey } from './_utils/mask-presets'
-import {
-  type FieldSize,
-  floatingLabelBaseText,
-  fieldPaddings,
-} from '@/components/_core/field-config'
+import { type FieldSize } from '@/components/_core/field-config'
 import { FormInputWrapper } from '../FormInputWrapper'
 
 export interface MaskedInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
+  icon?: ReactNode
+  iconPosition?: 'left' | 'right'
   mask?: MaskPattern
   maskPreset?: MaskPresetKey
   rawValue?: string
@@ -37,15 +46,17 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
     {
       id,
       label,
+      icon,
+      iconPosition = 'right',
       mask: maskProp,
       maskPreset,
       rawValue,
       onRawChange,
       onBlur,
-      placeholder,
+      placeholder: _placeholder,
       fullWidth,
       inputSize = 'md',
-      floatLabel = true,
+      floatLabel: _floatLabel = true,
       disabled,
       value,
       hasError = false,
@@ -71,6 +82,57 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
     const isControlled = rawValue !== undefined
     const [innerRaw, setInnerRaw] = useState<string>((value ?? '') as string)
     const effectiveRaw = isControlled ? rawValue! : innerRaw
+
+    const isCardField = _isCardField(maskPreset, hardMaxRaw)
+
+    const cardBrand = useMemo(
+      () => detectCardBrand(effectiveRaw),
+      [effectiveRaw]
+    )
+
+    const [loadedIcon, setLoadedIcon] = useState<ReactNode | null>(null)
+
+    React.useEffect(() => {
+      setLoadedIcon(null)
+    }, [cardBrand, isCardField])
+
+    if (
+      typeof window !== 'undefined' &&
+      isCardField &&
+      cardBrand &&
+      !loadedIcon
+    ) {
+      ;(async () => {
+        try {
+          if (cardBrand === 'visa') {
+            const mod = await import('@/components/icons/card/Visa')
+            setLoadedIcon(React.createElement(mod.VisaIcon))
+            return
+          }
+          if (cardBrand === 'mastercard') {
+            const mod = await import('@/components/icons/card/Mastercard')
+            setLoadedIcon(React.createElement(mod.MastercardIcon))
+            return
+          }
+          if (cardBrand === 'amex') {
+            const mod = await import('@/components/icons/card/Amex')
+            setLoadedIcon(React.createElement(mod.AmexIcon))
+            return
+          }
+        } catch {
+          setLoadedIcon(null)
+        }
+      })()
+    }
+
+    const autoIcon = useMemo<ReactNode | undefined>(() => {
+      if (icon) return icon
+      if (!isCardField) return undefined
+      if (loadedIcon) return loadedIcon
+      return <FiCreditCard />
+    }, [icon, isCardField, loadedIcon])
+
+    const resolvedIconPosition = iconPosition
 
     const maskedValue = mask ? formatWithMask(mask, effectiveRaw) : effectiveRaw
 
@@ -165,6 +227,9 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
         readOnly={readOnly}
         focused={focused}
         filled={filled}
+        hasIcon={!!autoIcon && resolvedIconPosition === 'left'}
+        icon={autoIcon}
+        iconPosition={resolvedIconPosition}
         fullWidth={fullWidth}
       >
         <input
@@ -175,20 +240,15 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
           readOnly={readOnly}
           required={required}
           maxLength={inputMaxLength}
-          placeholder={
-            floatLabel
-              ? undefined
-              : (placeholder ?? (typeof label === 'string' ? label : undefined))
-          }
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setFocused(true)}
           onBlur={handleBlur}
-          className={cn(
-            'peer w-full placeholder-transparent focus:outline-none border border-transparent',
-            disabled ? 'text-ds-subtlest' : 'text-ds-default',
-            fieldPaddings[inputSize],
-            floatingLabelBaseText[inputSize]
+          className={inputClasses(
+            inputSize,
+            disabled,
+            hasError,
+            autoIcon ? resolvedIconPosition : undefined
           )}
           {...rest}
         />

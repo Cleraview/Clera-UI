@@ -1,6 +1,3 @@
-// import typographyTokens from '@root/tokens/typography.json'
-// import { mapTokenGroup } from '@root/src/utils'
-
 export const tokenHeadingSizes = {
   xl: 'text-heading-xl',
   lg: 'text-heading-lg',
@@ -10,7 +7,6 @@ export const tokenHeadingSizes = {
 }
 
 export const tokenTextSizes = {
-  // ...mapTokenGroup('label', typographyTokens.typography.label),
   xl: 'text-label-xl',
   lg: 'text-label-lg',
   md: 'text-label-md',
@@ -31,4 +27,13 @@ export const tokenPaddings = {
   sm: 'p-2',
   md: 'p-2.5',
   lg: 'p-3',
+  xl: 'p-4',
+} as const
+
+export const tokenBadgePaddings = {
+  xs: 'p-0.5',
+  sm: 'p-1',
+  md: 'p-1.5',
+  lg: 'p-2',
+  xl: tokenPaddings.xl,
 } as const

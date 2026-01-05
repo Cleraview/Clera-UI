@@ -1,11 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
+import { FiSearch, FiSmartphone, FiUser } from 'react-icons/fi'
 import { MaskedInput } from '../MaskedInput'
+import { Select } from '@/components/form/select'
+import { Button } from '@/components/button'
 
 const meta: Meta<typeof MaskedInput> = {
   title: 'UI/Form/MaskedInput',
   component: MaskedInput,
   tags: ['dev'],
+  args: {
+    inputSize: 'md',
+  },
   argTypes: {
     maskPreset: {
       control: 'select',
@@ -60,6 +66,20 @@ const meta: Meta<typeof MaskedInput> = {
       description: 'The label for the input field.',
       table: { type: { summary: 'string' } },
     },
+    icon: {
+      control: false,
+      description: 'Icon node to render inside the input',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    iconPosition: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon relative to the input',
+      table: {
+        type: { summary: 'left | right' },
+        defaultValue: { summary: 'right' },
+      },
+    },
     mask: {
       control: 'text',
       description:
@@ -70,14 +90,6 @@ const meta: Meta<typeof MaskedInput> = {
       },
     },
   },
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'A text input component that supports input masking for various formats like credit cards, phone numbers, etc.',
-      },
-    },
-  },
 }
 export default meta
 
@@ -85,10 +97,47 @@ type Story = StoryObj<typeof MaskedInput>
 
 export const CreditCard: Story = {
   args: {
-    label: 'Card Number',
-    maskPreset: 'card16',
-    inputMode: 'numeric',
-    autoComplete: 'cc-number',
+    iconPosition: 'right',
+  },
+  render: args => {
+    const [raw, setRaw] = useState('4111111111111111')
+
+    const sampleOptions = [
+      { value: '4111111111111111', label: 'Visa — 4111 1111 1111 1111' },
+      { value: '5555555555554444', label: 'MasterCard — 5555 5555 5555 4444' },
+      { value: '378282246310005', label: 'Amex — 3782 822463 10005' },
+      { value: '', label: 'Empty' },
+    ]
+
+    return (
+      <div className="min-w-[300px] space-y-gap-md">
+        <Select
+          label="Sample Card"
+          options={sampleOptions}
+          defaultValue={sampleOptions[0].value}
+          onChange={val => setRaw(val)}
+        />
+
+        <MaskedInput
+          {...args}
+          label="Card Number"
+          maskPreset="card16"
+          inputMode="numeric"
+          autoComplete="cc-number"
+          rawValue={raw}
+          onRawChange={setRaw}
+          readOnly
+        />
+
+        <MaskedInput
+          {...args}
+          label="Card Number"
+          maskPreset="card16"
+          inputMode="numeric"
+          autoComplete="cc-number"
+        />
+      </div>
+    )
   },
 }
 
@@ -103,11 +152,42 @@ export const ExpiryDate: Story = {
 }
 
 export const CVCCode: Story = {
-  args: {
-    label: 'CVC',
-    maskPreset: 'cvc3',
-    inputMode: 'numeric',
-    autoComplete: 'cc-csc',
+  render: args => {
+    const [raw, setRaw] = useState('')
+    const [visible, setVisible] = useState(false)
+
+    return (
+      <div className="min-w-[200px] space-y-2">
+        <div className="flex flex-col gap-2">
+          <div className="">
+            <MaskedInput
+              {...args}
+              label="CVC"
+              maskPreset="cvc3"
+              inputMode="numeric"
+              autoComplete="cc-csc"
+              rawValue={raw}
+              onRawChange={setRaw}
+              type={visible ? 'text' : 'password'}
+            />
+          </div>
+
+          <Button
+            type="button"
+            aria-pressed={visible}
+            aria-label={visible ? 'Hide CVC' : 'Show CVC'}
+            onClick={() => setVisible(state => !state)}
+            fullWidth
+          >
+            {visible ? 'Hide' : 'Show'}
+          </Button>
+        </div>
+
+        <p className="text-body-xs text-ds-subtlest">
+          Raw: {raw ? raw.replace(/.(?=.{1,}$)/g, '*') : '(empty)'}
+        </p>
+      </div>
+    )
   },
 }
 
@@ -117,7 +197,35 @@ export const PhoneUS: Story = {
     maskPreset: 'phoneUS',
     inputMode: 'tel',
     autoComplete: 'tel',
+    icon: <FiSmartphone />,
+    iconPosition: 'left',
   },
+}
+
+export const WithIconLeft: Story = {
+  render: args => (
+    <MaskedInput
+      {...args}
+      label="Phone"
+      maskPreset="phoneUS"
+      inputMode="tel"
+      icon={<FiSearch />}
+      iconPosition="left"
+    />
+  ),
+}
+
+export const WithIconRight: Story = {
+  render: args => (
+    <MaskedInput
+      {...args}
+      label="Phone"
+      maskPreset="phoneUS"
+      inputMode="tel"
+      icon={<FiUser />}
+      iconPosition="right"
+    />
+  ),
 }
 
 export const ControlledExample: Story = {

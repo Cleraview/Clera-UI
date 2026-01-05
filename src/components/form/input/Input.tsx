@@ -1,13 +1,8 @@
 'use client'
 
-import { InputHTMLAttributes, useId, useState } from 'react'
-import { cn } from '@/utils/tailwind'
-import {
-  type FieldSize,
-  fieldStateStyles,
-  floatingLabelBaseText,
-  fieldPaddings,
-} from '@/components/_core/field-config'
+import { InputHTMLAttributes, useId, useState, ReactNode } from 'react'
+import { type FieldSize } from '@/components/_core/field-config'
+import { inputClasses } from './styles'
 import { FormInputWrapper } from '../FormInputWrapper'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -17,6 +12,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   inputSize?: FieldSize
   hasError?: boolean
   onBlur?: () => void
+  icon?: ReactNode
+  iconPosition?: 'left' | 'right'
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -31,6 +28,8 @@ export const Input: React.FC<InputProps> = ({
   type = 'text',
   inputSize = 'md',
   hasError = false,
+  icon,
+  iconPosition = 'right',
   ...restProps
 }) => {
   const autoId = useId()
@@ -57,19 +56,21 @@ export const Input: React.FC<InputProps> = ({
       readOnly={readOnly}
       focused={focused}
       filled={filled}
+      hasIcon={!!icon && iconPosition === 'left'}
+      icon={icon}
+      iconPosition={iconPosition}
       fullWidth={fullWidth}
     >
       <input
         id={inputId}
-        className={cn(
-          'peer w-full placeholder-transparent focus:outline-none bg-transparent',
-          fieldPaddings[inputSize],
-          floatingLabelBaseText[inputSize],
-          disabled ? 'text-ds-subtlest' : 'text-ds-default',
-          hasError && fieldStateStyles.error.text
-        )}
         type={type}
         value={value}
+        className={inputClasses(
+          inputSize,
+          disabled,
+          hasError,
+          icon ? iconPosition : undefined
+        )}
         readOnly={readOnly}
         disabled={disabled}
         onFocus={handleFocus}

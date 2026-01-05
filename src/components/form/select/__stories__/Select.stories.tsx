@@ -121,9 +121,15 @@ const meta: Meta<typeof Select> = {
       { value: 'option2', label: 'Option 2' },
       { value: 'option3', label: 'Option 3' },
     ],
-    // placeholder: 'Select an option',
     inputSize: 'md',
   },
+  decorators: [
+    Story => (
+      <div className="min-w-[200px]">
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
@@ -159,7 +165,7 @@ export const Controlled: Story = {
   render: args => {
     const [value, setValue] = useState('option2')
     return (
-      <div className="flex flex-col gap-space-sm">
+      <div className="min-w-[200px] flex flex-col gap-space-sm">
         <Select {...args} value={value} onChange={setValue} />
         <p className="text-ds-subtle text-body-xs">Chose: {value}</p>
       </div>

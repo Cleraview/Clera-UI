@@ -1,68 +1,71 @@
 @utility text-display-2xl {
-  @apply text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none;
+  @apply text-5xl md:text-7xl font-black tracking-tighter leading-none;
 }
 @utility text-display-xl {
-  @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none;
+  @apply text-4xl md:text-6xl font-extrabold tracking-tight leading-none;
 }
 @utility text-display-lg {
-  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1];
+  @apply text-3xl md:text-5xl font-bold tracking-tight leading-[1.1];
 }
 @utility text-display-md {
-  @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
+  @apply text-2xl md:text-4xl font-bold tracking-tight leading-tight;
+}
+@utility text-heading-4xl {
+  @apply text-3xl md:text-5xl font-bold tracking-tight leading-snug;
 }
 @utility text-heading-3xl {
-  @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-snug;
+  @apply text-2xl md:text-4xl font-bold tracking-tight leading-snug;
 }
 @utility text-heading-2xl {
-  @apply text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-snug;
+  @apply text-xl md:text-3xl font-bold tracking-tight leading-snug;
 }
 @utility text-heading-xl {
-  @apply text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight leading-snug;
+  @apply text-lg md:text-2xl font-semibold tracking-tight leading-snug;
 }
 @utility text-heading-lg {
-  @apply text-lg sm:text-xl md:text-2xl font-semibold leading-snug;
+  @apply text-base md:text-xl font-semibold leading-snug;
 }
 @utility text-heading-md {
-  @apply text-base sm:text-lg md:text-xl font-semibold leading-normal;
+  @apply text-base md:text-lg font-semibold leading-normal;
 }
 @utility text-heading-sm {
-  @apply text-sm sm:text-base font-semibold leading-normal;
+  @apply text-sm md:text-base font-semibold leading-normal;
 }
 @utility text-body-2xl {
-  @apply text-2xl leading-relaxed;
+  @apply text-2xl md:text-2xl leading-relaxed;
 }
 @utility text-body-xl {
-  @apply text-xl leading-relaxed;
+  @apply text-xl md:text-xl leading-relaxed;
 }
 @utility text-body-lg {
-  @apply text-lg leading-relaxed;
+  @apply text-lg md:text-lg leading-relaxed;
 }
 @utility text-body-md {
-  @apply text-base leading-relaxed;
+  @apply text-base md:text-base leading-relaxed;
 }
 @utility text-body-sm {
-  @apply text-sm leading-relaxed;
+  @apply text-sm md:text-sm leading-relaxed;
 }
 @utility text-body-xs {
-  @apply text-xs leading-normal;
+  @apply text-xs md:text-xs leading-normal;
 }
 @utility text-label-xl {
-  @apply text-xl leading-7 tracking-tight;
+  @apply text-xl md:text-xl leading-7 tracking-tight;
 }
 @utility text-label-lg {
-  @apply text-lg leading-6 tracking-tight;
+  @apply text-lg md:text-lg leading-6 tracking-tight;
 }
 @utility text-label-md {
-  @apply text-base leading-5;
+  @apply text-base md:text-base leading-5;
 }
 @utility text-label-sm {
-  @apply text-sm leading-4;
+  @apply text-sm md:text-sm leading-4;
 }
 @utility text-label-xs {
-  @apply text-xs leading-3;
+  @apply text-xs md:text-xs leading-3;
 }
 @utility text-label-xxs {
-  @apply text-[10px] leading-[10px];
+  @apply text-[10px] md:text-[10px] leading-[10px];
 }
 @utility text-helper-text {
   @apply text-xs text-ds-subtle leading-normal;

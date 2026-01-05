@@ -4,10 +4,11 @@ import * as ContextMenuStories from "./ContextMenu.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Context Menu" of={ContextMenuStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Context Menu
 
@@ -83,6 +84,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   { label: 'Save As...', shortcut: '⌘S' },
                   { label: 'Print...', shortcut: '⌘P' },
                 ]}
+                onSelect={(value) => console.log('Selected:', value)}
               />
             )
           }
@@ -133,6 +135,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                   { type: 'separator' },
                   { label: 'Delete', icon: FaTrash, className: 'text-ds-destructive' },
                 ]}
+                onSelect={(value) => console.log('Selected:', value)}
               />
             )
           }
@@ -186,6 +189,12 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                     id: 'colm',
                   },
                 ]}
+                onGroupSelect={(groupId, value) => {
+                  console.log('group select', groupId, value)
+                }}
+                onSelect={(value) => {
+                  console.log('select', value)
+                }}
               />
             )
           }
@@ -209,8 +218,19 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     | `width` | `string \| number` | `240` | Width of the menu content. |
     | `className` | `string` | - | Optional classes for the content container. |
     | `onOpenChange` | `(open: boolean) => void` | - | Callback when the open state changes. |
+    | `closeOnSelect` | `boolean` | `true` | If `false`, the menu will remain open after selecting an item. |
+    | `onSelect` | `fn(value, item?)` | - | Global handler invoked when a non-checkbox/non-radio item is selected or when group handlers are not provided. |
+    | `onGroupSelect` | `fn(groupId, value, item?)` | - | Handler invoked for grouped selections (useful for checkbox groups). |
 
     <br />
+
+    **Full handler signatures**
+
+    ```ts
+    onSelect?: (value: string, item?: ContextMenuItemDef) => void
+    onGroupSelect?: (groupId: string, value: string, item?: ContextMenuItemDef) => void
+    ```
+
 
     ### **ContextMenuItemDef Type**
 
@@ -223,7 +243,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
           | string 
           | ReactElement 
           | {
-              type?: 'item' | 'label' | 'separator' | 'checkbox' | 'radio'
+              | type?: 'item' | 'label' | 'separator' | 'checkbox' | 'radio'
               label?: ReactNode
               icon?: ElementType
               shortcut?: string
@@ -234,6 +254,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
               checked?: boolean
               onCheckedChange?: (checked: boolean) => void
               value?: string
+              groupId?: string
               id?: string
             }
       `} />
@@ -349,4 +370,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

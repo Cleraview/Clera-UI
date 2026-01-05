@@ -95,7 +95,7 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({
                               {shortcut}
                             </kbd>
                           )}
-                          {id === selectedValue && selectable && (
+                          {id === selectedValue && selectable && FiCheck && (
                             <FiCheck className={styles.menu.checkIcon} />
                           )}
                         </div>

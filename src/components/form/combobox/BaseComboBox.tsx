@@ -25,6 +25,7 @@ import {
   floatingLabelBaseText,
 } from '@/components/_core/field-config'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 export type BaseComboBoxProps = {
   id?: string
@@ -74,14 +75,14 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
       disabled,
       required,
       hasError,
-
       children,
+      className,
       triggerClassName,
     },
     ref
   ) => {
-    const autoId = useId()
-    const inputId = idProp ?? autoId
+    const customId = useId()
+    const inputId = idProp ?? customId
     const filled = !!value
 
     return (
@@ -96,6 +97,7 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
         focused={open}
         filled={filled}
         fullWidth={fullWidth}
+        className={className}
       >
         <Popover.Root open={open} onOpenChange={onOpenChange}>
           <Popover.Trigger
@@ -106,18 +108,26 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
             aria-label={label}
             disabled={disabled || readOnly}
             className={cn(
-              'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-              '[&>[data-filled="false"]]:text-ds-subtlest',
-              disabled ? 'text-ds-subtlest' : 'text-ds-default',
+              styles.triggerBase,
+              styles.triggerFilledFalse,
+              disabled ? styles.triggerTextDisabled : styles.triggerTextDefault,
               fieldPaddings[inputSize],
               triggerClassName
             )}
             onClick={() => !readOnly && onOpenChange(!open)}
           >
             <span
+              className={cn(
+                styles.placeholderSpan,
+                floatingLabelBaseText[inputSize]
+              )}
+            >
+              {placeholder}
+            </span>
+            <span
               data-filled={filled}
               className={cn(
-                'truncate',
+                styles.valueAbsolute,
                 hasError ? 'text-ds-destructive' : 'text-ds-default',
                 !value && 'invisible',
                 floatingLabelBaseText[inputSize]
@@ -126,32 +136,33 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
               {value ? displayValue : placeholder}
             </span>
 
-            <FiChevronDown
-              aria-hidden="true"
-              className={cn(
-                'w-4 h-4 ml-space-sm text-ds-subtlest shrink-0 transition-transform duration-200',
-                hasError && 'text-ds-destructive!',
-                open && 'rotate-180'
-              )}
-            />
+            {FiChevronDown && (
+              <FiChevronDown
+                aria-hidden="true"
+                className={cn(
+                  styles.chevIcon,
+                  hasError && 'text-ds-destructive!',
+                  open && 'rotate-180'
+                )}
+              />
+            )}
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Content
-              className="w-(--radix-popover-trigger-width) z-50 rounded-md bg-ds-elevation-surface shadow-md border border-ds-default animate-in fade-in-0 zoom-in-95"
+              className={styles.popoverContent}
               sideOffset={4}
               side="bottom"
               align="start"
             >
               <Command
-                className="flex flex-col overflow-hidden rounded-md"
+                className={styles.command}
                 shouldFilter={shouldFilter}
                 aria-label={`${label} options`}
               >
                 <CommandInput
                   className={cn(
-                    'w-full border-b border-ds-default bg-transparent outline-none',
-                    'text-body-sm text-ds-default placeholder:text-ds-subtlest',
+                    styles.commandInputBase,
                     fieldPaddings[inputSize]
                   )}
                   placeholder="Search..."
@@ -159,7 +170,7 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
                   onValueChange={onSearchChange}
                   aria-label={`Search ${label}`}
                 />
-                <CommandList className="max-h-60 overflow-y-auto scrollbar p-space-xs">
+                <CommandList className={styles.commandList}>
                   {children}
                 </CommandList>
               </Command>
@@ -182,11 +193,8 @@ export const ComboBoxItem = forwardRef<
   <CommandItem
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center rounded-sm outline-none',
-      'text-ds-default transition-colors',
-      'aria-selected:bg-ds-primary aria-selected:text-ds-primary',
-
-      isSelected && 'bg-ds-primary text-ds-primary outline-none',
+      styles.commandItem,
+      isSelected ? styles.commandItemSelected : styles.commandItemUnselected,
       fieldPaddings[inputSize],
       floatingLabelBaseText[inputSize],
       className
@@ -200,16 +208,7 @@ export const ComboBoxGroup = forwardRef<
   ElementRef<typeof CommandGroup>,
   ComponentPropsWithoutRef<typeof CommandGroup>
 >(({ className, ...props }, ref) => (
-  <CommandGroup
-    ref={ref}
-    className={cn(
-      'overflow-hidden text-ds-default',
-      '[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5',
-      '[&_[cmdk-group-heading]]:text-body-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-ds-subtle',
-      className
-    )}
-    {...props}
-  />
+  <CommandGroup ref={ref} className={cn(styles.group, className)} {...props} />
 ))
 ComboBoxGroup.displayName = 'ComboBoxGroup'
 
@@ -217,11 +216,7 @@ export const ComboBoxEmpty = forwardRef<
   ElementRef<typeof CommandEmpty>,
   ComponentPropsWithoutRef<typeof CommandEmpty>
 >(({ className, ...props }, ref) => (
-  <CommandEmpty
-    ref={ref}
-    className={cn('py-6 text-center text-body-sm text-ds-subtle', className)}
-    {...props}
-  />
+  <CommandEmpty ref={ref} className={cn(styles.empty, className)} {...props} />
 ))
 ComboBoxEmpty.displayName = 'ComboBoxEmpty'
 

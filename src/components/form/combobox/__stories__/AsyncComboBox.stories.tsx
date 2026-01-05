@@ -14,7 +14,6 @@ import {
 import { ReactNode } from 'react'
 
 const allProducts = [
-  // Electronics
   {
     value: 'prod-01',
     label: 'Laptop Pro 16"',
@@ -55,7 +54,6 @@ const allProducts = [
     price: '399.00',
     img: 'https://placehold.co/80x80/2a9d8f/ffffff?text=Watch',
   },
-  // Apparel
   {
     value: 'prod-06',
     label: 'Classic T-Shirt',
@@ -96,7 +94,6 @@ const allProducts = [
     price: '45.00',
     img: 'https://placehold.co/80x80/e9c46a/ffffff?text=Wallet',
   },
-  // Home & Kitchen
   {
     value: 'prod-11',
     label: 'Coffee Maker',
@@ -137,7 +134,6 @@ const allProducts = [
     price: '99.00',
     img: 'https://placehold.co/80x80/f4a261/ffffff?text=Fryer',
   },
-  // Groceries
   {
     value: 'prod-16',
     label: 'Organic Avocados',
@@ -178,7 +174,6 @@ const allProducts = [
     price: '7.99',
     img: 'https://placehold.co/80x80/e76f51/ffffff?text=Quinoa',
   },
-  // More Electronics
   {
     value: 'prod-21',
     label: 'Sony WH-1000XM5',
@@ -219,7 +214,6 @@ const allProducts = [
     price: '139.00',
     img: 'https_//placehold.co/80x80/2a9d8f/ffffff?text=Kindle',
   },
-  // More Apparel
   {
     value: 'prod-26',
     label: 'Leather Belt',
@@ -490,9 +484,11 @@ export const ECommerceSearch: Story = {
       switch (option.type) {
         case 'text':
           return (
-            <div className="flex items-center gap-3 p-space-sm">
+            <div className="flex items-center gap-space-sm p-space-sm">
               <FiShoppingBag className="w-4 h-4 text-(--fill-ds-icon-subtle) shrink-0" />
-              <span className="text-body-sm font-semibold">{option.label}</span>
+              <span className="text-label-sm font-semibold">
+                {option.label}
+              </span>
             </div>
           )
         case 'image':
@@ -598,6 +594,7 @@ export const CustomLoadingSkeletons: Story = {
     loadOptions: async search => ({
       Flights: (await fakeApi(search, flights))['Products'],
     }),
+    className: 'min-w-[300px]',
     renderItem: option => (
       <div className="flex items-center gap-3 p-space-sm">
         <Image

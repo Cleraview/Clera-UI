@@ -11,6 +11,7 @@ import {
   fieldPaddings,
 } from '@/components/_core/field-config'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 export type SelectOption = {
   value: string
@@ -52,7 +53,7 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   const autoId = useId()
   const inputId = idProp ?? autoId
-
+  const placeholder = disabled ? 'Disabled' : readOnly ? 'Read Only' : label
   const [focused, setFocused] = useState(false)
   const [filled, setFilled] = useState(
     value !== undefined
@@ -90,14 +91,12 @@ export const Select: React.FC<SelectProps> = ({
         <SelectPrimitive.Trigger
           id={inputId}
           className={cn(
-            'w-full flex items-center justify-between bg-transparent',
-            '[&>[data-filled="false"]]:invisible',
+            styles.triggerBase,
+            styles.triggerFilledFalse,
             fieldPaddings[inputSize],
             floatingLabelBaseText[inputSize],
-            hasError && '[&>[data-has-error="true"]]:text-ds-destructive',
-            disabled
-              ? 'text-ds-subtlest'
-              : 'outline-none text-ds-default cursor-pointer',
+            hasError && styles.triggerHasError,
+            disabled ? styles.triggerDisabled : styles.triggerDefault,
             className
           )}
           onBlur={() => {
@@ -106,33 +105,32 @@ export const Select: React.FC<SelectProps> = ({
           disabled={disabled || readOnly}
         >
           <SelectPrimitive.Value
-            placeholder={label}
+            placeholder={placeholder}
             data-filled={filled}
             data-has-error={hasError}
             className={cn(
-              hasError ? 'text-ds-destructive' : 'text-ds-default',
+              hasError ? styles.valueError : styles.valueDefault,
               floatingLabelBaseText[inputSize]
             )}
           />
 
           <SelectPrimitive.Icon asChild>
-            <GoChevronDown
-              className={cn(
-                'w-4 h-4 ml-space-sm text-ds-subtlest',
-                hasError && 'text-ds-destructive!'
-              )}
-            />
+            {GoChevronDown && (
+              <GoChevronDown
+                className={cn(styles.iconBase, hasError && styles.iconError)}
+              />
+            )}
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="w-[var(--radix-select-trigger-width)] z-50 bg-ds-elevation-surface rounded-md bg-default shadow-md border border-ds-default"
+            className={styles.content}
             sideOffset={4}
             position="popper"
             side="bottom"
           >
-            <SelectPrimitive.Viewport className="p-space-xs">
+            <SelectPrimitive.Viewport className={styles.viewport}>
               {options
                 .filter(option => option.value && option.value.trim() !== '')
                 .map(option => (
@@ -140,8 +138,7 @@ export const Select: React.FC<SelectProps> = ({
                     key={option.value}
                     value={option.value}
                     className={cn(
-                      'flex items-center justify-between rounded-sm cursor-pointer',
-                      'focus:bg-ds-primary focus:text-ds-primary outline-none',
+                      styles.itemBase,
                       fieldPaddings[inputSize],
                       floatingLabelBaseText[inputSize]
                     )}
@@ -151,7 +148,9 @@ export const Select: React.FC<SelectProps> = ({
                     </SelectPrimitive.ItemText>
 
                     <SelectPrimitive.ItemIndicator>
-                      <IoCheckmark className="w-4 h-4 ml-space-md text-(--fill-ds-icon-primary)" />
+                      {IoCheckmark && (
+                        <IoCheckmark className={styles.itemIndicatorIcon} />
+                      )}
                     </SelectPrimitive.ItemIndicator>
                   </SelectPrimitive.Item>
                 ))}

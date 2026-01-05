@@ -3,11 +3,11 @@ import config from "@/config/site"
 import * as BrandLogoStories from "./BrandLogo.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/BrandLogo" of={BrandLogoStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # BrandLogo
 
@@ -51,4 +51,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <br />
   </div>
-</div>
+</DocsLayout>

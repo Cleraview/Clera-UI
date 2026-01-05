@@ -10,13 +10,13 @@ import {
   type ComponentPropsWithoutRef,
   type ElementRef,
   type Attributes,
-  type MouseEventHandler,
   type MouseEvent,
 } from 'react'
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 import { GoChevronRight } from 'react-icons/go'
 import { FaCircleCheck, FaCircle } from 'react-icons/fa6'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 const ContextMenuRoot = ContextMenuPrimitive.Root
 const ContextMenuTrigger = ContextMenuPrimitive.Trigger
@@ -34,15 +34,13 @@ const ContextMenuSubTrigger = forwardRef<
   <ContextMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      'flex cursor-default select-none items-center rounded-sm p-menu-item-md text-body-sm text-ds-default outline-none',
-      'hover:bg-ds-neutral-subtle-hovered focus:bg-ds-neutral-subtle-hovered data-[state=open]:bg-ds-neutral-subtle-hovered',
-      inset && 'pl-8',
+      styles.subTrigger,
+      inset && styles.subTriggerInset,
       className
     )}
     {...props}
   >
     {children}
-    <GoChevronRight className="ml-auto h-4 w-4 text-ds-subtle" />
   </ContextMenuPrimitive.SubTrigger>
 ))
 ContextMenuSubTrigger.displayName = ContextMenuPrimitive.SubTrigger.displayName
@@ -53,10 +51,7 @@ const ContextMenuSubContent = forwardRef<
 >(({ className, ...props }, ref) => (
   <ContextMenuPrimitive.SubContent
     ref={ref}
-    className={cn(
-      'z-50 min-w-[8rem] overflow-hidden rounded-md border border-ds-default bg-ds-elevation-surface p-1 shadow-ds-elevation-overlay animate-in slide-in-from-left-1',
-      className
-    )}
+    className={cn(styles.subContent, className)}
     {...props}
   />
 ))
@@ -69,10 +64,7 @@ const ContextMenuContent = forwardRef<
   <ContextMenuPrimitive.Portal>
     <ContextMenuPrimitive.Content
       ref={ref}
-      className={cn(
-        'z-50 min-w-[8rem] overflow-hidden rounded-md border border-ds-default bg-ds-elevation-surface p-1 shadow-ds-elevation-overlay animate-in fade-in-80',
-        className
-      )}
+      className={cn(styles.content, className)}
       {...props}
     />
   </ContextMenuPrimitive.Portal>
@@ -87,14 +79,7 @@ const ContextMenuItem = forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <ContextMenuPrimitive.Item
     ref={ref}
-    className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm p-menu-item-md text-body-sm text-ds-default outline-none cursor-pointer transition-colors',
-      'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-      'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      inset && 'pl-space-md',
-      className
-    )}
+    className={cn(styles.item, inset && styles.itemInset, className)}
     {...props}
   />
 ))
@@ -107,29 +92,26 @@ const ContextMenuCheckboxItem = forwardRef<
   <ContextMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-body-sm text-ds-default cursor-pointer outline-none transition-colors',
-      !checked && [
-        'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-        'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      ],
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      checked && 'bg-ds-primary',
+      styles.checkboxItem,
+      checked && styles.itemSelected,
       className
     )}
     checked={checked}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <FaCircleCheck
-        className={cn(
-          'h-4 w-4',
-          checked
-            ? 'text-(--fill-ds-icon-accent-violet)'
-            : 'text-(--fill-ds-icon)'
-        )}
-      />
+    <span className={styles.iconWrapper}>
+      {FaCircleCheck && (
+        <FaCircleCheck
+          className={cn(
+            styles.checkboxIcon,
+            checked ? styles.checkboxIconChecked : styles.checkboxIconDefault
+          )}
+        />
+      )}
     </span>
-    {children}
+    <div className={styles.labelGroup}>
+      <span>{children}</span>
+    </div>
   </ContextMenuPrimitive.CheckboxItem>
 ))
 ContextMenuCheckboxItem.displayName =
@@ -137,23 +119,21 @@ ContextMenuCheckboxItem.displayName =
 
 const ContextMenuRadioItem = forwardRef<
   ElementRef<typeof ContextMenuPrimitive.RadioItem>,
-  ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof ContextMenuPrimitive.RadioItem> & {
+    checked?: boolean
+  }
+>(({ className, children, checked, ...props }, ref) => (
   <ContextMenuPrimitive.RadioItem
     ref={ref}
-    className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-body-sm text-ds-default outline-none transition-colors',
-      'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
-      'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-      'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      className
-    )}
+    className={cn(styles.radioItem, checked && styles.itemSelected, className)}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <FaCircle className="h-2 w-2 fill-ds-icon-brand" />
+    <span className={styles.iconWrapperRadio}>
+      {FaCircle && <FaCircle className={styles.radioIcon} />}
     </span>
-    {children}
+    <div className={styles.labelGroup}>
+      <span>{children}</span>
+    </div>
   </ContextMenuPrimitive.RadioItem>
 ))
 ContextMenuRadioItem.displayName = ContextMenuPrimitive.RadioItem.displayName
@@ -166,11 +146,7 @@ const ContextMenuLabel = forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <ContextMenuPrimitive.Label
     ref={ref}
-    className={cn(
-      'p-menu-item-md text-body-sm font-semibold text-ds-default',
-      inset && 'pl-8',
-      className
-    )}
+    className={cn(styles.label, inset && styles.subTriggerInset, className)}
     {...props}
   />
 ))
@@ -182,7 +158,7 @@ const ContextMenuSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <ContextMenuPrimitive.Separator
     ref={ref}
-    className={cn('my-1 h-px bg-ds-neutral-subtle-pressed', className)}
+    className={cn(styles.separator, className)}
     {...props}
   />
 ))
@@ -203,16 +179,37 @@ export type ContextMenuItemDef =
       checked?: boolean
       onCheckedChange?: (checked: boolean) => void
       value?: string
+      groupId?: string
       id?: string
     }
+
+type RadioItemDef = {
+  type?: 'radio'
+  label?: ReactNode
+  value?: string
+  groupId?: string
+  checked?: boolean
+  className?: string
+  disabled?: boolean
+  id?: string
+}
 
 interface ContextMenuProps extends ComponentPropsWithoutRef<
   typeof ContextMenuPrimitive.Root
 > {
-  items: ContextMenuItemDef[]
+  items: ContextMenuItemDef[] | Record<string, never>[]
   trigger: ReactNode
   width?: string | number
   className?: string
+  closeOnSelect?: boolean
+  onCheckboxToggle?: (value: string, checked: boolean) => void
+  onRadioSelect?: (value: string) => void
+  onSelect?: (value: string, item?: ContextMenuItemDef) => void
+  onGroupSelect?: (
+    groupId: string,
+    value: string,
+    item?: ContextMenuItemDef
+  ) => void
 }
 
 const ContextMenu = ({
@@ -221,8 +218,110 @@ const ContextMenu = ({
   width = 240,
   className,
   onOpenChange,
+  closeOnSelect = true,
+  onCheckboxToggle,
+  onRadioSelect,
+  onSelect,
+  onGroupSelect,
   ...props
 }: ContextMenuProps) => {
+  type ItemProps = {
+    onClick?: (e: MouseEvent<HTMLDivElement> | Event) => void
+    onCheckedChange?: (checked: boolean) => void
+    disabled?: boolean
+  }
+
+  const invokeOnClick = (props: ItemProps | undefined, e: MouseEvent) => {
+    props?.onClick?.(e as unknown as MouseEvent<HTMLDivElement>)
+  }
+
+  const isCheckboxChecked = (node: ContextMenuItemDef | undefined) =>
+    !!node &&
+    typeof node !== 'string' &&
+    !isValidElement(node) &&
+    node.type === 'checkbox' &&
+    Boolean(node.checked)
+
+  const computeRoundedClass = (itemNode: ContextMenuItemDef, idx: number) => {
+    const prevChecked = isCheckboxChecked(items[idx - 1])
+    const nextChecked = isCheckboxChecked(items[idx + 1])
+    const itemChecked = Boolean((itemNode as { checked?: boolean }).checked)
+
+    if (!itemChecked) return styles.checkboxRoundedSingle
+    if (prevChecked && nextChecked) return styles.checkboxRoundedMiddle
+    if (prevChecked) return styles.checkboxRoundedBottom
+    if (nextChecked) return styles.checkboxRoundedTop
+    return styles.checkboxRoundedSingle
+  }
+
+  const makeCheckboxClickHandler = (
+    itemNode: ContextMenuItemDef & {
+      checked?: boolean
+      value?: string
+      groupId?: string
+    },
+    propsObj: ItemProps | undefined
+  ) => {
+    return (e: MouseEvent) => {
+      const nextCheckedState = !Boolean(itemNode.checked)
+      if (propsObj?.onCheckedChange) {
+        propsObj.onCheckedChange(nextCheckedState)
+      } else if (itemNode.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode.value) {
+        onSelect(itemNode.value, itemNode)
+      } else if (onCheckboxToggle && itemNode.value) {
+        onCheckboxToggle(itemNode.value, nextCheckedState)
+      }
+      invokeOnClick(propsObj, e)
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
+
+  const makeRadioClickHandler = (
+    itemNode: ContextMenuItemDef & { value?: string; groupId?: string },
+    propsObj: ItemProps | undefined
+  ) => {
+    return (e: MouseEvent) => {
+      if (propsObj?.onClick) {
+        propsObj.onClick(e as unknown as MouseEvent<HTMLDivElement>)
+      } else if (itemNode.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode.value) {
+        onSelect(itemNode.value, itemNode)
+      } else if (onRadioSelect && itemNode.value) {
+        onRadioSelect(itemNode.value)
+      }
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
+
+  const makeClickHandler = (
+    propsObj: ItemProps | undefined,
+    itemNode?: ContextMenuItemDef & { value?: string; groupId?: string }
+  ) => {
+    return (e: MouseEvent) => {
+      if (propsObj?.onClick) {
+        propsObj.onClick(e as unknown as MouseEvent<HTMLDivElement>)
+      } else if (itemNode?.groupId && onGroupSelect && itemNode.value) {
+        onGroupSelect(itemNode.groupId, itemNode.value, itemNode)
+      } else if (onSelect && itemNode?.value) {
+        onSelect(itemNode.value, itemNode)
+      }
+
+      if (!closeOnSelect) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+  }
+
   const renderItem = (item: ContextMenuItemDef, index: number) => {
     if (typeof item === 'string') {
       return <ContextMenuItem key={index}>{item}</ContextMenuItem>
@@ -247,15 +346,24 @@ const ContextMenu = ({
       return (
         <ContextMenuSub key={key}>
           <ContextMenuSubTrigger
-            className={cn('justify-between', className)}
+            className={cn(styles.item, className)}
             disabled={itemProps.disabled}
           >
-            <div className="flex items-center">
-              {Icon && <Icon className="mr-2 h-4 w-4" />}
-              <span>{label}</span>
+            <div className={styles.itemInner}>
+              {Icon && (
+                <span className={styles.iconWrapper}>
+                  <Icon className={styles.itemIcon} />
+                </span>
+              )}
+              <div className={cn(styles.labelGroup, styles.labelAndChevron)}>
+                <span>{label}</span>
+                {GoChevronRight && (
+                  <GoChevronRight className={styles.chevronSmall} />
+                )}
+              </div>
             </div>
           </ContextMenuSubTrigger>
-          <ContextMenuSubContent className="w-full min-w-[8rem]">
+          <ContextMenuSubContent>
             {children.map((child, idx) => renderItem(child, idx))}
           </ContextMenuSubContent>
         </ContextMenuSub>
@@ -265,51 +373,71 @@ const ContextMenu = ({
     switch (type) {
       case 'separator':
         return <ContextMenuSeparator key={key} className={className} />
+
       case 'label':
         return (
           <ContextMenuLabel key={key} className={className}>
             {label}
           </ContextMenuLabel>
         )
-      case 'checkbox':
+
+      case 'checkbox': {
+        const roundedClass = computeRoundedClass(item, index)
+
         return (
           <ContextMenuCheckboxItem
             key={key}
-            className={className}
+            className={cn(className, roundedClass)}
             checked={item.checked}
-            onCheckedChange={item.onCheckedChange}
+            onClick={makeCheckboxClickHandler(
+              item as ContextMenuItemDef & { checked?: boolean },
+              itemProps as ItemProps
+            )}
             disabled={itemProps.disabled}
           >
             {label}
           </ContextMenuCheckboxItem>
         )
+      }
+
       case 'radio':
         return (
           <ContextMenuRadioItem
             key={key}
             className={className}
             value={item.value!}
+            checked={item.checked}
             disabled={itemProps.disabled}
+            onClick={makeRadioClickHandler(
+              item as ContextMenuItemDef & { value?: string },
+              itemProps as ItemProps
+            )}
           >
             {label}
           </ContextMenuRadioItem>
         )
+
       case 'item':
       default:
         return (
           <ContextMenuItem
             key={key}
             className={className}
-            onClick={itemProps.onClick as MouseEventHandler<HTMLDivElement>}
             disabled={itemProps.disabled}
+            onClick={makeClickHandler(
+              itemProps as ItemProps,
+              item as ContextMenuItemDef & { value?: string; groupId?: string }
+            )}
           >
-            {Icon && <Icon className="mr-2 h-4 w-4" />}
-            <span>{label}</span>
-            {shortcut && (
-              <span className="ml-auto text-xs tracking-widest opacity-60">
-                {shortcut}
+            {Icon && (
+              <span className={styles.iconWrapper}>
+                <Icon className={styles.itemIcon} />
               </span>
             )}
+            <div className={cn(styles.labelGroup, styles.labelAndShortcut)}>
+              <span>{label}</span>
+              {shortcut && <span className={styles.shortcut}>{shortcut}</span>}
+            </div>
           </ContextMenuItem>
         )
     }
@@ -318,8 +446,106 @@ const ContextMenu = ({
   return (
     <ContextMenuRoot onOpenChange={onOpenChange} {...props}>
       <ContextMenuTrigger asChild>{trigger}</ContextMenuTrigger>
-      <ContextMenuContent className={cn('p-1', className)} style={{ width }}>
-        {items.map(renderItem)}
+      <ContextMenuContent
+        className={cn(styles.content, styles.contentPadding, className)}
+        style={{ width }}
+      >
+        {(() => {
+          const nodes: ReactNode[] = []
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i]
+
+            if (typeof item === 'string' || isValidElement(item)) {
+              nodes.push(renderItem(item, i))
+              continue
+            }
+
+            if (item.type === 'radio') {
+              const groupId = item.groupId
+              const groupItems: Array<RadioItemDef & { __idx?: number }> = []
+              let j = i
+              if (groupId) {
+                while (j < items.length) {
+                  const it = items[j]
+                  if (
+                    typeof it !== 'string' &&
+                    !isValidElement(it) &&
+                    it.type === 'radio' &&
+                    it.groupId === groupId
+                  ) {
+                    groupItems.push({
+                      ...(it as object as RadioItemDef),
+                      __idx: j,
+                    })
+                    j++
+                  } else break
+                }
+              } else {
+                while (j < items.length) {
+                  const it = items[j]
+                  if (
+                    typeof it !== 'string' &&
+                    !isValidElement(it) &&
+                    it.type === 'radio' &&
+                    !it.groupId
+                  ) {
+                    groupItems.push({
+                      ...(it as object as RadioItemDef),
+                      __idx: j,
+                    })
+                    j++
+                  } else break
+                }
+              }
+
+              const groupValue =
+                groupItems.find(g => Boolean(g.checked))?.value ?? undefined
+
+              const handleValueChange = (value: string) => {
+                const matched = groupItems.find(g => g.value === value)
+                if (!matched) return
+                if (matched.groupId && onGroupSelect) {
+                  onGroupSelect(matched.groupId, value, matched)
+                } else if (onSelect) {
+                  onSelect(value, matched)
+                } else if (onRadioSelect) {
+                  onRadioSelect(value)
+                }
+              }
+
+              nodes.push(
+                <ContextMenuRadioGroup
+                  key={'radio-group-' + i + (groupId ?? '')}
+                  value={groupValue}
+                  onValueChange={handleValueChange}
+                >
+                  {groupItems.map(g => (
+                    <ContextMenuRadioItem
+                      key={g.id ?? g.__idx}
+                      className={g.className}
+                      value={g.value!}
+                      checked={g.checked}
+                      disabled={g.disabled}
+                      onClick={makeRadioClickHandler(
+                        g as ContextMenuItemDef & { value?: string },
+                        g as ItemProps
+                      )}
+                    >
+                      {g.label}
+                    </ContextMenuRadioItem>
+                  ))}
+                </ContextMenuRadioGroup>
+              )
+
+              i = j - 1
+              continue
+            }
+
+            nodes.push(renderItem(item, i))
+          }
+
+          return nodes
+        })()}
       </ContextMenuContent>
     </ContextMenuRoot>
   )

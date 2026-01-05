@@ -95,24 +95,3 @@ export const Disabled: Story = {
     disabled: true,
   },
 }
-
-export const Playground: Story = {
-  render: args => {
-    const [checked, setChecked] = useState(args.defaultChecked || false)
-    return (
-      <Checkbox
-        {...args}
-        checked={args.checked !== undefined ? args.checked : checked}
-        onChange={isChecked => {
-          if (args.checked === undefined) {
-            setChecked(isChecked)
-          }
-          args.onChange?.(isChecked)
-        }}
-      />
-    )
-  },
-  args: {
-    label: 'Playground Checkbox',
-  },
-}
