@@ -5,7 +5,7 @@ export type FieldSize = 'sm' | 'md' | 'lg'
 export const floatingLabelBase: Record<FieldSize, string> = {
   sm: '-left-1 translate-x-[14px] translate-y-[10px]',
   md: '-left-1.5 translate-x-[16px] translate-y-[10px]',
-  lg: '-left-2 translate-x-[20px] translate-y-[12px]',
+  lg: '-left-2 translate-x-[20px] translate-y-[10px]',
 }
 
 export const floatingLabelActive: Record<FieldSize, string> = {
@@ -26,10 +26,10 @@ export const floatingLabelActiveText: Record<FieldSize, string> = {
   lg: tokenTextSizes.sm,
 }
 
-export const fieldPaddings: Record<FieldSize, string> = {
-  sm: tokenPaddings.sm,
-  md: tokenPaddings.md,
-  lg: tokenPaddings.lg,
+export const fieldPaddings: Record<FieldSize, string | string[]> = {
+  sm: ['h-[32px]', tokenPaddings.sm],
+  md: ['h-[36px]', tokenPaddings.md],
+  lg: ['h-[40px]', tokenPaddings.lg],
 }
 
 export const fieldIconPosition = {
@@ -46,21 +46,21 @@ export const fieldIconPosition = {
 }
 
 export const fieldPaddingsWithIcon: Record<FieldSize, string> = {
-  sm: 'py-2 pl-7 pr-2',
-  md: 'py-2.5 pl-8 pr-2.5',
-  lg: 'py-3 pl-9 pr-3',
+  sm: 'h-[32px] py-2 pl-7 pr-2',
+  md: 'h-[36px] py-2.5 pl-8 pr-2.5',
+  lg: 'h-[40px] py-3 pl-9 pr-3',
 }
 
 export const fieldPaddingsWithIconRight: Record<FieldSize, string> = {
-  sm: 'py-2 pl-2 pr-10',
-  md: 'py-2.5 pl-2.5 pr-10',
-  lg: 'py-3 pl-3 pr-10',
+  sm: 'h-[32px] py-2 pl-2 pr-10',
+  md: 'h-[36px] py-2.5 pl-2.5 pr-10',
+  lg: 'h-[40px] py-3 pl-3 pr-10',
 }
 
 export const floatingLabelBaseWithIcon: Record<FieldSize, string> = {
   sm: 'translate-x-[28px] translate-y-[10px]',
   md: 'translate-x-[32px] translate-y-[10px]',
-  lg: 'translate-x-[36px] translate-y-[12px]',
+  lg: 'translate-x-[36px] translate-y-[10px]',
 }
 
 export const floatingLabelActiveWithIcon: Record<FieldSize, string> = {
