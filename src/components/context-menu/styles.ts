@@ -58,7 +58,9 @@ export const styles = {
   itemInner: 'flex items-center',
   itemInset: 'pl-space-md',
   chevronSmall: 'absolute right-2 h-4 w-4 text-ds-subtle',
-  labelGroup: 'flex items-center w-full pl-space-md',
+  labelGroup: 'flex items-center w-full pl-space-lg',
+  labelGroupNoPad: 'flex items-center w-full',
+  labelGroupCheckbox: 'flex items-center w-full pl-space-md',
   labelAndChevron: 'flex items-center w-full justify-between',
   labelAndShortcut: 'flex items-center w-full justify-between',
   iconWrapper: cn(

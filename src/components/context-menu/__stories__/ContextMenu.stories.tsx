@@ -1,17 +1,85 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import React, { useState } from 'react'
+import React, { useState, forwardRef, ComponentProps } from 'react'
 import { ContextMenu } from '../ContextMenu'
-import type { ContextMenuItemDef } from '../ContextMenu'
+import type { ContextMenuItemDef } from '../types'
 import { FaPaste, FaTrash, FaCog } from 'react-icons/fa'
-import { forwardRef, ComponentProps } from 'react'
 
 const meta: Meta<typeof ContextMenu> = {
   title: 'UI/Context Menu',
   component: ContextMenu,
+  tags: [],
   parameters: {
     layout: 'centered',
   },
-  tags: ['dev'],
+  argTypes: {
+    width: {
+      control: { type: 'number' },
+      description: 'Width of the context menu in pixels.',
+      table: {
+        type: { summary: 'number | string' },
+        defaultValue: { summary: '240' },
+      },
+    },
+    closeOnSelect: {
+      control: 'boolean',
+      description: 'Whether the menu closes after selecting an item.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    className: {
+      control: 'text',
+      description: 'Additional className applied to the menu container.',
+      table: { type: { summary: 'string' } },
+    },
+    items: {
+      control: 'object',
+      description: 'Array of menu item descriptors used to build the menu.',
+      table: { type: { summary: 'ContextMenuItemDef[]' } },
+    },
+    onSelect: {
+      action: 'onSelect',
+      description: 'Item select handler',
+      table: {
+        type: { summary: '(value: string, item?: ContextMenuItemDef) => void' },
+      },
+    },
+    onCheckboxToggle: {
+      action: 'onCheckboxToggle',
+      description: 'Checkbox toggle handler',
+      table: { type: { summary: '(value: string, checked: boolean) => void' } },
+    },
+    onRadioSelect: {
+      action: 'onRadioSelect',
+      description: 'Radio select handler',
+      table: { type: { summary: '(value: string) => void' } },
+    },
+    onGroupSelect: {
+      action: 'onGroupSelect',
+      description: 'Group select handler',
+      table: {
+        type: {
+          summary:
+            '(groupId: string, value: string, item?: ContextMenuItemDef) => void',
+        },
+      },
+    },
+    onOpenChange: {
+      action: 'onOpenChange',
+      description: 'Open state change handler',
+      table: { type: { summary: '(open: boolean) => void' } },
+    },
+    trigger: {
+      control: false,
+      description: 'Trigger node that opens the context menu (ReactNode).',
+      table: { type: { summary: 'ReactNode' } },
+    },
+  },
+  args: {
+    width: 240,
+    closeOnSelect: true,
+  },
 }
 
 export default meta
@@ -31,7 +99,7 @@ const TriggerArea = forwardRef<HTMLDivElement, ComponentProps<'div'>>(
 TriggerArea.displayName = 'TriggerArea'
 
 export const Default: Story = {
-  render: () => {
+  render: args => {
     const [selectedLabel, setSelectedLabel] = React.useState<string>('none')
 
     const baseItems: ContextMenuItemDef[] = [
@@ -43,17 +111,23 @@ export const Default: Story = {
       { label: 'Print...', shortcut: '⌘P', value: 'print' },
     ]
 
+    const items = (args.items as ContextMenuItemDef[] | undefined) ?? baseItems
+    const trigger = args.trigger ?? <TriggerArea />
+
     return (
       <div className="flex flex-col items-center gap-4">
         <div className="text-body-sm text-ds-subtle">
           <strong>Selected:</strong> {selectedLabel}
         </div>
         <ContextMenu
-          trigger={<TriggerArea />}
-          items={baseItems}
-          onSelect={(value: string, item) =>
+          trigger={trigger}
+          items={items}
+          width={args.width}
+          closeOnSelect={args.closeOnSelect}
+          onSelect={(value: string, item) => {
+            args.onSelect?.(value, item)
             setSelectedLabel(item?.label ?? value)
-          }
+          }}
         />
       </div>
     )
@@ -61,10 +135,10 @@ export const Default: Story = {
 }
 
 export const WithIconsAndSubmenu: Story = {
-  render: () => {
+  render: args => {
     const [selectedLabel, setSelectedLabel] = React.useState<string>('none')
 
-    const items: ContextMenuItemDef[] = [
+    const defaultItems: ContextMenuItemDef[] = [
       { label: 'Back', shortcut: '⌘[', value: 'back' },
       { label: 'Reload', shortcut: '⌘R', value: 'reload' },
       { type: 'separator' },
@@ -95,15 +169,22 @@ export const WithIconsAndSubmenu: Story = {
       },
     ] as const
 
+    const items =
+      (args.items as ContextMenuItemDef[] | undefined) ?? defaultItems
+    const trigger = args.trigger ?? <TriggerArea />
+
     return (
       <div className="flex flex-col items-center gap-space-md">
         <div className="text-body-sm text-ds-subtle">
           <strong>Selected:</strong> {selectedLabel}
         </div>
         <ContextMenu
-          trigger={<TriggerArea />}
+          trigger={trigger}
           items={items}
+          width={args.width}
+          closeOnSelect={args.closeOnSelect}
           onSelect={(value: string, item) => {
+            args.onSelect?.(value, item)
             console.log('Selected item:', { value, item })
             setSelectedLabel(item?.label ?? value)
           }}
@@ -114,7 +195,7 @@ export const WithIconsAndSubmenu: Story = {
 }
 
 export const CheckboxesAndRadios: Story = {
-  render: () => {
+  render: args => {
     const [selectedItems, setSelectedItems] = useState<string[]>([
       'status',
       'toolbar',
@@ -207,8 +288,12 @@ export const CheckboxesAndRadios: Story = {
               onGroupSelect={(_: string, value: string) => {
                 const next = !selectedItems.includes(value)
                 toggleSelected(value, next)
+                args.onGroupSelect?.(_, value)
               }}
-              onSelect={(value: string) => setPerson(value)}
+              onSelect={(value: string) => {
+                setPerson(value)
+                args.onSelect?.(value)
+              }}
             />
           )
         })()}
