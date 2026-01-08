@@ -359,48 +359,6 @@ export const SizedItems: Story = {
   render: () => {
     const [selectedValue, setSelectedValue] = useState('')
 
-    const sizedMenuGroups: CommandMenuGroup[] = [
-      {
-        id: 'suggestions',
-        heading: 'Suggestions',
-        items: [
-          {
-            id: 'calendar',
-            label: 'Calendar',
-            icon: FiCalendar,
-            onSelect: () => setSelectedValue('calendar'),
-          },
-          {
-            id: 'dashboard',
-            label: 'Dashboard',
-            icon: FiHome,
-            onSelect: () => setSelectedValue('dashboard'),
-          },
-        ],
-      },
-    ]
-
-    const sizedMenuGroupsSm: CommandMenuGroup[] = [
-      {
-        id: 'suggestions-sm',
-        heading: 'Suggestions',
-        items: [
-          {
-            id: 'calendar-sm',
-            label: 'Calendar',
-            icon: FiCalendar,
-            onSelect: () => setSelectedValue('calendar-sm'),
-          },
-          {
-            id: 'dashboard-sm',
-            label: 'Dashboard',
-            icon: FiHome,
-            onSelect: () => setSelectedValue('dashboard-sm'),
-          },
-        ],
-      },
-    ]
-
     const sizedMenuGroupsMd: CommandMenuGroup[] = [
       {
         id: 'suggestions-md',
@@ -427,25 +385,8 @@ export const SizedItems: Story = {
       <div className="flex flex-col gap-space-md w-full max-w-sm">
         <Command>
           <CommandMenu
-            groups={sizedMenuGroups}
-            placeholder="Small items (xs)..."
-            size="xs"
-            value={selectedValue}
-          />
-        </Command>
-        <Command>
-          <CommandMenu
-            groups={sizedMenuGroupsSm}
-            placeholder="Medium items (sm)..."
-            size="sm"
-            value={selectedValue}
-          />
-        </Command>
-        <Command>
-          <CommandMenu
             groups={sizedMenuGroupsMd}
             placeholder="Default items (md)..."
-            size="md"
             value={selectedValue}
           />
         </Command>

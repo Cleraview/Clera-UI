@@ -23,7 +23,7 @@
   --text-color-ds-accent-neutral-bolder: oklch(20.5% 0 0);
   --text-color-ds-accent-gray: oklch(27.8% 0.033 256.848);
   --text-color-ds-accent-gray-bolder: oklch(21% 0.034 264.665);
-  --text-color-ds-disabled: oklch(70.8% 0 0);
+  --text-color-ds-disabled: oklch(87% 0 0);
   --text-color-ds-inverse: oklch(98.5% 0 0);
   --text-color-ds-primary: oklch(49.1% 0.27 292.581);
   --text-color-ds-selected: oklch(49.1% 0.27 292.581);
@@ -51,7 +51,7 @@
   --fill-ds-icon-accent-violet: oklch(54.1% 0.281 293.009);
   --fill-ds-icon-accent-fuchsia: oklch(59.1% 0.293 322.896);
   --fill-ds-icon-accent-gray: oklch(43.9% 0 0);
-  --fill-ds-icon-disabled: oklch(70.8% 0 0);
+  --fill-ds-icon-disabled: oklch(87% 0 0);
   --fill-ds-icon-inverse: oklch(97% 0 0);
   --fill-ds-icon-selected: oklch(49.1% 0.27 292.581);
   --fill-ds-icon-brand: oklch(49.1% 0.27 292.581);
@@ -316,7 +316,7 @@
   --background-color-ds-info-bold-hovered: oklch(42.4% 0.199 265.638);
   --background-color-ds-info-bold-pressed: oklch(37.9% 0.146 265.522);
   --background-color-ds-info-pressed: oklch(80.9% 0.105 251.813);
-  --background-color-ds-disabled: oklch(97% 0 0);
+  --background-color-ds-disabled: oklch(87% 0 0);
   --background-color-ds-input: rgb(255, 255, 255);
   --background-color-ds-input-hovered: oklch(97% 0 0);
   --background-color-ds-input-pressed: rgb(255, 255, 255);
@@ -481,7 +481,7 @@
   --text-color-ds-accent-neutral-bolder: oklch(97% 0 0);
   --text-color-ds-accent-gray: oklch(92.8% 0.006 264.531);
   --text-color-ds-accent-gray-bolder: oklch(96.7% 0.003 264.542);
-  --text-color-ds-disabled: oklch(70.8% 0 0);
+  --text-color-ds-disabled: oklch(37.1% 0 0);
   --text-color-ds-inverse: oklch(26.9% 0 0);
   --text-color-ds-primary: oklch(49.1% 0.27 292.581);
   --text-color-ds-selected: oklch(60.6% 0.25 292.717);
@@ -509,7 +509,7 @@
   --fill-ds-icon-accent-violet: oklch(60.6% 0.25 292.717);
   --fill-ds-icon-accent-fuchsia: oklch(66.7% 0.295 322.15);
   --fill-ds-icon-accent-gray: oklch(43.9% 0 0);
-  --fill-ds-icon-disabled: oklch(70.8% 0 0);
+  --fill-ds-icon-disabled: oklch(37.1% 0 0);
   --fill-ds-icon-inverse: oklch(26.9% 0 0);
   --fill-ds-icon-selected: oklch(60.6% 0.25 292.717);
   --fill-ds-icon-brand: oklch(70.2% 0.183 293.541);
@@ -535,7 +535,7 @@
   --border-color-ds-disabled: oklch(37.1% 0 0);
   --border-color-ds-focused: oklch(81.1% 0.111 293.571);
   --border-color-ds-input: oklch(43.9% 0 0);
-  --border-color-ds-inverse: oklch(37.1% 0 0);
+  --border-color-ds-inverse: oklch(14.5% 0 0);
   --border-color-ds-selected: oklch(60.6% 0.25 292.717);
   --border-color-ds-brand: oklch(70.2% 0.183 293.541);
   --border-color-ds-destructive: oklch(63.7% 0.237 25.331);

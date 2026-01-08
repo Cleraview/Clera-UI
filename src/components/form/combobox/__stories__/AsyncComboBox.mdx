@@ -171,6 +171,37 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     
     <br />
 
+    ## **Grouping**
+    `AsyncComboBox` expects `loadOptions` (and `loadDefaultOptions`) to return a grouped record where the keys are group titles and the values are arrays of option objects.
+
+    <Canvas>
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          type AsyncComboBoxOption = { value: string; label: React.ReactNode; [key: string]: unknown }
+          type OptionGroups = Record<string, AsyncComboBoxOption[]>
+
+          const loadOptions = async (search: string): Promise<OptionGroups> => {
+            return {
+              'Popular Products': [ { value: 'p1', label: 'Item 1' } ],
+              'Categories': [ { value: 'c1', label: 'Category A' } ]
+            }
+          }
+
+          return (
+            <AsyncComboBox
+              label="Search Products"
+              loadOptions={loadOptions}
+              renderItem={(option) => <div>{option.label}</div>}
+            />
+          )
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    The component will render each record key as a group heading and the group items beneath it. Separators between groups are automatically inserted by `BaseComboBox` using the `styles.separator` class.
+    
+    <br />
+
     ### **Custom Loading State**
 
     You can provide your own custom loading component via the `loading` prop, or a function to render a specific number of skeletons.
@@ -340,6 +371,10 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
             {
               id: "custom-not-found",
               label: "Custom Not Found"
+            },
+            {
+              id: "grouping",
+              label: "Grouping"
             },
             {
               id: "custom-loading-state",

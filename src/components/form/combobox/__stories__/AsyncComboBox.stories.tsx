@@ -257,12 +257,13 @@ const allProducts = [
 ]
 
 const popularText = [
-  { value: 'pop-txt-01', label: 'iPhone 15 Pro', type: 'text' },
+  { value: 'pop-txt-01', label: 'iPhone 15 Pro', type: 'text', disabled: true },
   { value: 'pop-txt-02', label: 'Gift Cards', type: 'text' },
   { value: 'pop-txt-03', label: 'Prime Day Deals', type: 'text' },
   { value: 'pop-txt-04', label: 'Air Fryer', type: 'text' },
   { value: 'pop-txt-05', label: 'Lego Sets', type: 'text' },
 ]
+
 const popularImage = [
   {
     value: 'pop-img-01',
@@ -295,6 +296,7 @@ const popularImage = [
     img: 'https://placehold.co/80x80/f4a261/ffffff?text=Coffee',
   },
 ]
+
 const trends = [
   { value: 'trend-01', label: 'Smart Watches', type: 'trend' },
   { value: 'trend-02', label: 'Wireless Earbuds', type: 'trend' },
@@ -302,6 +304,7 @@ const trends = [
   { value: 'trend-04', label: 'Organic Groceries', type: 'trend' },
   { value: 'trend-05', label: 'Travel Backpacks', type: 'trend' },
 ]
+
 const categorySliderItem = {
   value: 'cat-slider-01',
   label: 'Shop by Category',
@@ -374,7 +377,8 @@ const fakeDefaultApi = (): Promise<Record<string, AsyncComboBoxOption[]>> => {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve({
-        'Popular Products': [...popularText, ...popularImage],
+        'Popular Products': [...popularText],
+        'Popular Items': [...popularImage],
         'Trending Searches': trends,
         'Shop by Category': [categorySliderItem],
       })
@@ -385,22 +389,80 @@ const fakeDefaultApi = (): Promise<Record<string, AsyncComboBoxOption[]>> => {
 const meta: Meta<typeof AsyncComboBox> = {
   title: 'UI/Form/AsyncComboBox',
   component: AsyncComboBox,
-  tags: ['dev', 'v12.1.2'],
+  tags: [],
   argTypes: {
-    label: { control: 'text' },
-    placeholder: { control: 'text' },
-    disabled: { control: 'boolean' },
-    hasError: { control: 'boolean' },
-    loadOptions: { control: false },
-    loadDefaultOptions: { control: false },
-    renderItem: { control: false },
-    notFoundContent: { control: false },
+    label: {
+      control: 'text',
+      description: 'Label for the async combobox input.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Search' },
+      },
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text for the async combobox.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'Search for anything...' },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Determines if the async combobox is disabled.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    hasError: {
+      control: 'boolean',
+      description: 'Determines if the async combobox has an error.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
     debounceMs: {
       control: 'number',
       description: 'The debounce time in milliseconds for the async search.',
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: '300' },
+      },
+    },
+    loadOptions: {
+      control: false,
+      description:
+        'Function to load options asynchronously based on search input.',
+      table: {
+        type: {
+          summary:
+            '(search: string) => Promise<Record<string, AsyncComboBoxOption[]>>',
+        },
+      },
+    },
+    loadDefaultOptions: {
+      control: false,
+      description: 'Function to load default options asynchronously.',
+      table: {
+        type: {
+          summary: '() => Promise<Record<string, AsyncComboBoxOption[]>>',
+        },
+      },
+    },
+    renderItem: {
+      control: false,
+      description: 'Custom render function for each item.',
+      table: {
+        type: { summary: '(item: AsyncComboBoxOption) => ReactNode' },
+      },
+    },
+    notFoundContent: {
+      control: false,
+      description: 'Content to display when no options are found.',
+      table: {
+        type: { summary: 'ReactNode' },
       },
     },
   },
@@ -411,6 +473,13 @@ const meta: Meta<typeof AsyncComboBox> = {
     hasError: false,
     debounceMs: 300,
   },
+  decorators: [
+    Story => (
+      <div className="min-w-[300px]">
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
@@ -485,7 +554,7 @@ export const ECommerceSearch: Story = {
         case 'text':
           return (
             <div className="flex items-center gap-space-sm p-space-sm">
-              <FiShoppingBag className="w-4 h-4 text-(--fill-ds-icon-subtle) shrink-0" />
+              <FiShoppingBag className="w-4 h-4 shrink-0" />
               <span className="text-label-sm font-semibold">
                 {option.label}
               </span>
@@ -493,7 +562,7 @@ export const ECommerceSearch: Story = {
           )
         case 'image':
           return (
-            <div className="flex items-center gap-3 p-space-sm">
+            <div className="flex items-center gap-space-sm p-space-sm">
               <Image
                 src={option.img as string}
                 alt={option.label as string}

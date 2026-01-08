@@ -1,11 +1,13 @@
 'use client'
 
-import React, {
+import {
   forwardRef,
   useState,
   useEffect,
   useMemo,
   useCallback,
+  isValidElement,
+  ReactNode,
 } from 'react'
 import { Skeleton } from '@/components/skeleton'
 import { debounce } from '@/utils/debounce'
@@ -21,16 +23,15 @@ import { type FieldSize } from '@/components/_core/field-config'
 
 export type AsyncComboBoxOption = {
   value: string
-  label: React.ReactNode
+  label: ReactNode
+  group?: string
+  disabled?: boolean
   [key: string]: unknown
 }
 
 type OptionGroups = Record<string, AsyncComboBoxOption[]>
 
-type LoadingState =
-  | boolean
-  | React.ReactNode
-  | ((count: number) => React.ReactNode)
+type LoadingState = boolean | ReactNode | ((count: number) => ReactNode)
 
 export type AsyncComboBoxProps = {
   id?: string
@@ -51,8 +52,8 @@ export type AsyncComboBoxProps = {
   loadDefaultOptions?: () => Promise<OptionGroups>
   loading?: LoadingState
   loadingItemCount?: number
-  renderItem: (option: AsyncComboBoxOption) => React.ReactNode
-  notFoundContent?: React.ReactNode
+  renderItem: (option: AsyncComboBoxOption) => ReactNode
+  notFoundContent?: ReactNode
   debounceMs?: number
   onValueChange?: (search: string) => void
 }
@@ -155,7 +156,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
       if (typeof loadingProp === 'function')
         return loadingProp(loadingItemCount)
 
-      if (React.isValidElement(loadingProp)) return loadingProp
+      if (isValidElement(loadingProp)) return loadingProp
 
       return Array.from({ length: loadingItemCount }).map((_, i) => (
         <div key={i} className={styles.loadingRow}>
@@ -211,6 +212,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
                     onSelect={handleSelect}
                     inputSize={inputSize}
                     isSelected={option.value === value}
+                    disabled={option.disabled}
                   >
                     {renderItem(option)}
                   </ComboBoxItem>

@@ -587,8 +587,8 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | Prop | Type | Default | Description |
     |------|------|---------|-------------|
     | `className` | `string` | - | Optional CSS classes to customize styling |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive>` | - | All standard HTML div props |
-    | `ref` | `React.ForwardedRef` | - | Forwards ref to the underlying CommandPrimitive component |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive>` | - | All standard HTML div props |
+    | `ref` | `ForwardedRef` | - | Forwards ref to the underlying CommandPrimitive component |
     | `withBorder` | `boolean` | `true` | Whether to display a border around the command component |
 
     <br />
@@ -601,7 +601,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     |------|------|---------|-------------|
     | `open` | `boolean` | - | Controls whether the dialog is open *(required)* |
     | `onOpenChange` | `(open: boolean) => void` | - | Callback fired when dialog open state changes *(required)* |
-    | `children` | `React.ReactNode` | - | Dialog content *(required)* |
+    | `children` | `ReactNode` | - | Dialog content *(required)* |
     | `title` | `string` | - | Optional title for the dialog |
     | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Dialog size |
     | `autoFocusInput` | `boolean` | `true` | Whether to auto-focus the input when dialog opens |
@@ -617,7 +617,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the input |
     | `placeholder` | `string` | - | Placeholder text |
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>` | - | All standard input props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Input>` | - | All standard input props |
 
     <br />
 
@@ -628,7 +628,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | Prop | Type | Default | Description |
     |------|------|---------|-------------|
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>` | - | All standard HTML div props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.List>` | - | All standard HTML div props |
 
     <br />
 
@@ -638,9 +638,9 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     | Prop | Type | Default | Description |
     |------|------|---------|-------------|
-    | `children` | `React.ReactNode` | - | Empty state message content |
+    | `children` | `ReactNode` | - | Empty state message content |
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>` | - | All standard HTML div props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>` | - | All standard HTML div props |
 
     <br />
 
@@ -653,7 +653,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | `heading` | `string` | - | Optional group heading text |
     | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the heading |
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>` | - | All standard HTML div props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Group>` | - | All standard HTML div props |
 
     <br />
 
@@ -669,7 +669,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the item |
     | `isSelected` | `boolean` | `false` | Visual indication of selection (shows checkmark) |
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>` | - | All standard HTML div props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Item>` | - | All standard HTML div props |
 
     <br />
 
@@ -680,7 +680,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     | Prop | Type | Default | Description |
     |------|------|---------|-------------|
     | `className` | `string` | - | Optional CSS classes |
-    | `...props` | `React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>` | - | All standard HTML div props |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>` | - | All standard HTML div props |
 
     <br />
 
@@ -1145,14 +1145,6 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
             {
               id: "commanditem-props",
               label: "CommandItem Props"
-            },
-            {
-              id: "commandseparator-props",
-              label: "CommandSeparator Props"
-            },
-            {
-              id: "commandmenu-props",
-              label: "CommandMenu Props"
             }
           ]
         },

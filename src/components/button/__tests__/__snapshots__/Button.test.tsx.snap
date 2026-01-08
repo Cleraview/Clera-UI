@@ -81,7 +81,7 @@ exports[`components/Button renders contents correctly 1`] = `
   "baseElement": <body>
     <div>
       <button
-        class="inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none bg-ds-primary-bold hover:bg-ds-primary-bold-hovered active:bg-ds-primary-bold-pressed rounded-md hover:rounded-xl text-ds-inverse dark:text-ds-default border-transparent"
+        class="inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none bg-ds-primary-bold hover:bg-ds-primary-bold-hovered active:bg-ds-primary-bold-pressed rounded-md hover:rounded-xl not-disabled:text-ds-inverse dark:not-disabled:text-ds-default border-transparent"
         data-testid="btn"
       >
         <div
@@ -96,7 +96,7 @@ exports[`components/Button renders contents correctly 1`] = `
   </body>,
   "container": <div>
     <button
-      class="inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none bg-ds-primary-bold hover:bg-ds-primary-bold-hovered active:bg-ds-primary-bold-pressed rounded-md hover:rounded-xl text-ds-inverse dark:text-ds-default border-transparent"
+      class="inline-flex items-center justify-center gap-1.5 border whitespace-nowrap font-bold! tracking-wide cursor-pointer transition-all duration-300 ease-in-out outline-none bg-ds-primary-bold hover:bg-ds-primary-bold-hovered active:bg-ds-primary-bold-pressed rounded-md hover:rounded-xl not-disabled:text-ds-inverse dark:not-disabled:text-ds-default border-transparent"
       data-testid="btn"
     >
       <div

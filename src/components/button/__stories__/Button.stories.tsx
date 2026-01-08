@@ -31,7 +31,7 @@ const meta: Meta<typeof Button> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
       description:
-        'Defines the button’s size to match different contexts (small, medium, or large).',
+        "Defines the button's size to match different contexts (small, medium, or large).",
       table: {
         type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
@@ -152,8 +152,6 @@ export default meta
 
 type Story = StoryObj<typeof Button>
 
-export const Playground: Story = {}
-
 export const Solid: Story = {
   args: {
     size: 'sm',
@@ -161,19 +159,19 @@ export const Solid: Story = {
   render: args => {
     return (
       <div className="flex gap-space-sm">
-        <Button variant="primary" size={args.size}>
+        <Button {...args} variant="primary">
           Primary
         </Button>
-        <Button variant="secondary" size={args.size}>
+        <Button {...args} variant="secondary">
           Secondary
         </Button>
-        <Button variant="destructive" size={args.size}>
+        <Button {...args} variant="destructive">
           Destructive
         </Button>
-        <Button variant="light" size={args.size}>
+        <Button {...args} variant="light">
           Light
         </Button>
-        <Button variant="ghost" size={args.size}>
+        <Button {...args} variant="ghost">
           Ghost
         </Button>
       </div>
@@ -218,12 +216,58 @@ export const Loading: Story = {
             checked={isLoading}
           />
 
-          <p>Enable loading state</p>
+          <p className="text-ds-default">Enable loading state</p>
         </div>
 
         <div className="self-start">
           <Button variant="primary" loading={isLoading}>
             Change State
+          </Button>
+        </div>
+      </div>
+    )
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+  },
+  render: args => {
+    return (
+      <div className="flex flex-col gap-space-sm">
+        <div className="flex gap-space-sm">
+          <Button {...args} variant="primary">
+            Primary
+          </Button>
+          <Button {...args} variant="secondary">
+            Secondary
+          </Button>
+          <Button {...args} variant="destructive">
+            Destructive
+          </Button>
+          <Button {...args} variant="info">
+            Info
+          </Button>
+          <Button {...args} variant="success">
+            Success
+          </Button>
+          <Button {...args} variant="warning">
+            Warning
+          </Button>
+          <Button {...args} variant="ghost">
+            Ghost
+          </Button>
+        </div>
+        <div className="flex gap-space-sm">
+          <Button {...args} variant="outlinePrimary">
+            Outline Primary
+          </Button>
+          <Button {...args} variant="outlineSecondary">
+            Outline Secondary
+          </Button>
+          <Button {...args} variant="outlineDestructive">
+            Outline Destructive
           </Button>
         </div>
       </div>

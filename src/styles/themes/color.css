@@ -23,7 +23,7 @@
   --text-color-ds-accent-neutral-bolder: theme(colors.neutral.900);
   --text-color-ds-accent-gray: theme(colors.gray.800);
   --text-color-ds-accent-gray-bolder: theme(colors.gray.900);
-  --text-color-ds-disabled: theme(colors.neutral.400);
+  --text-color-ds-disabled: theme(colors.neutral.300);
   --text-color-ds-inverse: theme(colors.neutral.50);
   --text-color-ds-primary: theme(colors.violet.700);
   --text-color-ds-selected: theme(colors.violet.700);
@@ -51,7 +51,7 @@
   --fill-ds-icon-accent-violet: theme(colors.violet.600);
   --fill-ds-icon-accent-fuchsia: theme(colors.fuchsia.600);
   --fill-ds-icon-accent-gray: theme(colors.neutral.600);
-  --fill-ds-icon-disabled: theme(colors.neutral.400);
+  --fill-ds-icon-disabled: theme(colors.neutral.300);
   --fill-ds-icon-inverse: theme(colors.neutral.100);
   --fill-ds-icon-selected: theme(colors.violet.700);
   --fill-ds-icon-brand: theme(colors.violet.700);
@@ -316,7 +316,7 @@
   --background-color-ds-info-bold-hovered: theme(colors.blue.800);
   --background-color-ds-info-bold-pressed: theme(colors.blue.900);
   --background-color-ds-info-pressed: theme(colors.blue.300);
-  --background-color-ds-disabled: theme(colors.neutral.100);
+  --background-color-ds-disabled: theme(colors.neutral.300);
   --background-color-ds-input: rgb(255, 255, 255);
   --background-color-ds-input-hovered: theme(colors.neutral.100);
   --background-color-ds-input-pressed: rgb(255, 255, 255);
@@ -482,7 +482,7 @@
   --text-color-ds-accent-neutral-bolder: theme(colors.neutral.100);
   --text-color-ds-accent-gray: theme(colors.gray.200);
   --text-color-ds-accent-gray-bolder: theme(colors.gray.100);
-  --text-color-ds-disabled: theme(colors.neutral.400);
+  --text-color-ds-disabled: theme(colors.neutral.700);
   --text-color-ds-inverse: theme(colors.neutral.800);
   --text-color-ds-primary: theme(colors.violet.700);
   --text-color-ds-selected: theme(colors.violet.500);
@@ -510,7 +510,7 @@
   --fill-ds-icon-accent-violet: theme(colors.violet.500);
   --fill-ds-icon-accent-fuchsia: theme(colors.fuchsia.500);
   --fill-ds-icon-accent-gray: theme(colors.neutral.600);
-  --fill-ds-icon-disabled: theme(colors.neutral.400);
+  --fill-ds-icon-disabled: theme(colors.neutral.700);
   --fill-ds-icon-inverse: theme(colors.neutral.800);
   --fill-ds-icon-selected: theme(colors.violet.500);
   --fill-ds-icon-brand: theme(colors.violet.400);
@@ -536,7 +536,7 @@
   --border-color-ds-disabled: theme(colors.neutral.700);
   --border-color-ds-focused: theme(colors.violet.300);
   --border-color-ds-input: theme(colors.neutral.600);
-  --border-color-ds-inverse: theme(colors.neutral.700);
+  --border-color-ds-inverse: theme(colors.neutral.950);
   --border-color-ds-selected: theme(colors.violet.500);
   --border-color-ds-brand: theme(colors.violet.400);
   --border-color-ds-destructive: theme(colors.red.500);

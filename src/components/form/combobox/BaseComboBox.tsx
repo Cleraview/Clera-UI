@@ -3,9 +3,14 @@
 import {
   forwardRef,
   useId,
+  Children,
+  isValidElement,
+  Fragment,
   type ReactNode,
   type ComponentPropsWithoutRef,
   type ElementRef,
+  ReactElement,
+  cloneElement,
 } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import {
@@ -84,6 +89,52 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
     const customId = useId()
     const inputId = idProp ?? customId
     const filled = !!value
+
+    const flatten = (nodes: ReactNode): ReactElement[] => {
+      const out: ReactElement[] = []
+      Children.forEach(nodes, node => {
+        if (!isValidElement(node)) return
+        if (node.type === Fragment) {
+          const childNodes = (node.props as { children?: ReactNode }).children
+          out.push(...flatten(childNodes))
+        } else {
+          out.push(node)
+        }
+      })
+      return out
+    }
+
+    const renderedChildren: ReactNode[] = (() => {
+      const flat = flatten(children)
+      return flat.map((child, idx, arr) => {
+        const next = arr[idx + 1] as ReactElement | undefined
+
+        const isGroup =
+          isValidElement(child) &&
+          typeof (child.props as { heading?: unknown })?.heading !== 'undefined'
+        const nextIsGroup =
+          isValidElement(next) &&
+          typeof (next?.props as { heading?: unknown })?.heading !== 'undefined'
+
+        if (isValidElement(child) && child.type === ComboBoxItem) {
+          const comboBoxChild = child as ReactElement<{ disabled?: boolean }>
+          const { disabled } = comboBoxChild.props
+          return (
+            <Fragment key={idx}>
+              {cloneElement(comboBoxChild, { disabled: !!disabled })}
+              {isGroup && nextIsGroup && <div className={styles.separator} />}
+            </Fragment>
+          )
+        }
+
+        return (
+          <Fragment key={idx}>
+            {child}
+            {isGroup && nextIsGroup && <div className={styles.separator} />}
+          </Fragment>
+        )
+      })
+    })()
 
     return (
       <FormInputWrapper
@@ -171,7 +222,7 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
                   aria-label={`Search ${label}`}
                 />
                 <CommandList className={styles.commandList}>
-                  {children}
+                  {renderedChildren}
                 </CommandList>
               </Command>
             </Popover.Content>
@@ -188,17 +239,19 @@ export const ComboBoxItem = forwardRef<
   ComponentPropsWithoutRef<typeof CommandItem> & {
     inputSize?: FieldSize
     isSelected?: boolean
+    disabled?: boolean
   }
->(({ className, inputSize = 'md', isSelected, ...props }, ref) => (
+>(({ className, inputSize = 'md', isSelected, disabled, ...props }, ref) => (
   <CommandItem
     ref={ref}
     className={cn(
       styles.commandItem,
       isSelected ? styles.commandItemSelected : styles.commandItemUnselected,
-      fieldPaddings[inputSize],
+      disabled && styles.commandItemDisabled,
       floatingLabelBaseText[inputSize],
       className
     )}
+    disabled={disabled}
     {...props}
   />
 ))

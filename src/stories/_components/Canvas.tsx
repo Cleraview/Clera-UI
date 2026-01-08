@@ -141,38 +141,47 @@ export const Canvas = ({ children }: CanvasProps) => {
 
   return (
     <div className="my-space-sm border border-ds-default rounded-lg overflow-hidden">
+      {story && (
+        <div
+          className={cn(
+            'flex justify-center items-center p-space-sm',
+            (theme === 'dark' && !canvasTheme) || canvasTheme === 'dark'
+              ? 'bg-[linear-gradient(45deg,#18191a_25%,transparent_25%),linear-gradient(-45deg,#18191a_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#18191a_75%),linear-gradient(-45deg,transparent_75%,#18191a_75%)]'
+              : 'bg-[linear-gradient(45deg,#f8f8f8_25%,transparent_25%),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%),linear-gradient(45deg,#ffffff_75%,#f8f8f8_75%),linear-gradient(-45deg,#ffffff_75%,#f8f8f8_75%)]',
+            'bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0]',
+            ((theme === 'dark' && !canvasTheme) || canvasTheme === 'dark') &&
+              'bg-[#232323] text-ds-default'
+          )}
+        >
+          <div className="w-full">{story}</div>
+        </div>
+      )}
+
       <div
         className={cn(
-          'flex justify-center items-center p-space-sm',
-          (theme === 'dark' && !canvasTheme) || canvasTheme === 'dark'
-            ? 'bg-[linear-gradient(45deg,#18191a_25%,transparent_25%),linear-gradient(-45deg,#18191a_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#18191a_75%),linear-gradient(-45deg,transparent_75%,#18191a_75%)]'
-            : 'bg-[linear-gradient(45deg,#f8f8f8_25%,transparent_25%),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%),linear-gradient(45deg,#ffffff_75%,#f8f8f8_75%),linear-gradient(-45deg,#ffffff_75%,#f8f8f8_75%)]',
-          'bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0]',
-          ((theme === 'dark' && !canvasTheme) || canvasTheme === 'dark') &&
-            'bg-[#232323] text-ds-default'
+          'flex justify-between items-center px-space-sm py-space-xs bg-ds-elevation-surface-sunken! text-ds-default! border-ds-default',
+          story ? 'border-y' : 'border-b'
         )}
       >
-        <div className="w-full">{story}</div>
-      </div>
-
-      <div className="flex justify-between items-center px-space-sm py-space-xs bg-ds-elevation-surface-sunken! text-ds-default! border-y border-ds-default">
-        <Dropdown
-          align="start"
-          className="min-w-[400px] bg-ds-elevation-surface! shadow-ds-elevation-overflow border-0!"
-          trigger={
-            <button
-              className={cn(
-                'px-space-sm py-space-xs bg-ds-transparent outline-none rounded cursor-pointer flex items-center gap-space-xs font-semibold',
-                'hover:bg-ds-neutral-hovered data-[state=open]:bg-ds-selected-pressed/40 text-ds-default data-[state=open]:text-ds-accent-violet border border-transparent data-[state=open]:border-selected'
-              )}
-            >
-              <RiListSettingsLine />
-              Preferences
-              {GoChevronDown && <GoChevronDown className="ml-space-sm" />}
-            </button>
-          }
-          items={[themeSelectionItem]}
-        />
+        {story && (
+          <Dropdown
+            align="start"
+            className="min-w-[400px] bg-ds-elevation-surface! shadow-ds-elevation-overflow border-0!"
+            trigger={
+              <button
+                className={cn(
+                  'px-space-sm py-space-xs bg-ds-transparent outline-none rounded cursor-pointer flex items-center gap-space-xs font-semibold',
+                  'hover:bg-ds-neutral-hovered data-[state=open]:bg-ds-selected-pressed/40 text-ds-default data-[state=open]:text-ds-accent-violet border border-transparent data-[state=open]:border-selected'
+                )}
+              >
+                <RiListSettingsLine />
+                Preferences
+                {GoChevronDown && <GoChevronDown className="ml-space-sm" />}
+              </button>
+            }
+            items={[themeSelectionItem]}
+          />
+        )}
 
         <Tooltip
           open={isCopied ? true : undefined}

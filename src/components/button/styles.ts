@@ -58,7 +58,7 @@ export const styles = {
           full: 'rounded-full',
         },
         disabled: {
-          true: 'bg-disabled! text-ds-disabled disabled:cursor-not-allowed disabled:opacity-50',
+          true: 'bg-ds-disabled! text-ds-subtlest disabled:cursor-not-allowed',
           false: '',
         },
         fullWidth: {
@@ -71,8 +71,29 @@ export const styles = {
         { disabled: false, rounded: 'md', className: 'hover:rounded-xl' },
 
         {
+          disabled: true,
+          variant: [
+            'outlinePrimary',
+            'outlineSecondary',
+            'outlineDestructive',
+            'outlineLight',
+            'outlineSuccess',
+            'outlineInfo',
+            'outlineWarning',
+          ],
+          className: 'bg-transparent! border-ds-disabled text-ds-disabled',
+        },
+
+        {
+          disabled: true,
+          variant: 'ghost',
+          className: 'bg-transparent! text-ds-disabled',
+        },
+
+        {
           variant: ['primary', 'success', 'info', 'destructive'],
-          className: 'text-ds-inverse dark:text-ds-default',
+          className:
+            'not-disabled:text-ds-inverse dark:not-disabled:text-ds-default',
         },
 
         {

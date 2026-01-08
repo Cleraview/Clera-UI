@@ -25,7 +25,7 @@ export function inputClasses(
     'peer w-full placeholder-transparent focus:outline-none bg-transparent',
     paddingClass,
     floatingLabelBaseText[inputSize],
-    disabled ? 'text-ds-subtlest' : 'text-ds-default',
+    disabled ? 'text-ds-disabled cursor-not-allowed' : 'text-ds-default',
     hasError && fieldStateStyles.error.text
   )
 }

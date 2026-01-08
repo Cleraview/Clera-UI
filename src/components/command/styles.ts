@@ -40,7 +40,7 @@ export const styles = {
   separator: 'h-px bg-ds-default',
   item: cva(
     [
-      'relative flex cursor-pointer select-none items-center rounded-md text-ds-default outline-none transition-colors',
+      'relative flex cursor-pointer select-none items-center rounded-md text-ds-default outline-none transition-colors aria-disabled:text-ds-subtlest aria-disabled:opacity-40 aria-disabled:cursor-not-allowed',
       elementPaddings.md,
       elementTextSizes.md,
     ],
