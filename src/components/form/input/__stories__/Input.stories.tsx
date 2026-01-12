@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { useState } from 'react'
 import { Input } from '../Input'
 import { FiSearch, FiUser } from 'react-icons/fi'
 
@@ -77,10 +78,15 @@ const meta: Meta<typeof Input> = {
       },
     },
     icon: {
-      control: false,
+      control: 'select',
       description:
         'Icon node to render inside the input. Only works with types other than password.',
       table: { type: { summary: 'ReactNode' } },
+      options: ['search', 'user'],
+      mapping: {
+        search: <FiSearch />,
+        user: <FiUser />,
+      },
     },
     iconPosition: {
       control: 'select',
@@ -220,4 +226,178 @@ export const WithIconRight: Story = {
       </div>
     ),
   ],
+}
+
+export const WithValidation: Story = {
+  args: {
+    label: 'Email Address',
+    validationPreset: 'email',
+    validationMode: 'onChange',
+    showValidationErrors: true,
+  },
+  render: args => {
+    const [value, setValue] = useState('')
+    return (
+      <div>
+        <Input
+          {...args}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <p className="mt-space-md text-label-xs text-ds-subtle">
+          Current value: &quot;{value}&quot;
+        </p>
+        <p className="mt-space-sm text-label-xs text-ds-info">
+          Format: Valid email address (e.g., user@example.com)
+        </p>
+      </div>
+    )
+  },
+}
+
+export const NumericValidation: Story = {
+  args: {
+    label: 'Age',
+    validation: {
+      pattern: 'numeric',
+      min: 18,
+      max: 120,
+      required: true,
+      preventInvalidInput: true,
+    },
+    validationMode: 'onChange',
+    showValidationErrors: true,
+  },
+  render: args => {
+    const [value, setValue] = useState('')
+    return (
+      <div>
+        <Input
+          {...args}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <p className="mt-space-md text-label-xs text-ds-subtle">
+          Current value: &quot;{value}&quot;
+        </p>
+        <p className="mt-space-sm text-label-xs text-ds-info">
+          Format: Numbers only (18-120) • Prevents non-numeric input
+        </p>
+      </div>
+    )
+  },
+}
+
+export const UsernameValidation: Story = {
+  args: {
+    label: 'Username',
+    validationPreset: 'username',
+    validationMode: 'all',
+    showValidationErrors: true,
+  },
+  render: args => {
+    const [value, setValue] = useState('')
+    return (
+      <div>
+        <Input
+          {...args}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <p className="mt-2 text-label-xs text-ds-subtle">
+          Current value: &quot;{value}&quot;
+        </p>
+        <p className="mt-space-sm text-label-xs text-ds-info">
+          Format: 3-20 characters, letters, numbers, underscore, hyphen
+        </p>
+      </div>
+    )
+  },
+}
+
+export const CustomValidation: Story = {
+  args: {
+    label: 'Product Code',
+    validation: {
+      pattern: /^[A-Z]{2}\d{4}$/,
+      patternMessage:
+        'Product code must be 2 uppercase letters followed by 4 digits (e.g., AB1234)',
+      required: true,
+      rules: [
+        {
+          validate: (value: string) =>
+            value !== 'XX0000' || 'This code is reserved',
+          message: 'This product code is reserved',
+        },
+      ],
+    },
+    validationMode: 'onBlur',
+    showValidationErrors: true,
+  },
+  render: args => {
+    const [value, setValue] = useState('')
+    return (
+      <div>
+        <Input
+          {...args}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <p className="mt-2 text-label-xs text-ds-subtle">
+          Current value: &quot;{value}&quot;
+        </p>
+        <p className="mt-space-sm text-label-xs text-ds-info">
+          Format: 2 uppercase letters + 4 digits (e.g., AB1234) • Custom regex
+          pattern
+        </p>
+      </div>
+    )
+  },
+}
+
+export const AdvancedValidation: Story = {
+  args: {
+    label: 'Phone Number',
+    validation: {
+      pattern: /^[\d\s\-\(\)\+]*$/,
+      required: true,
+      transform: (value: string) => value.replace(/[^\d\-\(\)\s\+]/g, ''),
+      preventInvalidInput: true,
+      rules: [
+        {
+          validate: (value: string) => {
+            if (value.replace(/[\s\-\(\)\+]/g, '').length >= 10) {
+              return /^(\+1)?[\s-]?\(?([0-9]{3})\)?[\s-]?([0-9]{3})[\s-]?([0-9]{4})$/.test(
+                value
+              )
+            }
+            return true
+          },
+          message:
+            'Please enter a valid US phone number (e.g., (555) 123-4567)',
+        },
+      ],
+    },
+    validationMode: 'onBlur',
+    showValidationErrors: true,
+  },
+  render: args => {
+    const [value, setValue] = useState('')
+    return (
+      <div>
+        <Input
+          {...args}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+        />
+        <p className="mt-2 text-label-xs text-ds-subtle">
+          Current value: &quot;{value}&quot;
+        </p>
+        <p className="mt-space-sm text-label-xs text-ds-info">
+          Format: Only phone chars allowed • Typing + paste validation •
+          Validates complete format
+        </p>
+      </div>
+    )
+  },
 }

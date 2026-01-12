@@ -93,7 +93,6 @@ describe('components/form/Input', () => {
     const { rerender } = render(<Input id="email" label="Email" type="email" />)
     expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email')
 
-    // Password type renders as text to support custom masking with bullets
     rerender(<Input id="password" label="Password" type="password" />)
     expect(screen.getByLabelText('Password')).toHaveAttribute('type', 'text')
   })

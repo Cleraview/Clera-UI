@@ -6,6 +6,11 @@ import { type FieldSize } from '@/components/_core/field-config'
 import { inputClasses } from './../styles'
 import { FormInputWrapper } from '../FormInputWrapper'
 import { usePasswordMask } from './_hooks/usePasswordMask'
+import {
+  useInputValidation,
+  UseInputValidationOptions,
+} from './_hooks/useInputValidation'
+import { ValidationPresets } from './_utils/input-validator'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
@@ -17,6 +22,11 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode
   iconPosition?: 'left' | 'right'
   maskDelay?: number
+  validation?: UseInputValidationOptions
+  validationPreset?: keyof typeof ValidationPresets
+  showValidationErrors?: boolean
+  validationMode?: 'onChange' | 'onBlur' | 'onSubmit' | 'all'
+  onValidationChange?: (isValid: boolean, errors: string[]) => void
 }
 
 export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
@@ -34,6 +44,12 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
   icon,
   iconPosition = 'right',
   maskDelay = 300,
+  validation,
+  validationPreset,
+  showValidationErrors = true,
+  validationMode = 'onBlur',
+  onValidationChange,
+  autoComplete = 'off',
   ...restProps
 }) => {
   const autoId = useId()
@@ -61,6 +77,35 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
 
   const actualValue = isControlled ? (value as string) : internalValue
 
+  const validationConfig =
+    validation ||
+    (validationPreset ? ValidationPresets[validationPreset]() : undefined)
+  const shouldUseValidation = validationConfig && !isPassword
+
+  const {
+    validationResult,
+    touched: validationTouched,
+    handleChange: handleValidationChange,
+    handleBlur: handleValidationBlur,
+    handleKeyPress,
+    handlePaste,
+    getDisplayErrors: _getDisplayErrors,
+  } = useInputValidation({
+    ...validationConfig,
+    value: shouldUseValidation ? actualValue : '',
+    mode: validationMode,
+    onValidationChange: result => {
+      onValidationChange?.(result.isValid, result.errors)
+    },
+  })
+
+  const inputHasError =
+    hasError ||
+    (shouldUseValidation &&
+      showValidationErrors &&
+      !validationResult.isValid &&
+      validationTouched)
+
   const resolvedType = isPassword ? 'text' : type
   const resolvedIconPosition = isPassword ? 'right' : iconPosition
   const resolvedIcon = isPassword ? (
@@ -81,6 +126,11 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setFocused(false)
     setFilled(!!e.target.value)
+
+    if (shouldUseValidation) {
+      handleValidationBlur()
+    }
+
     if (onBlur) onBlur()
   }
 
@@ -88,9 +138,20 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
     const inputVal = e.target.value
 
     if (!isPassword || showPassword) {
-      if (!isControlled) setInternalValue(inputVal)
-      setFilled(!!inputVal)
-      restProps.onChange?.(e)
+      let finalValue = inputVal
+
+      if (shouldUseValidation) {
+        finalValue = handleValidationChange(inputVal, 'onChange')
+      }
+
+      if (!isControlled) setInternalValue(finalValue)
+      setFilled(!!finalValue)
+
+      const syntheticEvent = {
+        ...e,
+        target: { ...e.target, value: finalValue },
+      } as React.ChangeEvent<HTMLInputElement>
+      restProps.onChange?.(syntheticEvent)
       return
     }
 
@@ -123,12 +184,55 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
     restProps.onChange?.(syntheticEvent)
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      shouldUseValidation &&
+      !handleKeyPress(
+        e.key,
+        (e.target as HTMLInputElement).value,
+        e.nativeEvent
+      )
+    ) {
+      e.preventDefault()
+    }
+    restProps.onKeyDown?.(e)
+  }
+
+  const handlePasteEvent = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    if (shouldUseValidation && handlePaste) {
+      e.preventDefault()
+
+      const pastedText = e.clipboardData.getData('text')
+      const currentValue = (e.target as HTMLInputElement).value
+      const validPastedText = handlePaste(pastedText, currentValue)
+
+      if (validPastedText) {
+        const newValue = currentValue + validPastedText
+        let finalValue = newValue
+
+        if (shouldUseValidation) {
+          finalValue = handleValidationChange(newValue, 'onChange')
+        }
+
+        if (!isControlled) setInternalValue(finalValue)
+        setFilled(!!finalValue)
+
+        const syntheticEvent = {
+          ...e,
+          target: { ...e.target, value: finalValue },
+        } as unknown as React.ChangeEvent<HTMLInputElement>
+        restProps.onChange?.(syntheticEvent)
+      }
+    }
+    restProps.onPaste?.(e)
+  }
+
   return (
     <FormInputWrapper
       id={inputId}
       label={label}
       inputSize={inputSize}
-      hasError={hasError}
+      hasError={inputHasError}
       required={required}
       disabled={disabled}
       readOnly={readOnly}
@@ -144,11 +248,11 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
         id={inputId}
         type={resolvedType}
         value={isPassword && !showPassword ? displayValue : actualValue}
-        autoComplete={isPassword ? 'off' : restProps.autoComplete}
+        autoComplete={isPassword ? 'off' : autoComplete}
         className={inputClasses(
           inputSize,
           disabled,
-          hasError,
+          inputHasError,
           resolvedIcon ? resolvedIconPosition : undefined
         )}
         placeholder={label}
@@ -157,6 +261,8 @@ export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        onPaste={handlePasteEvent}
         {...restProps}
       />
     </FormInputWrapper>

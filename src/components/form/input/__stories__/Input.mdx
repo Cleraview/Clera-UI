@@ -37,7 +37,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     -   **InputSize**: Adjust the size of the input to fit the surrounding content.
     -   **ReadOnly**: Prevent users from editing the input's value.
     -   **Disabled**: Disable the input, preventing any interaction.
-    -   **Placeholder**: Display a hint to guide users on what to enter.
+    -   **Label**: Display a hint to guide users on what to enter.
 
     ## **Implementation Notes**
 
@@ -62,7 +62,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputTextExample = () => {
-            return <Input type="text" placeholder="Enter text" />
+            return <Input type="text" label="Enter text" />
           }
 
           export default InputTextExample
@@ -86,7 +86,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputPasswordExample = () => {
-            return <Input type="password" placeholder="Enter password" />
+            return <Input type="password" label="Enter password" />
           }
 
           export default InputPasswordExample
@@ -110,7 +110,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputNumberExample = () => {
-            return <Input type="number" placeholder="Enter number" />
+            return <Input type="number" label="Enter number" />
           }
 
           export default InputNumberExample
@@ -134,7 +134,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputSearchExample = () => {
-            return <Input type="search" placeholder="Enter search term" />
+            return <Input type="search" label="Enter search term" />
           }
 
           export default InputSearchExample
@@ -158,7 +158,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputFullWidthExample = () => {
-            return <Input fullWidth placeholder="Full width input" />
+            return <Input fullWidth label="Full width input" />
           }
 
           export default InputFullWidthExample
@@ -182,7 +182,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputRequiredExample = () => {
-            return <Input required placeholder="Required input" />
+            return <Input required label="Required input" />
           }
 
           export default InputRequiredExample
@@ -206,7 +206,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputSmallExample = () => {
-            return <Input inputSize="sm" placeholder="Small input" />
+            return <Input inputSize="sm" label="Small input" />
           }
 
           export default InputSmallExample
@@ -230,7 +230,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputMediumExample = () => {
-            return <Input inputSize="md" placeholder="Medium input" />
+            return <Input inputSize="md" label="Medium input" />
           }
 
           export default InputMediumExample
@@ -254,7 +254,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputLargeExample = () => {
-            return <Input inputSize="lg" placeholder="Large input" />
+            return <Input inputSize="lg" label="Large input" />
           }
 
           export default InputLargeExample
@@ -278,7 +278,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputReadOnlyExample = () => {
-            return <Input readOnly placeholder="Read-only input" />
+            return <Input readOnly label="Read-only input" />
           }
 
           export default InputReadOnlyExample
@@ -302,7 +302,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           import { Input } from '@clera-ui/form'
 
           const InputDisabledExample = () => {
-            return <Input disabled placeholder="Disabled input" />
+            return <Input disabled label="Disabled input" />
           }
 
           export default InputDisabledExample
@@ -326,7 +326,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
           const InputWithIconExample = () => {
             return <Input 
-              placeholder="Username" 
+              label="Username" 
               icon={<FiUser />} 
               iconPosition="left" 
             />
@@ -336,6 +336,230 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
         `} />
       </Canvas.Source>
     </Canvas>
+
+    <br />
+
+    ## **Validation**
+
+    The Input component supports comprehensive validation through built-in patterns, custom rules, and validation presets. Validation helps ensure data quality and provides immediate feedback to users.
+
+    ### **When to Use Validation**
+
+    Use validation when you need to:
+    - Enforce data formats (email, phone numbers, etc.)
+    - Restrict input to specific character sets (numbers only, letters only)
+    - Apply business rules (min/max values, custom patterns)
+    - Provide real-time feedback to improve user experience
+    - Prevent invalid data submission
+
+    ### **How to Implement Validation**
+
+    The validation system provides multiple approaches:
+
+    **1. Built-in Presets**: Use `validationPreset` for common patterns
+    **2. Custom Configuration**: Use `validation` prop for advanced scenarios
+    **3. Validation Modes**: Control when validation occurs (`onChange`, `onBlur`, `onSubmit`, `all`)
+
+    ### **Email Validation**
+
+    Simple email validation using a built-in preset.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.WithValidation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+
+          const EmailValidationExample = () => {
+            return (
+              <Input 
+                label="Email Address" 
+                validationPreset="email"
+                validationMode="onChange"
+                showValidationErrors={true}
+              />
+            )
+          }
+
+          export default EmailValidationExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Numeric Validation with Range**
+
+    Validates numeric input with min/max constraints and prevents invalid characters.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.NumericValidation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+
+          const NumericValidationExample = () => {
+            return (
+              <Input 
+                label="Age" 
+                validation={{
+                  pattern: 'numeric',
+                  min: 18,
+                  max: 120,
+                  required: true,
+                  preventInvalidInput: true,
+                }}
+                validationMode="onChange"
+                showValidationErrors={true}
+              />
+            )
+          }
+
+          export default NumericValidationExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Username Validation**
+
+    Complex validation using a preset that includes pattern, length, and transformation rules.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.UsernameValidation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+
+          const UsernameValidationExample = () => {
+            return (
+              <Input 
+                label="Username" 
+                validationPreset="username"
+                validationMode="all"
+                showValidationErrors={true}
+              />
+            )
+          }
+
+          export default UsernameValidationExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Custom Pattern Validation**
+
+    Advanced validation with custom regex pattern and business rules.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.CustomValidation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+
+          const CustomValidationExample = () => {
+            return (
+              <Input 
+                label="Product Code" 
+                validation={{
+                  pattern: /^[A-Z]{2}\\d{4}$/,
+                  patternMessage: 'Product code must be 2 uppercase letters followed by 4 digits (e.g., AB1234)',
+                  required: true,
+                  rules: [
+                    {
+                      validate: (value) => value !== 'XX0000' || 'This code is reserved',
+                      message: 'This product code is reserved',
+                    }
+                  ]
+                }}
+                validationMode="onBlur"
+                showValidationErrors={true}
+              />
+            )
+          }
+
+          export default CustomValidationExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Phone Number with Transform**
+
+    Demonstrates input transformation and pattern validation for phone numbers.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={InputStories.AdvancedValidation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Input } from '@clera-ui/form'
+
+          const PhoneValidationExample = () => {
+            return (
+              <Input 
+                label="Phone Number" 
+                validation={{
+                  pattern: 'phoneUS',
+                  required: true,
+                  transform: (value) => value.replace(/[^\\d\\-\\(\\)\\s\\+]/g, ''),
+                  preventInvalidInput: false,
+                }}
+                validationMode="onBlur"
+                showValidationErrors={true}
+              />
+            )
+          }
+
+          export default PhoneValidationExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Available Validation Presets**
+
+    The following presets are available for quick setup:
+
+    - `email` - Email address validation with transformation
+    - `phone` - General phone number validation
+    - `strongPassword` - Strong password requirements
+    - `username` - Username validation (3-20 chars, alphanumeric + special chars)
+    - `name` - Person name validation (letters, spaces, hyphens, apostrophes)
+    - `numeric(min?, max?)` - Numeric input with optional range
+    - `decimal(min?, max?)` - Decimal number validation
+    - `alphanumeric(minLength?, maxLength?)` - Letters and numbers only
+    - `url` - URL validation with transformation
+    - `zipCode` - US ZIP code validation
+
+    ### **Validation Props**
+
+    | Prop | Type | Description |
+    |------|------|-------------|
+    | `validation` | `ValidationConfig` | Complete validation configuration object |
+    | `validationPreset` | `keyof ValidationPresets` | Use a built-in validation preset |
+    | `showValidationErrors` | `boolean` | Whether to display validation errors (default: `true`) |
+    | `validationMode` | `onChange`, `onBlur`, `onSubmit`, `all` | When to trigger validation (default: `'onBlur'`) |
+    | `onValidationChange` | `(isValid: boolean, errors: string[]) => void` | Callback when validation state changes |
 
     <br />
 
@@ -353,7 +577,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input type="text" placeholder="Enter your username" />
+        <Input type="text" label="Enter your username" />
       `} />
     </Canvas.Source>
 
@@ -363,7 +587,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input fullWidth placeholder="Full width input" />
+        <Input fullWidth label="Full width input" />
       `} />
     </Canvas.Source>
 
@@ -373,7 +597,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input required placeholder="Required input" />
+        <Input required label="Required input" />
       `} />
     </Canvas.Source>
 
@@ -383,7 +607,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input inputSize="lg" placeholder="Large input" />
+        <Input inputSize="lg" label="Large input" />
       `} />
     </Canvas.Source>
 
@@ -393,7 +617,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input readOnly placeholder="Read-only input" />
+        <Input readOnly label="Read-only input" />
       `} />
     </Canvas.Source>
 
@@ -403,7 +627,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Input disabled placeholder="Disabled input" />
+        <Input disabled label="Disabled input" />
       `} />
     </Canvas.Source>
   </div>
@@ -444,16 +668,8 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
               label: "Required"
             },
             {
-              id: "small",
-              label: "Small"
-            },
-            {
               id: "medium",
               label: "Medium"
-            },
-            {
-              id: "large",
-              label: "Large"
             },
             {
               id: "read-only",
