@@ -2,7 +2,7 @@
 
 import { InputHTMLAttributes, useId, useState, ReactNode } from 'react'
 import { type FieldSize } from '@/components/_core/field-config'
-import { inputClasses } from './styles'
+import { inputClasses } from './../styles'
 import { FormInputWrapper } from '../FormInputWrapper'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -16,7 +16,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   iconPosition?: 'left' | 'right'
 }
 
-export const Input: React.FC<InputProps> = ({
+export const Input: React.FC<Omit<InputProps, 'placeholder'>> = ({
   id,
   label,
   value,
@@ -56,7 +56,7 @@ export const Input: React.FC<InputProps> = ({
       readOnly={readOnly}
       focused={focused}
       filled={filled}
-      hasIcon={!!icon && iconPosition === 'left'}
+      hasIcon={!!icon}
       icon={icon}
       iconPosition={iconPosition}
       fullWidth={fullWidth}
@@ -71,6 +71,7 @@ export const Input: React.FC<InputProps> = ({
           hasError,
           icon ? iconPosition : undefined
         )}
+        placeholder={label}
         readOnly={readOnly}
         disabled={disabled}
         onFocus={handleFocus}

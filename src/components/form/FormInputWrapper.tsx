@@ -1,22 +1,20 @@
 'use client'
 
-import { ReactNode, useId } from 'react'
+import { Fragment, ReactNode, useId } from 'react'
 import type { FieldSize } from '@/components/_core/field-config'
 import { cn } from '@/utils/tailwind'
 import {
-  fieldStateStyles,
-  floatingLabelBaseText,
-  floatingLabelActiveText,
-} from '@/components/_core/field-config'
-
-import {
   root as formRoot,
+  inputContentWrapper,
   labelClass,
-  container as formContainer,
   fieldset as fieldsetClass,
   legendClass,
   iconClass,
+  sizingShim,
+  sizingShimSpan,
+  interactiveLayer,
 } from './styles'
+import type { IconPosition } from './types'
 
 export type FormInputWrapperProps = {
   id?: string
@@ -29,7 +27,7 @@ export type FormInputWrapperProps = {
   readOnly?: boolean
   hasIcon?: boolean
   icon?: ReactNode
-  iconPosition?: 'left' | 'right'
+  iconPosition?: IconPosition
   filled?: boolean
   focused?: boolean
   fullWidth?: boolean
@@ -53,46 +51,56 @@ export const FormInputWrapper = ({
   className,
   hasIcon,
   icon,
-  iconPosition = 'right',
+  iconPosition = 'right' as IconPosition,
 }: FormInputWrapperProps) => {
   const customId = useId()
   const inputId = id ?? customId
   const state = hasError ? 'error' : focused ? 'focused' : 'default'
+  const isActive =
+    (focused || filled || readOnly || disabled) && Boolean(label?.length)
 
   const displayLabel = (
-    <span
-      className={cn(
-        fieldStateStyles[state].label,
-        floatingLabelBaseText[inputSize],
-        (focused || filled || readOnly || disabled) && [
-          floatingLabelActiveText[inputSize],
-        ]
-      )}
-    >
+    <Fragment>
       {readOnly ? 'Read Only' : disabled ? 'Disabled' : label}
       {required && !readOnly && !disabled && <span>*</span>}
-    </span>
+    </Fragment>
   )
 
   return (
     <div className={cn(formRoot(fullWidth, disabled), className)}>
-      <label
-        htmlFor={inputId}
-        className={labelClass({
-          focused,
-          filled,
-          readOnly,
-          disabled,
-          inputSize,
-          inputType,
-          hasIcon,
-        })}
-      >
-        {displayLabel}
-      </label>
+      <div className={cn(inputContentWrapper(fullWidth, disabled))}>
+        {label && (
+          <Fragment>
+            <div
+              className={cn(
+                sizingShim(inputSize, icon ? iconPosition : undefined)
+              )}
+            >
+              <span aria-hidden className={sizingShimSpan}>
+                {label}
+              </span>
+            </div>
 
-      <div className={formContainer(disabled)}>
-        <div className="relative flex items-center w-full">
+            <label
+              htmlFor={inputId}
+              className={labelClass({
+                focused,
+                filled,
+                readOnly,
+                disabled,
+                inputSize,
+                inputType,
+                hasIcon: hasIcon || !!icon,
+                iconPosition,
+                state,
+              })}
+            >
+              {displayLabel}
+            </label>
+          </Fragment>
+        )}
+
+        <div className={interactiveLayer(disabled)}>
           {icon && iconPosition === 'left' && (
             <span className={iconClass(inputSize, 'left')}>{icon}</span>
           )}
@@ -102,20 +110,13 @@ export const FormInputWrapper = ({
           {icon && iconPosition === 'right' && (
             <span className={iconClass(inputSize, 'right')}>{icon}</span>
           )}
-        </div>
 
-        <fieldset className={fieldsetClass(fieldStateStyles[state].border)}>
-          <legend
-            className={legendClass(
-              inputSize,
-              focused || filled || readOnly || disabled
-            )}
-          >
-            <span className={cn(floatingLabelBaseText[inputSize])}>
+          <fieldset className={fieldsetClass(state, isActive, inputSize)}>
+            <legend className={legendClass(inputSize, isActive)}>
               {displayLabel}
-            </span>
-          </legend>
-        </fieldset>
+            </legend>
+          </fieldset>
+        </div>
       </div>
     </div>
   )

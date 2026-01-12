@@ -5,7 +5,7 @@ import { FiSearch, FiUser } from 'react-icons/fi'
 const meta: Meta<typeof Input> = {
   title: 'UI/Form/Input',
   component: Input,
-  tags: ['dev'],
+  tags: [],
   parameters: {},
   argTypes: {
     fullWidth: {
@@ -60,12 +60,12 @@ const meta: Meta<typeof Input> = {
         defaultValue: { summary: 'false' },
       },
     },
-    placeholder: {
-      control: 'text',
-      description: 'The placeholder text for the input',
+    hasError: {
+      control: 'boolean',
+      description: 'Determines if the input has an error state',
       table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
       },
     },
     label: {
@@ -94,7 +94,6 @@ const meta: Meta<typeof Input> = {
   args: {
     label: 'Label',
     type: 'text',
-    placeholder: 'Placeholder',
     inputSize: 'md',
   },
 }
@@ -106,16 +105,21 @@ type Story = StoryObj<typeof Input>
 export const Text: Story = {
   args: {
     type: 'text',
-    label: 'Text',
-    placeholder: 'Enter text',
+    label: 'Make this your text input overflowing to see how it behaves',
   },
+  decorators: [
+    StoryComponent => (
+      <div style={{ width: '280px' }}>
+        <StoryComponent />
+      </div>
+    ),
+  ],
 }
 
 export const Password: Story = {
   args: {
     type: 'password',
     label: 'Password',
-    placeholder: 'Enter password',
   },
 }
 
@@ -123,7 +127,6 @@ export const Number: Story = {
   args: {
     type: 'number',
     label: 'Number',
-    placeholder: 'Enter number',
   },
 }
 
@@ -131,7 +134,6 @@ export const Search: Story = {
   args: {
     type: 'search',
     label: 'Search',
-    placeholder: 'Enter search term',
   },
 }
 
@@ -139,15 +141,20 @@ export const FullWidth: Story = {
   args: {
     fullWidth: true,
     label: 'Full Width',
-    placeholder: 'Full width input',
   },
+  decorators: [
+    StoryComponent => (
+      <div style={{ width: '400px' }}>
+        <StoryComponent />
+      </div>
+    ),
+  ],
 }
 
 export const Required: Story = {
   args: {
     required: true,
     label: 'Required',
-    placeholder: 'Required input',
   },
 }
 
@@ -155,7 +162,6 @@ export const Small: Story = {
   args: {
     inputSize: 'sm',
     label: 'Small',
-    placeholder: 'Small input',
   },
 }
 
@@ -163,7 +169,6 @@ export const Medium: Story = {
   args: {
     inputSize: 'md',
     label: 'Medium',
-    placeholder: 'Medium input',
   },
 }
 
@@ -171,7 +176,6 @@ export const Large: Story = {
   args: {
     inputSize: 'lg',
     label: 'Large',
-    placeholder: 'Large input',
   },
 }
 
@@ -179,7 +183,6 @@ export const ReadOnly: Story = {
   args: {
     readOnly: true,
     label: 'Read Only',
-    placeholder: 'Read-only input',
   },
 }
 
@@ -187,7 +190,6 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     label: 'Disabled',
-    placeholder: 'Disabled input',
   },
 }
 
@@ -196,7 +198,6 @@ export const WithIconLeft: Story = {
     icon: <FiSearch />,
     iconPosition: 'left' as 'left' | 'right',
     label: 'Search',
-    placeholder: 'Search...',
   },
   render: args => <Input {...args} />,
 }
@@ -205,10 +206,14 @@ export const WithIconRight: Story = {
   args: {
     icon: <FiUser />,
     iconPosition: 'right' as 'left' | 'right',
-    label: 'User',
-    placeholder: 'Username',
+    label: 'Lorem ipsum dolor sit amet consectetur adipisicing',
   },
-  render: args => (
-    <Input {...args} label="User" placeholder="Username" icon={<FiUser />} />
-  ),
+  render: args => <Input {...args} />,
+  decorators: [
+    StoryComponent => (
+      <div style={{ maxWidth: '300px' }}>
+        <StoryComponent />
+      </div>
+    ),
+  ],
 }

@@ -28,7 +28,7 @@
   --text-color-ds-primary: theme(colors.violet.700);
   --text-color-ds-selected: theme(colors.violet.700);
   --text-color-ds-brand: theme(colors.violet.700);
-  --text-color-ds-destructive: theme(colors.red.800);
+  --text-color-ds-destructive: theme(colors.red.600);
   --text-color-ds-warning: theme(colors.orange.800);
   --text-color-ds-warning-inverse: theme(colors.neutral.900);
   --text-color-ds-success: theme(colors.green.800);
@@ -55,7 +55,7 @@
   --fill-ds-icon-inverse: theme(colors.neutral.100);
   --fill-ds-icon-selected: theme(colors.violet.700);
   --fill-ds-icon-brand: theme(colors.violet.700);
-  --fill-ds-icon-destructive: theme(colors.red.700);
+  --fill-ds-icon-destructive: theme(colors.red.600);
   --fill-ds-icon-warning: theme(colors.orange.600);
   --fill-ds-icon-warning-inverse: theme(colors.neutral.950);
   --fill-ds-icon-success: theme(colors.green.600);
@@ -494,7 +494,7 @@
   --text-color-ds-discovery: theme(colors.purple.300);
   --text-color-ds-info: theme(colors.blue.300);
   --text-color-ds-subtle: theme(colors.neutral.400);
-  --text-color-ds-subtlest: theme(colors.neutral.400);
+  --text-color-ds-subtlest: theme(colors.neutral.300);
   --text-color-ds-link: theme(colors.teal.400);
   --text-color-ds-link-pressed: theme(colors.teal.300);
   --text-color-ds-link-visited: theme(colors.neutral.400);
@@ -514,7 +514,7 @@
   --fill-ds-icon-inverse: theme(colors.neutral.800);
   --fill-ds-icon-selected: theme(colors.violet.500);
   --fill-ds-icon-brand: theme(colors.violet.400);
-  --fill-ds-icon-destructive: theme(colors.red.500);
+  --fill-ds-icon-destructive: theme(colors.red.300);
   --fill-ds-icon-warning: theme(colors.orange.300);
   --fill-ds-icon-warning-inverse: theme(colors.neutral.100);
   --fill-ds-icon-success: theme(colors.green.500);
@@ -539,7 +539,7 @@
   --border-color-ds-inverse: theme(colors.neutral.950);
   --border-color-ds-selected: theme(colors.violet.500);
   --border-color-ds-brand: theme(colors.violet.400);
-  --border-color-ds-destructive: theme(colors.red.500);
+  --border-color-ds-destructive: theme(colors.red.300);
   --border-color-ds-warning: theme(colors.orange.500);
   --border-color-ds-success: theme(colors.green.500);
   --border-color-ds-discovery: theme(colors.purple.500);

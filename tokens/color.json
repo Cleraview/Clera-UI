@@ -273,7 +273,7 @@
         },
         "destructive": {
           "$type": "color",
-          "$value": "{color.red.800}",
+          "$value": "{color.red.600}",
           "$extensions": {
             "mode": {
               "dark": "{color.red.300}"
@@ -339,7 +339,7 @@
           "$value": "{color.neutral.500}",
           "$extensions": {
             "mode": {
-              "dark": "{color.neutral.400}"
+              "dark": "{color.neutral.300}"
             }
           }
         },
@@ -521,10 +521,10 @@
           },
           "destructive": {
             "$type": "color",
-            "$value": "{color.red.700}",
+            "$value": "{color.red.600}",
             "$extensions": {
               "mode": {
-                "dark": "{color.red.500}"
+                "dark": "{color.red.300}"
               }
             }
           },
@@ -756,7 +756,7 @@
           "$value": "{color.red.600}",
           "$extensions": {
             "mode": {
-              "dark": "{color.red.500}"
+              "dark": "{color.red.300}"
             }
           }
         },

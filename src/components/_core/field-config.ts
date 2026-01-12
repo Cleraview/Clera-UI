@@ -1,17 +1,24 @@
 import { tokenPaddings, tokenTextSizes } from './tokens'
 
 export type FieldSize = 'sm' | 'md' | 'lg'
+export type FieldState = 'default' | 'focused' | 'error' | 'disabled'
+
+export const fieldHorizontalPadding: Record<FieldSize, string> = {
+  sm: 'px-2',
+  md: 'px-2.5',
+  lg: 'px-3',
+}
 
 export const floatingLabelBase: Record<FieldSize, string> = {
-  sm: '-left-1 translate-x-[14px] translate-y-[10px]',
-  md: '-left-1.5 translate-x-[16px] translate-y-[10px]',
-  lg: '-left-2 translate-x-[20px] translate-y-[10px]',
+  sm: 'px-2 translate-y-[10px]',
+  md: 'px-2.5 translate-y-[10px]',
+  lg: 'px-3 translate-y-[10px]',
 }
 
 export const floatingLabelActive: Record<FieldSize, string> = {
-  sm: 'translate-x-[15px] -translate-y-3.5',
-  md: 'translate-x-[16px] -translate-y-3.5',
-  lg: 'translate-x-[17px] -translate-y-3.5',
+  sm: 'px-3.5 -translate-y-1',
+  md: 'px-4 -translate-y-1',
+  lg: 'px-4.5 -translate-y-1.5',
 }
 
 export const floatingLabelBaseText: Record<FieldSize, string> = {
@@ -20,8 +27,8 @@ export const floatingLabelBaseText: Record<FieldSize, string> = {
   lg: tokenTextSizes.md,
 }
 
-export const floatingLabelActiveText: Record<FieldSize, string> = {
-  sm: 'text-[10px] leading-3',
+export const floatingLabelTextActive: Record<FieldSize, string> = {
+  sm: tokenTextSizes.xxs,
   md: tokenTextSizes.xs,
   lg: tokenTextSizes.sm,
 }
@@ -52,42 +59,49 @@ export const fieldPaddingsWithIcon: Record<FieldSize, string> = {
 }
 
 export const fieldPaddingsWithIconRight: Record<FieldSize, string> = {
-  sm: 'h-[32px] py-2 pl-2 pr-10',
-  md: 'h-[36px] py-2.5 pl-2.5 pr-10',
-  lg: 'h-[40px] py-3 pl-3 pr-10',
+  sm: 'h-[32px] py-2 pl-2 pr-8',
+  md: 'h-[36px] py-2.5 pl-2.5 pr-8',
+  lg: 'h-[40px] py-3 pl-3 pr-8',
 }
 
-export const floatingLabelBaseWithIcon: Record<FieldSize, string> = {
-  sm: 'translate-x-[28px] translate-y-[10px]',
-  md: 'translate-x-[32px] translate-y-[10px]',
-  lg: 'translate-x-[36px] translate-y-[10px]',
+export const floatingLabelBaseWithIcon: Record<
+  'left' | 'right',
+  Record<FieldSize, string>
+> = {
+  left: {
+    sm: 'pl-8 pr-2 translate-y-[10px]',
+    md: 'pl-8 pr-2.5 translate-y-[10px]',
+    lg: 'pl-8 pr-3 translate-y-[10px]',
+  },
+  right: {
+    sm: 'pl-2 pr-8 translate-y-[10px]',
+    md: 'pl-2.5 pr-8 translate-y-[10px]',
+    lg: 'pl-3 pr-8 translate-y-[10px]',
+  },
 }
 
-export const floatingLabelActiveWithIcon: Record<FieldSize, string> = {
-  sm: 'translate-x-[15px] -translate-y-3.5',
-  md: 'translate-x-[16px] -translate-y-3.5',
-  lg: 'translate-x-[17px] -translate-y-3.5',
-}
-
-export const fieldStateStyles = {
+export const fieldStateStyles: Record<
+  FieldState,
+  { label: string; border: string; text: string }
+> = {
   default: {
     label: 'text-ds-subtlest',
-    border: 'border-ds-input',
+    border: 'border-2 border-ds-input',
     text: 'text-ds-default',
   },
   focused: {
     label: 'text-ds-accent-violet',
-    border: 'border-[2px] border-ds-focused',
+    border: 'border-2 border-ds-focused',
     text: 'text-ds-default',
   },
   error: {
     label: 'text-ds-destructive',
-    border: 'border-ds-destructive',
+    border: 'border-2 border-ds-destructive',
     text: 'text-ds-destructive',
   },
   disabled: {
     label: 'text-ds-disabled',
-    border: 'border-ds-disabled',
+    border: 'border-2 border-ds-disabled',
     text: 'text-ds-disabled',
   },
 }

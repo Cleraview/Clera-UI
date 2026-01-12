@@ -22,13 +22,11 @@ import { FormInputWrapper } from '@/components/form/FormInputWrapper'
 import { type FieldSize } from '@/components/_core/field-config'
 import {
   triggerWrapper,
-  inputClass,
   prevButton,
   nextButton,
   dropdownRoot,
   dropdownSelect,
   weekday as weekdayClass,
-  iconClass,
   monthCaption,
   dropdownNav,
   chevronIcon,
@@ -39,6 +37,7 @@ import {
 } from './styles'
 import { parseSelected } from './_utils/parse'
 import 'react-day-picker/dist/style.css'
+import { inputClasses } from '../styles'
 
 type CalendarMode = 'single' | 'range' | 'multiple'
 
@@ -301,21 +300,23 @@ const Calendar: React.FC<CalendarProps> = ({
       focused={focused}
       filled={filled}
       fullWidth={fullWidth}
+      icon={<FiCalendar />}
+      iconPosition="right"
+      hasIcon
     >
       <Popover.Root
         open={focused && !disabled && !readOnly}
         onOpenChange={handleOpenChange}
       >
-        <Popover.Trigger asChild>
+        <Popover.Trigger disabled={disabled || readOnly} asChild>
           <div className={triggerWrapper}>
             <input
-              className={inputClass(inputSize, disabled, mode)}
+              className={inputClasses(inputSize, disabled, hasError, 'right')}
               type="text"
               value={displayValue}
               disabled={disabled}
               readOnly
             />
-            {FiCalendar && <FiCalendar className={iconClass} />}
           </div>
         </Popover.Trigger>
 

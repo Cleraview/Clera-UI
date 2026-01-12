@@ -117,7 +117,7 @@ const meta: Meta<typeof Select> = {
     label: 'Label',
     options: [
       { value: '', label: 'Select an option' },
-      { value: 'option1', label: 'Option 1' },
+      { value: 'option1', label: 'Option 1', disabled: true },
       { value: 'option2', label: 'Option 2' },
       { value: 'option3', label: 'Option 3' },
     ],
@@ -173,10 +173,18 @@ export const Controlled: Story = {
   },
 }
 
-export const WithoutPlaceholder: Story = {
+export const WithoutLabel: Story = {
   args: {
-    defaultValue: 'option1',
+    defaultValue: '',
+    label: 'Please select an option p-0 (must be provided for accessibility)',
   },
+  decorators: [
+    StoryComponent => (
+      <div className="max-w-[200px]">
+        <StoryComponent />
+      </div>
+    ),
+  ],
 }
 
 export const NoLabel: Story = {

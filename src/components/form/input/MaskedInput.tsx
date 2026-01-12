@@ -37,7 +37,6 @@ export interface MaskedInputProps extends InputHTMLAttributes<HTMLInputElement> 
   fullWidth?: boolean
   inputSize?: FieldSize
   hasError?: boolean
-  floatLabel?: boolean
   maxRawLength?: number
 }
 
@@ -56,7 +55,6 @@ export const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
       placeholder: _placeholder,
       fullWidth,
       inputSize = 'md',
-      floatLabel: _floatLabel = true,
       disabled,
       value,
       hasError = false,

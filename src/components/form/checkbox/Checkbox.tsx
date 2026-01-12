@@ -22,7 +22,7 @@ export const Checkbox = forwardRef<
   const id = idProp || autoId
 
   return (
-    <div className={cn(styles.container, disabled && styles.disabledOpacity)}>
+    <div className={cn(styles.container, disabled && styles.disabledContainer)}>
       <CheckboxPrimitive.Root
         ref={ref}
         id={id}

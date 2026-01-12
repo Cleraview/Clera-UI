@@ -1,25 +1,6 @@
 import { cn } from '@/utils/tailwind'
-import {
-  type FieldSize,
-  fieldPaddings,
-  floatingLabelBaseText,
-} from '@/components/_core/field-config'
 
-export const triggerWrapper = 'relative'
-
-export function inputClass(
-  inputSize: FieldSize,
-  disabled?: boolean,
-  _mode?: string
-) {
-  return cn(
-    'peer w-full pr-space-xl! placeholder-transparent focus:outline-none cursor-pointer',
-    fieldPaddings[inputSize],
-    floatingLabelBaseText[inputSize],
-    disabled ? 'text-ds-subtlest' : 'text-ds-default',
-    'truncate'
-  )
-}
+export const triggerWrapper = 'w-full [&>input]:cursor-pointer'
 
 export const content = (extra?: string) =>
   cn(
@@ -95,7 +76,6 @@ export const getClassNamesCommon = (
 
 export default {
   triggerWrapper,
-  inputClass,
   content,
   prevButton,
   nextButton,

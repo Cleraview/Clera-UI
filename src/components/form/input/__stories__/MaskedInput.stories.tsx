@@ -8,11 +8,16 @@ import { Button } from '@/components/button'
 const meta: Meta<typeof MaskedInput> = {
   title: 'UI/Form/MaskedInput',
   component: MaskedInput,
-  tags: ['dev'],
+  tags: [],
   args: {
     inputSize: 'md',
   },
   argTypes: {
+    label: {
+      control: 'text',
+      description: 'The label for the input field.',
+      table: { type: { summary: 'string' } },
+    },
     maskPreset: {
       control: 'select',
       options: ['card16', 'expiryMMYY', 'cvc3', 'phoneUS', 'phoneIntlLite'],
@@ -20,6 +25,79 @@ const meta: Meta<typeof MaskedInput> = {
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: 'undefined' },
+      },
+    },
+    mask: {
+      control: 'text',
+      description:
+        'Custom mask pattern using 0 for digits, A for letters, and * for alphanumeric characters.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
+      },
+    },
+    inputSize: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'The size of the input',
+      table: {
+        type: { summary: 'sm | md | lg' },
+        defaultValue: { summary: 'md' },
+      },
+    },
+    fullWidth: {
+      control: 'boolean',
+      description:
+        'Determines if the input should take up the full width of its container',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    required: {
+      control: 'boolean',
+      description: 'Determines if the input is required',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    readOnly: {
+      control: 'boolean',
+      description: 'Determines if the input is read-only',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Determines if the input is disabled',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    hasError: {
+      control: 'boolean',
+      description: 'Determines if the input has an error state',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    icon: {
+      control: false,
+      description: 'Icon node to render inside the input',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    iconPosition: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the icon relative to the input',
+      table: {
+        type: { summary: 'left | right' },
+        defaultValue: { summary: 'right' },
       },
     },
     inputMode: {
@@ -41,51 +119,30 @@ const meta: Meta<typeof MaskedInput> = {
         defaultValue: { summary: '""' },
       },
     },
-    placeholder: {
-      control: 'text',
-      description:
-        'Provides a hint to the user of what can be entered in the field.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '""' },
-      },
-    },
     rawValue: {
       control: 'text',
       description:
         'The unformatted value of the input, useful for controlled components.',
+      table: { type: { summary: 'string' } },
     },
     onRawChange: {
       action: 'rawValue changed',
       description:
         'Callback function that is called when the raw (unformatted) value changes.',
-      table: { type: { summary: 'function' } },
+      table: { type: { summary: '(raw: string) => void' } },
     },
-    label: {
-      control: 'text',
-      description: 'The label for the input field.',
-      table: { type: { summary: 'string' } },
-    },
-    icon: {
-      control: false,
-      description: 'Icon node to render inside the input',
-      table: { type: { summary: 'ReactNode' } },
-    },
-    iconPosition: {
-      control: 'select',
-      options: ['left', 'right'],
-      description: 'Position of the icon relative to the input',
-      table: {
-        type: { summary: 'left | right' },
-        defaultValue: { summary: 'right' },
-      },
-    },
-    mask: {
-      control: 'text',
+    onBlur: {
+      action: 'blurred',
       description:
-        'Custom mask pattern using 0 for digits, A for letters, and * for alphanumeric characters.',
+        'Callback function that is called when the input loses focus.',
+      table: { type: { summary: '() => void' } },
+    },
+    maxRawLength: {
+      control: 'number',
+      description:
+        'Maximum length of the raw (unformatted) value. Defaults to mask token capacity if not set.',
       table: {
-        type: { summary: 'string' },
+        type: { summary: 'number' },
         defaultValue: { summary: 'undefined' },
       },
     },
@@ -103,19 +160,19 @@ export const CreditCard: Story = {
     const [raw, setRaw] = useState('4111111111111111')
 
     const sampleOptions = [
-      { value: '4111111111111111', label: 'Visa — 4111 1111 1111 1111' },
+      { value: '411111111111111111111', label: 'Visa — 4111 1111 1111 1111' },
       { value: '5555555555554444', label: 'MasterCard — 5555 5555 5555 4444' },
       { value: '378282246310005', label: 'Amex — 3782 822463 10005' },
       { value: '', label: 'Empty' },
     ]
 
     return (
-      <div className="min-w-[300px] space-y-gap-md">
+      <div className="min-w-[280px] space-y-gap-md">
         <Select
           label="Sample Card"
           options={sampleOptions}
           defaultValue={sampleOptions[0].value}
-          onChange={val => setRaw(val)}
+          onChange={(val: string) => setRaw(val)}
         />
 
         <MaskedInput
@@ -147,7 +204,6 @@ export const ExpiryDate: Story = {
     maskPreset: 'expiryMMYY',
     inputMode: 'numeric',
     autoComplete: 'cc-exp',
-    placeholder: '2222 2222 2222 2222',
   },
 }
 

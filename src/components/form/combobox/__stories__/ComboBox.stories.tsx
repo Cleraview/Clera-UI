@@ -186,6 +186,17 @@ export const Disabled: Story = {
 }
 
 export const WithError: Story = {
+  render: args => {
+    const [value, setValue] = useState(args.value ?? 'my')
+    return (
+      <div className="w-64">
+        <ComboBox {...args} value={value} onChange={setValue} />
+        <p className="text-ds-subtle text-body-xs mt-space-md">
+          Selected Value: {value}
+        </p>
+      </div>
+    )
+  },
   args: {
     hasError: true,
     value: 'my',

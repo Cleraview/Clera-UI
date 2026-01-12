@@ -1,21 +1,17 @@
 'use client'
 
-import React, { useId, useState } from 'react'
+import React, { FC, ReactNode, SyntheticEvent, useId, useState } from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { FormInputWrapper } from '../FormInputWrapper'
 import { GoChevronDown } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
-import {
-  type FieldSize,
-  floatingLabelBaseText,
-  fieldPaddings,
-} from '@/components/_core/field-config'
-import { cn } from '@/utils/tailwind'
-import { styles } from './styles'
+import { type FieldSize } from '@/components/_core/field-config'
+import { styles, triggerClass, valueClass, itemClass } from './styles'
 
 export type SelectOption = {
   value: string
-  label: React.ReactNode
+  label: ReactNode
+  disabled?: boolean
 }
 
 export type SelectProps = {
@@ -35,7 +31,7 @@ export type SelectProps = {
   onBlur?: () => void
 }
 
-export const Select: React.FC<SelectProps> = ({
+export const Select: FC<SelectProps> = ({
   id: idProp,
   label,
   options,
@@ -68,6 +64,13 @@ export const Select: React.FC<SelectProps> = ({
     onChange?.(val)
   }
 
+  const handleOnItemSelect = (event: SyntheticEvent, option: SelectOption) => {
+    if (option.disabled) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   return (
     <FormInputWrapper
       id={inputId}
@@ -80,6 +83,8 @@ export const Select: React.FC<SelectProps> = ({
       focused={focused}
       filled={filled}
       fullWidth={fullWidth}
+      icon={GoChevronDown ? <GoChevronDown /> : undefined}
+      iconPosition="right"
       inputType="select"
     >
       <SelectPrimitive.Root
@@ -90,15 +95,7 @@ export const Select: React.FC<SelectProps> = ({
       >
         <SelectPrimitive.Trigger
           id={inputId}
-          className={cn(
-            styles.triggerBase,
-            styles.triggerFilledFalse,
-            fieldPaddings[inputSize],
-            floatingLabelBaseText[inputSize],
-            hasError && styles.triggerHasError,
-            disabled ? styles.triggerDisabled : styles.triggerDefault,
-            className
-          )}
+          className={triggerClass({ inputSize, hasError, disabled, className })}
           onBlur={() => {
             onBlur?.()
           }}
@@ -108,19 +105,10 @@ export const Select: React.FC<SelectProps> = ({
             placeholder={placeholder}
             data-filled={filled}
             data-has-error={hasError}
-            className={cn(
-              hasError ? styles.valueError : styles.valueDefault,
-              floatingLabelBaseText[inputSize]
-            )}
+            data-disabled={disabled}
+            aria-disabled={disabled}
+            className={valueClass(inputSize, hasError)}
           />
-
-          <SelectPrimitive.Icon asChild>
-            {GoChevronDown && (
-              <GoChevronDown
-                className={cn(styles.iconBase, hasError && styles.iconError)}
-              />
-            )}
-          </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
 
         <SelectPrimitive.Portal>
@@ -137,11 +125,11 @@ export const Select: React.FC<SelectProps> = ({
                   <SelectPrimitive.Item
                     key={option.value}
                     value={option.value}
-                    className={cn(
-                      styles.itemBase,
-                      fieldPaddings[inputSize],
-                      floatingLabelBaseText[inputSize]
-                    )}
+                    aria-disabled={option.disabled}
+                    data-disabled={option.disabled}
+                    className={itemClass(inputSize, option.disabled)}
+                    onSelect={event => handleOnItemSelect(event, option)}
+                    disabled={option.disabled}
                   >
                     <SelectPrimitive.ItemText>
                       {option.label}
