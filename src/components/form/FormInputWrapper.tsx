@@ -28,6 +28,7 @@ export type FormInputWrapperProps = {
   hasIcon?: boolean
   icon?: ReactNode
   iconPosition?: IconPosition
+  iconClickable?: boolean
   filled?: boolean
   focused?: boolean
   fullWidth?: boolean
@@ -52,6 +53,7 @@ export const FormInputWrapper = ({
   hasIcon,
   icon,
   iconPosition = 'right' as IconPosition,
+  iconClickable,
 }: FormInputWrapperProps) => {
   const customId = useId()
   const inputId = id ?? customId
@@ -102,13 +104,17 @@ export const FormInputWrapper = ({
 
         <div className={interactiveLayer(disabled)}>
           {icon && iconPosition === 'left' && (
-            <span className={iconClass(inputSize, 'left')}>{icon}</span>
+            <span className={iconClass(inputSize, 'left', iconClickable)}>
+              {icon}
+            </span>
           )}
 
           {children}
 
           {icon && iconPosition === 'right' && (
-            <span className={iconClass(inputSize, 'right')}>{icon}</span>
+            <span className={iconClass(inputSize, 'right', iconClickable)}>
+              {icon}
+            </span>
           )}
 
           <fieldset className={fieldsetClass(state, isActive, inputSize)}>

@@ -143,10 +143,12 @@ export const itemRoot = (className?: string) => cn('space-y-1', className)
 
 export const iconClass = (
   inputSize: FieldSize = 'md',
-  position: IconPosition = 'left'
+  position: IconPosition = 'left',
+  clickable?: boolean
 ) =>
   cn(
-    'absolute z-10 text-ds-subtlest pointer-events-none',
+    'absolute flex items-center z-10 text-ds-subtlest',
+    clickable ? 'cursor-pointer pointer-events-auto' : 'pointer-events-none',
     elementIconSizes[inputSize],
     fieldIconPosition[position][inputSize]
   )

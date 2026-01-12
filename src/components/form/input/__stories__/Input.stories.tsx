@@ -78,13 +78,15 @@ const meta: Meta<typeof Input> = {
     },
     icon: {
       control: false,
-      description: 'Icon node to render inside the input',
+      description:
+        'Icon node to render inside the input. Only works with types other than password.',
       table: { type: { summary: 'ReactNode' } },
     },
     iconPosition: {
       control: 'select',
       options: ['left', 'right'],
-      description: 'Position of the icon relative to the input',
+      description:
+        'Position of the icon relative to the input. Only works with types other than password (password always uses right position for visibility toggle).',
       table: {
         type: { summary: 'left | right' },
         defaultValue: { summary: 'left' },
@@ -127,6 +129,8 @@ export const Number: Story = {
   args: {
     type: 'number',
     label: 'Number',
+    icon: <FiUser />,
+    iconPosition: 'right',
   },
 }
 
