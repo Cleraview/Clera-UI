@@ -77,7 +77,7 @@
   --border-color-ds-disabled: theme(colors.neutral.300);
   --border-color-ds-focused: theme(colors.violet.500);
   --border-color-ds-input: theme(colors.neutral.200);
-  --border-color-ds-inverse: theme(colors.neutral.50);
+  --border-color-ds-inverse: theme(colors.neutral.900);
   --border-color-ds-selected: theme(colors.violet.700);
   --border-color-ds-brand: theme(colors.violet.700);
   --border-color-ds-destructive: theme(colors.red.600);
@@ -536,7 +536,7 @@
   --border-color-ds-disabled: theme(colors.neutral.700);
   --border-color-ds-focused: theme(colors.violet.300);
   --border-color-ds-input: theme(colors.neutral.600);
-  --border-color-ds-inverse: theme(colors.neutral.950);
+  --border-color-ds-inverse: theme(colors.neutral.100);
   --border-color-ds-selected: theme(colors.violet.500);
   --border-color-ds-brand: theme(colors.violet.400);
   --border-color-ds-destructive: theme(colors.red.300);
