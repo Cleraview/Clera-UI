@@ -99,7 +99,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
   const renderItems = (items: TOCItem[], level = 0) => (
     <ul
       className={cn(
-        'list-none! space-y-gap-xs',
+        'list-none! space-y-gap-xs [&>*]:text-label-sm!',
         level > 0 ? 'pl-space-sm!' : 'pl-0!'
       )}
     >
@@ -109,9 +109,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
             href={`#${item.id}`}
             target="_self"
             className={cn(
-              'text-default! block text-sm! py-space-xs',
+              'block py-space-xs',
               level === 0 && 'font-semibold',
-              level > 0 && 'text-muted-foreground'
+              item.id === activeId && 'text-ds-selected! font-semibold',
+              level > 0 && item.id !== activeId && 'text-ds-subtlest!'
             )}
             onClick={e => {
               e.preventDefault()
@@ -132,18 +133,18 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
   return (
     <nav
       ref={tocRef}
+      role="navigation"
+      aria-label="Table of contents"
       className={cn(
-        'relative sticky top-20 right-20 w-[200px] max-h-[calc(100vh-5rem)] px-4 py-3 border-l border-default',
+        'md:relative md:sticky md:top-10 md:right-20 md:w-[200px] md:max-h-[calc(100vh-5rem)] px-space-md py-space-xs border-l border-ds-default bg-ds-surface rounded-md',
         className
       )}
     >
       <span
-        className="absolute left-[-2px] w-[4px] bg-secondary-intense-pressed transition-all duration-200"
+        className="absolute left-[-2px] w-[4px] bg-ds-selected-bold transition-all duration-200"
         style={{ top: indicatorY, height: indicatorHeight }}
       />
-      <h2 className="text-sm! font-bold mb-space-md border-inverse!">
-        Contents
-      </h2>
+      <h2 className="text-label-sm! font-bold mb-space-md">Contents</h2>
       {renderItems(items)}
     </nav>
   )

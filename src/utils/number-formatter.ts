@@ -10,7 +10,7 @@ export function formatCurrency(
   }).format(price)
 }
 
-export const shortenNumber = (num: number): string => {
+export function shortenNumber(num: number): string {
   if (num === 0) return '0'
 
   const sign = Math.sign(num) < 0 ? '-' : ''

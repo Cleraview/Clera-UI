@@ -30,8 +30,9 @@ const sectionHeaderVariants = cva('flex flex-col gap-space-md', {
   },
 })
 
-export interface SectionHeaderProps
-  extends VariantProps<typeof sectionHeaderVariants> {
+export interface SectionHeaderProps extends VariantProps<
+  typeof sectionHeaderVariants
+> {
   title?: string | React.ReactNode
   subtitle?: string | React.ReactNode
   badgeLabel?: string
@@ -179,7 +180,7 @@ export const SectionHeader = forwardRef<HTMLDivElement, SectionHeaderProps>(
               className={cn(
                 subTitleClassName
                   ? subTitleClassName
-                  : 'text-heading-xl text-subtle font-light!',
+                  : 'text-heading-xl text-ds-subtle font-light!',
                 isAnimate && 'opacity-0'
               )}
             >

@@ -1,27 +1,39 @@
 'use client'
 
-import { ReactNode, useId } from 'react'
-import type { InputSize } from '@/components/form/_props/input-props'
+import { Fragment, ReactNode, useId } from 'react'
+import type { FieldSize } from '@/components/_core/field-config'
 import { cn } from '@/utils/tailwind'
 import {
-  inputColors,
-  labelClasses,
-  labelPositions,
-  labelSizes,
-} from '@/components/form/_props/input-props'
+  root as formRoot,
+  inputContentWrapper,
+  labelClass,
+  fieldset as fieldsetClass,
+  legendClass,
+  iconClass,
+  sizingShim,
+  sizingShimSpan,
+  interactiveLayer,
+} from './styles'
+import type { IconPosition } from './types'
 
 export type FormInputWrapperProps = {
   id?: string
   label: string
-  inputSize?: InputSize
+  inputSize?: FieldSize
+  inputType?: 'select' | 'input' | 'textarea'
   hasError?: boolean
   required?: boolean
   disabled?: boolean
   readOnly?: boolean
+  hasIcon?: boolean
+  icon?: ReactNode
+  iconPosition?: IconPosition
+  iconClickable?: boolean
   filled?: boolean
   focused?: boolean
   fullWidth?: boolean
   children: ReactNode
+  className?: string
 }
 
 export const FormInputWrapper = ({
@@ -31,61 +43,86 @@ export const FormInputWrapper = ({
   disabled,
   readOnly,
   inputSize = 'md',
+  inputType = 'input',
   hasError,
   focused,
   filled,
   fullWidth,
   children,
+  className,
+  hasIcon,
+  icon,
+  iconPosition = 'right' as IconPosition,
+  iconClickable,
 }: FormInputWrapperProps) => {
   const customId = useId()
   const inputId = id ?? customId
   const state = hasError ? 'error' : focused ? 'focused' : 'default'
+  const isActive =
+    (focused || filled || readOnly || disabled) && Boolean(label?.length)
 
   const displayLabel = (
-    <span>
+    <Fragment>
       {readOnly ? 'Read Only' : disabled ? 'Disabled' : label}
       {required && !readOnly && !disabled && <span>*</span>}
-    </span>
+    </Fragment>
   )
 
   return (
-    <div className={cn('relative', { 'w-full': fullWidth })}>
-      <label
-        htmlFor={inputId}
-        className={cn(
-          'absolute -left-1 bg-default px-1 transition-all pointer-events-none whitespace-nowrap z-[1]',
-          labelClasses[inputSize],
-          (focused || filled || readOnly || disabled) && [
-            labelSizes[inputSize],
-            labelPositions[inputSize],
-          ],
-          inputColors[state].label
+    <div className={cn(formRoot(fullWidth, disabled), className)}>
+      <div className={cn(inputContentWrapper(fullWidth, disabled))}>
+        {label && (
+          <Fragment>
+            <div
+              className={cn(
+                sizingShim(inputSize, icon ? iconPosition : undefined)
+              )}
+            >
+              <span aria-hidden className={sizingShimSpan}>
+                {label}
+              </span>
+            </div>
+
+            <label
+              htmlFor={inputId}
+              className={labelClass({
+                focused,
+                filled,
+                readOnly,
+                disabled,
+                inputSize,
+                inputType,
+                hasIcon: hasIcon || !!icon,
+                iconPosition,
+                state,
+              })}
+            >
+              {displayLabel}
+            </label>
+          </Fragment>
         )}
-      >
-        {displayLabel}
-      </label>
 
-      <div className="relative">
-        {children}
-
-        <fieldset
-          className={cn(
-            'absolute inset-0 rounded-sm px-space-xs pointer-events-none border transition-all duration-200',
-            inputColors[state].border
+        <div className={interactiveLayer(disabled)}>
+          {icon && iconPosition === 'left' && (
+            <span className={iconClass(inputSize, 'left', iconClickable)}>
+              {icon}
+            </span>
           )}
-        >
-          <legend
-            className={cn(
-              'w-auto h-0 p-0 transition-all duration-200 invisible whitespace-nowrap',
-              labelSizes[inputSize],
-              focused || filled || readOnly || disabled
-                ? 'max-w-full px-1'
-                : 'max-w-[0.01px] px-0'
-            )}
-          >
-            <span>{displayLabel}</span>
-          </legend>
-        </fieldset>
+
+          {children}
+
+          {icon && iconPosition === 'right' && (
+            <span className={iconClass(inputSize, 'right', iconClickable)}>
+              {icon}
+            </span>
+          )}
+
+          <fieldset className={fieldsetClass(state, isActive, inputSize)}>
+            <legend className={legendClass(inputSize, isActive)}>
+              {displayLabel}
+            </legend>
+          </fieldset>
+        </div>
       </div>
     </div>
   )

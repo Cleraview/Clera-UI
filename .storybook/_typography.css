@@ -1,0 +1,25 @@
+:root {
+  --typography-heading-6xl: text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-snug;
+  --typography-heading-5xl: text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug;
+  --typography-heading-4xl: text-3xl lg:text-4xl font-semibold tracking-tight leading-snug;
+  --typography-heading-3xl: text-2xl lg:text-3xl font-semibold leading-snug;
+  --typography-heading-2xl: text-xl lg:text-2xl font-semibold leading-snug;
+  --typography-heading-xl: text-base md:text-lg lg:text-xl font-semibold leading-normal;
+  --typography-heading-lg: text-base lg:text-lg font-semibold leading-normal;
+  --typography-heading-base: text-base font-semibold leading-normal;
+  --typography-body-xl: text-xl leading-relaxed;
+  --typography-body-lg: text-lg leading-relaxed;
+  --typography-body-md: text-base leading-normal;
+  --typography-body-sm: text-sm leading-normal;
+  --typography-body-xs: text-xs leading-normal;
+  --typography-body-xxs: text-[10px] leading-3;
+  --typography-label-lg: text-sm md:text-base font-medium;
+  --typography-label-sm: text-xs font-medium;
+  --typography-caption: text-xs leading-tight;
+  --typography-overline: text-[10px] uppercase tracking-wider font-semibold;
+  --typography-code: font-mono text-body-sm text-ds-accent-violet;
+  --typography-link: font-medium text-ds-accent-blue hover:underline;
+  --typography-muted: text-ds-subtlest;
+  --typography-strong: font-semibold text-ds-default;
+  --typography-em: italic text-ds-subtlest;
+}

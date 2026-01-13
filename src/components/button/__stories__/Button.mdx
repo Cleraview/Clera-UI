@@ -1,18 +1,19 @@
-import { Meta, Story, ArgTypes, Controls, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as ButtonStories from "./Button.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Button" of={ButtonStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Button
 
     To trigger an operation.
-    <DocInfo importStatement={`import { Button } from 'clera-ui/button'`} sourcePath={`components/button`} />
+    <DocInfo importStatement={`import { Button } from '@clera-ui/button'`} sourcePath={`components/button`} />
 
     <br />
 
@@ -22,16 +23,16 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     In {config.title}, buttons are highly flexible and can adapt to different contexts through their props:
 
       - **Variant**: Choose a visual style that reflects the purpose of the action.  
-        - *Primary*: For main actions.  
-        - *Secondary*: For supporting actions.  
-        - *Success / Info*: For positive or informative actions.  
-        - *Destructive*: For dangerous or irreversible actions (e.g., delete).  
-        - *Outline / Ghost*: For less prominent actions where subtlety is preferred.
+        - `Primary`: For main actions.  
+        - `Secondary`: For supporting actions.  
+        - `Success`, `Info`: For positive or informative actions.  
+        - `Destructive`: For dangerous or irreversible actions (e.g., delete).  
+        - `Outline` / `Ghost`: For less prominent actions where subtlety is preferred.
 
       - **Size**: Adjust the button to match the interface context.  
-        - *xs / sm*: Compact actions, toolbars, or dense UIs.  
-        - *md*: Default and most common usage.  
-        - *lg*: Prominent actions requiring emphasis.
+        - `xs` / `sm`: Compact actions, toolbars, or dense UIs.  
+        - `md`: Default and most common usage.  
+        - `lg`: Prominent actions requiring emphasis.
 
     - **Icon & Icon Position**: Add optional icons to reinforce meaning. Place them on the *left* or *right* of the label to guide visual flow.
     - **Full Width**: Use when the button should span the entire width of its container, common in forms or mobile layouts.
@@ -54,7 +55,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="primary">Selected button</Button>
@@ -75,7 +76,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary">Selected button</Button>
@@ -95,7 +96,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Button } from 'clera-ui/button'
+          import { Button } from '@clera-ui/button'
 
           const ButtonSelectedExample = () => {
             return <Button variant="outlinePrimary" loading>Selected button</Button>
@@ -148,8 +149,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     You can add an icon to a button by passing a React element to the `icon` prop. Use the `iconPosition` prop to control whether the icon appears on the left or right side of the button label.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { FaStar } from 'react-icons/fa';
-        <Button icon={<FaStar />} iconPosition="left">Click me</Button>
+        import { FaStar } from 'react-icons/fa'
+
+        <Button 
+          icon={<FaStar />} 
+          iconPosition="left"
+        >
+          Click me
+        </Button>
       `} />
     </Canvas.Source>
 
@@ -272,5 +279,5 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>
 

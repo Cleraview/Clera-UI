@@ -1,9 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import AlertDialog from '..'
 import { Button } from '@/components/button'
+import { elementVariantKeys } from '@/components/_core/element-config'
 
 const meta: Meta<typeof AlertDialog> = {
-  title: 'UI/AlertDialog',
+  title: 'UI/Alert Dialog',
   component: AlertDialog,
   tags: ['dev'],
   parameters: {
@@ -36,6 +37,24 @@ const meta: Meta<typeof AlertDialog> = {
         defaultValue: { summary: 'Confirm' },
       },
     },
+    okButtonVariant: {
+      control: 'select',
+      options: elementVariantKeys,
+      description: 'Variant style for the confirm button',
+      table: {
+        type: { summary: 'VariantType' },
+        defaultValue: { summary: 'destructive' },
+      },
+    },
+    cancelButtonVariant: {
+      control: 'select',
+      options: elementVariantKeys,
+      description: 'Variant style for the cancel button',
+      table: {
+        type: { summary: 'VariantType' },
+        defaultValue: { summary: 'ghost' },
+      },
+    },
     cancelText: {
       control: 'text',
       description: 'Label for the cancel button',
@@ -58,6 +77,14 @@ export default meta
 type Story = StoryObj<typeof AlertDialog>
 
 export const Default: Story = {
+  tags: [],
+  args: {
+    trigger: (
+      <Button variant="destructive" size="sm">
+        Delete Project(s)
+      </Button>
+    ),
+  },
   render: args => (
     <AlertDialog
       {...args}
@@ -71,10 +98,14 @@ export const Default: Story = {
 }
 
 export const WithTriggerButton: Story = {
+  tags: ['hidden'],
+  args: {
+    trigger: <Button variant="outline">Delete Message</Button>,
+  },
   render: args => (
     <AlertDialog
       {...args}
-      trigger={<Button variant="outline">Open Alert Dialog</Button>}
+      trigger={args.trigger}
       onOk={() =>
         new Promise<void>(resolve => {
           setTimeout(resolve, 1000)
@@ -85,6 +116,7 @@ export const WithTriggerButton: Story = {
 }
 
 export const WithLoadingState: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -100,6 +132,7 @@ export const WithLoadingState: Story = {
 }
 
 export const PreventCloseDuringLoading: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}
@@ -115,6 +148,7 @@ export const PreventCloseDuringLoading: Story = {
 }
 
 export const CustomText: Story = {
+  tags: ['hidden'],
   render: args => (
     <AlertDialog
       {...args}

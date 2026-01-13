@@ -3,16 +3,16 @@ import config from "@/config/site"
 import * as BrandLogoStories from "./BrandLogo.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/BrandLogo" of={BrandLogoStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # BrandLogo
 
     A component to display the brand's logo.
-    <DocInfo importStatement={`import { BrandLogo } from 'clera-ui/brand-logo'`} sourcePath={`components/brand-logo`} />
+    <DocInfo importStatement={`import { BrandLogo } from '@clera-ui/brand-logo'`} sourcePath={`components/brand-logo`} />
 
     <br />
 
@@ -38,7 +38,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { BrandLogo } from 'clera-ui/brand-logo'
+          import { BrandLogo } from '@clera-ui/brand-logo'
 
           const BrandLogoDefaultExample = () => {
             return <BrandLogo />
@@ -51,4 +51,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <br />
   </div>
-</div>
+</DocsLayout>

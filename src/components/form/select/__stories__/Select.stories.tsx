@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Select } from '../Select'
 import { useState } from 'react'
 
@@ -117,13 +117,19 @@ const meta: Meta<typeof Select> = {
     label: 'Label',
     options: [
       { value: '', label: 'Select an option' },
-      { value: 'option1', label: 'Option 1' },
+      { value: 'option1', label: 'Option 1', disabled: true },
       { value: 'option2', label: 'Option 2' },
       { value: 'option3', label: 'Option 3' },
     ],
-    // placeholder: 'Select an option',
     inputSize: 'md',
   },
+  decorators: [
+    Story => (
+      <div className="min-w-[200px]">
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 export default meta
@@ -159,18 +165,26 @@ export const Controlled: Story = {
   render: args => {
     const [value, setValue] = useState('option2')
     return (
-      <div className="flex flex-col gap-space-sm">
+      <div className="min-w-[200px] flex flex-col gap-space-sm">
         <Select {...args} value={value} onChange={setValue} />
-        <p className="text-subtle text-body-xs">Chose: {value}</p>
+        <p className="text-ds-subtle text-body-xs">Chose: {value}</p>
       </div>
     )
   },
 }
 
-export const WithoutPlaceholder: Story = {
+export const WithoutLabel: Story = {
   args: {
-    defaultValue: 'option1',
+    defaultValue: '',
+    label: 'Please select an option p-0 (must be provided for accessibility)',
   },
+  decorators: [
+    StoryComponent => (
+      <div className="max-w-[200px]">
+        <StoryComponent />
+      </div>
+    ),
+  ],
 }
 
 export const NoLabel: Story = {

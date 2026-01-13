@@ -1,36 +1,18 @@
 'use client'
 
 import React, { useState } from 'react'
-import { cn } from '@/utils/tailwind'
+import { type VariantProps } from 'class-variance-authority'
 import { AiOutlineClose } from 'react-icons/ai'
-import {
-  roundedMap,
-  sizeMap,
-  variantMap,
-  VariantType,
-} from '../_utils/variants'
-import { cva, VariantProps } from 'class-variance-authority'
+import { type ElementVariant } from '@/components/_core/element-config'
+import { cn } from '@/utils/tailwind/tailwind'
+import { alertStyles } from './styles'
 
-const alertVariants = cva('relative flex', {
-  variants: {
-    variant: variantMap,
-    rounded: roundedMap,
-    size: sizeMap,
-  },
-  defaultVariants: {
-    variant: 'primary',
-    rounded: 'md',
-    size: 'md',
-  },
-})
-
-export interface AlertProps extends VariantProps<typeof alertVariants> {
-  message: React.ReactNode
-  description?: React.ReactNode
+export interface AlertProps extends VariantProps<typeof alertStyles.root> {
+  title?: React.ReactNode | string
+  description?: React.ReactNode | string
   icon?: React.ReactNode
   action?: React.ReactNode
-  variant?: VariantType
-  showIcon?: boolean
+  variant?: ElementVariant
   banner?: boolean
   closable?: boolean
   onClose?: (e: React.MouseEvent<HTMLButtonElement>) => void
@@ -39,14 +21,12 @@ export interface AlertProps extends VariantProps<typeof alertVariants> {
 }
 
 export const Alert: React.FC<AlertProps> = ({
-  message,
+  title,
   description,
   icon,
   action,
   variant = 'primary',
   rounded,
-  size,
-  showIcon = false,
   banner = false,
   closable = false,
   onClose,
@@ -65,36 +45,32 @@ export const Alert: React.FC<AlertProps> = ({
 
   if (!visible) return null
 
+  const shouldAlignCloseStart = !banner && title && description
+
   return (
     <div
-      className={cn(
-        alertVariants({ variant, rounded, size }),
-        banner && 'w-full flex items-center',
-        className
-      )}
       role="alert"
+      className={cn(alertStyles.root({ variant, rounded, banner }), className)}
     >
-      {showIcon && icon && (
-        <div className="h-6 mr-space-sm self-start flex items-center text-xl">
-          {icon}
-        </div>
-      )}
-      <div className="flex-1">
-        <div className="text-heading-lg">{message}</div>
+      {icon && <div className={alertStyles.icon}>{icon}</div>}
+
+      <div className={alertStyles.content}>
+        {title && <div className={alertStyles.title}>{title}</div>}
         {description && (
-          <div className="text-body-md opacity-90">{description}</div>
+          <div className={alertStyles.description}>{description}</div>
         )}
       </div>
-      {action && <div className="ml-4">{action}</div>}
+
+      {action && <div className={alertStyles.action}>{action}</div>}
+
       {closable && (
         <button
-          className={cn(
-            'ml-space-sm text-body-lg opacity-70 hover:opacity-100 transition cursor-pointer',
-            !banner && 'self-start'
-          )}
+          className={alertStyles.close({
+            aligned: shouldAlignCloseStart ? 'start' : 'center',
+          })}
           onClick={handleClose}
         >
-          <AiOutlineClose />
+          {AiOutlineClose && <AiOutlineClose />}
         </button>
       )}
     </div>

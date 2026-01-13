@@ -3,6 +3,7 @@
 import { Fragment, type PropsWithChildren } from 'react'
 import { BrandLogo } from '@/components/brand-logo'
 import { extractSlots } from '@/utils/slots'
+import { styles } from './styles'
 
 type PlainLayoutProps = PropsWithChildren
 
@@ -17,17 +18,17 @@ const PlainLayoutComponent: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <Fragment>
-      <header className="fixed top-0 inset-x-0 z-[50] transition-all duration-300 bg-white shadow-sm shadow-gray-100/90">
-        <div className="flex items-center py-space-md">
-          <div className="flex justify-between items-center gap-4 px-space-md">
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <div className={styles.headerContainer}>
             <BrandLogo />
           </div>
 
-          <div className="ml-space-xl">{slots.Header}</div>
+          <div className={styles.headerSlots}>{slots.Header}</div>
         </div>
       </header>
 
-      <main className="main-app pt-[86px]">{mainContent}</main>
+      <main className={styles.main}>{mainContent}</main>
     </Fragment>
   )
 }

@@ -1,12 +1,12 @@
-import { Badge } from '@/components/badge'
 import { TypographyToken, typographyTokens } from './typography-tokens'
+import { CodeToken } from '../_components/CodeToken'
 
 const TypographyTable = ({ list }: { list: TypographyToken }) => {
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-2">{list.title} List</h3>
+      <h3 className="text-lg font-semibold mb-space-sm">{list.title} List</h3>
 
-      <div className="grid grid-cols-[150px_1fr_150px_150px] font-bold border-b-2 border-default">
+      <div className="grid grid-cols-[150px_1fr_150px_150px] font-bold border-b-2 border-ds-default">
         <p>Preview</p>
         <p>Token</p>
         <p>Size</p>
@@ -17,19 +17,13 @@ const TypographyTable = ({ list }: { list: TypographyToken }) => {
         {list.tokens.map((item, index) => (
           <div
             key={index}
-            className="grid grid-cols-[150px_1fr_150px_150px] items-center py-space-sm border-b border-default"
+            className="grid grid-cols-[150px_1fr_150px_150px] items-center py-space-sm border-b border-ds-default"
           >
             <div>
               <label className={item.token}>Aa</label>
             </div>
             <div>
-              <Badge
-                className="justify-self-start bg-secondary text-default border border-default font-light [&>*]:text-sm! [&>*]:text-default!"
-                size="sm"
-                rounded="full"
-              >
-                {item.token}
-              </Badge>
+              <CodeToken token={item.token as string} />
             </div>
             <div>
               <label>{item.fontSize}</label>

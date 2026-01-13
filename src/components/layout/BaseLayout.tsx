@@ -1,13 +1,10 @@
 import { Fragment, PropsWithChildren } from 'react'
-// import { AppHeader } from './app-header'
-// import { AppFooter } from './app-footer'
+import { styles } from './styles'
 
 export const BaseLayout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Fragment>
-      {/* <AppHeader /> */}
-      <main className="main-app">{children}</main>
-      {/* <AppFooter /> */}
+      <main className={styles.baseMain}>{children}</main>
     </Fragment>
   )
 }

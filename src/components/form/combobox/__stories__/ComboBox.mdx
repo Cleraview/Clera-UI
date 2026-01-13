@@ -3,16 +3,17 @@ import * as ComboBoxStories from "./ComboBox.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Form/ComboBox" of={ComboBoxStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # ComboBox
 
     A `ComboBox` combines a text input with a dropdown list, allowing users to select a value from a list or type to filter and find a value. It is an essential component for forms with long lists of options.
     <DocInfo 
-      importStatement={`import { ComboBox } from 'clera-ui/form'`} 
+      importStatement={`import { ComboBox } from '@clera-ui/form'`} 
       sourcePath={`components/form/combobox`} 
     />
 
@@ -45,7 +46,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source className="my-0!" dark code={`
           import { useState } from 'react'
-          import { ComboBox } from 'clera-ui/form'
+          import { ComboBox } from '@clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
@@ -86,7 +87,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { ComboBox } from 'clera-ui/form'
+          import { ComboBox } from '@clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
@@ -121,7 +122,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { ComboBox } from 'clera-ui/form'
+          import { ComboBox } from '@clera-ui/form'
 
           const frameworks = [
             { value: "next.js", label: "Next.js" },
@@ -145,6 +146,35 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <br />
 
+    ## **Grouping**
+
+    To render grouped headings and separators, provide `options` with a `group` key and pass `groupBy="group"` to `ComboBox`.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboBoxStories.Grouped} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`type ComboBoxOption = {
+          value: string
+          label: React.ReactNode
+          group?: string
+        }
+
+        const options: ComboBoxOption[] = [
+          { value: 'id', label: 'Indonesia', group: 'Asia' },
+          { value: 'sg', label: 'Singapore', group: 'Asia' },
+          { value: 'us', label: 'United States', group: 'North America' },
+        ]
+
+        <ComboBox options={options} groupBy="group" />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    The visual separator between consecutive groups is inserted by the shared `BaseComboBox` implementation and uses the `styles.separator` class in [src/components/form/combobox/styles.ts](src/components/form/combobox/styles.ts).
+
     ## **API**
 
     Below is a comprehensive list of all the props available for the `ComboBox` component, along with their types, default values, and descriptions.
@@ -161,7 +191,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        import { Form, ComboBox } from 'clera-ui/form'
+        import { Form, ComboBox } from '@clera-ui/form'
         import { useForm } from "react-hook-form"
         
         const methods = useForm()
@@ -291,6 +321,10 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             {
               id: "with-error",
               label: "With Error"
+            },
+            {
+              id: "grouping",
+              label: "Grouping"
             }
           ]
         },
@@ -327,5 +361,5 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>
 

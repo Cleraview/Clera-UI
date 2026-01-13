@@ -1,19 +1,17 @@
 'use client'
 
-import React, { useId, useState } from 'react'
+import React, { FC, ReactNode, SyntheticEvent, useId, useState } from 'react'
 import * as SelectPrimitive from '@radix-ui/react-select'
-import { cn } from '@/utils/tailwind'
-import {
-  sizeClasses,
-  type InputSize,
-} from '@/components/form/_props/input-props'
 import { FormInputWrapper } from '../FormInputWrapper'
 import { GoChevronDown } from 'react-icons/go'
 import { IoCheckmark } from 'react-icons/io5'
+import { type FieldSize } from '@/components/_core/field-config'
+import { styles, triggerClass, valueClass, itemClass } from './styles'
 
 export type SelectOption = {
   value: string
-  label: React.ReactNode
+  label: ReactNode
+  disabled?: boolean
 }
 
 export type SelectProps = {
@@ -24,7 +22,7 @@ export type SelectProps = {
   readOnly?: boolean
   disabled?: boolean
   required?: boolean
-  inputSize?: InputSize
+  inputSize?: FieldSize
   value?: string
   defaultValue?: string
   hasError?: boolean
@@ -33,7 +31,7 @@ export type SelectProps = {
   onBlur?: () => void
 }
 
-export const Select: React.FC<SelectProps> = ({
+export const Select: FC<SelectProps> = ({
   id: idProp,
   label,
   options,
@@ -51,7 +49,7 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   const autoId = useId()
   const inputId = idProp ?? autoId
-
+  const placeholder = disabled ? 'Disabled' : readOnly ? 'Read Only' : label
   const [focused, setFocused] = useState(false)
   const [filled, setFilled] = useState(
     value !== undefined
@@ -66,6 +64,13 @@ export const Select: React.FC<SelectProps> = ({
     onChange?.(val)
   }
 
+  const handleOnItemSelect = (event: SyntheticEvent, option: SelectOption) => {
+    if (option.disabled) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   return (
     <FormInputWrapper
       id={inputId}
@@ -78,6 +83,9 @@ export const Select: React.FC<SelectProps> = ({
       focused={focused}
       filled={filled}
       fullWidth={fullWidth}
+      icon={GoChevronDown ? <GoChevronDown /> : undefined}
+      iconPosition="right"
+      inputType="select"
     >
       <SelectPrimitive.Root
         value={value}
@@ -87,60 +95,50 @@ export const Select: React.FC<SelectProps> = ({
       >
         <SelectPrimitive.Trigger
           id={inputId}
-          className={cn(
-            'w-full flex items-center justify-between border-none bg-transparent outline-none cursor-pointer',
-            "[&>[data-filled='false']]:invisible [&>[data-has-error='true']]:text-destructive",
-            sizeClasses[inputSize],
-            disabled ? 'text-subtlest' : 'text-default',
-            className
-          )}
+          className={triggerClass({ inputSize, hasError, disabled, className })}
           onBlur={() => {
             onBlur?.()
           }}
           disabled={disabled || readOnly}
         >
           <SelectPrimitive.Value
-            placeholder={label}
+            placeholder={placeholder}
             data-filled={filled}
             data-has-error={hasError}
-            className={cn(hasError ? 'text-destructive' : 'text-default')}
+            data-disabled={disabled}
+            aria-disabled={disabled}
+            className={valueClass(inputSize, hasError)}
           />
-
-          <SelectPrimitive.Icon asChild>
-            <GoChevronDown
-              className={cn(
-                'w-4 h-4 ml-space-sm text-subtlest',
-                hasError && 'text-destructive!'
-              )}
-            />
-          </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
-            className="w-[var(--radix-select-trigger-width)] z-50 rounded-md bg-default shadow-md border border-default"
+            className={styles.content}
             sideOffset={4}
             position="popper"
             side="bottom"
           >
-            <SelectPrimitive.Viewport className="p-space-xs">
+            <SelectPrimitive.Viewport className={styles.viewport}>
               {options
-                .filter(o => o.value && o.value.trim() !== '')
-                .map(o => (
+                .filter(option => option.value && option.value.trim() !== '')
+                .map(option => (
                   <SelectPrimitive.Item
-                    key={o.value}
-                    value={o.value}
-                    className={cn(
-                      'flex items-center justify-between rounded-sm px-space-sm py-space-xs text-body-sm cursor-pointer',
-                      'focus:bg-primary focus:text-primary outline-none'
-                    )}
+                    key={option.value}
+                    value={option.value}
+                    aria-disabled={option.disabled}
+                    data-disabled={option.disabled}
+                    className={itemClass(inputSize, option.disabled)}
+                    onSelect={event => handleOnItemSelect(event, option)}
+                    disabled={option.disabled}
                   >
                     <SelectPrimitive.ItemText>
-                      {o.label}
+                      {option.label}
                     </SelectPrimitive.ItemText>
 
                     <SelectPrimitive.ItemIndicator>
-                      <IoCheckmark className="w-4 h-4 ml-space-md text-primary" />
+                      {IoCheckmark && (
+                        <IoCheckmark className={styles.itemIndicatorIcon} />
+                      )}
                     </SelectPrimitive.ItemIndicator>
                   </SelectPrimitive.Item>
                 ))}

@@ -3,10 +3,10 @@ type DebouncedFunction<A extends unknown[]> = {
   cancel: () => void
 }
 
-export const debounce = <A extends unknown[], R>(
+export function debounce<A extends unknown[], R>(
   fn: (...args: A) => R,
   delay: number
-): DebouncedFunction<A> => {
+): DebouncedFunction<A> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
 
   const debounced = (...args: A) => {

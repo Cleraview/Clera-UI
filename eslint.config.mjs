@@ -5,6 +5,7 @@ import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
+import unusedImports from 'eslint-plugin-unused-imports'
 import storybook from 'eslint-plugin-storybook'
 import prettier from 'eslint-plugin-prettier'
 import prettierConfig from 'eslint-config-prettier'
@@ -30,6 +31,7 @@ const eslintConfig = [
     plugins: {
       '@typescript-eslint': tseslint,
       'react': react,
+      'unused-imports': unusedImports,
       'react-hooks': reactHooks,
       'prettier': prettier,
     },
@@ -38,6 +40,12 @@ const eslintConfig = [
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...prettierConfig.rules,
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/no-unused-vars': 'off',
       'prettier/prettier': 'error',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',

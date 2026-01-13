@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Dialog from '..'
 import { Button } from '@/components/button'
 import { Switch } from '@/components/form'
@@ -75,11 +75,10 @@ const meta: Meta<typeof Dialog> = {
     open: false,
     title: 'Dialog Title',
     description: 'This is an example dialog description.',
-    size: 'md',
+    size: 'lg',
     position: 'center',
     showCloseButton: true,
-    children:
-      '<p className="text-body-md text-subtle">This is a sample dialog content body.</p>',
+    children: '<p>This is a sample dialog content body.</p>',
   },
 }
 
@@ -96,7 +95,10 @@ export const Default: Story = {
         <Button onClick={() => setOpen(true)}>Open Dialog</Button>
         <Dialog {...args} open={open} onOpenChange={setOpen}>
           <Dialog.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Dialog.Content>
         </Dialog>
       </div>
@@ -116,7 +118,9 @@ export const PositionVariants: Story = {
         <div className="flex items-center gap-space-sm">
           <Switch
             checked={position === 'top'}
-            onChange={checked => setPosition(checked ? 'top' : 'bottom')}
+            onChange={(checked: boolean) =>
+              setPosition(checked ? 'top' : 'bottom')
+            }
             checkedChildren="Top"
             unCheckedChildren="Bottom"
           />
@@ -132,7 +136,10 @@ export const PositionVariants: Story = {
           onOpenChange={setOpen}
         >
           <Dialog.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Dialog.Content>
         </Dialog>
       </div>
@@ -150,7 +157,10 @@ export const LargeDialog: Story = {
 
         <Dialog {...args} size="lg" open={open} onOpenChange={setOpen}>
           <Dialog.Content>
-            <div dangerouslySetInnerHTML={{ __html: args.children }} />
+            <div
+              className="[&>*]:text-ds-default"
+              dangerouslySetInnerHTML={{ __html: args.children }}
+            />
           </Dialog.Content>
         </Dialog>
       </div>
@@ -169,13 +179,13 @@ export const WithFooter: Story = {
 
         <Dialog {...args} open={open} onOpenChange={setOpen} loading={loading}>
           <Dialog.Content>
-            <p className="text-body-md text-default">
+            <p className="text-body-md text-ds-default">
               This dialog includes a footer with two action buttons.
             </p>
           </Dialog.Content>
 
           <Dialog.Footer>
-            <Button variant="outline" onClick={() => setOpen(false)}>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button

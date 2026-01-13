@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { Checkbox } from '../Checkbox'
 
@@ -93,26 +93,5 @@ export const Disabled: Story = {
   },
   args: {
     disabled: true,
-  },
-}
-
-export const Playground: Story = {
-  render: args => {
-    const [checked, setChecked] = useState(args.defaultChecked || false)
-    return (
-      <Checkbox
-        {...args}
-        checked={args.checked !== undefined ? args.checked : checked}
-        onChange={isChecked => {
-          if (args.checked === undefined) {
-            setChecked(isChecked)
-          }
-          args.onChange?.(isChecked)
-        }}
-      />
-    )
-  },
-  args: {
-    label: 'Playground Checkbox',
   },
 }

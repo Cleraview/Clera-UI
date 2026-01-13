@@ -3,29 +3,4 @@
 @import './utility.css';
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
-body {
-  font-family: var(--font-nunito), system-ui, sans-serif;
-  @apply antialiased;
-}
-
-/* @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-} */
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.animate-blink {
-  animation: blink 1s step-start infinite;
-  display: inline-block;
-}
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));

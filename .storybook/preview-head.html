@@ -1,15 +1,150 @@
 <title>Clera UI</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --font-nunito: "Nunito","Nunito Fallback";
+    --font-code: "Google Sans Code", monospace;
   }
+
   body {
     font-size: 16px;
+    background-color: var(--background-color-ds-elevation-surface);
   }
-  code, kbd, samp, pre {
+
+  
+  div[class*="css-"] :where(h1:not(.sb-anchor, .sb-unstyled, .sb-unstyled h1)),
+  div[class*="css-"] :where(h2:not(.sb-anchor, .sb-unstyled, .sb-unstyled h2)),
+  div[class*="css-"] :where(h3:not(.sb-anchor, .sb-unstyled, .sb-unstyled h3)),
+  div[class*="css-"] :where(h4:not(.sb-anchor, .sb-unstyled, .sb-unstyled h4)),
+  div[class*="css-"] :where(h5:not(.sb-anchor, .sb-unstyled, .sb-unstyled h5)),
+  div[class*="css-"] :where(h6:not(.sb-anchor, .sb-unstyled, .sb-unstyled h6)),
+  div[class*="css-"] :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)),
+  div[class*="css-"] :where(label:not(.sb-anchor, .sb-unstyled, .sb-unstyled label)),
+  div[class*="css-"] :where(a:not(.sb-anchor, .sb-unstyled, .sb-unstyled a)),
+  div[class*="css-"] :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)),
+  div[class*="css-"] :where(strong:not(.sb-anchor, .sb-unstyled, .sb-unstyled strong)),
+  div[class*="css-"] :where(b:not(.sb-anchor, .sb-unstyled, .sb-unstyled b)),
+  div[class*="css-"] :where(i:not(.sb-anchor, .sb-unstyled, .sb-unstyled i)),
+  div[class*="css-"] :where(span:not(.sb-anchor, .sb-unstyled, .sb-unstyled span)) {
+    color: var(--text-color-ds-default);
+  }
+  
+  div[class*="css-"] :where(a:not(.sb-anchor, .sb-unstyled, .sb-unstyled a)) {
+    margin-top: 10px;
+  }
+  
+  blockquote {
+    background-color: var(--background-color-ds-accent-yellow-subtlest);
+    border-left-color: var(--border-color-ds-accent-yellow)!important;
+  }
+  blockquote p {
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+
+  p kbd, 
+  p samp, 
+  p pre {
     font-size: 14px;
+    font-family: var(--font-code);
+    background-color: var(--background-color-ds-neutral);
   }
+
+  /* .sb-errordisplay.sb-wrapper {
+    margin-left: 300px;
+  } */
+
+  .sb-preparing-story, .sb-preparing-docs {
+    padding-top: 6rem;
+    background-color: var(--background-color-ds-elevation-surface);
+  }
+
+  .sbdocs.sbdocs-wrapper {
+    background: var(--background-color-ds-elevation-surface);
+    padding: 1rem 4rem;
+  }
+
+  .sb-previewBlock {
+    background-color: var(--background-color-ds-neutral);
+    box-shadow: unset;
+  }
+  .sb-previewBlock_icon {
+    background-color: var(--background-color-ds-skeleton);
+  }
+
+  div:has(> .docblock-argstable.sb-unstyled) {
+    border: 1px solid var(--border-color-ds-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .docblock-argstable.sb-unstyled {
+    color: var(--text-color-ds-default)!important;
+    margin: 0!important;
+  }
+  .docblock-argstable.sb-unstyled .docblock-argstable-head, 
+  .docblock-argstable.sb-unstyled .docblock-argstable-body {
+    filter: unset;
+  }
+  .docblock-argstable-head tr th {
+    color: var(--text-color-ds-default)!important;
+  }
+  .docblock-argstable-body tr td:nth-child(2) div:last-child span,
+  .docblock-argstable-body tr td:nth-child(3) div span {
+    background-color: var(--background-color-ds-neutral)!important;
+    border: none!important;
+    color: var(--text-color-ds-default)!important;
+  }
+  .docblock-argstable-head > tr > *,
+  .docblock-argstable-body > tr > * {
+    border-color: var(--border-color-ds-default)!important;
+  }
+  .docblock-argstable-body > tr > * {
+    background-color: var(--background-color-ds-elevation-surface)!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr > :first-of-type,
+  .docblock-argstable.sb-unstyled tbody > tr > :last-of-type {
+    border-inline-start: unset!important;
+    border-inline-end: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > * {
+    border-block-end: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > td:first-of-type,
+  .docblock-argstable.sb-unstyled tbody > tr:last-of-type > td:last-of-type {
+    border-radius: unset!important;
+  }
+  .docblock-argstable.sb-unstyled tbody > tr > * {
+    border-top: 1px solid var(--border-color-ds-default);
+  }
+
+  .sb-argstableBlock {
+    border: 1px solid var(--border-color-ds-default)!important;
+  }
+  .sb-argstableBlock-body {
+    box-shadow: unset!important;
+  }
+  .sb-argstableBlock-head tr {
+    border-bottom: 1px solid var(--border-color-ds-default);
+  }
+  .sb-argstableBlock-body tr {
+    border-color: var(--border-color-ds-default)!important;
+  }
+  .sb-argstableBlock-head th,
+  .sb-argstableBlock-body td {
+    background-color: var(--background-color-ds-neutral)!important;
+  }
+  
+  .sbdocs.sbdocs-content {
+    max-width: 1200px;
+  }
+  .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr th,
+  .sbdocs.sbdocs-content :where(table:not(.sb-anchor, .sb-unstyled, .sb-unstyled table)) tr td {
+    background-color: var(--background-color-ds-elevation-surface)!important;
+    border-color: var(--border-color-ds-default)!important;
+    color: var(--text-color-ds-default)!important;
+  }
+
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)),
   .sbdocs.sbdocs-content :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)),
   .sbdocs.sbdocs-content :where(div:not(.sb-anchor, .sb-unstyled, .sb-unstyled div)) {
@@ -17,15 +152,104 @@
     line-height: 1.5;
   }
 
+  .sbdocs.sbdocs-content code,
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)) code,
   .sbdocs.sbdocs-content :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)) code {
-    background-color: var(--color-neutral-100);
-    border: 1px solid var(--color-gray-200);
-    color: var(--color-neutral-800);
+    background-color: var(--background-color-ds-neutral)!important;
+    border: 1px solid var(--border-color-ds-default)!important;
+    color: var(--text-color-ds-default)!important;
+    font-family: var(--font-code);
   }
+
   .sbdocs.sbdocs-content .docblock-source {
     margin: 0!important;
     border-radius: 0!important;
-    background-color: #232323!important;
+    background-color: var(--background-color-ds-elevation-surface-sunken);
+    border: none;
+    color: var(--text-color-ds-default);
+    box-shadow: unset!important;
+  }
+  .sbdocs.sbdocs-content .docblock-source div:nth-child(2) button {
+    display: none;
+  }
+  
+  .sbdocs.sbdocs-content .docblock-source .token {
+    font-family: var(--font-code)!important;
+  }
+
+  /* DOCS BLOCK  SOURCE*/
+  .token {
+    color: var(--text-color-ds-default)!important;
+  }
+  span.token.imports,
+  span.token.plain-text {
+    color: var(--text-color-ds-default)!important;
+  }
+
+  /* { } ( ) [ ] , : = => < / > */
+  span.token.imports.punctuation,
+  span.token.operator,
+  span.token.punctuation,
+  span.token.arrow.operator,
+  span.token.tag.punctuation,
+  span.token.tag.attr-value.punctuation.attr-equals,
+  span.token.tag.attr-value.punctuation,
+  span.token.tag.script.language-javascript.script-punctuation.punctuation {
+    color: var(--text-color-ds-accent-neutral)!important;
+  }
+
+  /* import, from, const, return, export, default */
+  span.token.keyword.module,
+  span.token.keyword,
+  span.token.keyword.control-flow {
+    color: var(--text-color-ds-accent-violet)!important;
+  }
+
+  /* 'react', "flex flex-col...", "xs" */
+  span.token.string,
+  span.token.tag.attr-value {
+    color: var(--text-color-ds-accent-green)!important;
+  }
+
+  /* Command, CommandMenu, FiCalendar, SizedItemsExample */
+  span.token.imports.maybe-class-name,
+  span.token.function-variable.function.maybe-class-name,
+  span.token.maybe-class-name,
+  span.token.tag.class-name {
+    color: var(--text-color-ds-accent-teal)!important;
+  }
+
+  /* useState, setSelectedValue, onSelect */
+  span.token.function,
+  span.token.function-variable.function {
+    color: var(--text-color-ds-accent-blue)!important;
+  }
+
+  /* id, heading, items, onSelect, className, groups, menuGroups */
+  span.token.literal-property.property,
+  span.token.tag.attr-name,
+  span.token.tag.script.language-javascript {
+    color: var(--text-color-ds-accent-orange)!important;
+  }
+
+  /* the 'div' in <div ...> */
+  span.token.tag {
+    color: var(--text-color-ds-accent-red)!important;
+  }
+
+  /* true, false */
+  span.token.boolean {
+    color: var(--text-color-ds-accent-magenta)!important;
   }
 </style>
+<script>
+  (function() {
+    var theme = localStorage.getItem('theme')
+    
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+  })()
+</script>

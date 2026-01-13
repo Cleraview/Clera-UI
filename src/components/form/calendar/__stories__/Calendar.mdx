@@ -3,16 +3,17 @@ import * as CalendarStories from "./Calendar.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Form/Calendar" of={CalendarStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Calendar
 
     A component for selecting dates and date ranges, built upon `react-day-picker`.
     <DocInfo 
-      importStatement={`import { Calendar } from 'clera-ui/form'`} 
+      importStatement={`import { Calendar } from '@clera-ui/form'`} 
       sourcePath={`components/form/calendar`} 
     />
     <br />
@@ -43,7 +44,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source dark code={`
           import { useState } from 'react'
-          import { Calendar } from 'clera-ui/form'
+          import { Calendar } from '@clera-ui/form'
 
           const CalendarSingleExample = () => {
             const [date, setDate] = useState('')
@@ -74,7 +75,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source dark code={`
           import { useState } from 'react'
-          import { Calendar } from 'clera-ui/form'
+          import { Calendar } from '@clera-ui/form'
           import { DateRange } from 'react-day-picker'
 
           const CalendarRangeExample = () => {
@@ -107,7 +108,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source dark code={`
           import { useState } from 'react'
-          import { Calendar } from 'clera-ui/form'
+          import { Calendar } from '@clera-ui/form'
 
           const CalendarMultipleExample = () => {
             const [dates, setDates] = useState<string[]>([])
@@ -138,8 +139,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source dark code={`
           import { useState } from 'react'
-          import { Calendar } from 'clera-ui/form'
-          import { Button } from 'clera-ui/button'
+          import { Calendar } from '@clera-ui/form'
+          import { Button } from '@clera-ui/button'
 
           const CalendarControlledExample = () => {
             const [date, setDate] = useState('01/01/2025')
@@ -212,7 +213,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <Canvas.Source>
       <Source dark code={`
         import { Form } from '@/components/form'
-        import { Calendar } from 'clera-ui/form'
+        import { Calendar } from '@clera-ui/form'
         import { useForm } from 'react-hook-form'
 
         // ...
@@ -280,4 +281,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

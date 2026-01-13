@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Badge } from '..'
 import { FiUser, FiArrowRight } from 'react-icons/fi'
 import {
-  roundedMapKeys,
-  sizeMapKeys,
-  variantMapKeys,
-} from '../../_utils/variants'
+  elementRadiusKeys,
+  elementPaddingKeys,
+  elementVariantKeys,
+} from '@/components/_core/element-config'
 
 const meta: Meta<typeof Badge> = {
   title: 'UI/Badge',
@@ -17,27 +17,27 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: variantMapKeys,
+      options: elementVariantKeys,
       description:
         'Visual style of the badge, reflecting different semantic purposes.',
       table: {
-        type: { summary: variantMapKeys.join(' | ') },
+        type: { summary: elementVariantKeys.join(' | ') },
         defaultValue: { summary: 'primary' },
       },
     },
     size: {
       control: { type: 'radio' },
-      options: sizeMapKeys,
+      options: elementPaddingKeys,
       description:
-        'Defines the badge’s size to match different contexts (small, medium, or large).',
+        "Defines the badge's size to match different contexts (small, medium, or large).",
       table: {
-        type: { summary: sizeMapKeys.join(' | ') },
+        type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
       },
     },
     rounded: {
       control: { type: 'radio' },
-      options: roundedMapKeys,
+      options: elementRadiusKeys,
       description:
         'Controls the border radius of the badge for square, subtle rounding, or fully pill-shaped badges.',
       table: {
@@ -114,12 +114,24 @@ export const Variants: Story = {
 export const OutlineVariants: Story = {
   render: () => (
     <div className="grid grid-cols-3 gap-2">
-      <Badge variant="outlinePrimary">Outline Primary</Badge>
-      <Badge variant="outlineSecondary">Outline Secondary</Badge>
-      <Badge variant="outlineSuccess">Outline Success</Badge>
-      <Badge variant="outlineInfo">Outline Info</Badge>
-      <Badge variant="outlineWarning">Outline Warning</Badge>
-      <Badge variant="outlineDestructive">Outline Destructive</Badge>
+      <Badge variant="outlinePrimary" size="sm">
+        Outline Primary
+      </Badge>
+      <Badge variant="outlineSecondary" size="sm">
+        Outline Secondary
+      </Badge>
+      <Badge variant="outlineSuccess" size="sm">
+        Outline Success
+      </Badge>
+      <Badge variant="outlineInfo" size="sm">
+        Outline Info
+      </Badge>
+      <Badge variant="outlineWarning" size="sm">
+        Outline Warning
+      </Badge>
+      <Badge variant="outlineDestructive" size="sm">
+        Outline Destructive
+      </Badge>
     </div>
   ),
 }

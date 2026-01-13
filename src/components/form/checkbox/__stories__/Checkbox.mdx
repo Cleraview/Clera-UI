@@ -3,17 +3,18 @@ import * as CheckboxStories from "./Checkbox.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Form/Checkbox" of={CheckboxStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Checkbox
 
     A control that allows the user to toggle between checked and unchecked states.
 
     <DocInfo 
-      importStatement={`import { Checkbox } from 'clera-ui/form'`} 
+      importStatement={`import { Checkbox } from '@clera-ui/form'`} 
       sourcePath={`components/form/checkbox`} 
     />
 
@@ -44,7 +45,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       <Canvas.Source>
         <Source className="my-0!" dark code={`
           import { useState } from 'react'
-          import { Checkbox } from 'clera-ui/form'
+          import { Checkbox } from '@clera-ui/form'
 
           const CheckboxExample = () => {
             const [checked, setChecked] = useState(false)
@@ -74,7 +75,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Checkbox } from 'clera-ui/form'
+          import { Checkbox } from '@clera-ui/form'
 
           const DisabledCheckboxExample = () => {
             return (
@@ -122,7 +123,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         import { useFormContext } from "react-hook-form"
-        import { Form, Checkbox } from 'clera-ui/form'
+        import { Form, Checkbox } from '@clera-ui/form'
         
         const { control, setValue } = useFormContext()
 
@@ -137,7 +138,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     </Canvas.Source>
   </div>
 
-  <div className="hidden lg:block sticky top-24 h-max self-start">
+  <div>
     <TableOfContents 
       items={[
         {
@@ -181,4 +182,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

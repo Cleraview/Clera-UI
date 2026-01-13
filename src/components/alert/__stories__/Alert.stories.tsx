@@ -1,8 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Alert } from '../Alert'
-import { AiOutlineInfoCircle } from 'react-icons/ai'
+import { AiOutlineInfoCircle, AiFillAccountBook } from 'react-icons/ai'
+import { MdDisabledByDefault } from 'react-icons/md'
 import { Button } from '@/components/button'
-import { variantMapKeys } from '../../_utils/variants'
+import { elementVariantKeys } from '@/components/_core/element-config'
 
 const meta: Meta<typeof Alert> = {
   title: 'UI/Alert',
@@ -16,9 +17,9 @@ const meta: Meta<typeof Alert> = {
     icon: 'info',
   },
   argTypes: {
-    message: {
+    title: {
       control: 'text',
-      description: 'The main message text of the alert.',
+      description: 'The main title text of the alert.',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: '' },
@@ -51,15 +52,6 @@ const meta: Meta<typeof Alert> = {
         defaultValue: { summary: 'false' },
       },
     },
-    showIcon: {
-      control: 'boolean',
-      description:
-        'When true, displays an icon corresponding to the alert variant.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
     action: {
       control: 'object',
       description:
@@ -74,7 +66,7 @@ const meta: Meta<typeof Alert> = {
       description: 'Callback function triggered when the alert is dismissed.',
       table: {
         type: { summary: '() => void' },
-        defaultValue: { summary: () => {} },
+        defaultValue: { summary: '() => {}' },
       },
     },
     afterClose: {
@@ -83,16 +75,16 @@ const meta: Meta<typeof Alert> = {
         'Callback function triggered after the close animation completes.',
       table: {
         type: { summary: '() => void' },
-        defaultValue: { summary: () => {} },
+        defaultValue: { summary: '() => {}' },
       },
     },
     variant: {
       control: { type: 'select' },
-      options: variantMapKeys,
+      options: elementVariantKeys,
       description:
         'Visual style of the alert, reflecting different semantic purposes (e.g., primary for main actions, destructive for dangerous actions).',
       table: {
-        type: { summary: variantMapKeys.join(' | ') },
+        type: { summary: elementVariantKeys.join(' | ') },
         defaultValue: { summary: 'primary' },
       },
     },
@@ -118,14 +110,79 @@ export default meta
 type Story = StoryObj<typeof Alert>
 
 export const Solid: Story = {
+  render: args => {
+    return (
+      <Alert
+        {...args}
+        title="This is an alert"
+        description="Here is the description text for the alert."
+        variant="primary"
+        closable
+      />
+    )
+  },
+}
+
+export const Success: Story = {
+  render: args => {
+    return (
+      <Alert
+        {...args}
+        title="Your data has been successfully saved."
+        variant="success"
+        icon={<AiFillAccountBook />}
+        closable
+      />
+    )
+  },
+}
+
+export const Warning: Story = {
+  render: args => {
+    return (
+      <Alert
+        {...args}
+        title="Account under review"
+        description={
+          <p>
+            Your account is being reviewd by our{' '}
+            <strong className="font-bold underline">Technical Support.</strong>
+          </p>
+        }
+        variant="warning"
+        closable
+      />
+    )
+  },
+}
+
+export const Info: Story = {
   render: () => {
     return (
       <Alert
-        message="This is an alert"
-        description="Here is the description text for the alert."
-        variant="primary"
-        showIcon
+        description={
+          <p>
+            We just updated our terms and condition,{' '}
+            <a href="javascript:void(0);" className="underline font-semibold">
+              learn more
+            </a>
+          </p>
+        }
+        variant="info"
         closable
+      />
+    )
+  },
+}
+
+export const Destructive: Story = {
+  render: args => {
+    return (
+      <Alert
+        {...args}
+        title="Your account has been disabled"
+        variant="destructive"
+        icon={<MdDisabledByDefault />}
       />
     )
   },
@@ -133,9 +190,8 @@ export const Solid: Story = {
 
 export const WithAction: Story = {
   args: {
-    message: 'Action Alert',
+    title: 'Action Alert',
     description: 'This alert includes an action button.',
-    showIcon: true,
     closable: true,
     action: (
       <Button className="bg-primary-intense-pressed" size="sm">
@@ -147,7 +203,7 @@ export const WithAction: Story = {
 
 export const Banner: Story = {
   args: {
-    message: 'Banner Alert',
+    title: 'Banner Alert',
     banner: true,
     closable: true,
     variant: 'outlinePrimary',

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Calendar from '..'
 import { Button } from '@/components/button'
 import { DateRange } from 'react-day-picker'
@@ -140,7 +140,6 @@ export const Playground: Story = {
         selected={selected}
         onSelect={val => {
           setSelected(val as Date | Date[] | DateRange | undefined)
-          // Also call the storybook action
           args.onSelect?.(val)
         }}
       />
@@ -160,7 +159,7 @@ export const Single: Story = {
           selected={date}
           onSelect={val => setDate(val as Date)}
         />
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected: {date ? formatDateFns(date, args.formatDate!) : 'None'}
         </p>
       </div>
@@ -181,7 +180,7 @@ export const Range: Story = {
           selected={range}
           onSelect={val => setRange(val as DateRange)}
         />
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           From: {range?.from ? formatDateFns(range.from, format) : '–'} | To:{' '}
           {range?.to ? formatDateFns(range.to, format) : '–'}
         </p>
@@ -209,7 +208,7 @@ export const Multiple: Story = {
             },
           }}
         />
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected:{' '}
           {dates?.length
             ? dates.map(d => formatDateFns(d, format)).join(', ')
@@ -229,21 +228,30 @@ export const ControlledExample: Story = {
     const format = args.formatDate!
 
     return (
-      <div className="flex flex-col items-center gap-space-md">
+      <div className="flex flex-col items-center gap-space-md py-space-sm">
         <div className="flex gap-space-sm">
-          <Button onClick={() => setDate(new Date('2025-10-19T12:00:00'))}>
-            Set Date
-          </Button>
-          <Button variant="outlinePrimary" onClick={() => setDate(undefined)}>
-            Clear
-          </Button>
+          <div className="flex gap-space-sm">
+            <Button onClick={() => setDate(new Date())}>
+              Set Current Date
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setDate(new Date('2025-10-19T12:00:00'))}
+            >
+              Set (19 Oct 2025)
+            </Button>
+            <Button variant="outlinePrimary" onClick={() => setDate(undefined)}>
+              Clear
+            </Button>
+          </div>
+          <Calendar
+            {...args}
+            selected={date}
+            onSelect={val => setDate(val as Date | undefined)}
+            formatDate="dd, MMM yyyy"
+          />
         </div>
-        <Calendar
-          {...args}
-          selected={date}
-          onSelect={val => setDate(val as Date | undefined)}
-        />
-        <p className="text-body-md text-subtle">
+        <p className="text-body-md text-ds-subtle">
           Current: {date ? formatDateFns(date, format) : 'None'}
         </p>
       </div>
@@ -256,7 +264,7 @@ export const Disabled: Story = {
   render: args => (
     <div className="flex flex-col items-center gap-space-md">
       <Calendar {...args} />
-      <p className="text-body-sm text-subtle">Calendar is disabled.</p>
+      <p className="text-body-sm text-ds-subtle">Calendar is disabled.</p>
     </div>
   ),
 }
@@ -277,7 +285,7 @@ export const CustomFormat: Story = {
           selected={date}
           onSelect={val => setDate(val as Date | undefined)}
         />
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected: {date ? formatDateFns(date, args.formatDate!) : 'None'}
         </p>
       </div>
@@ -308,7 +316,7 @@ export const MinToday: Story = {
           selected={date}
           onSelect={val => setDate(val as Date | undefined)}
         />
-        <p className="text-body-sm text-subtle">
+        <p className="text-body-sm text-ds-subtle">
           Selected: {date ? formatDateFns(date, format) : 'None'}
         </p>
       </div>

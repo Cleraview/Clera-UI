@@ -14,8 +14,13 @@ export type { SelectOption, SelectProps } from './select'
 export { Checkbox } from './checkbox'
 export type { CheckboxProps } from './checkbox'
 
-export { AsyncComboBox } from './async-combobox'
-export type { AsyncComboBoxProps, AsyncComboBoxOption } from './async-combobox'
+export { AsyncComboBox, ComboBox } from './combobox'
+export type {
+  AsyncComboBoxProps,
+  AsyncComboBoxOption,
+  ComboBoxProps,
+  ComboBoxOption,
+} from './combobox'
 
 export { Switch } from './switch'
 export type { SwitchProps } from './switch'

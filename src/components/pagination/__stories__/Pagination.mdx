@@ -1,0 +1,260 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import * as PaginationStories from "./Pagination.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+<Meta title="UI/Pagination" of={PaginationStories} />
+
+<DocsLayout>
+  <div>
+    # Pagination
+
+    A navigation component that allows users to browse through a large set of data split into discrete pages.
+    It includes logic for handling page ranges, ellipsis truncation, and navigation boundaries.
+    <DocInfo 
+      importStatement={`import { Pagination } from '@clera/ui'`} 
+      sourcePath={`components/pagination`} 
+    />
+    
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Pagination` component is essential for managing large datasets (like tables, lists, or grids) where displaying all items at once would affect performance or usability.
+    It provides a predictable interface for users to navigate linearly through content.
+
+    It is designed to:
+    -   **Manage Range Logic**: Automatically calculates which page numbers to show and where to place ellipsis (`...`).
+    -   **Handle States**: Visually distinguishes the current page, hover states, and disabled states.
+    -   **Support Accessibility**: Uses correct ARIA roles (`navigation`, `aria-current`, `aria-disabled`) and keyboard navigation support.
+
+    <br />
+
+    ## **Component Structure**
+
+    The system offers two ways to build pagination:
+
+    ### **1. The Smart `Pagination` (Recommended)**
+    A single component that handles all the heavy lifting of range calculation and rendering.
+    -   **`Pagination`**: The smart wrapper. Accepts `totalCount`, `currentPage`, `pageSize`, etc.
+
+    ### **2. The Primitives (Advanced)**
+    Direct access to the underlying styled components for manual composition.
+    -   **`PaginationRoot`**: The `nav` container.
+    -   **`PaginationContent`**: The `ul` list wrapper.
+    -   **`PaginationItem`**: The `li` list item.
+    -   **`PaginationLink`**: The `a` tag link (used for numbers and prev/next buttons).
+    -   **`PaginationEllipsis`**: The visual indicator for skipped pages.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Default**
+
+    A standard pagination setup. It calculates the total pages based on `totalCount` and `pageSize` (default 10).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PaginationStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Pagination } from '@clera/ui'
+
+          const DefaultExample = () => {
+            const [page, setPage] = useState(1)
+
+            return (
+              <Pagination
+                currentPage={page}
+                totalCount={100}
+                onPageChange={setPage}
+              />
+            )
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Many Pages (Ellipsis)**
+
+    When the page count exceeds the available space, the component automatically adds ellipsis to keep the UI clean.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PaginationStories.ManyPages} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <Pagination
+            currentPage={page}
+            totalCount={500}
+            pageSize={10}
+            onPageChange={setPage}
+          />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Custom Siblings**
+
+    You can control how many pages are visible around the current page using the `siblingCount` prop.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PaginationStories.CustomSiblings} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <Pagination
+            currentPage={page}
+            totalCount={100}
+            siblingCount={2}
+            onPageChange={setPage}
+          />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Disabled State**
+
+    Disables all interactions and updates visual styles (e.g., during loading states).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PaginationStories.Disabled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <Pagination
+            currentPage={page}
+            totalCount={100}
+            disabled={true}
+          />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    ### **Pagination Props**
+
+    The smart component configuration.
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `currentPage` | `number` | **Required** | The current active page (1-based index). |
+    | `totalCount` | `number` | **Required** | The total number of items to paginate. |
+    | `onPageChange` | `(page: number) => void` | - | Callback fired when a page is clicked. |
+    | `pageSize` | `number` | `10` | Number of items per page. |
+    | `siblingCount` | `number` | `1` | Number of page buttons to show on each side of the current page. |
+    | `disabled` | `boolean` | `false` | Disables all pagination links. |
+    | `previousLabel` | `ReactNode` | `'Previous'` | Label/Icon for the previous button. |
+    | `nextLabel` | `ReactNode` | `'Next'` | Label/Icon for the next button. |
+    | `className` | `string` | - | Optional classes for the root container. |
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. How do I build a custom layout manually?**
+    If the smart `Pagination` doesn't fit your needs, you can compose the primitives directly.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { PaginationRoot, PaginationContent, PaginationItem, PaginationLink } from '@clera/ui'
+
+        <PaginationRoot>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationLink href="/prev">Prev</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="/1" isActive>1</PaginationLink>
+            </PaginationItem>
+             <PaginationItem>
+              <PaginationLink href="/next">Next</PaginationLink>
+            </PaginationItem>
+          </PaginationContent>
+        </PaginationRoot>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **2. Why isn't the component rendering?**
+    The component returns `null` if the calculated page count is less than 2 (i.e., if there is only 1 page, pagination is usually hidden to reduce clutter).
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "component-structure",
+          label: "Component Structure"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "default",
+              label: "Default"
+            },
+            {
+              id: "many-pages-ellipsis",
+              label: "Many Pages"
+            },
+            {
+              id: "custom-siblings",
+              label: "Custom Siblings"
+            },
+            {
+              id: "disabled-state",
+              label: "Disabled State"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API",
+          children: [
+            {
+              id: "pagination-props",
+              label: "Pagination Props"
+            }
+          ]
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "1-how-do-i-build-a-custom-layout-manually",
+              label: "Manual Layout..."
+            },
+            {
+              id: "2-why-isnt-the-component-rendering",
+              label: "Visibility Logic..."
+            }
+          ]
+        }
+      ]}
+    />
+  </div>
+</DocsLayout>

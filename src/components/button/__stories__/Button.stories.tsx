@@ -1,10 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { useState } from 'react'
 import { action } from 'storybook/actions'
 import { FiUser, FiArrowRight } from 'react-icons/fi'
 import { Button } from '..'
-import { variantMapKeys, sizeMapKeys } from '../../_utils/variants'
 import { Switch } from '@/components/form'
-import { useState } from 'react'
+import {
+  elementVariantKeys,
+  elementPaddingKeys,
+} from '@/components/_core/element-config'
 
 const meta: Meta<typeof Button> = {
   title: 'UI/Button',
@@ -12,23 +15,15 @@ const meta: Meta<typeof Button> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['dev'],
+  tags: ['dev', 'status:new'],
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: [
-        'primary',
-        'outlinePrimary',
-        'secondary',
-        'outlineSecondary',
-        'destructive',
-        'outlineDestructive',
-        'ghost',
-      ],
+      options: elementVariantKeys,
       description:
         'Visual style of the button, reflecting different semantic purposes (e.g., primary for main actions, destructive for dangerous actions).',
       table: {
-        type: { summary: variantMapKeys.join(' | ') },
+        type: { summary: elementVariantKeys.join(' | ') },
         defaultValue: { summary: 'primary' },
       },
     },
@@ -36,9 +31,9 @@ const meta: Meta<typeof Button> = {
       control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
       description:
-        'Defines the button’s size to match different contexts (small, medium, or large).',
+        "Defines the button's size to match different contexts (small, medium, or large).",
       table: {
-        type: { summary: sizeMapKeys.join(' | ') },
+        type: { summary: elementPaddingKeys.join(' | ') },
         defaultValue: { summary: 'md' },
       },
     },
@@ -158,22 +153,25 @@ export default meta
 type Story = StoryObj<typeof Button>
 
 export const Solid: Story = {
-  render: () => {
+  args: {
+    size: 'sm',
+  },
+  render: args => {
     return (
       <div className="flex gap-space-sm">
-        <Button variant="primary" size="sm">
+        <Button {...args} variant="primary">
           Primary
         </Button>
-        <Button variant="secondary" size="sm">
+        <Button {...args} variant="secondary">
           Secondary
         </Button>
-        <Button variant="destructive" size="sm">
+        <Button {...args} variant="destructive">
           Destructive
         </Button>
-        <Button variant="light" size="sm">
+        <Button {...args} variant="light">
           Light
         </Button>
-        <Button variant="ghost" size="sm">
+        <Button {...args} variant="ghost">
           Ghost
         </Button>
       </div>
@@ -182,19 +180,22 @@ export const Solid: Story = {
 }
 
 export const Outline: Story = {
-  render: () => {
+  args: {
+    size: 'sm',
+  },
+  render: args => {
     return (
       <div className="flex gap-space-sm">
-        <Button variant="outlinePrimary" size="sm">
+        <Button variant="outlinePrimary" size={args.size}>
           Outline Primary
         </Button>
-        <Button variant="outlineSecondary" size="sm">
+        <Button variant="outlineSecondary" size={args.size}>
           Outline Secondary
         </Button>
-        <Button variant="outlineDestructive" size="sm">
+        <Button variant="outlineDestructive" size={args.size}>
           Outline Destructive
         </Button>
-        <Button variant="outlineLight" size="sm">
+        <Button variant="outlineLight" size={args.size}>
           Outline Light
         </Button>
       </div>
@@ -211,16 +212,62 @@ export const Loading: Story = {
         <div className="flex items-center gap-space-sm">
           <Switch
             defaultChecked
-            onChange={checked => setIsLoading(checked)}
+            onChange={(checked: boolean) => setIsLoading(checked)}
             checked={isLoading}
           />
 
-          <p>Enable loading state</p>
+          <p className="text-ds-default">Enable loading state</p>
         </div>
 
         <div className="self-start">
           <Button variant="primary" loading={isLoading}>
+            Change State
+          </Button>
+        </div>
+      </div>
+    )
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+  },
+  render: args => {
+    return (
+      <div className="flex flex-col gap-space-sm">
+        <div className="flex gap-space-sm">
+          <Button {...args} variant="primary">
+            Primary
+          </Button>
+          <Button {...args} variant="secondary">
+            Secondary
+          </Button>
+          <Button {...args} variant="destructive">
+            Destructive
+          </Button>
+          <Button {...args} variant="info">
+            Info
+          </Button>
+          <Button {...args} variant="success">
+            Success
+          </Button>
+          <Button {...args} variant="warning">
+            Warning
+          </Button>
+          <Button {...args} variant="ghost">
+            Ghost
+          </Button>
+        </div>
+        <div className="flex gap-space-sm">
+          <Button {...args} variant="outlinePrimary">
             Outline Primary
+          </Button>
+          <Button {...args} variant="outlineSecondary">
+            Outline Secondary
+          </Button>
+          <Button {...args} variant="outlineDestructive">
+            Outline Destructive
           </Button>
         </div>
       </div>

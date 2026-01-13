@@ -1,43 +1,35 @@
-import { cn } from '@/utils/tailwind'
-import { TokenItem } from './color-tokens'
+import { cn } from '@/utils'
 
-type ColorTableProps = {
-  tokens: TokenItem[]
+export type ColorBoxProps = {
+  color?: string | null
+  value?: string | null
+  label?: string
+  theme?: 'light' | 'dark'
 }
 
-export const ColorBox: React.FC<ColorTableProps> = ({ tokens }) => (
-  <div className="mb-space-lg!">
-    <div className="grid grid-cols-[1fr_100px] items-center border-b border-default font-semibold">
-      <div className="flex">
-        <p className="m-0!">Token and description</p>
-      </div>
-
-      <div className="justify-self-center">
-        <p>Palette</p>
-      </div>
+export const ColorBox = ({ color, value, theme = 'light' }: ColorBoxProps) => {
+  return (
+    <div
+      className={cn(
+        'w-full flex flex-col items-center gap-space-sm p-[6px] border rounded-md shadow-ds-elevation-overflow/20 cursor-pointer',
+        theme === 'dark' ? 'bg-[#262626]' : 'bg-[#ffffff] border-ds-default'
+      )}
+    >
+      <div
+        className={cn(
+          'w-full h-7 rounded shadow-sm',
+          theme === 'dark' && 'border border-[#404040]'
+        )}
+        style={{ backgroundColor: color ?? 'transparent' }}
+      />
+      <p
+        className={cn(
+          'm-0! text-body-sm! text-center pointer-events-none font-(--font-code)',
+          theme === 'dark' ? 'text-[#ffffff]!' : 'text-[#262626]!'
+        )}
+      >
+        {value ?? '—'}
+      </p>
     </div>
-
-    <div className="space-y-gap-md">
-      {tokens.map((token, tokenIndex) => (
-        <div
-          key={tokenIndex}
-          className="grid grid-cols-[1fr_100px] py-space-sm"
-        >
-          <div className="flex flex-col gap-space-sm">
-            <p className="m-0! self-start bg-secondary text-default text-xs! font-semibold py-space-xs px-space-sm rounded-md">
-              {token.name}
-            </p>
-            <p className="m-0! text-default">{token.description}</p>
-          </div>
-
-          <div className="justify-self-center flex flex-col justify-center gap-space-sm p-[8px] rounded-md shadow shadow-sm">
-            <div className={cn('w-24 h-6 rounded-md', token.palette)}></div>
-            <p className="m-0! font-mono! text-center text-xs!">
-              {token.palette.split('-').slice(1).join('')}
-            </p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)
+  )
+}

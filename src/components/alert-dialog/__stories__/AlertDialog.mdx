@@ -3,17 +3,18 @@ import * as AlertDialogStories from "./AlertDialog.stories"
 import { Canvas } from "@/stories/_components/Canvas"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 
 <Meta title="UI/Feedback/AlertDialog" of={AlertDialogStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # AlertDialog
 
     A component for critical user confirmations and irreversible actions.
 
     <DocInfo 
-      importStatement={`import { AlertDialog } from 'clera-ui/alert-dialog'`}
+      importStatement={`import { AlertDialog } from '@clera-ui/alert-dialog'`}
       sourcePath={`components/alert-dialog`}
     />
 
@@ -46,7 +47,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from 'clera-ui/alert-dialog'
+          import { AlertDialog } from '@clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -72,8 +73,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from 'clera-ui/alert-dialog'
-          import { Button } from "clera-ui/button"
+          import { AlertDialog } from '@clera-ui/alert-dialog'
+          import { Button } from "@clera-ui/button"
 
           const Example = () => (
             <AlertDialog
@@ -100,7 +101,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from 'clera-ui/alert-dialog'
+          import { AlertDialog } from '@clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -126,7 +127,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from 'clera-ui/alert-dialog'
+          import { AlertDialog } from '@clera-ui/alert-dialog'
 
           const Example = () => (
             <AlertDialog
@@ -152,8 +153,8 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { AlertDialog } from 'clera-ui/alert-dialog'
-          import { Button } from "clera-ui/button"
+          import { AlertDialog } from '@clera-ui/alert-dialog'
+          import { Button } from "@clera-ui/button"
 
           const Example = () => (
             <AlertDialog
@@ -283,4 +284,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>

@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 const getLayerFill = (index: number) => {
   const opacities = ['0.08', '0.06', '0.04']
@@ -44,9 +45,9 @@ export const FabricLayer: React.FC<FabricLayerProps> = ({ className }) => {
   }
 
   return (
-    <div className={cn('w-full h-full absolute', className)}>
+    <div className={cn(styles.container, className)}>
       <svg
-        className="w-full h-full absolute inset-0 z-0 pointer-events-none"
+        className={styles.svg}
         viewBox="0 0 500 200"
         preserveAspectRatio="none"
       >
@@ -58,7 +59,7 @@ export const FabricLayer: React.FC<FabricLayerProps> = ({ className }) => {
             }}
             d="M0,100 C250,0 250,200 500,100 L500,0 L0,0 Z"
             fill={getLayerFill(i)}
-            className="fabric-path"
+            className={styles.path}
           />
         ))}
       </svg>

@@ -8,6 +8,7 @@ import {
 } from 'react-hook-form'
 import { isValidElement, cloneElement, ReactElement } from 'react'
 import { cn } from '@/utils/tailwind'
+import { itemRoot, errorText } from './styles'
 
 export type FormItemProps<T extends FieldValues> = {
   name: Path<T>
@@ -49,13 +50,13 @@ export function FormItem<T extends FieldValues>({
       }
 
   return (
-    <div className={cn('space-y-1', className)}>
+    <div className={itemRoot(className)}>
       {isValidElement(children)
         ? cloneElement(children, injectedProps)
         : children}
 
       {hasError && (
-        <p className="text-sm text-destructive">
+        <p className={cn(errorText)}>
           {fieldState.error?.message || 'This field is required'}
         </p>
       )}

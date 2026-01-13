@@ -1,0 +1,1168 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as CommandStories from "./Command.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+<Meta title="UI/Command" of={CommandStories} />
+
+<DocsLayout>
+  <div>
+    # Command
+
+    A `Command` is a powerful and flexible component for building command palettes, keyboard shortcuts, command menus, and searchable lists. Built on top of the `cmdk` library, it provides an efficient way to filter and display items with keyboard navigation and search functionality.
+    <DocInfo 
+      importStatement={`import { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandMenu } from '@clera/ui'`} 
+      sourcePath={`components/command`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    The `Command` component family is designed to create accessible, performant command interfaces. It is ideal for:
+    - **Command Palettes**: Similar to VS Code's command palette (⌘K)
+    - **Keyboard Shortcuts**: Application-wide keyboard shortcut lists and navigation
+    - **Search & Filter**: Large lists that benefit from real-time filtering
+    - **Mobile Menus**: Responsive command menus and navigation dropdowns
+    - **Global Navigation**: Quick access to pages, actions, and commands
+
+    Unlike `ComboBox`, which is form-focused, `Command` is designed for actions and navigation. It shines when you need:
+    - Keyboard-first interaction with arrow keys and Enter
+    - Grouped items with optional headings
+    - Search/filter across multiple categories
+    - Keyboard shortcuts displayed alongside items
+    - Dialog integration for command palettes
+
+    <br />
+
+    ## **Component Structure**
+
+    The `Command` system is composed of several sub-components working together:
+
+    - **`Command`**: The root container for the command interface
+    - **`CommandDialog`**: Wraps `Command` in a modal dialog (great for command palettes)
+    - **`CommandInput`**: Search/filter input with an icon
+    - **`CommandList`**: Scrollable container for items
+    - **`CommandEmpty`**: Message displayed when no results match the search
+    - **`CommandGroup`**: Groups related items with an optional heading
+    - **`CommandItem`**: Individual action/menu item
+    - **`CommandSeparator`**: Visual divider between groups
+    - **`CommandMenu`**: Higher-level component that combines all the above with structured data
+
+    <br />
+
+    ## **Examples**
+
+    ### **Default (Command Dialog)**
+
+    A standard `CommandDialog` with grouped items. Press ⌘C or click the button to open. This demonstrates keyboard shortcuts triggered with `useEffect` and a global event listener.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CommandStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState, useEffect } from 'react'
+          import {
+            Command,
+            CommandDialog,
+            CommandInput,
+            CommandList,
+            CommandEmpty,
+            CommandGroup,
+            CommandItem,
+            CommandMenu,
+            CommandMenuGroup,
+          } from '@clera/ui'
+          import { FiCalendar, FiHome, FiUser, FiSettings } from 'react-icons/fi'
+
+          const CommandDialogExample = () => {
+            const [open, setOpen] = useState(false)
+            const [selectedValue, setSelectedValue] = useState('')
+
+            useEffect(() => {
+              const down = (e: KeyboardEvent) => {
+                if (e.key === 'c' && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault()
+                  setOpen(open => !open)
+                }
+              }
+
+              document.addEventListener('keydown', down)
+              return () => document.removeEventListener('keydown', down)
+            }, [])
+
+            const menuGroups: CommandMenuGroup[] = [
+              {
+                id: 'suggestions',
+                heading: 'Suggestions',
+                items: [
+                  {
+                    id: 'calendar',
+                    label: 'Calendar',
+                    icon: FiCalendar,
+                    onSelect: () => {
+                      setSelectedValue('calendar')
+                      setOpen(false)
+                    },
+                  },
+                  {
+                    id: 'dashboard',
+                    label: 'Dashboard',
+                    icon: FiHome,
+                    onSelect: () => {
+                      setSelectedValue('dashboard')
+                      setOpen(false)
+                    },
+                  },
+                ],
+              },
+              {
+                id: 'settings',
+                heading: 'Settings',
+                items: [
+                  {
+                    id: 'profile',
+                    label: 'Profile',
+                    icon: FiUser,
+                    onSelect: () => {
+                      setSelectedValue('profile')
+                      setOpen(false)
+                    },
+                  },
+                  {
+                    id: 'settings',
+                    label: 'Settings',
+                    icon: FiSettings,
+                    onSelect: () => {
+                      setSelectedValue('settings')
+                      setOpen(false)
+                    },
+                  },
+                ],
+              },
+            ]
+
+            return (
+              <div className="flex flex-col items-center gap-space-sm">
+                <Button onClick={() => setOpen(true)}>
+                  Open Command (⌘C)
+                </Button>
+                <p className="text-body-sm text-ds-subtle">
+                  Selected: {selectedValue || 'None'}
+                </p>
+                <CommandDialog
+                  open={open}
+                  onOpenChange={setOpen}
+                  title="Command Menu"
+                >
+                  <CommandMenu
+                    key={open.toString()}
+                    groups={menuGroups}
+                    value={selectedValue}
+                  />
+                </CommandDialog>
+              </div>
+            )
+          }
+
+          export default CommandDialogExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Static Command Menu**
+
+    A `Command` rendered as a static component (not in a dialog). Perfect for sidebars, static menus, or always-visible command palettes. This demonstrates how to use `Command` outside of a dialog context.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CommandStories.AsStaticMenu} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import {
+            Command,
+            CommandInput,
+            CommandList,
+            CommandEmpty,
+            CommandGroup,
+            CommandItem,
+            CommandMenu,
+            CommandMenuGroup,
+          } from '@clera/ui'
+          import { FiCalendar, FiHome } from 'react-icons/fi'
+
+          const StaticCommandMenuExample = () => {
+            const [selectedValue, setSelectedValue] = useState('')
+
+            const menuGroups: CommandMenuGroup[] = [
+              {
+                id: 'suggestions',
+                heading: 'Suggestions',
+                items: [
+                  {
+                    id: 'calendar',
+                    label: 'Calendar',
+                    icon: FiCalendar,
+                    onSelect: () => setSelectedValue('calendar'),
+                  },
+                  {
+                    id: 'dashboard',
+                    label: 'Dashboard',
+                    icon: FiHome,
+                    onSelect: () => setSelectedValue('dashboard'),
+                  },
+                ],
+              },
+            ]
+
+            return (
+              <div className="flex flex-col gap-space-md w-full max-w-sm">
+                <Command>
+                  <CommandMenu
+                    groups={menuGroups}
+                    placeholder="Filter items..."
+                    value={selectedValue}
+                  />
+                </Command>
+                <p className="text-body-sm text-ds-subtle">
+                  Selected: {selectedValue || 'None'}
+                </p>
+              </div>
+            )
+          }
+
+          export default StaticCommandMenuExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Sized Items**
+
+    Demonstrates all available sizes for items: `xs`, `sm`, and `md`. Use the `size` prop on `CommandMenu` to control text size of the input, group headings, and items. This is useful for adapting the command menu to different contexts and screen sizes.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CommandStories.SizedItems} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import {
+            Command,
+            CommandMenu,
+            CommandMenuGroup,
+          } from '@clera/ui'
+          import { FiCalendar, FiHome } from 'react-icons/fi'
+
+          const SizedItemsExample = () => {
+            const [selectedValue, setSelectedValue] = useState('')
+
+            const menuGroups: CommandMenuGroup[] = [
+              {
+                id: 'suggestions',
+                heading: 'Suggestions',
+                items: [
+                  {
+                    id: 'calendar',
+                    label: 'Calendar',
+                    icon: FiCalendar,
+                    onSelect: () => setSelectedValue('calendar'),
+                  },
+                  {
+                    id: 'dashboard',
+                    label: 'Dashboard',
+                    icon: FiHome,
+                    onSelect: () => setSelectedValue('dashboard'),
+                    disabled: true,
+                  },
+                ],
+              },
+            ]
+
+            return (
+              <div className="flex flex-col gap-space-md w-full max-w-sm">
+                <Command>
+                  <CommandMenu
+                    groups={menuGroups}
+                    placeholder="Small items (xs)..."
+                    size="xs"
+                    value={selectedValue}
+                  />
+                </Command>
+                <Command>
+                  <CommandMenu
+                    groups={menuGroups}
+                    placeholder="Medium items (sm)..."
+                    size="sm"
+                    value={selectedValue}
+                  />
+                </Command>
+                <Command>
+                  <CommandMenu
+                    groups={menuGroups}
+                    placeholder="Default items (md)..."
+                    size="md"
+                    value={selectedValue}
+                  />
+                </Command>
+              </div>
+            )
+          }
+
+          export default SizedItemsExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Controlled Selection**
+
+    Demonstrates controlled selection where the selected value is managed in React state. This shows how to initialize with a default value and update it via `onSelect` callbacks. The checkmark appears next to the selected item.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CommandStories.ControlledSelection} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import {
+            Command,
+            CommandMenu,
+            CommandMenuGroup,
+          } from '@clera/ui'
+          import { FiCalendar, FiHome, FiUser } from 'react-icons/fi'
+
+          const ControlledSelectionExample = () => {
+            const [selectedValue, setSelectedValue] = useState('calendar')
+
+            const menuGroups: CommandMenuGroup[] = [
+              {
+                id: 'suggestions',
+                heading: 'Suggestions',
+                items: [
+                  {
+                    id: 'calendar',
+                    label: 'Calendar',
+                    icon: FiCalendar,
+                    onSelect: () => setSelectedValue('calendar'),
+                  },
+                  {
+                    id: 'dashboard',
+                    label: 'Dashboard',
+                    icon: FiHome,
+                    onSelect: () => setSelectedValue('dashboard'),
+                  },
+                ],
+              },
+              {
+                id: 'settings',
+                heading: 'Settings',
+                items: [
+                  {
+                    id: 'profile',
+                    label: 'Profile',
+                    icon: FiUser,
+                    onSelect: () => setSelectedValue('profile'),
+                  },
+                ],
+              },
+            ]
+
+            return (
+              <div className="flex flex-col gap-space-md w-full max-w-sm">
+                <Command>
+                  <CommandMenu
+                    groups={menuGroups}
+                    placeholder="Filter items..."
+                    value={selectedValue}
+                  />
+                </Command>
+                <p className="text-body-sm text-ds-subtle">
+                  Selected: {selectedValue || 'None'}
+                </p>
+              </div>
+            )
+          }
+
+          export default ControlledSelectionExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Keyboard Shortcuts**
+
+    A comprehensive example showing how to display keyboard shortcuts alongside items. This pattern is common in application command palettes (like VS Code). The `shortcut` prop renders a styled `<kbd>` element. Items are organized in multiple groups to showcase pagination with the `columns-2` Tailwind utility.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CommandStories.KeyboardShortcuts} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState, useEffect } from 'react'
+          import {
+            CommandDialog,
+            CommandMenu,
+            CommandMenuGroup,
+          } from '@clera/ui'
+          import {
+            FiFilePlus,
+            FiFolder,
+            FiSave,
+            FiPrinter,
+            FiEdit,
+            FiScissors,
+            FiCopy,
+            FiFile,
+            FiTrash,
+            FiCommand,
+            FiSearch,
+            FiMaximize,
+            FiSidebar,
+            FiBox,
+            FiChevronsRight,
+            FiGitPullRequest,
+            FiHelpCircle,
+            FiSettings,
+          } from 'react-icons/fi'
+
+          const KeyboardShortcutsExample = () => {
+            const [open, setOpen] = useState(false)
+            const [selectedValue, setSelectedValue] = useState('')
+
+            useEffect(() => {
+              const down = (e: KeyboardEvent) => {
+                if (e.key === 'c' && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault()
+                  setOpen(open => !open)
+                }
+              }
+
+              document.addEventListener('keydown', down)
+              return () => document.removeEventListener('keydown', down)
+            }, [])
+
+            const menuGroups: CommandMenuGroup[] = [
+              {
+                id: 'file',
+                heading: 'File',
+                items: [
+                  {
+                    id: 'new-file',
+                    label: 'New File',
+                    icon: FiFilePlus,
+                    shortcut: '⌘ N',
+                    onSelect: () => setSelectedValue('new-file'),
+                  },
+                  {
+                    id: 'save',
+                    label: 'Save',
+                    icon: FiSave,
+                    shortcut: '⌘ S',
+                    onSelect: () => setSelectedValue('save'),
+                  },
+                  {
+                    id: 'print',
+                    label: 'Print',
+                    icon: FiPrinter,
+                    shortcut: '⌘ P',
+                    onSelect: () => setSelectedValue('print'),
+                  },
+                ],
+              },
+              {
+                id: 'edit',
+                heading: 'Edit',
+                items: [
+                  {
+                    id: 'undo',
+                    label: 'Undo',
+                    icon: FiEdit,
+                    shortcut: '⌘ Z',
+                    onSelect: () => setSelectedValue('undo'),
+                  },
+                  {
+                    id: 'copy',
+                    label: 'Copy',
+                    icon: FiCopy,
+                    shortcut: '⌘ C',
+                    onSelect: () => setSelectedValue('copy'),
+                  },
+                  {
+                    id: 'delete',
+                    label: 'Delete',
+                    icon: FiTrash,
+                    shortcut: '⌫',
+                    onSelect: () => setSelectedValue('delete'),
+                  },
+                ],
+              },
+              {
+                id: 'view',
+                heading: 'View',
+                items: [
+                  {
+                    id: 'search',
+                    label: 'Search',
+                    icon: FiSearch,
+                    shortcut: '⌘ F',
+                    onSelect: () => setSelectedValue('search'),
+                  },
+                  {
+                    id: 'fullscreen',
+                    label: 'Toggle Fullscreen',
+                    icon: FiMaximize,
+                    shortcut: 'F11',
+                    onSelect: () => setSelectedValue('fullscreen'),
+                  },
+                  {
+                    id: 'sidebar',
+                    label: 'Toggle Sidebar',
+                    icon: FiSidebar,
+                    shortcut: '⌘ B',
+                    onSelect: () => setSelectedValue('sidebar'),
+                  },
+                ],
+              },
+            ]
+
+            return (
+              <div className="flex flex-col items-center gap-space-sm">
+                <Button onClick={() => setOpen(true)}>
+                  Open Command (⌘C)
+                </Button>
+                <p className="text-body-sm text-ds-subtle">
+                  Selected: {selectedValue || 'None'}
+                </p>
+                <CommandDialog
+                  open={open}
+                  onOpenChange={setOpen}
+                  title="Keyboard Shortcuts"
+                  size="lg"
+                >
+                  <CommandMenu
+                    key={open.toString()}
+                    groups={menuGroups}
+                    value={selectedValue}
+                    placeholder="Search shortcuts..."
+                    className="columns-2 [&_[cmdk-group]]:break-inside-avoid"
+                  />
+                </CommandDialog>
+              </div>
+            )
+          }
+
+          export default KeyboardShortcutsExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    ### **Command Props**
+
+    The root `Command` component that wraps all sub-components.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `className` | `string` | - | Optional CSS classes to customize styling |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive>` | - | All standard HTML div props |
+    | `ref` | `ForwardedRef` | - | Forwards ref to the underlying CommandPrimitive component |
+    | `withBorder` | `boolean` | `true` | Whether to display a border around the command component |
+
+    <br />
+
+    ### **CommandDialog Props**
+
+    Wraps the command in a modal dialog. Extends `DialogProps` with the following additional props:
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `open` | `boolean` | - | Controls whether the dialog is open *(required)* |
+    | `onOpenChange` | `(open: boolean) => void` | - | Callback fired when dialog open state changes *(required)* |
+    | `children` | `ReactNode` | - | Dialog content *(required)* |
+    | `title` | `string` | - | Optional title for the dialog |
+    | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Dialog size |
+    | `autoFocusInput` | `boolean` | `true` | Whether to auto-focus the input when dialog opens |
+
+    <br />
+
+    ### **CommandInput Props**
+
+    The search/filter input component. Includes a search icon by default.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the input |
+    | `placeholder` | `string` | - | Placeholder text |
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Input>` | - | All standard input props |
+
+    <br />
+
+    ### **CommandList Props**
+
+    The scrollable container for items. Handles overflow and scrolling.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.List>` | - | All standard HTML div props |
+
+    <br />
+
+    ### **CommandEmpty Props**
+
+    Message displayed when no results match the search query.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `children` | `ReactNode` | - | Empty state message content |
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>` | - | All standard HTML div props |
+
+    <br />
+
+    ### **CommandGroup Props**
+
+    Groups related items with an optional heading.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `heading` | `string` | - | Optional group heading text |
+    | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the heading |
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Group>` | - | All standard HTML div props |
+
+    <br />
+
+    ### **CommandItem Props**
+
+    Individual action/menu item.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `onSelect` | `() => void` | - | Callback fired when item is selected *(required)* |
+    | `value` | `string` | `label` | The search value (defaults to label text) |
+    | `disabled` | `boolean` | `false` | Whether the item is disabled |
+    | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size of the item |
+    | `isSelected` | `boolean` | `false` | Visual indication of selection (shows checkmark) |
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Item>` | - | All standard HTML div props |
+
+    <br />
+
+    ### **CommandSeparator Props**
+
+    Visual divider between groups.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `className` | `string` | - | Optional CSS classes |
+    | `...props` | `ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>` | - | All standard HTML div props |
+
+    <br />
+
+    ### **CommandMenu Props**
+
+    High-level component that combines all sub-components with structured data.
+
+    | Prop | Type | Default | Description |
+    |------|------|---------|-------------|
+    | `groups` | `CommandMenuGroup[]` | - | Array of item groups *(required)* |
+    | `placeholder` | `string` | `'Type a command or search...'` | Placeholder text for the input |
+    | `emptyState` | `string` | `'No results found.'` | Message when no results match |
+    | `size` | `'xs' \| 'sm' \| 'md'` | `'md'` | Text size for input, headings, and items |
+    | `value` | `string` | - | Currently selected item ID |
+    | `className` | `string` | - | Optional CSS classes for the container |
+
+    <br />
+
+    ### **CommandMenuGroup Type**
+
+    Structure for organizing items into groups.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        type CommandMenuGroup = {
+          id: string
+          heading?: string
+          items: CommandMenuItem[]
+        }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    ### **CommandMenuItem Type**
+
+    Individual item within a group.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        type CommandMenuItem = {
+          id: string
+          label: string
+          icon?: React.ElementType
+          onSelect: () => void
+          value?: string
+          disabled?: boolean
+          shortcut?: string
+        }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    ## **FAQ**
+
+    #### **1. What's the difference between `Command` and `ComboBox`?**
+
+    `Command` and `ComboBox` serve different purposes:
+
+    - **`ComboBox`**: A form input component for selecting a value from a list. Use it in forms when you need to collect user input with autocomplete.
+    - **`Command`**: An action/navigation component for executing commands or navigating. Use it for command palettes, global shortcuts, and application menus.
+
+    Key differences:
+
+    | Aspect | Command | ComboBox |
+    |--------|---------|----------|
+    | **Purpose** | Actions & Navigation | Form Input |
+    | **Use Case** | Command palette, shortcuts | Selecting from options |
+    | **Search** | Filter across actions | Filter options to select |
+    | **Dialog** | Native integration | Can be used in dropdown |
+    | **Selection** | Execute action | Submit value in form |
+    | **Icons** | Native support | Not built-in |
+    | **Shortcuts** | Native support | Not built-in |
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Form.Item name="framework">
+          <ComboBox
+            label="Select Framework"
+            options={frameworks}
+          />
+        </Form.Item>
+
+        <CommandDialog open={open} onOpenChange={setOpen}>
+          <CommandMenu groups={menuGroups} />
+        </CommandDialog>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **2. How do I add a global keyboard shortcut to open the command palette?**
+
+    Use `useEffect` with a global `keydown` event listener:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { useEffect, useState } from 'react'
+
+        const MyApp = () => {
+          const [open, setOpen] = useState(false)
+
+          useEffect(() => {
+            const down = (e: KeyboardEvent) => {
+              if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                setOpen(open => !open)
+              }
+            }
+
+            document.addEventListener('keydown', down)
+            return () => document.removeEventListener('keydown', down)
+          }, [])
+
+          return (
+            <>
+              <CommandDialog open={open} onOpenChange={setOpen}>
+                <CommandMenu groups={menuGroups} />
+              </CommandDialog>
+            </>
+          )
+        }
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **3. How do I handle item selection and close the dialog?**
+
+    Inside the `onSelect` callback, update your state and close the dialog:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'suggestions',
+            heading: 'Suggestions',
+            items: [
+              {
+                id: 'calendar',
+                label: 'Calendar',
+                icon: FiCalendar,
+                onSelect: () => {
+                  router.push('/calendar')
+                  setOpen(false)
+                },
+              },
+            ],
+          },
+        ]
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **4. Can I disable items in the command menu?**
+
+    Yes, use the `disabled` prop on `CommandMenuItem`:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'actions',
+            heading: 'Actions',
+            items: [
+              {
+                id: 'save',
+                label: 'Save',
+                icon: FiSave,
+                disabled: !canSave,
+                onSelect: () => handleSave(),
+              },
+            ],
+          },
+        ]
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **5. How do I customize the empty state message?**
+
+    Pass a custom message to the `emptyState` prop of `CommandMenu`:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <CommandMenu
+          groups={menuGroups}
+          placeholder="Search commands..."
+          emptyState="No commands found. Try searching for something else."
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **6. How do I use icons with command items?**
+
+    Pass an icon component to the `icon` prop. The component should accept standard icon props:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { FiHome, FiSettings, FiUser } from 'react-icons/fi'
+
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'navigation',
+            heading: 'Navigation',
+            items: [
+              {
+                id: 'home',
+                label: 'Home',
+                icon: FiHome,
+                onSelect: () => router.push('/'),
+              },
+              {
+                id: 'settings',
+                label: 'Settings',
+                icon: FiSettings,
+                onSelect: () => router.push('/settings'),
+              },
+              {
+                id: 'profile',
+                label: 'Profile',
+                icon: FiUser,
+                onSelect: () => router.push('/profile'),
+              },
+            ],
+          },
+        ]
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **7. How do I display keyboard shortcuts alongside items?**
+
+    Use the `shortcut` prop on `CommandMenuItem`. The component automatically renders it as a styled `<kbd>` element:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'file',
+            heading: 'File',
+            items: [
+              {
+                id: 'new',
+                label: 'New File',
+                icon: FiFilePlus,
+                shortcut: '⌘ N',
+                onSelect: () => handleNewFile(),
+              },
+              {
+                id: 'save',
+                label: 'Save',
+                icon: FiSave,
+                shortcut: '⌘ S',
+                onSelect: () => handleSave(),
+              },
+            ],
+          },
+        ]
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **8. Can I use Command outside of a dialog?**
+
+    Yes! `Command` can be used as a standalone, static component. Simply render it without `CommandDialog`:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <div className="w-full max-w-sm">
+          <Command className="rounded-lg border border-ds-default shadow-lg">
+            <CommandMenu
+              groups={menuGroups}
+              placeholder="Filter items..."
+            />
+          </Command>
+        </div>
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **9. How do I track which item is selected?**
+
+    Use React state and pass the selected item's ID to the `value` prop of `CommandMenu`. The selected item will display a checkmark:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const [selectedValue, setSelectedValue] = useState('calendar')
+
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'suggestions',
+            heading: 'Suggestions',
+            items: [
+              {
+                id: 'calendar',
+                label: 'Calendar',
+                onSelect: () => setSelectedValue('calendar'),
+              },
+              {
+                id: 'dashboard',
+                label: 'Dashboard',
+                onSelect: () => setSelectedValue('dashboard'),
+              },
+            ],
+          },
+        ]
+
+        return (
+          <CommandMenu
+            groups={menuGroups}
+            value={selectedValue}
+          />
+        )
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **10. How do I adjust text sizes?**
+
+    Use the `size` prop to control the font size of the input, group headings, and items:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <CommandMenu groups={menuGroups} size="xs" />
+
+        <CommandMenu groups={menuGroups} size="sm" />
+
+        <CommandMenu groups={menuGroups} size="md" />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **11. How do I trigger actions on item selection?**
+
+    Use the `onSelect` callback to perform any action. This is where you'd navigate, submit data, or trigger side effects:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const menuGroups: CommandMenuGroup[] = [
+          {
+            id: 'actions',
+            heading: 'Quick Actions',
+            items: [
+              {
+                id: 'create-post',
+                label: 'Create Post',
+                icon: FiFilePlus,
+                onSelect: () => {
+                  openCreatePostModal()
+                  setOpen(false)
+                  showNotification('Creating post...')
+                },
+              },
+            ],
+          },
+        ]
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **12. Can I customize the appearance of the command dialog?**
+
+    Yes! Use the `className` prop on `Command`, `CommandMenu`, and individual sub-components. You can also customize the `CommandDialog` using the `size` prop:
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <CommandDialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Advanced Command Palette"
+          size="lg"
+        >
+          <Command className="custom-command-styles">
+            <CommandMenu
+              groups={menuGroups}
+              className="custom-menu-container"
+            />
+          </Command>
+        </CommandDialog>
+      `} />
+    </Canvas.Source>
+
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "purpose-and-context",
+          label: "Purpose and Context"
+        },
+        {
+          id: "component-structure",
+          label: "Component Structure"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "default-command-dialog",
+              label: "Default (Command Dialog)"
+            },
+            {
+              id: "static-command-menu",
+              label: "Static Command Menu"
+            },
+            {
+              id: "sized-items",
+              label: "Sized Items"
+            },
+            {
+              id: "controlled-selection",
+              label: "Controlled Selection"
+            },
+            {
+              id: "keyboard-shortcuts",
+              label: "Keyboard Shortcuts"
+            }
+          ]
+        },
+        {
+          id: "api",
+          label: "API",
+          children: [
+            {
+              id: "command-props",
+              label: "Command Props"
+            },
+            {
+              id: "commanddialog-props",
+              label: "CommandDialog Props"
+            },
+            {
+              id: "commandinput-props",
+              label: "CommandInput Props"
+            },
+            {
+              id: "commandlist-props",
+              label: "CommandList Props"
+            },
+            {
+              id: "commandempty-props",
+              label: "CommandEmpty Props"
+            },
+            {
+              id: "commandgroup-props",
+              label: "CommandGroup Props"
+            },
+            {
+              id: "commanditem-props",
+              label: "CommandItem Props"
+            }
+          ]
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "1-whats-the-difference-between-command-and-combobox",
+              label: "Command vs. ComboBox"
+            },
+            {
+              id: "2-how-do-i-add-a-global-keyboard-shortcut-to-open-the-command-palette",
+              label: "Global keyboard..."
+            }
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

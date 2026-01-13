@@ -1,28 +1,13 @@
 'use client'
 
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/utils/tailwind'
-import { roundedMap, sizeMap, variantMap } from '../_utils/variants'
-
-const badgeVariants = cva(
-  'inline-flex align-self items-center gap-space-xs font-bold rounded-full',
-  {
-    variants: {
-      variant: variantMap,
-      rounded: roundedMap,
-      size: sizeMap,
-    },
-    defaultVariants: {
-      variant: 'primary',
-      size: 'md',
-      rounded: 'md',
-    },
-  }
-)
+import { type VariantProps } from 'class-variance-authority'
+import { cn } from '@/utils/tailwind/tailwind'
+import { styles } from './styles'
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof styles.badge> {
   children: React.ReactNode
   icon?: React.ReactNode
   iconPosition?: 'left' | 'right'
@@ -41,8 +26,8 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <div
       className={cn(
-        badgeVariants({ variant, size, rounded }),
-        iconPosition === 'right' && 'flex-row-reverse',
+        styles.badge({ variant, size, rounded }),
+        iconPosition === 'right' && styles.reverse,
         className
       )}
       {...props}

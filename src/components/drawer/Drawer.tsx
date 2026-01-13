@@ -3,6 +3,7 @@ import * as Portal from '@radix-ui/react-portal'
 import { FiX } from 'react-icons/fi'
 import { getPositionStyles, getTransformStyles } from './_utils/transform'
 import { cn } from '@/utils/tailwind'
+import { styles } from './styles'
 
 export type DrawerProps = {
   open: boolean
@@ -42,13 +43,31 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
   const [isMounted, setIsMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+
     if (open) {
       setIsMounted(true)
-      setTimeout(() => setIsVisible(true), 10)
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = requestAnimationFrame(() => {
+          setIsVisible(true)
+          rafRef.current = null
+        })
+      })
     } else {
       setIsVisible(false)
+    }
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
     }
   }, [open])
 
@@ -77,9 +96,9 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
   if (!isMounted) return null
 
   return (
-    <Portal.Root className="fixed inset-0 z-[9999]">
+    <Portal.Root className={styles.portal}>
       <div
-        className="absolute inset-0 bg-black"
+        className={styles.overlay}
         style={{
           opacity: isVisible ? overlayOpacity : 0,
           transition: `opacity ${duration}ms ease-out`,
@@ -90,7 +109,7 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
 
       <div
         ref={drawerRef}
-        className="absolute bg-default shadow-2xl flex flex-col"
+        className={styles.drawer}
         style={{
           ...getPositionStyles(position, fullScreen),
           ...getTransformStyles(position, isVisible),
@@ -100,21 +119,19 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
         onTransitionEnd={handleTransitionEnd}
       >
         {(title || showCloseButton) && (
-          <div className="flex items-center gap-2 p-4 border-b border-default">
+          <div className={styles.header}>
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="rounded-full hover:bg-accent-gray-hovered transition-colors cursor-pointer"
+                className={styles.closeButton}
                 aria-label="Close drawer"
               >
-                {closeIcon ? closeIcon : <FiX className="w-5 h-5" />}
+                {closeIcon
+                  ? closeIcon
+                  : FiX && <FiX className={styles.closeIcon} />}
               </button>
             )}
-            {title && (
-              <h1 className="text-heading-lg font-semibold text-default">
-                {title}
-              </h1>
-            )}
+            {title && <h1 className={styles.title}>{title}</h1>}
           </div>
         )}
 
@@ -125,7 +142,7 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
 }
 
 const DrawerHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="p-space-md border-b">{children}</div>
+  <div className={styles.head}>{children}</div>
 )
 
 const DrawerContent: React.FC<{
@@ -134,7 +151,7 @@ const DrawerContent: React.FC<{
   position?: 'left' | 'right' | 'bottom' | 'top'
 }> = ({ children, className, position }) => {
   const widthClasses = cn(
-    'flex-1 overflow-auto p-space-md',
+    styles.contentBase,
     className,
     position === 'left' || position === 'right' ? 'w-[80%] md:w-[378px]' : ''
   )

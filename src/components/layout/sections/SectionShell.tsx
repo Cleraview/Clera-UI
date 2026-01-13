@@ -50,7 +50,8 @@ const sectionShellVariants = cva('flex', {
 })
 
 export interface SectionShellProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof sectionShellVariants> {
   children: React.ReactNode
   innerClassName?: string

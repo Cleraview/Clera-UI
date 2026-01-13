@@ -2,17 +2,18 @@ import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as CardStories from "./Card.stories"
 import { Canvas } from "@/stories/_components/Canvas"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
 import { DocInfo } from "@/stories/_components/DocInfo"
 import { TableOfContents } from "@/stories/_components/TableOfContents"
 
 <Meta title="UI/Card" of={CardStories} />
 
-<div className="flex gap-space-4xl">
+<DocsLayout>
   <div>
     # Card
 
     A flexible container for grouping and displaying related content.
-    <DocInfo importStatement={`import { Card } from 'clera-ui/card'`} sourcePath={`components/card`} />
+    <DocInfo importStatement={`import { Card } from '@clera-ui/card'`} sourcePath={`components/card`} />
     
     <br />
 
@@ -35,7 +36,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     -   **ClassName**: Allows for custom styling with Tailwind CSS classes.
     -   **Link**: Makes the entire card clickable, navigating to a specified URL.
     -   **Meta Items**: Displays additional information or metadata.
-    -   **Footer Action Label**: Adds a call-to-action button in the card's footer.
+    -   **Meta Link Label**: Adds a call-to-action button in the card's footer.
     -   **Text Size**: Controls the text size for the title, description, and footer action.
     -   **Badge**: Adds a badge to highlight specific aspects of the card.
 
@@ -54,7 +55,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from 'clera-ui/card'
+          import { Card } from '@clera-ui/card'
           import AgileImage from "@/assets/images/agile-methodology.jpg"
 
           const CardWithImageExample = () => {
@@ -64,7 +65,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
                 description="Real-time metrics with a clear layout."
                 thumbnail={AgileImage}
                 metaItems={["Product", "28.2025"]}
-                footerActionLabel="Read more"
+                metaLinkLabel="Read more"
               />
             )
           }
@@ -87,14 +88,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          import { Card } from 'clera-ui/card'
+          import { Card } from '@clera-ui/card'
 
           const CardWithCustomContentExample = () => {
             return (
               <Card>
                 <Card.Content>
-                  <h3 className="text-xl font-bold mb-2">Custom Title</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-body-xl font-bold mb-2">Custom Title</h3>
+                  <p className="text-ds-subtle">
                     This is a custom body. You can place any content you want here.
                   </p>
                 </Card.Content>
@@ -108,6 +109,143 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     </Canvas>
 
     <br />
+
+    ### **With Custom Node**
+    A card using ReactNodes for the `title`, `extended`, and `footer` props so you can pass custom components or markup.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CardStories.CustomNode} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Card } from '@clera-ui/card'
+          import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+
+          const CustomNodeExample = () => {
+            return (
+              <Card
+                title={
+                  <div className="flex items-center gap-2">
+                    <span className="text-heading-md text-ds-default font-semibold">Custom Node Title</span>
+                  </div>
+                }
+                extended={
+                  <div className="flex items-center gap-1">
+                    <AiFillStar className="text-ds-primary" />
+                    <AiFillStar className="text-ds-primary" />
+                    <AiFillStar className="text-ds-primary" />
+                    <AiFillStar className="text-ds-primary" />
+                    <AiOutlineStar className="text-ds-subtlest" />
+                    <span className="text-body-sm text-ds-subtlest ml-2">4.0 ratings</span>
+                  </div>
+                }
+                description="This card uses a ReactNode for the title and shows extended info below."
+                padding="md"
+                footer={
+                  <div className="flex justify-between items-center w-full">
+                    <span className="text-ds-subtle">Last updated: June 2024</span>
+                    <button className="text-ds-primary font-medium hover:underline">Update Now</button>
+                  </div>
+                }
+              />
+            )
+          }
+
+          export default CustomNodeExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Variants**
+
+    A few common variants demonstrating badges, footer actions, padding and rounded/shadow combinations.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CardStories.WithBadge} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Card } from '@clera-ui/card'
+
+          const CardWithBadgeExample = () => {
+            return (
+              <Card
+                title="Card with Badge"
+                badge={{ label: 'Featured', size: 'md' }}
+              />
+            )
+          }
+          
+          export default CardWithBadgeExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CardStories.WithFooterActionOnly} />
+      </Canvas.Story>
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <Card title="Footer Action" metaLinkLabel="Open" link="/open" />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CardStories.RoundedAndShadow} />
+      </Canvas.Story>
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Card } from '@clera-ui/card'
+
+          const RoundedShadowExample = () => (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+              <Card title="Small / none" roundedSize="sm" shadow="none" padding="md" />
+              <Card title="Medium / md" roundedSize="md" shadow="md" padding="md" paddingAxis="all" />
+              <Card title="XL / xl" roundedSize="lg" shadow="xl" padding="md" paddingAxis="all" />
+            </div>
+          )
+
+          export default RoundedShadowExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CardStories.TextSizeMatrix} />
+      </Canvas.Story>
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Card } from '@clera-ui/card'
+
+          const TextSizeMatrixExample = () => {
+            const sizes = ['md','lg','xl','2xl']
+            return (
+              <div className="space-y-space-md">
+                {sizes.map(s => (
+                  <Card key={s} title="Heading md" description="Description with heading md" textSize={{ title: s as string, description: 'md', footerAction: 'sm' }} />
+                ))}
+              </div>
+            )
+          }
+
+          export default TextSizeMatrixExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
 
     ## **API**
 
@@ -123,7 +261,18 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Card title="My Card" description="This is a description." />
+        import { Card } from '@clera-ui/card'
+
+        const CardExample = () => {
+          return (
+            <Card
+              title="My Card"
+              description="This is a description."
+            />
+          )
+        }
+
+        export default CardExample
       `} />
     </Canvas.Source>
 
@@ -152,11 +301,11 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
     <br />
     #### **How do I add a footer action to a card?**
 
-    Use the `footerActionLabel` prop to specify the text for the footer action button.  You'll also need to use the `link` prop to specify the URL to navigate to when the button is clicked.
+    Use the `metaLinkLabel` prop to specify the text for the footer action button.  You'll also need to use the `link` prop to specify the URL to navigate to when the button is clicked.
 
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Card footerActionLabel="Learn More" link="/learn-more" />
+        <Card metaLinkLabel="Learn More" link="/learn-more" />
       `} />
     </Canvas.Source>
   </div>
@@ -183,6 +332,14 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
             {
               id: "with-custom-content",
               label: "With Custom Content"
+            },
+            {
+              id: "with-custom-node",
+              label: "With Custom Node"
+            },
+            {
+              id: "variants",
+              label: "Variants"
             }
           ]
         },
@@ -211,4 +368,4 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
       ]}
     />
   </div>
-</div>
+</DocsLayout>
