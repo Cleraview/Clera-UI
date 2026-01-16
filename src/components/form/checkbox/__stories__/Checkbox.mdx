@@ -124,48 +124,48 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-import { useState } from 'react'
-import { Checkbox } from '@clera-ui/form'
-import { Card } from '@clera-ui/card'
-import { cn } from '@/utils/tailwind'
+          import { useState } from 'react'
+          import { Checkbox } from '@clera-ui/form'
+          import { Card } from '@clera-ui/card'
+          import { cn } from '@/utils/tailwind'
 
-const CustomLabelExample = () => {
-  const [checked, setChecked] = useState(false)
+          const CustomLabelExample = () => {
+            const [checked, setChecked] = useState(false)
 
-  return (
-    <Card 
-      padding="none" 
-      className={cn(
-        'border border-ds-default',
-        checked 
-          ? 'bg-ds-accent-violet-subtlest border-ds-selected' 
-          : 'hover:bg-ds-neutral-hovered/10 transition-colors duration-200'
-      )}
-    >
-      <Card.Content className="flex flex-col gap-space-md">
-        <Checkbox
-          checked={checked}
-          onChange={setChecked}
-          className="p-space-md"
-          label={
-            <div className="flex flex-col gap-space-xs">
-              <label>
-                I agree to the{' '}
-                <a href="#" className="text-ds-primary underline">
-                  Terms and Conditions
-                </a>
-              </label>
-              <label className="text-body-sm text-ds-subtlest">
-                By checking this box, you consent to our collection 
-                and use of your data as described in our Privacy Policy.
-              </label>
-            </div>
+            return (
+              <Card 
+                padding="none" 
+                className={cn(
+                  'border border-ds-default',
+                  checked 
+                    ? 'bg-ds-accent-violet-subtlest border-ds-selected' 
+                    : 'hover:bg-ds-neutral-hovered/10 transition-colors duration-200'
+                )}
+              >
+                <Card.Content className="flex flex-col gap-space-md">
+                  <Checkbox
+                    checked={checked}
+                    onChange={setChecked}
+                    className="p-space-md"
+                    label={
+                      <div className="flex flex-col gap-space-xs">
+                        <label>
+                          I agree to the{' '}
+                          <a href="#" className="text-ds-primary underline">
+                            Terms and Conditions
+                          </a>
+                        </label>
+                        <label className="text-body-sm text-ds-subtlest">
+                          By checking this box, you consent to our collection 
+                          and use of your data as described in our Privacy Policy.
+                        </label>
+                      </div>
+                    }
+                  />
+                </Card.Content>
+              </Card>
+            )
           }
-        />
-      </Card.Content>
-    </Card>
-  )
-}
         `} />
       </Canvas.Source>
     </Canvas>

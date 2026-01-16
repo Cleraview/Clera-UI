@@ -1,0 +1,150 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as RadioStories from "./Radio.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+<Meta title="UI/Form/Radio" of={RadioStories} />
+
+<DocsLayout>
+  <div>
+    # Radio
+
+    The `Radio` component represents a single choice input. It is intended for use both as a standalone control and as part of a `RadioGroup` for mutually exclusive selections. Use `Radio` when you need a simple, accessible choice input; prefer `RadioGroup` when managing multiple related options since it centralizes state and keyboard behavior. The component accepts all standard HTML input attributes and supports both controlled (`checked` + `onChange`) and uncontrolled usage. Use the `name` prop to group radios and `value` to identify options.
+
+    <DocInfo importStatement={`import { Radio } from '@clera-ui/form'`} sourcePath={`components/form/radio`} />
+
+    <br />
+
+    ## Examples
+
+    ### Controlled
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadioStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Radio } from '@clera-ui/form'
+
+          const Example = () => {
+            const [value, setValue] = useState('one')
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <Radio label="Option A" value="one" checked={value === 'one'} onChange={() => setValue('one')} />
+                <Radio label="Option B" value="two" checked={value === 'two'} onChange={() => setValue('two')} />
+              </div>
+            )
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### Uncontrolled
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadioStories.Uncontrolled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Radio } from '@clera-ui/form'
+
+          const Example = () => <Radio label="Standalone" value="single" />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### Custom label content
+
+    `Radio` accepts a ReactNode `label`, so you can render richer content (icons, multiple lines, etc.).
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadioStories.CustomLabelContent} />
+      </Canvas.Story>
+  
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Radio } from '@clera-ui/form'
+          import PromoVipIcon from '@/assets/docs/promo-vip.svg'
+
+          const Example = () => {
+            const [value, setValue] = useState('vip')
+
+            return (
+              <Radio
+                name="promotion"
+                value="vip"
+                checked={value === 'vip'}
+                onChange={() => setValue('vip')}
+                label={
+                  <div className="flex items-center gap-space-sm">
+                    <PromoVipIcon aria-label="VIP" className="w-8 h-8" />
+                    <div>
+                      <div className="font-semibold">VIP</div>
+                      <div className="opacity-80">
+                        Early access and member-only deals
+                      </div>
+                    </div>
+                  </div>
+                }
+              />
+            )
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+    
+    <br />
+
+    ## API
+    <ArgTypes />
+
+    <br />
+
+    ## **FAQ**
+
+    ### **When should I use a standalone `Radio` vs `RadioGroup`?**
+    Use a `RadioGroup` when presenting multiple related choices where only one option may be selected; it centralizes state via `value` and `onChange` and ensures consistent keyboard navigation. Use a standalone `Radio` when the input represents a single choice or when you need to place radios in a custom layout not suited to direct children.
+
+    ### **How do I control selection programmatically?**
+    For a group, keep a `value` in state and pass it to `RadioGroup` with an `onChange` callback. For single radios, use the `checked` prop and `onChange` to control the element.
+
+    ### **Accessibility notes**
+    Ensure grouped radios share the same `name` attribute so assistive tech recognizes the set. Provide clear labels and avoid using color alone to indicate selection. Native radio inputs handle most keyboard interactions (arrow keys, tab), so keep markup semantic.
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: 'radio',
+          label: 'Radio',
+          children: [
+            { 
+              id: 'examples', 
+              label: 'Examples', 
+              children: [
+                { id: 'controlled', label: 'Controlled' }, 
+                { id: 'uncontrolled', label: 'Uncontrolled' },
+                { id: 'custom-label-content', label: 'Custom Label Content' }
+              ] 
+            },
+          ],
+        },
+        { id: 'api', label: 'API' },
+        { 
+          id: 'faq', 
+          label: 'FAQ'
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

@@ -20,9 +20,82 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <br />
 
+    ## **Options API**
+
+    You can provide an `options` array to `RadioGroup` to render radios without manually adding `Radio` children.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadioGroupStories.WithOptions} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { RadioGroup } from '@clera-ui/form'
+
+          const options = [
+            { label: 'Monthly', value: 'monthly' },
+            { label: 'Yearly', value: 'yearly' },
+            { label: 'Lifetime', value: 'lifetime' },
+          ]
+
+          const Example = () => {
+            const [value, setValue] = useState('monthly')
+            return <RadioGroup value={value} onChange={setValue} name="billingCycle" options={options} />
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **Custom Label Content (Image + Text)**
+
+    `RadioGroup` supports custom label nodes via the Options API by passing a ReactNode label. The rendering and click behavior for custom labels is handled by `Radio`.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { useState } from 'react'
+        import { RadioGroup } from '@clera-ui/form'
+        import PromoSaleIcon from '@/assets/docs/promo-sale.svg'
+        import PromoVipIcon from '@/assets/docs/promo-vip.svg'
+
+        const promoOptions = [
+          { label: 'No Promotion', value: 'none' },
+          {
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <PromoSaleIcon aria-label="Sale" width={32} height={32} />
+                <span>Sale — 20% off</span>
+              </div>
+            ),
+            value: 'sale',
+          },
+          {
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <PromoVipIcon aria-label="VIP" width={32} height={32} />
+                <span>Exclusive Offer</span>
+              </div>
+            ),
+            value: 'exclusive',
+          },
+        ]
+
+        const Example = () => {
+          const [value, setValue] = useState('none')
+          return <RadioGroup name="promotion" value={value} onChange={setValue} options={promoOptions} />
+        }
+      `} />
+    </Canvas.Source>
+
+    For more complex label layouts (multiple lines, badges, etc.), render `Radio` children directly instead of using `options`.
+
+
     ## **Purpose and Context**
 
-    The `Radio` component is designed to provide users with a clear and intuitive way to select one option from a group. It is commonly used in scenarios such as surveys, preference settings, and any form where exclusive selection is required.
+    The `RadioGroup` component is designed to provide users with a clear and intuitive way to select one option from a group. It is commonly used in scenarios such as surveys, preference settings, and any form where exclusive selection is required.
 
     -  **Checked**: Indicates whether the radio button is selected.
     -  **Disabled**: Disables the radio button, preventing user interaction.
@@ -111,7 +184,19 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
             name="group1"
             value="option2"
           />
-        <RadioGroup>
+        </RadioGroup>
+      `} />
+    </Canvas.Source>
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        // Options API
+        const options = [
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+        ]
+
+        <RadioGroup value={value} onChange={setValue} name="group1" options={options} />
       `} />
     </Canvas.Source>
 

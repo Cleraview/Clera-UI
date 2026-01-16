@@ -32,7 +32,7 @@ export const styles = {
   disabledContainer: 'cursor-not-allowed opacity-60',
 
   rootBase:
-    'peer h-5 w-5 appearance-none rounded-sm border border-ds-input transition-all',
+    'peer h-4 w-4 appearance-none rounded-sm border border-ds-input transition-all',
   rootChecked:
     'data-[state=checked]:bg-ds-selected-bold data-[state=checked]:border-ds-selected',
   rootFocus:
@@ -41,9 +41,9 @@ export const styles = {
     'data-[state=checked]:bg-ds-disabled data-[state=checked]:border-ds-disabled cursor-not-allowed',
   rootDefaultCursor: 'cursor-pointer',
 
-  indicatorIcon: 'pl-[2px] text-ds-inverse dark:text-ds-default',
+  indicatorIcon: 'pl-[1px] text-ds-inverse dark:text-ds-default text-label-sm',
 
-  labelBase: 'text-label-sm select-none',
+  labelBase: 'text-ds-disabled text-label-sm select-none',
   labelDisabledCursor: 'pointer-events-none [&>*]:text-ds-disabled!',
   labelDefaultCursor: 'cursor-pointer text-ds-default ',
 }
