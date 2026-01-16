@@ -24,7 +24,7 @@ const PlainLayoutComponent: React.FC<PropsWithChildren> = ({ children }) => {
             <BrandLogo />
           </div>
 
-          <div className={styles.headerSlots}>{slots.Header}</div>
+          <div className={styles.headerSlots}>{slots.Header?.children}</div>
         </div>
       </header>
 

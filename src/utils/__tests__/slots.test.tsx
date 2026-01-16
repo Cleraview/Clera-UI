@@ -37,7 +37,7 @@ describe('utils/slots', () => {
       children,
       slotsConfig
     )
-    expect(slots.Header).toBe('Header Content')
+    expect(slots.Header?.children).toBe('Header Content')
     expect(slots.Footer).toBeUndefined()
     expect(remainingChildren).toEqual([])
   })
@@ -51,8 +51,8 @@ describe('utils/slots', () => {
       children,
       slotsConfig
     )
-    expect(slots.Header).toBe('Header Content')
-    expect(slots.Footer).toBe('Footer Content')
+    expect(slots.Header?.children).toBe('Header Content')
+    expect(slots.Footer?.children).toBe('Footer Content')
     expect(remainingChildren).toEqual([])
   })
 
@@ -68,8 +68,8 @@ describe('utils/slots', () => {
       slotsConfig
     )
 
-    expect(slots.Header).toBe('Header Content')
-    expect(slots.Footer).toBe('Footer Content')
+    expect(slots.Header?.children).toBe('Header Content')
+    expect(slots.Footer?.children).toBe('Footer Content')
     expect(remainingChildren).toEqual([
       <p key="1">Child 1</p>,
       <div key="3">Child 2</div>,
@@ -85,7 +85,7 @@ describe('utils/slots', () => {
       children,
       slotsConfig
     )
-    expect(slots.Header).toBe('Header')
+    expect(slots.Header?.children).toBe('Header')
     expect(remainingChildren).toEqual(<p key="2">The only child</p>)
   })
 
@@ -99,13 +99,13 @@ describe('utils/slots', () => {
       children,
       slotsConfig
     )
-    expect(slots.Header).toBe('Header 2')
+    expect(slots.Header?.children).toBe('Header 2')
     expect(remainingChildren).toEqual(<p key="2">Hello</p>)
   })
 
   it('should handle slots with no children (returning the component itself)', () => {
     const children = <SlotA />
     const { slots } = extractSlots(children, slotsConfig)
-    expect(slots.Header).toEqual(children)
+    expect(slots.Header?.children).toEqual(children)
   })
 })

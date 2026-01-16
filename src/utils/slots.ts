@@ -2,22 +2,27 @@ import { ReactNode, Children, isValidElement, PropsWithChildren } from 'react'
 
 type SlotComponents = Record<string, React.ComponentType<PropsWithChildren>>
 
+export type SlotData = {
+  children: ReactNode
+  props: Record<string, unknown>
+}
+
 type ExtractSlotsResult = {
-  slots: Record<string, ReactNode>
+  slots: Record<string, SlotData | undefined>
   children: ReactNode
 }
 
-type NodePropsChildren = {
-  props: {
-    children: React.ReactNode
+type NodeProps = {
+  props: Record<string, unknown> & {
+    children?: React.ReactNode
   }
 }
 
 export function extractSlots(
-  children: ReactNode,
+  children: ReactNode | undefined,
   slotComponents: SlotComponents
 ): ExtractSlotsResult {
-  const slots: Record<string, ReactNode> = {}
+  const slots: Record<string, SlotData | undefined> = {}
   const content: ReactNode[] = []
 
   Children.forEach(children, child => {
@@ -27,8 +32,12 @@ export function extractSlots(
       )?.[0]
 
       if (matchedSlotKey) {
-        const children = (child as NodePropsChildren).props.children
-        slots[matchedSlotKey] = children ?? child
+        const { children: slotChildren, ...restProps } = (child as NodeProps)
+          .props
+        slots[matchedSlotKey] = {
+          children: slotChildren ?? child,
+          props: restProps,
+        }
         return
       }
     }

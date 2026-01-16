@@ -1,0 +1,146 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import * as CheckboxGroupStories from "./CheckboxGroup.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+<Meta title="UI/Form/CheckboxGroup" of={CheckboxGroupStories} />
+
+<DocsLayout>
+  <div>
+    # CheckboxGroup
+
+    A component that renders a related set of checkboxes and manages their collective selection state.
+
+    <DocInfo 
+      importStatement={`import { CheckboxGroup } from '@clera-ui/form'`} 
+      sourcePath={`components/form/checkbox`} 
+    />
+
+    <br />
+
+    ## **Purpose and Context**
+
+    `CheckboxGroup` is useful when you need to present multiple related boolean options and allow the user to pick any number of them. It groups items for accessibility and simplifies controlled/uncontrolled state handling.
+
+    - **Grouping**: Presents semantically related options as a single group.
+    - **State patterns**: Supports both controlled (`value`) and uncontrolled (`defaultValue`) usage.
+    - **Disabled handling**: Accepts a `disabled` prop to disable all items, and individual options may be disabled.
+    - **Layout**: Use the `layout` prop to switch between vertical (default) and horizontal arrangement. If you provide a custom `className`, the layout variant is not applied.
+
+    <br />
+
+    ## **Examples**
+
+
+    ### **Playground**
+
+    A basic uncontrolled example using `options` and the `layout` prop.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CheckboxGroupStories.Playground} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+import CheckboxGroup from '@clera-ui/form'
+
+const options = [
+  { value: 'a', label: 'Alpha' },
+  { value: 'b', label: 'Bravo' },
+  { value: 'c', label: 'Charlie', disabled: true },
+]
+
+<CheckboxGroup name="basic" options={options} layout="horizontal" />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Controlled**
+
+    The controlled example demonstrates passing `value` and `onChange` to manage selection externally.
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CheckboxGroupStories.Controlled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+import { useState } from 'react'
+import CheckboxGroup from '@clera-ui/form'
+
+const options = [
+  { value: 'x', label: 'X' },
+  { value: 'y', label: 'Y' },
+]
+
+function ControlledExample() {
+  const [vals, setVals] = useState(['y'])
+  return <CheckboxGroup options={options} value={vals} onChange={setVals} />
+}
+
+<ControlledExample />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+
+    <ArgTypes />
+
+    <br />
+
+    ## **FAQ**
+
+    ### **How do I use this in a `Form`?**
+
+    When integrating with form libraries like `react-hook-form`, map the array of selected values to the form field. Because `CheckboxGroup` emits an array of strings via `onChange`, you can directly use the array as the field value.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+// Pseudocode with react-hook-form
+import { useForm } from 'react-hook-form'
+import CheckboxGroup from '@clera-ui/form'
+
+function FormExample() {
+  const { control, setValue } = useForm()
+
+  // when CheckboxGroup changes, call setValue('selectedOptions', values)
+  return (
+    <CheckboxGroup
+      options={[{value:'a', label:'A'}]}
+      onChange={(vals) => setValue('selectedOptions', vals)}
+    />
+  )
+}
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents 
+      items={[
+        {
+          id: "checkbox-group",
+          label: "CheckboxGroup",
+          children: [
+            { id: "purpose-and-context", label: "Purpose and Context" },
+            { id: "examples", label: "Examples", children: [
+              { id: "playground", label: "Playground" },
+              { id: "controlled", label: "Controlled" },
+            ] }
+          ]
+        },
+        { id: "api", label: "API" },
+        { id: "faq", label: "FAQ" },
+      ]}
+    />
+  </div>
+</DocsLayout>

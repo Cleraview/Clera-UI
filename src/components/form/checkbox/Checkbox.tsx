@@ -1,6 +1,6 @@
 'use client'
 
-import React, { forwardRef, useId } from 'react'
+import React, { forwardRef, useId, useRef, useImperativeHandle } from 'react'
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
 import { FiCheck } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
@@ -10,7 +10,7 @@ export interface CheckboxProps extends Omit<
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
   'onChange'
 > {
-  label: React.ReactNode
+  label: React.ReactNode | string
   onChange?: (checked: boolean) => void
 }
 
@@ -20,18 +20,35 @@ export const Checkbox = forwardRef<
 >(({ label, id: idProp, className, onChange, disabled, ...props }, ref) => {
   const autoId = useId()
   const id = idProp || autoId
+  const internalRef = useRef<HTMLButtonElement>(null)
+  const hasCustomLabel = Boolean(typeof label !== 'string')
+
+  useImperativeHandle(ref, () => internalRef.current as HTMLButtonElement)
+
+  const handleWrapperClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return
+    if (disabled) return
+    internalRef.current?.click()
+  }
 
   return (
-    <div className={cn(styles.container, disabled && styles.disabledContainer)}>
+    <div
+      role="none"
+      onClick={handleWrapperClick}
+      className={cn(
+        styles.container(hasCustomLabel),
+        disabled && styles.disabledContainer,
+        className
+      )}
+    >
       <CheckboxPrimitive.Root
-        ref={ref}
+        ref={internalRef}
         id={id}
         className={cn(
           styles.rootBase,
           styles.rootChecked,
           styles.rootFocus,
-          disabled ? styles.rootDisabled : styles.rootDefaultCursor,
-          className
+          disabled ? styles.rootDisabled : styles.rootDefaultCursor
         )}
         onCheckedChange={onChange}
         disabled={disabled}
@@ -43,15 +60,16 @@ export const Checkbox = forwardRef<
           )}
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      <label
-        htmlFor={id}
-        className={cn(
-          styles.labelBase,
-          disabled ? styles.labelDisabledCursor : styles.labelDefaultCursor
-        )}
-      >
-        {label}
-      </label>
+      {label && (
+        <span
+          className={cn(
+            styles.labelBase,
+            disabled ? styles.labelDisabledCursor : styles.labelDefaultCursor
+          )}
+        >
+          {typeof label === 'string' ? label : label}
+        </span>
+      )}
     </div>
   )
 })
