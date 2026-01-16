@@ -26,10 +26,10 @@ const TypographyTable = ({ list }: { list: TypographyToken }) => {
               <CodeToken token={item.token as string} />
             </div>
             <div>
-              <label>{item.fontSize}</label>
+              <label className="text-label-sm">{item.fontSize}</label>
             </div>
             <div>
-              <label>{item.lineHeight}</label>
+              <label className="text-label-sm">{item.lineHeight}</label>
             </div>
           </div>
         ))}
