@@ -97,6 +97,8 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
       [options]
     )
 
+    const totalItems = allOptionsFlat.length
+
     useEffect(() => {
       if (value) {
         const found = allOptionsFlat.find(opt => opt.value === value)
@@ -197,28 +199,30 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
             </span>
             {renderLoading()}
           </ComboBoxLoading>
+        ) : !Boolean(totalItems) ? (
+          <ComboBoxEmpty>
+            {notFoundContent ?? 'No results found.'}
+          </ComboBoxEmpty>
         ) : (
           <>
-            <ComboBoxEmpty>
-              {notFoundContent ?? 'No results found.'}
-            </ComboBoxEmpty>
-
-            {Object.entries(options).map(([group, items]) => (
-              <ComboBoxGroup key={group} heading={group}>
-                {items.map(option => (
-                  <ComboBoxItem
-                    key={option.value}
-                    value={option.value}
-                    onSelect={handleSelect}
-                    inputSize={inputSize}
-                    isSelected={option.value === value}
-                    disabled={option.disabled}
-                  >
-                    {renderItem(option)}
-                  </ComboBoxItem>
-                ))}
-              </ComboBoxGroup>
-            ))}
+            {Object.entries(options)
+              .filter(([, items]) => items && items.length > 0)
+              .map(([group, items]) => (
+                <ComboBoxGroup key={group} heading={group}>
+                  {items.map(option => (
+                    <ComboBoxItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={handleSelect}
+                      inputSize={inputSize}
+                      isSelected={option.value === value}
+                      disabled={option.disabled}
+                    >
+                      {renderItem(option)}
+                    </ComboBoxItem>
+                  ))}
+                </ComboBoxGroup>
+              ))}
           </>
         )}
       </BaseComboBox>
