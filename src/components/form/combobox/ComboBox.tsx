@@ -3,12 +3,7 @@
 import React, { forwardRef, ReactNode, useState } from 'react'
 import { FiCheck } from 'react-icons/fi'
 import { type FieldSize } from '@/components/_core/field-config'
-import {
-  BaseComboBox,
-  ComboBoxItem,
-  ComboBoxEmpty,
-  ComboBoxGroup,
-} from './BaseComboBox'
+import { BaseComboBox, ComboBoxItem, ComboBoxGroup } from './BaseComboBox'
 import { styles } from './styles'
 import { cn } from '@/utils'
 
@@ -33,6 +28,7 @@ export type ComboBoxProps = {
   hasError?: boolean
   className?: string
   placeholder?: string
+  emptyMessage?: ReactNode | string
   onChange?: (value: string) => void
   onBlur?: () => void
   groupBy?: keyof ComboBoxOption
@@ -54,6 +50,7 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
       hasError,
       defaultValue,
       placeholder,
+      emptyMessage,
       onChange,
       onBlur,
       groupBy,
@@ -68,6 +65,11 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
     const activeValue = isControlled ? value : internalValue
 
     const displayLabel = options.find(o => o.value === activeValue)?.label
+
+    const handleOpenChange = (isOpen: boolean) => {
+      setOpen(isOpen)
+      if (!isOpen) onBlur?.()
+    }
 
     const handleSelect = (val: string) => {
       if (!isControlled) setInternalValue(val)
@@ -130,10 +132,7 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
         displayValue={displayLabel}
         placeholder={placeholder}
         open={open}
-        onOpenChange={isOpen => {
-          setOpen(isOpen)
-          if (!isOpen) onBlur?.()
-        }}
+        onOpenChange={handleOpenChange}
         searchValue={search}
         onSearchChange={setSearch}
         inputSize={inputSize}
@@ -144,9 +143,8 @@ export const ComboBox = forwardRef<HTMLButtonElement, ComboBoxProps>(
         hasError={hasError}
         className={className}
         shouldFilter={true}
+        emptyMessage={emptyMessage}
       >
-        <ComboBoxEmpty>No results found.</ComboBoxEmpty>
-
         {renderChildren}
       </BaseComboBox>
     )

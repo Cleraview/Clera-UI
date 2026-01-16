@@ -15,7 +15,6 @@ import {
   BaseComboBox,
   ComboBoxItem,
   ComboBoxGroup,
-  ComboBoxEmpty,
   ComboBoxLoading,
 } from './BaseComboBox'
 import { styles } from './styles'
@@ -97,7 +96,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
       [options]
     )
 
-    const totalItems = allOptionsFlat.length
+    // totalItems handled by BaseComboBox; no local usage required
 
     useEffect(() => {
       if (value) {
@@ -190,6 +189,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
         required={required}
         hasError={hasError}
         className={className}
+        empty={notFoundContent}
         shouldFilter={false}
       >
         {effectiveLoading ? (
@@ -199,10 +199,6 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
             </span>
             {renderLoading()}
           </ComboBoxLoading>
-        ) : !Boolean(totalItems) ? (
-          <ComboBoxEmpty>
-            {notFoundContent ?? 'No results found.'}
-          </ComboBoxEmpty>
         ) : (
           <>
             {Object.entries(options)
