@@ -11,6 +11,7 @@
     "doc:deploy": "pnpm doc:build && vercel deploy --target=production --prebuilt"
   },
   "dependencies": {
+    "@clera/charts": "workspace:*",
     "@clera/tokens": "workspace:*",
     "@clera/ui": "workspace:*"
   },

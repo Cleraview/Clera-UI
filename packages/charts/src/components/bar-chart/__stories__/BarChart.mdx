@@ -1,0 +1,44 @@
+import { Meta, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as BarChartStories from './BarChart.stories'
+
+<Meta title="Charts/BarChart" of={BarChartStories} />
+
+# BarChart
+
+A lightweight horizontal bar chart for comparing categorical values. Each row renders a label, a proportionally-sized bar, and an optional numeric value.
+
+## When to use
+
+- Comparing a small set (≲ 10) of named values at a glance.
+- Showing breakdowns where the relative size matters more than precise numbers.
+- Inside dashboards or KPI cards alongside other primitives from `@clera/ui`.
+
+For dense time-series, scatter plots, or anything interactive, reach for a fuller charting primitive (coming later in `@clera/charts`).
+
+## Examples
+
+### Default
+
+<Story of={BarChartStories.Default} />
+
+### Variants
+
+Pass a `variant` on each datum to recolor individual bars. Variants pull from `@clera/tokens` so they automatically respect the active light/dark theme.
+
+<Story of={BarChartStories.Variants} />
+
+### Formatted values
+
+Supply a `formatValue` callback to render currency, percentages, abbreviated counts, etc.
+
+<Story of={BarChartStories.FormattedValues} />
+
+### Without values
+
+Hide the trailing value column when the bar itself is enough context.
+
+<Story of={BarChartStories.WithoutValues} />
+
+## API
+
+<ArgTypes of={BarChartStories} />
