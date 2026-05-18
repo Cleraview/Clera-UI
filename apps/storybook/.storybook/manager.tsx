@@ -19,10 +19,5 @@ addons.setConfig({
   theme: light,
   showNav: true,
   showPanel: true,
-  // layoutCustomisations: {
-  //   showToolbar() {
-  //     return false
-  //   },
-  // },
   sidebar: customSidebar
 })

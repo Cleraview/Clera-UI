@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import { THEME_STORAGE_KEY, ThemeProvider } from '../context/ThemeContext'
+import { THEME_STORAGE_KEY, ThemeProvider } from '@clera/ui/theme'
 import type React from 'react'
 
 export const withThemeProvider = (

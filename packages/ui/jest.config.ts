@@ -13,7 +13,6 @@ const config: Config = {
   moduleNameMapper: {
     '\\.(css|scss|sass)$': 'identity-obj-proxy',
     '\\.svg$': '<rootDir>/__mocks__/svg.ts',
-    '^@root/(.*)$': '<rootDir>/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [

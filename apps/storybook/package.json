@@ -1,0 +1,39 @@
+{
+  "name": "@clera/storybook",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unified Storybook app aggregating stories from @clera/ui (and future @clera/charts).",
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build",
+    "build:static": "storybook build -o storybook-static",
+    "doc:build": "vercel build --target=production",
+    "doc:deploy": "pnpm doc:build && vercel deploy --target=production --prebuilt"
+  },
+  "dependencies": {
+    "@clera/tokens": "workspace:*",
+    "@clera/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@mdx-js/loader": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@storybook/addon-docs": "^10.1.8",
+    "@storybook/addon-onboarding": "^10.1.8",
+    "@storybook/addon-themes": "^10.1.8",
+    "@storybook/addon-webpack5-compiler-babel": "^4.0.0",
+    "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
+    "@storybook/builder-webpack5": "^10.1.8",
+    "@storybook/nextjs": "^10.1.8",
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20.19.27",
+    "next": "^16.0.10",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-icons": "^5.5.0",
+    "remark-gfm": "^4.0.1",
+    "storybook": "^10.1.8",
+    "storybook-addon-deep-controls": "^0.10.0",
+    "typescript": "^5.9.3",
+    "webpack": "^5.103.0"
+  }
+}

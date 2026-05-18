@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "declaration": false,
+    "plugins": [{ "name": "next" }]
+  },
+  "include": [".storybook/**/*.ts", ".storybook/**/*.tsx"]
+}

@@ -6,6 +6,12 @@
   "main": "dist/lib/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./styles/*.css": "./src/styles/*.css"
+  },
   "author": {
     "name": "itsferdiardiansa"
   },
@@ -20,10 +26,7 @@
     "bundle:meta": "cp README.md LICENSE dist/",
     "bundle:package": "node scripts/generate-package.ts",
     "bundle": "pnpm clean && pnpm bundle:es && pnpm bundle:cjs && pnpm bundle:types && pnpm bundle:css && pnpm bundle:umd && pnpm bundle:meta && pnpm bundle:package",
-    "build": "storybook build",
     "dev": "ts-node --esm scripts/dev.ts",
-    "doc:build": "vercel build --target=production",
-    "doc:deploy": "pnpm doc:build && vercel deploy --target=production --prebuilt",
     "lint": "eslint --cache \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --cache \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",

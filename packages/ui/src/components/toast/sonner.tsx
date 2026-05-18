@@ -7,7 +7,7 @@ import type { ExternalToast as SonnerOptionsType } from 'sonner'
 import { toast as sonnerToast, Toaster } from 'sonner'
 import { Toast, type ToastActionPlacement } from './Toast'
 import { Button } from '@/components/button'
-import { cn } from '@root/src/utils'
+import { cn } from '@/utils'
 
 const MAX_ACTIONS = 3
 

@@ -14,3 +14,6 @@ export * from './components/skeleton'
 
 // Utils
 export * from './utils'
+
+// Theme
+export * from './theme'

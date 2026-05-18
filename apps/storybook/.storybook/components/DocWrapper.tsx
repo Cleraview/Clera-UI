@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react'
 import type React from 'react'
 import { DocsContainer } from '@storybook/addon-docs/blocks'
-import { useTheme, getInitialTheme, THEME_STORAGE_KEY } from '../context/ThemeContext'
+import { useTheme, getInitialTheme, THEME_STORAGE_KEY } from '@clera/ui/theme'
 
 type StoryTitle = { title?: string }
 export type DocsContext = {

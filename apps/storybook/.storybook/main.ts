@@ -1,12 +1,17 @@
+import { fileURLToPath } from 'url'
 import remarkGfm from 'remark-gfm'
 import path from 'path'
 import type { Configuration as WebpackConfiguration } from 'webpack'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const WORKSPACE_ROOT = path.resolve(__dirname, '../../..')
+const fromRoot = (...parts: string[]) => path.join(WORKSPACE_ROOT, ...parts)
+
 type StorybookConfig = Record<string, any>
 const config: StorybookConfig = {
   stories: [
-    "../@(src|docs)/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    fromRoot('packages/*/src/**/*.mdx'),
+    fromRoot('packages/*/src/**/*.stories.@(js|jsx|mjs|ts|tsx)')
   ],
   addons: [
     "@storybook/addon-webpack5-compiler-swc",
@@ -27,9 +32,9 @@ const config: StorybookConfig = {
     options: {}
   },
   staticDirs: [
-    "../public",
+    fromRoot('packages/ui/public'),
     {
-      from: "../src/assets/docs", to: "/assets"
+      from: fromRoot('packages/ui/src/assets/docs'), to: "/assets"
     }
   ],
   webpackFinal: async (config: WebpackConfiguration) => {
@@ -47,10 +52,10 @@ const config: StorybookConfig = {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        '@': path.resolve(path.resolve(), '../src/'),
+        '@': fromRoot('packages/ui/src'),
       };
     }
-    
+
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],

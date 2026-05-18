@@ -10,7 +10,7 @@ import { GoChevronDown } from 'react-icons/go'
 import { Dropdown } from '@/components/dropdown-menu'
 import { Button } from '@/components/button'
 import { Tooltip } from '@/components/tooltip'
-import { useTheme } from '@root/.storybook/context/ThemeContext'
+import { useTheme } from '../../theme'
 import { cn } from '@/utils/tailwind'
 
 type CanvasProps = {

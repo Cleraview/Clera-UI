@@ -1,4 +1,4 @@
-import colorThemes from '!!css-loader!@/styles/themes/color.css'
+import colorThemes from '!!css-loader!@clera/tokens/themes/color.css'
 
 const themeRegex = /theme\(colors\.([a-z]+)\.([a-z0-9]+)\)/i
 const tokenRegex = /(--[a-z0-9-]+): (.*);/g

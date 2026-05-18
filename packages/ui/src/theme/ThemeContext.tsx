@@ -9,7 +9,7 @@ export const getInitialTheme = (): Theme => {
     try {
       const stored = localStorage.getItem(THEME_STORAGE_KEY)
       return stored as Theme
-    } catch (e) {
+    } catch {
       return 'light'
     }
   }
@@ -26,7 +26,9 @@ const ThemeContext = createContext<ThemeContextType>({
   handleSetTheme: () => {},
 })
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [theme, setTheme] = useState<Theme>(getInitialTheme())
 
   useEffect(() => {
@@ -34,8 +36,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     try {
       localStorage.setItem(THEME_STORAGE_KEY, theme)
-    } catch (e) {
-    }
+    } catch {}
 
     if (theme === 'dark') {
       htmlElement.setAttribute('data-theme', 'dark')

@@ -4,7 +4,7 @@ import { useStorybookApi } from 'storybook/manager-api'
 import { FiMoon, FiSun } from 'react-icons/fi'
 import { FaGithub, FaStar } from 'react-icons/fa'
 import { light, dark } from '../theme'
-import { cn } from '../../src/utils'
+import { cn } from '@clera/ui/utils'
 
 export const ADDON_ID = 'custom-header'
 export const TOOL_ID = `${ADDON_ID}/tool`

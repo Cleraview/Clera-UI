@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority'
-import { cn } from '@root/src/utils/tailwind/tailwind'
+import { cn } from '@/utils/tailwind/tailwind'
 
 export const styles = {
   root: cva(

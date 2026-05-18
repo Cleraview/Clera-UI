@@ -1,9 +1,9 @@
 import type React from 'react'
-import { ThemeProvider } from './context/ThemeContext'
+import { ThemeProvider } from '@clera/ui/theme'
 import { withThemeProvider } from './decorator/withThemeProvider'
 import { DocsContainerArgs, DocWrapper } from './components/DocWrapper'
-import '../src/styles/globals.css'
-import '../src/styles/prose.css'
+import '@clera/ui/styles/globals.css'
+import '@clera/ui/styles/prose.css'
 
 type DecoratorFn = (Story: React.ComponentType<Record<string, unknown>>) => React.ReactElement
 
