@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { Checkbox } from '../Checkbox'
+import { Card } from '@/components/card'
+import { cn } from '@/utils/tailwind'
 
 const meta: Meta<typeof Checkbox> = {
   title: 'UI/Form/Checkbox',
@@ -93,5 +95,45 @@ export const Disabled: Story = {
   },
   args: {
     disabled: true,
+  },
+}
+
+export const CustomLabel: Story = {
+  render: args => {
+    const [checked, setChecked] = useState(false)
+    return (
+      <Card
+        padding="none"
+        className={cn(
+          'border border-ds-default',
+          checked
+            ? 'bg-ds-accent-violet-subtlest border-ds-selected'
+            : 'hover:bg-ds-neutral-hovered/10 transition-colors duration-200'
+        )}
+      >
+        <Card.Content className="flex flex-col gap-space-md">
+          <Checkbox
+            {...args}
+            checked={checked}
+            onChange={setChecked}
+            className="p-space-md"
+            label={
+              <div className="flex flex-col gap-space-xs">
+                <label>
+                  I agree to the{' '}
+                  <a href="#" className="text-ds-primary underline">
+                    Terms and Conditions
+                  </a>
+                </label>
+                <label className="text-body-sm text-ds-subtlest">
+                  By checking this box, you consent to our collection and use of
+                  your data as described in our Privacy Policy.
+                </label>
+              </div>
+            }
+          />
+        </Card.Content>
+      </Card>
+    )
   },
 }

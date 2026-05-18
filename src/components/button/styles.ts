@@ -121,7 +121,7 @@ export const styles = {
   loadingWrapper:
     'absolute flex gap-space-sm items-center justify-center cursor-not-allowed',
   loadingSpinner:
-    'w-4 h-4 rounded-full inline-block border-t-[2px] border-r-[2px] border-r-transparent box-border animate-spin',
+    'w-4 h-4 rounded-full inline-block border-t-[2px] border-r-[2px] border-ds-default dark:border-ds-inverse border-r-transparent box-border animate-spin',
   contentWrapper: 'flex gap-space-sm items-center justify-center',
   contentHidden: 'invisible',
   contentReverse: 'flex-row-reverse',

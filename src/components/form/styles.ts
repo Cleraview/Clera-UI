@@ -44,7 +44,7 @@ export const root = (fullWidth?: boolean, disabled?: boolean) =>
 
 export const inputContentWrapper = (fullWidth?: boolean, disabled?: boolean) =>
   cn(
-    'inline-flex flex-col justify-center',
+    'flex flex-col justify-center',
     fullWidth ? 'w-full' : 'min-w-[20ch]',
     disabled && 'cursor-not-allowed'
   )

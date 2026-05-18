@@ -15,7 +15,6 @@ import {
   BaseComboBox,
   ComboBoxItem,
   ComboBoxGroup,
-  ComboBoxEmpty,
   ComboBoxLoading,
 } from './BaseComboBox'
 import { styles } from './styles'
@@ -96,6 +95,8 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
       () => Object.values(options).flat(),
       [options]
     )
+
+    // totalItems handled by BaseComboBox; no local usage required
 
     useEffect(() => {
       if (value) {
@@ -188,6 +189,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
         required={required}
         hasError={hasError}
         className={className}
+        empty={notFoundContent}
         shouldFilter={false}
       >
         {effectiveLoading ? (
@@ -199,26 +201,24 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
           </ComboBoxLoading>
         ) : (
           <>
-            <ComboBoxEmpty>
-              {notFoundContent ?? 'No results found.'}
-            </ComboBoxEmpty>
-
-            {Object.entries(options).map(([group, items]) => (
-              <ComboBoxGroup key={group} heading={group}>
-                {items.map(option => (
-                  <ComboBoxItem
-                    key={option.value}
-                    value={option.value}
-                    onSelect={handleSelect}
-                    inputSize={inputSize}
-                    isSelected={option.value === value}
-                    disabled={option.disabled}
-                  >
-                    {renderItem(option)}
-                  </ComboBoxItem>
-                ))}
-              </ComboBoxGroup>
-            ))}
+            {Object.entries(options)
+              .filter(([, items]) => items && items.length > 0)
+              .map(([group, items]) => (
+                <ComboBoxGroup key={group} heading={group}>
+                  {items.map(option => (
+                    <ComboBoxItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={handleSelect}
+                      inputSize={inputSize}
+                      isSelected={option.value === value}
+                      disabled={option.disabled}
+                    >
+                      {renderItem(option)}
+                    </ComboBoxItem>
+                  ))}
+                </ComboBoxGroup>
+              ))}
           </>
         )}
       </BaseComboBox>

@@ -51,6 +51,15 @@ const meta: Meta<typeof ComboBox> = {
         defaultValue: { summary: 'Select a country...' },
       },
     },
+    emptyMessage: {
+      control: 'text',
+      description:
+        'Message to display when there are no options available or no search results.',
+      table: {
+        type: { summary: 'ReactNode | string' },
+        defaultValue: { summary: 'No results found.' },
+      },
+    },
     fullWidth: {
       control: 'boolean',
       description: 'Determines if the combobox should take up the full width.',
@@ -115,6 +124,7 @@ const meta: Meta<typeof ComboBox> = {
     ],
     placeholder: 'Select a country...',
     inputSize: 'md',
+    emptyMessage: 'No data found.',
   },
   decorators: [Story => <div className="min-w-[200px]">{Story()}</div>],
 }

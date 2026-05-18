@@ -726,10 +726,10 @@
         },
         "inverse": {
           "$type": "color",
-          "$value": "{color.neutral.50}",
+          "$value": "{color.neutral.900}",
           "$extensions": {
             "mode": {
-              "dark": "{color.neutral.950}"
+              "dark": "{color.neutral.100}"
             }
           }
         },

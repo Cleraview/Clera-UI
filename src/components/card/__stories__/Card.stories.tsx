@@ -16,7 +16,7 @@ const textSizeKeys = Object.keys(textSizeMap)
 
 const CenteredDecorator = (Story: React.ComponentType) => (
   <div className="w-full flex justify-center">
-    <div className="w-full max-w-[300px]">
+    <div className="min-w-[280px] max-w-[300px]">
       <Story />
     </div>
   </div>

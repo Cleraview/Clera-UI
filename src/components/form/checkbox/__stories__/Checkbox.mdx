@@ -98,6 +98,80 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     <br />
 
+    ### **Custom Label**
+
+    The `label` prop accepts a `ReactNode`, enabling rich, interactive labels with additional content like links, descriptions, or custom layouts. This is useful when you need to provide more context or legal disclaimers alongside the checkbox.
+
+    **When to use:**
+    - Consent forms requiring links to Terms of Service or Privacy Policy
+    - Multi-line labels with title and description
+    - Interactive cards where the entire area toggles the checkbox
+
+    **Why:**
+    - Improves user experience by keeping related content visually grouped
+    - Maintains accessibility while allowing complex label structures
+    - Enables visual feedback (e.g., background color change) when checked
+
+    **How:**
+    - Pass a JSX element to the `label` prop instead of a string
+    - Wrap the checkbox in a `Card` or styled container for enhanced visuals
+    - Use conditional styling based on the `checked` state
+
+    <Canvas>
+      <Canvas.Story>
+        <Story of={CheckboxStories.CustomLabel} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Checkbox } from '@clera-ui/form'
+          import { Card } from '@clera-ui/card'
+          import { cn } from '@/utils/tailwind'
+
+          const CustomLabelExample = () => {
+            const [checked, setChecked] = useState(false)
+
+            return (
+              <Card 
+                padding="none" 
+                className={cn(
+                  'border border-ds-default',
+                  checked 
+                    ? 'bg-ds-accent-violet-subtlest border-ds-selected' 
+                    : 'hover:bg-ds-neutral-hovered/10 transition-colors duration-200'
+                )}
+              >
+                <Card.Content className="flex flex-col gap-space-md">
+                  <Checkbox
+                    checked={checked}
+                    onChange={setChecked}
+                    className="p-space-md"
+                    label={
+                      <div className="flex flex-col gap-space-xs">
+                        <label>
+                          I agree to the{' '}
+                          <a href="#" className="text-ds-primary underline">
+                            Terms and Conditions
+                          </a>
+                        </label>
+                        <label className="text-body-sm text-ds-subtlest">
+                          By checking this box, you consent to our collection 
+                          and use of your data as described in our Privacy Policy.
+                        </label>
+                      </div>
+                    }
+                  />
+                </Card.Content>
+              </Card>
+            )
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
     ## **API**
     
     Below are the props for the `Checkbox` component:
@@ -160,6 +234,10 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
                 {
                   id: "disabled",
                   label: "Disabled"
+                },
+                {
+                  id: "custom-label",
+                  label: "Custom Label"
                 }
               ]
             }

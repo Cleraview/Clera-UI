@@ -56,6 +56,10 @@ export type BaseComboBoxProps = {
   children: ReactNode
   className?: string
   triggerClassName?: string
+  /** Custom node to render when there are no items */
+  empty?: ReactNode
+  /** Fallback empty message when `empty` is not provided */
+  emptyMessage?: ReactNode
 }
 
 export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
@@ -81,6 +85,8 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
       required,
       hasError,
       children,
+      empty,
+      emptyMessage,
       className,
       triggerClassName,
     },
@@ -135,6 +141,23 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
         )
       })
     })()
+
+    const hasAnyItems = (nodes: ReactNode): boolean => {
+      let found = false
+      Children.forEach(nodes, node => {
+        if (found) return
+        if (!isValidElement(node)) return
+        if (node.type === ComboBoxItem) {
+          found = true
+          return
+        }
+        const childNodes = (node.props as { children?: ReactNode })?.children
+        if (childNodes) {
+          if (hasAnyItems(childNodes)) found = true
+        }
+      })
+      return found
+    }
 
     return (
       <FormInputWrapper
@@ -222,7 +245,13 @@ export const BaseComboBox = forwardRef<HTMLButtonElement, BaseComboBoxProps>(
                   aria-label={`Search ${label}`}
                 />
                 <CommandList className={styles.commandList}>
-                  {renderedChildren}
+                  {hasAnyItems(children) ? (
+                    renderedChildren
+                  ) : (
+                    <CommandEmpty className={styles.empty}>
+                      {empty ?? emptyMessage ?? 'No results found.'}
+                    </CommandEmpty>
+                  )}
                 </CommandList>
               </Command>
             </Popover.Content>

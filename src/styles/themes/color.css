@@ -77,7 +77,7 @@
   --border-color-ds-disabled: theme(colors.neutral.300);
   --border-color-ds-focused: theme(colors.violet.500);
   --border-color-ds-input: theme(colors.neutral.200);
-  --border-color-ds-inverse: theme(colors.neutral.50);
+  --border-color-ds-inverse: theme(colors.neutral.900);
   --border-color-ds-selected: theme(colors.violet.700);
   --border-color-ds-brand: theme(colors.violet.700);
   --border-color-ds-destructive: theme(colors.red.600);
@@ -536,7 +536,7 @@
   --border-color-ds-disabled: theme(colors.neutral.700);
   --border-color-ds-focused: theme(colors.violet.300);
   --border-color-ds-input: theme(colors.neutral.600);
-  --border-color-ds-inverse: theme(colors.neutral.950);
+  --border-color-ds-inverse: theme(colors.neutral.100);
   --border-color-ds-selected: theme(colors.violet.500);
   --border-color-ds-brand: theme(colors.violet.400);
   --border-color-ds-destructive: theme(colors.red.300);
@@ -915,4 +915,35 @@
   --chart-ds-info-bold: theme(colors.blue.300);
   --chart-ds-info-bold-hovered: theme(colors.blue.200);
 }
+}
+
+/* Sonner toast variables mapped to DS tokens for deterministic coloring */
+[data-sonner-toaster] {
+  --normal-bg: var(--background-color-ds-neutral);
+  --normal-text: var(--text-color-ds-default);
+  --normal-border: var(--border-color-ds-default);
+
+  --success-bg: red;
+  --success-text: var(--text-color-ds-default);
+  --success-border: var(--border-color-ds-success);
+
+  --error-bg: var(--background-color-ds-destructive-bold);
+  --error-text: var(--text-color-ds-inverse);
+  --error-border: var(--border-color-ds-destructive);
+
+  --info-bg: var(--background-color-ds-info-bold);
+  --info-text: var(--text-color-ds-inverse);
+  --info-border: var(--border-color-ds-info);
+
+  --warning-bg: var(--background-color-ds-warning-bold);
+  --warning-text: var(--text-color-ds-warning-inverse);
+  --warning-border: var(--border-color-ds-warning);
+}
+
+/* Dark-mode overrides to match `dark:text-ds-default` */
+.dark [data-sonner-toaster] {
+  --success-text: var(--text-color-ds-default);
+  --error-text: var(--text-color-ds-default);
+  --info-text: var(--text-color-ds-default);
+  --warning-text: var(--text-color-ds-default);
 }

@@ -101,7 +101,7 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
         {link && <Link href={link} className={styles.link} />}
 
         {slots.Thumbnail
-          ? slots.Thumbnail
+          ? slots.Thumbnail.children
           : thumbnail && (
               <CardThumbnailSlot
                 src={thumbnail}
@@ -114,8 +114,13 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
             )}
 
         {slots.Content ? (
-          <div className={styles.card({ padding, paddingAxis })}>
-            {slots.Content}
+          <div
+            className={cn(
+              thumbnail && styles.card({ padding, paddingAxis }),
+              slots.Content.props?.className as string
+            )}
+          >
+            {slots.Content.children}
           </div>
         ) : (
           <div
@@ -221,8 +226,10 @@ export const CardComponent = forwardRef<HTMLDivElement, CardProps>(
   }
 )
 
-export const CardContentSlot: React.FC<PropsWithChildren> = ({ children }) => {
-  return children
+export const CardContentSlot: React.FC<
+  PropsWithChildren<{ className?: string }>
+> = ({ children }) => {
+  return <>{children}</>
 }
 
 type CardThumbnailSlotProps = Pick<CardProps, 'roundedSize'> & {
