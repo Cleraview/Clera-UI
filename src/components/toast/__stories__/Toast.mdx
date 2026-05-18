@@ -1,0 +1,497 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import * as ToastStories from "./Toast.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+
+<Meta title="UI/Toast" of={ToastStories} />
+
+<DocsLayout toc>
+  <div>
+    # Toast
+
+    A transient, non-blocking notification used to surface short status or feedback messages without interrupting the user's flow.
+    <DocInfo importStatement={`import { customToast, SonnerToaster } from '@clera-ui/toast'`} sourcePath={`components/toast`} />
+
+    <br />
+
+    ## **When To Use**
+
+    Toasts are best for short, low-priority feedback that does not require an explicit acknowledgment from the user. They appear briefly, then dismiss automatically, so they should never carry information the user must read to continue their task.
+
+    In {config.title}, toasts are configurable through their props:
+
+    -   **Variant**: Choose a visual style that matches the semantic purpose of the message.
+        -   *Primary*: Default notification.
+        -   *Success*: Confirms a successful action.
+        -   *Info*: Conveys neutral, contextual information.
+        -   *Warning*: Highlights a potential issue that needs attention.
+        -   *Destructive*: Reports a failure or error.
+    -   **Title**: Short heading that summarizes the message at a glance.
+    -   **Description**: Optional supporting detail rendered below the title.
+    -   **Icon**: Optional leading icon to reinforce the message's intent.
+    -   **Action**: Optional inline action (e.g., *Undo*, *Retry*) that gives the user a follow-up choice.
+    -   **Position**: Screen placement of the toast — combinations of `top` / `bottom` and `left` / `center` / `right`.
+    -   **Closable**: Whether the toast renders a manual close button in addition to auto-dismiss.
+
+    ## **Accesibility**
+    The Toast component is designed with accessibility in mind. It uses `role="status"` on the toast container so assistive technologies announce the message politely without stealing focus from the user's current task. Auto-dismiss durations are tunable to give users enough time to read the content.
+
+    Additionally, the visual design ensures sufficient color contrast between text and background across all variants for users with visual impairments.
+      -  **Keyboard Navigation**: When closable, the dismiss button is focusable and can be activated via Enter or Space.
+      -  **Screen Reader Support**: The container uses `role="status"` (and aria-live polite semantics) so screen readers announce the toast as it appears.
+      -  **Non-Blocking**: Toasts never trap focus or interrupt the user's primary flow. Critical confirmations should use a dialog instead.
+      -  **Color Contrast**: Text on each variant background meets WCAG AA contrast guidance.
+      -  **Icons**: Decorative icons should pass `aria-hidden="true"`; meaningful icons should expose an accessible label.
+      -  **Timing**: Provide a `duration` long enough for the message length, or let the user dismiss manually via the close button.
+
+    <br />
+
+    ## **Examples**
+
+    ### **Basic**
+    Default toast triggered imperatively via `customToast`. Render a single `<SonnerToaster />` once in your app to host all toasts.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.Default} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark language="tsx" code={`
+          import { customToast, SonnerToaster } from '@clera-ui/toast'
+
+          const ToastBasicExample = () => {
+            return (
+              <>
+                <button
+                  onClick={() =>
+                    customToast('Notification', {
+                      description: 'Something just happened. Check it out.',
+                      duration: 5000,
+                    })
+                  }
+                >
+                  Show Notification
+                </button>
+
+                <SonnerToaster />
+              </>
+            )
+          }
+
+          export default ToastBasicExample
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Success**
+    **Positive Feedback:** Confirms that an action completed successfully.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.Success} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { customToast } from '@clera-ui/toast'
+
+          customToast('Saved', {
+            description: 'Your changes have been saved.',
+            variant: 'success',
+          })
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Destructive**
+    **Error State:** Reports that an action failed and likely needs the user's attention.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.Destructive} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { customToast } from '@clera-ui/toast'
+
+          customToast('Failed', {
+            description: 'We could not save your changes.',
+            variant: 'destructive',
+          })
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Icon**
+    Reinforce the intent of the message with a leading icon.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.WithIcon} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { AiOutlineInfoCircle } from 'react-icons/ai'
+          import { customToast } from '@clera-ui/toast'
+
+          customToast('Heads up', {
+            description: 'This message includes an icon.',
+            icon: <AiOutlineInfoCircle />,
+          })
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Action**
+    Add a follow-up affordance the user can take directly from the toast (e.g., *Undo*, *Restart*).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.WithAction} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { customToast } from '@clera-ui/toast'
+
+          customToast('New update available', {
+            description: 'Restart the app to get the latest features.',
+            action: {
+              label: 'Restart',
+              onClick: () => console.log('Restart'),
+            },
+          })
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **With Async Action**
+    Wire the action button to an async task and let the toast swap itself through `loading` → `success`/`error` states without any extra plumbing. Provide a `Promise`-returning `onClick` plus state-specific content; the toast updates in place and auto-dismisses after the result.
+
+    -   **`loading`**: shown while `onClick` is pending. The toast becomes non-dismissable and displays a spinner.
+    -   **`success`**: shown when the promise resolves. Switches to the *success* variant and auto-dismisses after 4s. Can be a function of the resolved value.
+    -   **`error`**: shown when the promise rejects. Switches to the *destructive* variant and auto-dismisses after 4s. Can be a function of the thrown error.
+
+    The trigger that opened the toast (e.g., a `<Button>` elsewhere on the page) is yours to coordinate — wrap `onClick` with your own `useState` toggle to reflect in-flight state externally. The story below demonstrates this with `Button loading={...}`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.WithAsyncAction} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { customToast } from '@clera-ui/toast'
+          import { Button } from '@clera-ui/button'
+
+          const SaveExample = () => {
+            const [loading, setLoading] = useState(false)
+
+            const triggerSave = () =>
+              customToast('Save changes?', {
+                description: 'Click "Save" to persist your edits.',
+                action: {
+                  label: 'Save',
+                  // Wrap onClick to drive the external Button's loading state.
+                  onClick: async () => {
+                    setLoading(true)
+                    try {
+                      await saveChanges()
+                    } finally {
+                      setLoading(false)
+                    }
+                  },
+                  loading: {
+                    title: 'Saving…',
+                    description: 'Hang tight while we sync your changes.',
+                  },
+                  success: {
+                    title: 'Saved',
+                    description: 'Your changes have been saved.',
+                  },
+                  error: err => ({
+                    title: 'Save failed',
+                    description:
+                      err instanceof Error ? err.message : 'Something went wrong.',
+                  }),
+                },
+              })
+
+            return (
+              <Button loading={loading} onClick={triggerSave}>
+                Save Changes
+              </Button>
+            )
+          }
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ### **Stacked**
+    Multiple toasts triggered in sequence are stacked automatically by the underlying toaster.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ToastStories.Stacked} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { customToast } from '@clera-ui/toast'
+
+          customToast('Upload started', {
+            description: 'We are preparing your files.',
+          })
+
+          setTimeout(() => {
+            customToast('Upload complete', {
+              description: 'All files are synced.',
+            })
+          }, 1000)
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    <br />
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Toast component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    <br />
+    #### **PresetVariants**
+    > type PresetVariants = primary | outlinePrimary | secondary | outlineSecondary | success | outlineSuccess | info | outlineInfo | warning | outlineWarning | destructive | outlineDestructive | light | outlineLight | ghost
+
+    <br />
+    #### **ToastPosition**
+    > type ToastPosition = top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+
+    <br />
+
+    ## **FAQ**
+    #### **How do I trigger a toast?**
+
+    Toasts are triggered imperatively via the `customToast(title, options)` helper. Mount `<SonnerToaster />` once in your app so toasts have a host to render into.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        import { customToast, SonnerToaster } from '@clera-ui/toast'
+
+        const App = () => (
+          <>
+            <button onClick={() => customToast('Saved')}>Save</button>
+            <SonnerToaster />
+          </>
+        )
+      `} />
+    </Canvas.Source>
+
+    #### **How do I change where toasts appear on screen?**
+
+    Pass the `position` option to either `customToast` (per-toast) or `<SonnerToaster position="..." />` (global default).
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('Saved', { position: 'top-right' })
+
+        // or set it globally:
+        <SonnerToaster position="top-center" />
+      `} />
+    </Canvas.Source>
+
+    #### **How do I add a description to a toast?**
+
+    Pass the `description` option alongside the title.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('Saved', {
+          description: 'Your changes have been saved.',
+        })
+      `} />
+    </Canvas.Source>
+
+    #### **How do I make a toast non-dismissable?**
+
+    Set `closable: false` to hide the close button. The toast will still auto-dismiss after its `duration`.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('Saved', {
+          description: 'Your changes have been saved.',
+          closable: false,
+        })
+      `} />
+    </Canvas.Source>
+
+    #### **How do I add an action button?**
+
+    Use the `action` option to attach a labeled callback. Clicking it runs the handler and dismisses the toast.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('New update available', {
+          description: 'Restart the app to get the latest features.',
+          action: {
+            label: 'Restart',
+            onClick: () => restartApp(),
+          },
+        })
+      `} />
+    </Canvas.Source>
+
+    #### **How do I run an async task from the action button?**
+
+    Return a `Promise` from the action's `onClick` and supply any combination of `loading`, `success`, and `error` content. The toast swaps itself in place through each state and auto-dismisses after the result. `success`/`error` can be functions of the resolved value or thrown error.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('Save changes?', {
+          description: 'Click "Save" to persist your edits.',
+          action: {
+            label: 'Save',
+            onClick: () => saveChanges(),
+            loading: { title: 'Saving…' },
+            success: { title: 'Saved' },
+            error: err => ({ title: 'Save failed', description: err.message }),
+          },
+        })
+      `} />
+    </Canvas.Source>
+
+    #### **How do I reflect the in-flight state on the trigger button (not the toast)?**
+
+    The async transitions live inside the toast, but the button that opened the toast is yours to coordinate. Wrap the action's `onClick` with your own `useState` toggle.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        const [loading, setLoading] = useState(false)
+
+        const triggerSave = () =>
+          customToast('Save changes?', {
+            action: {
+              label: 'Save',
+              onClick: async () => {
+                setLoading(true)
+                try {
+                  await saveChanges()
+                } finally {
+                  setLoading(false)
+                }
+              },
+              loading: { title: 'Saving…' },
+              success: { title: 'Saved' },
+              error: { title: 'Save failed' },
+            },
+          })
+
+        return <Button loading={loading} onClick={triggerSave}>Save</Button>
+      `} />
+    </Canvas.Source>
+
+    #### **How do I control how long a toast stays visible?**
+
+    Pass `duration` (in milliseconds). Default is sonner's auto-dismiss duration.
+
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        customToast('Saved', {
+          description: 'Your changes have been saved.',
+          duration: 5000,
+        })
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <TableOfContents
+    items={[
+      {
+        id: "when-to-use",
+        label: "When To Use"
+      },
+      {
+        id: "accesibility",
+        label: "Accessibility"
+      },
+      {
+        id: "examples",
+        label: "Examples",
+        children: [
+          {
+            id: "basic",
+            label: "Basic"
+          },
+          {
+            id: "success",
+            label: "Success"
+          },
+          {
+            id: "destructive",
+            label: "Destructive"
+          },
+          {
+            id: "with-icon",
+            label: "With Icon"
+          },
+          {
+            id: "with-action",
+            label: "With Action"
+          },
+          {
+            id: "with-async-action",
+            label: "With Async Action"
+          },
+          {
+            id: "stacked",
+            label: "Stacked"
+          }
+        ]
+      },
+      {
+        id: "api",
+        label: "API",
+        children: [
+          {
+            id: "presetvariants",
+            label: "Preset Variants"
+          },
+          {
+            id: "toastposition",
+            label: "Toast Position"
+          }
+        ]
+      },
+      {
+        id: "faq",
+        label: "FAQ",
+        children: [
+          {
+            id: "how-do-i-trigger-a-toast",
+            label: "How do I trigger..."
+          },
+          {
+            id: "how-do-i-change-where-toasts-appear-on-screen",
+            label: "How do I change position..."
+          },
+          {
+            id: "how-do-i-add-a-description-to-a-toast",
+            label: "How do I add a description..."
+          }
+        ]
+      },
+    ]}
+  />
+</DocsLayout>

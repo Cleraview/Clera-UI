@@ -155,6 +155,7 @@
     "zod": "^4.0.10"
   },
   "dependencies": {
-    "@radix-ui/react-context-menu": "^2.2.16"
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "sonner": "^2.0.7"
   }
 }
