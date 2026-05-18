@@ -1,11 +1,5 @@
 {
   "color": {
-    "$meta": {
-      "outPath": {
-        "native": ".storybook/_colors.css",
-        "theme": "src/styles/themes/color.css"
-      }
-    },
     "theme": {
       "$type": "color",
       "$value": "'light'",

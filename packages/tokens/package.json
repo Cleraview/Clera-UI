@@ -1,0 +1,33 @@
+{
+  "name": "@clera/tokens",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Design tokens (color, spacing, typography) for the Clera design system.",
+  "author": {
+    "name": "itsferdiardiansa"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "tokens",
+    "config",
+    "scripts"
+  ],
+  "exports": {
+    "./tokens/*.json": "./tokens/*.json",
+    "./themes/*.css": "./dist/themes/*.css",
+    "./utilities/*.css": "./dist/utilities/*.css",
+    "./native/*.css": "./dist/native/*.css"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "generate": "ts-node --esm scripts/generate-tokens.ts --config config/token-gen.json",
+    "build": "pnpm clean && pnpm generate"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.27",
+    "tailwindcss": "^4.1.18",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

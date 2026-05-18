@@ -24,6 +24,7 @@ coverage
 /build
 dist
 lib
+!packages/tokens/dist
 
 # misc
 .DS_Store

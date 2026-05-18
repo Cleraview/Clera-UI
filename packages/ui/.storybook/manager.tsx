@@ -3,7 +3,7 @@ import { addons, types } from 'storybook/manager-api'
 import { ADDON_ID, TOOL_ID, ManagerHeader } from './components/ManagerHeader'
 import customSidebar from './addons/custom-sidebar'
 import { light } from './theme'
-import './_colors.css'
+import '@clera/tokens/native/color.css'
 import './manager.css'
 
 addons.register(ADDON_ID, () => {

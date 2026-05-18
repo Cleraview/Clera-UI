@@ -3,20 +3,20 @@
   "outputs": {
     "nativeCss": {
       "enabled": true,
-      "path": ".storybook",
-      "prefix": "_",
+      "path": "dist/native",
+      "prefix": "",
       "suffix": ".css",
       "includePaletteBlock": false
     },
     "tailwindCss": {
       "enabled": true,
-      "path": "src/styles/themes",
+      "path": "dist/themes",
       "prefix": "",
       "suffix": ".css"
     },
     "runtimeJs": {
       "enabled": false,
-      "path": "src/styles/themes",
+      "path": "dist/runtime",
       "prefix": "",
       "suffix": "-vars.js"
     }
@@ -29,7 +29,7 @@
     "typography": {
       "mode": "utility",
       "prefix": "text-",
-      "outPath": "src/styles/utilities/typography.css"
+      "outPath": "dist/utilities/typography.css"
     }
   },
   "stops": {

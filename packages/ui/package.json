@@ -30,8 +30,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "type-check": "tsc --noEmit",
-    "generate:tokens": "ts-node --esm scripts/generate-tokens.ts --config config/token-gen.json"
+    "type-check": "tsc --noEmit"
   },
   "files": [
     "dist"
@@ -151,6 +150,7 @@
     "zod": "^4.0.10"
   },
   "dependencies": {
+    "@clera/tokens": "workspace:*",
     "@radix-ui/react-context-menu": "^2.2.16",
     "sonner": "^2.0.7"
   }
