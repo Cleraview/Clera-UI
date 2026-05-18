@@ -36,6 +36,7 @@
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
+    "@clera/config-jest": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^29.5.14",

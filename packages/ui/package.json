@@ -43,6 +43,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "@babel/preset-react": "^7.28.5",
     "@changesets/cli": "^2.29.8",
+    "@clera/config-jest": "workspace:*",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3.3.3",
