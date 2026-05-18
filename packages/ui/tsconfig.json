@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@root/*": ["./*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "src/stories",
+    "src/config",
+    "**/*.stories.tsx",
+    "**/*.stories.mdx",
+    "**/*.test.tsx",
+    "**/*.test.ts",
+    "**/__stories__",
+    "**/__tests__",
+    "**/__mocks__"
+  ]
+}
