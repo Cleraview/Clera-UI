@@ -47,7 +47,7 @@ jobs:
         run: |
           CHANGES="${CHANGE_COUNT:-0}"
           if [ "$CHANGES" -gt 0 ]; then
-            BODY="### 🔍 Visual Regression"$'\n'"$CHANGES visual change(s) detected — [review in Chromatic](${BUILD_URL}) before merging."
+            BODY="### 🔍 Visual Regression"$'\n'"$CHANGES visual change(s) detected - [review in Chromatic](${BUILD_URL}) before merging."
           else
             BODY="### ✅ Visual Regression"$'\n'"No visual changes detected. [View build](${BUILD_URL})."
           fi
