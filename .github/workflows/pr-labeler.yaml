@@ -1,6 +1,8 @@
 name: pr labeler
 on:
   pull_request:
+    types:
+      - opened
     branches:
       - main
 
