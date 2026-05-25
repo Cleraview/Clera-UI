@@ -27,20 +27,29 @@ jobs:
       - name: Setup
         uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.2
         
+      - name: Build Storybook
+        run: pnpm --filter @clera/storybook build
+
       - name: Run Chromatic
         id: chromatic_run
-        run: pnpm --filter @clera/storybook exec chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        continue-on-error: true
-      
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: apps/storybook
+          storybookBuildDir: storybook-static
+          exitZeroOnChanges: true
+
       - name: Format comment body
         id: format_comment
+        env:
+          CHANGE_COUNT: ${{ steps.chromatic_run.outputs.changeCount }}
+          BUILD_URL: ${{ steps.chromatic_run.outputs.buildUrl }}
         run: |
-          if [ "${{ steps.chromatic_run.outcome }}" = "success" ]; then
-            BODY=$'### ✅ Visual Regression\nNo visual changes detected.'
+          CHANGES="${CHANGE_COUNT:-0}"
+          if [ "$CHANGES" -gt 0 ]; then
+            BODY="### 🔍 Visual Regression"$'\n'"$CHANGES visual change(s) detected — [review in Chromatic](${BUILD_URL}) before merging."
           else
-            BODY=$'### 🔍 Visual Regression\nVisual changes detected or the Storybook build failed — please review the run in Chromatic before merging.'
+            BODY="### ✅ Visual Regression"$'\n'"No visual changes detected. [View build](${BUILD_URL})."
           fi
           {
             echo 'body<<EOF'
