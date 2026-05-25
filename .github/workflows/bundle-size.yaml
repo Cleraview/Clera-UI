@@ -16,7 +16,7 @@ concurrency:
 jobs:
   analyze:
     name: analyze
-    uses: itsferdiardiansa/ci-toolbox/.github/workflows/bundle-size.yaml@v1.1.0
+    uses: itsferdiardiansa/ci-toolbox/.github/workflows/bundle-size.yaml@v1.1.1
     with:
       issue-number: ${{ github.event.pull_request.number }}
       build-command: 'pnpm --filter @clera/ui bundle'
