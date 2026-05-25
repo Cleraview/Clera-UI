@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.1
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.2
         
       - name: Run Chromatic
         id: chromatic_run
@@ -37,10 +37,14 @@ jobs:
       - name: Format comment body
         id: format_comment
         run: |
+          if [ "${{ steps.chromatic_run.outcome }}" = "success" ]; then
+            BODY=$'### ✅ Visual Regression\nNo visual changes detected.'
+          else
+            BODY=$'### 🔍 Visual Regression\nVisual changes detected or the Storybook build failed — please review the run in Chromatic before merging.'
+          fi
           {
             echo 'body<<EOF'
-            echo "${{ steps.chromatic_run.outcome == 'success' && '### Visual Regression' || '' }}"
-            echo "${{ steps.chromatic_run.outcome == 'success' && '<img src=\"https://media.makeameme.org/created/test-passed.jpg\" width=\"180\">' || '' }}"
+            echo "$BODY"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
           
@@ -55,7 +59,7 @@ jobs:
           fetch-depth: 0
 
       - name: Post or Update Comment
-        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.1.1
+        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}

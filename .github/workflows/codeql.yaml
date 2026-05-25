@@ -36,7 +36,7 @@ jobs:
           config-file: ./.github/codeql/codeql-config.yaml
 
       - name: Setup & Install
-        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.1
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.2
         with:
           install-deps: true
 
