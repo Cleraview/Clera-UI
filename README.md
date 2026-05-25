@@ -1,114 +1,83 @@
-# Clera UI
+# Clera
 
-[![React](https://img.shields.io/badge/React-20232a?logo=react&logoColor=61dafb)](https://reactjs.org/) [![Storybook](https://img.shields.io/badge/Storybook-FF4785?logo=storybook&logoColor=white)](https://storybook.js.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) [![tested with jest](https://img.shields.io/badge/tested%20with-jest-99424f.svg?logo=jest)](https://jestjs.io/) [![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
+Monorepo for the Clera design system: UI components, design tokens, and charts, plus a Storybook that documents them.
 
-The official design system and shared React component library for the **Cleraview** platform.
+## Packages
 
-This repository contains the core UI elements used across all Cleraview products. It is developed and documented in isolation using **Storybook**, built with **React (TypeScript)**, and styled with **Tailwind CSS**.
+| Package | Location | What it is |
+| --- | --- | --- |
+| `@clera/ui` | `packages/ui` | React component library — Button, Toast, Alert, form controls, and so on |
+| `@clera/tokens` | `packages/tokens` | Design tokens. Source JSON in `tokens/`, generated CSS in `dist/` |
+| `@clera/charts` | `packages/charts` | Data-visualization primitives, built on top of `@clera/ui` and the tokens |
+| `@clera/config-jest` | `packages/configs/jest` | Shared Jest base config the other packages extend |
+| `@clera/storybook` | `apps/storybook` | Storybook site; picks up stories from every package |
 
----
+Cross-package dependencies use the `workspace:*` protocol. `@clera/ui` and `@clera/charts` both pull their styling from `@clera/tokens`.
 
-## Features
+## Requirements
 
--   **React (TypeScript):** Fully-typed, reusable React components.
--   **Storybook:** Isolated component development, documentation, and testing.
--   **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
--   **Testing (Jest & RTL):** Unit and integration testing for component logic.
--   **Testing (Playwright):** End-to-end and visual regression testing.
--   **CI/CD:** Automated testing (GitHub Actions) and deployment of Storybook to Vercel.
+- Node 22 or newer
+- pnpm 10 - run `corepack enable` and it'll use the version pinned in `package.json`
 
-## Tech Stack
+The repo is pnpm-only; `npm install` and `yarn` are blocked.
 
-| Area | Stack |
-| --- | --- |
-| Core Framework | React (with Next.js for Storybook) |
-| Component Dev | Storybook |
-| Styling | Tailwind CSS |
-| Unit Testing | Jest, React Testing Library |
-| E2E Testing | Playwright |
-| Linting | ESLint, Prettier |
-| Deployment | Vercel (for Storybook) |
+## Setup
 
-## Installation
-```bash
-npm install clera-ui
-```
-
-```bash
-pnpm add clera-ui
-```
-
-```bash
-yarn add clera-ui
-```
-
-## Usage
-```tsx
-import { Button } from "clera-ui/button"
-
-const ButtonSelectedExample = () => {
-  return <Button variant="outlinePrimary">Selected button</Button>
-}
-
-export default ButtonSelectedExample
-```
-
-## Development
-
-#### 1. Clone & Install
-```bash
-git clone [https://github.com/Cleraview/Clera-UI.git](https://github.com/Cleraview/Clera-UI.git)
-cd Clera-UI
-
-# Install dependencies
+```sh
 pnpm install
 ```
 
-#### 2. Run Dev Server
-To browse and develop components in isolation, run the dev server:
+`@clera/tokens` keeps its generated CSS committed under `dist/`, so there's nothing to build before Storybook or the tests will run.
 
-```bash
-pnpm run dev
-```
-Then visit `http://localhost:6006` in your browser.
+## Day-to-day
 
-## Testing
-This repository uses a hybrid testing strategy:
+Tasks run through Turborepo from the root — across every package, with caching.
 
-#### 1. Jest (Unit & Integration Tests)
-Run all unit tests:
-```bash
-pnpm test
+```sh
+pnpm lint          # eslint
+pnpm test          # jest
+pnpm type-check    # tsc --noEmit
+pnpm build         # packages that define a build task
 ```
 
-Run tests in watch mode:
-```bash
-pnpm run test:watch
+Storybook:
+
+```sh
+pnpm --filter @clera/storybook dev
 ```
 
-Generate a coverage report:
-```bash
-pnpm run test:coverage
+Use `--filter` to scope anything to one package:
+
+```sh
+pnpm --filter @clera/charts test
 ```
 
-#### 2. Playwright (E2E & Visual Tests)
-#### Available Scripts
+## Editing tokens
 
-| Script | Command |
-| --- | --- |
-| `pnpm install` | Enforces `pnpm` as the only package manager. |
-| `pnpm prepare` | Runs Husky to set up Git hooks. |
-| `pnpm clean-install` | Removes `node_modules`, caches, and lockfile, then reinstalls. |
-| `pnpm build` | Creates a static production build. |
-| `pnpm dev` | Starts the dev server on port 6006 without opening a browser. |
-| `pnpm doc:build` | Builds the project for Vercel production. |
-| `pnpm doc:deploy` | Builds and deploys the project to Vercel production. |
-| `pnpm lint` | Lints files in the `src` directory using ESLint/Next.js. |
-| `pnpm lint:fix` | Automatically fixes linting errors in the `src` directory. |
-| `pnpm test` | Runs all Jest unit tests. |
-| `pnpm test:watch` | Runs Jest in watch mode, re-running tests on file changes. |
-| `pnpm test:coverage` | Generates a test coverage report. |
-| `pnpm type-check` | Checks the project for TypeScript type errors without compiling. |
+Token sources are `packages/tokens/tokens/*.json`. After changing them, regenerate the CSS and commit the result alongside the JSON:
 
-## Deployment
-The Storybook static site is configured to be automatically deployed to Vercel. Any commits or pull requests pushed to the repository will trigger a new build and deployment via GitHub Actions.
+```sh
+pnpm --filter @clera/tokens build
+```
+
+The output in `packages/tokens/dist` is checked in on purpose, so consumers don't need to run the generator.
+
+## Releasing
+
+Versioning goes through Changesets:
+
+```sh
+pnpm changeset          # write a changeset for your change
+pnpm changeset:version  # apply the bumps and update changelogs
+```
+
+Publishing happens from CI once the version PR lands on `main`.
+
+## Conventions
+
+- Commits follow Conventional Commits — commitlint checks the message on commit.
+- Pre-commit runs lint-staged: type-check and tests for touched package sources, eslint for touched files.
+
+## License
+
+MIT — see [LICENSE](./LICENSE).

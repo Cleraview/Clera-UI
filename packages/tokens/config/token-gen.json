@@ -1,0 +1,44 @@
+{
+  "tokensPath": "tokens/*.json",
+  "outputs": {
+    "nativeCss": {
+      "enabled": true,
+      "path": "dist/native",
+      "prefix": "",
+      "suffix": ".css",
+      "includePaletteBlock": false
+    },
+    "tailwindCss": {
+      "enabled": true,
+      "path": "dist/themes",
+      "prefix": "",
+      "suffix": ".css"
+    },
+    "runtimeJs": {
+      "enabled": false,
+      "path": "dist/runtime",
+      "prefix": "",
+      "suffix": "-vars.js"
+    }
+  },
+  "paletteResolution": {
+    "strategy": "tailwind",
+    "requireTailwindPackage": true
+  },
+  "overrides": {
+    "typography": {
+      "mode": "utility",
+      "prefix": "text-",
+      "outPath": "dist/utilities/typography.css"
+    }
+  },
+  "stops": {
+    "min": 50,
+    "max": 950,
+    "step": 50
+  },
+  "defaults": {
+    "themeRoot": ":root",
+    "darkSelector": "[data-theme='dark']"
+  }
+}

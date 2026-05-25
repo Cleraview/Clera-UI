@@ -25,22 +25,35 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.0.0
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.2
         
+      - name: Build Storybook
+        run: pnpm --filter @clera/storybook build
+
       - name: Run Chromatic
         id: chromatic_run
-        run: pnpm chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-        continue-on-error: true
-      
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: apps/storybook
+          storybookBuildDir: storybook-static
+          exitZeroOnChanges: true
+
       - name: Format comment body
         id: format_comment
+        env:
+          CHANGE_COUNT: ${{ steps.chromatic_run.outputs.changeCount }}
+          BUILD_URL: ${{ steps.chromatic_run.outputs.buildUrl }}
         run: |
+          CHANGES="${CHANGE_COUNT:-0}"
+          if [ "$CHANGES" -gt 0 ]; then
+            BODY="### 🔍 Visual Regression"$'\n'"$CHANGES visual change(s) detected - [review in Chromatic](${BUILD_URL}) before merging."
+          else
+            BODY="### ✅ Visual Regression"$'\n'"No visual changes detected. [View build](${BUILD_URL})."
+          fi
           {
             echo 'body<<EOF'
-            echo "${{ steps.chromatic_run.outcome == 'success' && '### Visual Regression' || '' }}"
-            echo "${{ steps.chromatic_run.outcome == 'success' && '<img src=\"https://media.makeameme.org/created/test-passed.jpg\" width=\"180\">' || '' }}"
+            echo "$BODY"
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
           
@@ -55,7 +68,7 @@ jobs:
           fetch-depth: 0
 
       - name: Post or Update Comment
-        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.0.0
+        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
