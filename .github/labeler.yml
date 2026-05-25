@@ -1,26 +1,27 @@
-feat:
-  - changed-files:
-    - any-glob-to-any-file: 
-      - 'app/**'
-
 shared-ui:
   - changed-files:
-    - any-glob-to-any-file: 
-      - 'components/**'
+    - any-glob-to-any-file:
+      - 'packages/ui/**'
+
+charts:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/charts/**'
+
+tokens:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/tokens/**'
+
+storybook:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'apps/storybook/**'
 
 utils:
   - changed-files:
     - any-glob-to-any-file:
-      - 'utils/**'
-      - 'lib/**'
-      - 'helpers/**'
-
-seo:
-  - changed-files:
-    - any-glob-to-any-file:
-      - 'app/**/metadata.ts'
-      - 'app/robots.txt'
-      - 'app/sitemap.xml'
+      - 'packages/*/src/utils/**'
 
 style:
   - changed-files:
@@ -28,36 +29,39 @@ style:
       - '**/*.css'
       - '**/*.scss'
       - '**/*.sass'
-      - 'styles/**'
-      - 'theme/**'
-      - 'tailwind.config.*'
+      - 'packages/*/src/styles/**'
+      - 'packages/tokens/**'
 
 tests:
   - changed-files:
     - any-glob-to-any-file:
-      - '__tests__/**'
+      - '**/__tests__/**'
+      - '**/*.test.{ts,tsx}'
 
 config:
   - changed-files:
     - any-glob-to-any-file:
-      - '.eslintrc*'
-      - '.prettierrc*'
-      - '*.config.*'
-      - 'tsconfig.*'
-      - '.lintstagedrc.js'
-      - 'jest.setup.js'
-      - 'tsconfig.json'
+      - '**/.eslintrc*'
+      - '**/eslint.config.*'
+      - '**/.prettierrc*'
+      - '**/*.config.{js,ts,cjs,mjs}'
+      - '**/tsconfig*.json'
+      - '.lintstagedrc.*'
+      - 'packages/configs/**'
+      - 'turbo.json'
+      - 'pnpm-workspace.yaml'
 
 build:
   - changed-files:
     - any-glob-to-any-file:
-      - 'scripts/**'
+      - 'packages/*/scripts/**'
 
 docs:
   - changed-files:
     - any-glob-to-any-file:
       - 'docs/**'
       - '**/*.md'
+      - '**/*.mdx'
 
 ci:
   - changed-files:
@@ -68,5 +72,5 @@ ci:
 deps:
   - changed-files:
     - any-glob-to-any-file:
-      - 'package.json'
+      - '**/package.json'
       - 'pnpm-lock.yaml'

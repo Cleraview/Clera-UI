@@ -27,6 +27,7 @@
     "@storybook/nextjs": "^10.1.8",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20.19.27",
+    "chromatic": "^13.3.4",
     "next": "^16.0.10",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

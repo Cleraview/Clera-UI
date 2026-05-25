@@ -25,11 +25,11 @@ jobs:
           fetch-depth: 0
 
       - name: Setup
-        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.0.0
+        uses: itsferdiardiansa/ci-toolbox/actions/setup-node@v1.1.0
         
       - name: Run Chromatic
         id: chromatic_run
-        run: pnpm chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
+        run: pnpm --filter @clera/storybook exec chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --build-script-name=build
         env:
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         continue-on-error: true
@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 0
 
       - name: Post or Update Comment
-        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.0.0
+        uses: itsferdiardiansa/ci-toolbox/actions/post-comment@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}

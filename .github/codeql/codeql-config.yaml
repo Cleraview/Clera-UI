@@ -1,3 +1,5 @@
 name: "CodeQL config"
 paths:
-  - src
+  - packages/*/src
+  - packages/configs/*/src
+  - apps/*/.storybook
