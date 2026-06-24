@@ -13,6 +13,10 @@ jest.mock('echarts/components', () => ({
   TitleComponent: {},
   LegendComponent: {},
   MarkLineComponent: {},
+  MarkPointComponent: {},
+  DataZoomComponent: {},
+  BrushComponent: {},
+  ToolboxComponent: {},
 }))
 jest.mock('echarts/renderers', () => ({ CanvasRenderer: {} }))
 
@@ -514,6 +518,52 @@ describe('components/charts/Bar', () => {
     expect(lastOption().animation).toBe(false)
   })
 
+  it('adds max/min markPoints to each series', () => {
+    render(
+      <Bar
+        direction="vertical"
+        markPoints={['max', 'min']}
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'A', data: [1, 2] },
+          { name: 'B', data: [3, 4] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].markPoint.data).toEqual([{ type: 'max' }, { type: 'min' }])
+    expect(series[1].markPoint.data).toEqual([{ type: 'max' }, { type: 'min' }])
+    // markPoints stay put on hover (no emphasis state)
+    expect(series[0].markPoint.emphasis.disabled).toBe(true)
+  })
+
+  it('draws a per-series average line colored to match each bar', () => {
+    render(
+      <Bar
+        direction="vertical"
+        referenceLine="average"
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'A', data: [1, 2], variant: 'info' },
+          { name: 'B', data: [3, 4], variant: 'success' },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].markLine.data[0].type).toBe('average')
+    expect(series[1].markLine.data[0].type).toBe('average')
+    // each average line follows its series color
+    expect(series[0].markLine.lineStyle.color).not.toBe(
+      series[1].markLine.lineStyle.color
+    )
+    expect(series[0].markLine.lineStyle.color).toBe(series[0].itemStyle.color)
+  })
+
+  it('adds a markPoint to a single-series chart', () => {
+    render(<Bar data={sample} markPoints={['max']} />)
+    expect(lastOption().series[0].markPoint.data).toEqual([{ type: 'max' }])
+  })
+
   it('renders an empty-state title when data is empty', () => {
     render(<Bar data={[]} emptyMessage="Nothing here" />)
     const option = lastOption()
@@ -528,6 +578,35 @@ describe('components/charts/Bar', () => {
     const handler = mockChart.on.mock.calls.find(c => c[0] === 'click')?.[1]
     handler?.({ name: 'Desktop' })
     expect(onBarClick).toHaveBeenCalledWith(sample[1], 1)
+  })
+
+  it('calls onReady with the chart instance on mount', () => {
+    const onReady = jest.fn()
+    render(<Bar data={sample} onReady={onReady} />)
+    expect(onReady).toHaveBeenCalledTimes(1)
+    expect(onReady).toHaveBeenCalledWith(mockChart)
+  })
+
+  it('registers hover handlers that map back to the datum', () => {
+    const onBarHover = jest.fn()
+    const onBarLeave = jest.fn()
+    render(
+      <Bar data={sample} onBarHover={onBarHover} onBarLeave={onBarLeave} />
+    )
+    const over = mockChart.on.mock.calls.find(c => c[0] === 'mouseover')?.[1]
+    const out = mockChart.on.mock.calls.find(c => c[0] === 'mouseout')?.[1]
+    over?.({ componentType: 'series', name: 'Desktop' })
+    expect(onBarHover).toHaveBeenCalledWith(sample[1], 1)
+    out?.()
+    expect(onBarLeave).toHaveBeenCalledTimes(1)
+  })
+
+  it('ignores hover events that are not on a bar', () => {
+    const onBarHover = jest.fn()
+    render(<Bar data={sample} onBarHover={onBarHover} />)
+    const over = mockChart.on.mock.calls.find(c => c[0] === 'mouseover')?.[1]
+    over?.({ componentType: 'xAxis', name: 'Desktop' })
+    expect(onBarHover).not.toHaveBeenCalled()
   })
 
   it('shows the loading overlay when loading is true', () => {
@@ -611,6 +690,87 @@ describe('components/charts/Bar', () => {
   it('can toggle grid lines independently of the value axis', () => {
     render(<Bar data={sample} showValueAxis gridLines={false} />)
     expect(lastOption().xAxis.splitLine.show).toBe(false)
+  })
+
+  it('rotates category axis labels with axisLabelRotate', () => {
+    render(<Bar data={sample} direction="vertical" axisLabelRotate={45} />)
+    expect(lastOption().xAxis.axisLabel.rotate).toBe(45)
+  })
+
+  it('applies an explicit value-axis min', () => {
+    render(<Bar data={sample} direction="vertical" min={-20} />)
+    expect(lastOption().yAxis.min).toBe(-20)
+  })
+
+  it('sets axis titles from valueAxisName and categoryAxisName', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        valueAxisName="Revenue"
+        categoryAxisName="Month"
+      />
+    )
+    expect(lastOption().yAxis.name).toBe('Revenue')
+    expect(lastOption().xAxis.name).toBe('Month')
+  })
+
+  it('normalizes stacked series to 100% with stackMode="percent"', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stackMode="percent"
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'A', data: [1, 3] },
+          { name: 'B', data: [1, 1] },
+        ]}
+      />
+    )
+    const option = lastOption()
+    expect(option.series[0].stack).toBe('total')
+    expect(option.series[0].data[0]).toBe(50)
+    expect(option.series[0].data[1]).toBe(75)
+    expect(option.yAxis.max).toBe(100)
+  })
+
+  it('adds dataZoom on the category axis when zoom is enabled', () => {
+    render(<Bar data={sample} direction="vertical" zoom />)
+    const { dataZoom } = lastOption()
+    expect(dataZoom).toHaveLength(2)
+    expect(dataZoom[0].xAxisIndex).toBe(0)
+  })
+
+  it('targets the value axis when zoom="value"', () => {
+    render(<Bar data={sample} direction="vertical" zoom="value" />)
+    expect(lastOption().dataZoom[0].yAxisIndex).toBe(0)
+  })
+
+  it('enables a brush toolbox when selectable is set', () => {
+    render(<Bar data={sample} direction="vertical" selectable />)
+    const option = lastOption()
+    expect(option.toolbox.feature.brush).toBeDefined()
+    expect(option.brush.xAxisIndex).toBe(0)
+  })
+
+  it('maps a brush selection back to category labels', () => {
+    const onBrushSelect = jest.fn()
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        selectable
+        onBrushSelect={onBrushSelect}
+      />
+    )
+    const handler = mockChart.on.mock.calls.find(
+      c => c[0] === 'brushselected'
+    )?.[1]
+    handler?.({ batch: [{ selected: [{ dataIndex: [0, 2] }] }] })
+    expect(onBrushSelect).toHaveBeenCalledWith({
+      indices: [0, 2],
+      labels: ['Mobile', 'Tablet'],
+    })
   })
 
   it('applies numeric height as inline px style', () => {

@@ -73,12 +73,12 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
-    ### **E-commerce revenue**
+    ### **Basic**
 
     Monthly gross revenue as columns with a "Target" reference line. `showValueAxis` renders the y-axis scale and grid lines, while `formatValue` formats the ticks, tooltip, and reference label as currency.
     <Canvas>
       <Canvas.Story>
-        <Story of={BarStories.Ecommerce} />
+        <Story of={BarStories.Basic} />
       </Canvas.Story>
 
       <Canvas.Source>
@@ -294,6 +294,165 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **100% stacked**
+    `stackMode="percent"` normalizes each category of a grouped chart to 100% (stacking is implied). Pass the **raw** values — the component does the normalization — and turn on `showValues` to print each segment's share inside the bar.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.PercentStacked} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const ChannelMix = () => (
+            <Bar
+              direction="horizontal"
+              stackMode="percent"
+              showValues
+              formatValue={(v) => Math.round(v) + '%'}
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Direct', data: [100, 302, 301, 334, 390, 330, 320] },
+                { name: 'Mail Ad', data: [320, 132, 101, 134, 90, 230, 210] },
+                { name: 'Affiliate Ad', data: [220, 182, 191, 234, 290, 330, 310] },
+                { name: 'Video Ad', data: [150, 212, 201, 154, 190, 330, 410] },
+                { name: 'Search Engine', data: [820, 832, 901, 934, 1290, 1330, 1320] },
+              ]}
+            />
+          )
+
+          export default ChannelMix
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Zoom and rotated labels**
+    For many categories, `zoom` adds a dataZoom slider plus scroll/drag zoom, and `axisLabelRotate` keeps long labels legible. `categoryAxisName`/`valueAxisName` add axis titles. Use `zoom="value"` to zoom the value axis instead.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.Zoom} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Daily = ({ data }) => (
+            <Bar
+              direction="vertical"
+              zoom="category"
+              axisLabelRotate={45}
+              showValueAxis
+              categoryAxisName="Month"
+              valueAxisName="Units"
+              data={data}
+            />
+          )
+
+          export default Daily
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Brush select**
+    `selectable` adds a brush toolbox button. Activate it and drag across the bars to select a band; the selected `{ indices, labels }` arrive via `onBrushSelect`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.BrushSelect} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Selectable = ({ data }) => (
+            <Bar
+              direction="vertical"
+              selectable
+              showValueAxis
+              onBrushSelect={({ labels }) => console.log('selected', labels)}
+              data={data}
+            />
+          )
+
+          export default Selectable
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Rainfall vs evaporation**
+
+    A recreation of the classic ECharts "Rainfall vs Evaporation" example: two grouped series, `markPoints={['max', 'min']}` to pin each series' extremes, and `referenceLine="average"` to draw each series' own average line.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.RainfallVsEvaporation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Weather = () => (
+            <Bar
+              showValueAxis
+              markPoints={['max', 'min']}
+              referenceLine="average"
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
+              series={[
+                { name: 'Rainfall', variant: 'info', data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3] },
+                { name: 'Evaporation', variant: 'success', data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3] },
+              ]}
+            />
+          )
+
+          export default Weather
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Drilldown (multi-level)**
+
+    Drilldown is a usage pattern, not a prop: the `useBarDrilldown` helper holds a tree and swaps which level's `data` is shown, while `onBarClick` drills in and a breadcrumb jumps back. It supports any depth — here regions → countries → cities.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.Drilldown} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar, useBarDrilldown } from '@clera/charts'
+
+          const tree = [
+            { label: 'Americas', value: 1200, children: [
+              { label: 'USA', value: 800, children: [
+                { label: 'New York', value: 400 },
+                { label: 'San Francisco', value: 250 },
+              ] },
+              { label: 'Canada', value: 250 },
+            ] },
+            { label: 'EMEA', value: 900, children: [/* ... */] },
+          ]
+
+          const Sales = () => {
+            const { data, path, onBarClick, drillTo } = useBarDrilldown(tree)
+            return (
+              <div>
+                <nav>
+                  {path.map((label, i) => (
+                    <button key={i} onClick={() => drillTo(i)}>{label}</button>
+                  ))}
+                </nav>
+                <Bar data={data} showValueAxis onBarClick={onBarClick} />
+              </div>
+            )
+          }
+
+          export default Sales
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ## **API**
     Below is a comprehensive list of all the props available for the Bar component, along with their types, default values, and descriptions.
     <ArgTypes />
@@ -404,12 +563,34 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
 
     <br />
 
-    #### **How do I react to bar clicks?**
+    #### **How do I react to bar clicks or hover?**
 
-    Pass `onBarClick`. It receives the clicked datum and its index, mapped back to the original (unsorted) data.
+    Pass `onBarClick`, `onBarHover`, or `onBarLeave`. Each receives the datum and its index (mapped back to the original, unsorted data), so you can drive selection, tooltips, or a drilldown.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Bar onBarClick={(datum, index) => console.log(datum, index)} data={data} />
+        <Bar
+          data={data}
+          onBarClick={(datum, index) => console.log('click', datum, index)}
+          onBarHover={(datum) => setActive(datum.label)}
+          onBarLeave={() => setActive(null)}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I access the ECharts instance directly?**
+
+    Pass `onReady` — it's called once on mount with the underlying ECharts instance. Use it as an escape hatch for anything the props don't cover (dataZoom, brush selection, drilldown, custom events) without forking the component.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar
+          data={data}
+          onReady={(chart) => {
+            chart.dispatchAction({ type: 'highlight', dataIndex: 0 })
+            chart.on('datazoom', (e) => console.log(e))
+          }}
+        />
       `} />
     </Canvas.Source>
 
@@ -453,8 +634,8 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
               label: "Single bar style"
             },
             {
-              id: "e-commerce-revenue",
-              label: "E-commerce revenue"
+              id: "basic",
+              label: "Basic"
             },
             {
               id: "grouped-with-legend",
@@ -463,6 +644,10 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "stacked-series",
               label: "Stacked series"
+            },
+            {
+              id: "100-stacked",
+              label: "100% stacked"
             },
             {
               id: "track-background",
@@ -475,6 +660,22 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "waterfall",
               label: "Waterfall"
+            },
+            {
+              id: "zoom-and-rotated-labels",
+              label: "Zoom & rotated labels"
+            },
+            {
+              id: "brush-select",
+              label: "Brush select"
+            },
+            {
+              id: "rainfall-vs-evaporation",
+              label: "Rainfall vs evaporation"
+            },
+            {
+              id: "drilldown-multi-level",
+              label: "Drilldown (multi-level)"
             },
           ]
         },
@@ -515,8 +716,12 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
               label: "How do I format values?"
             },
             {
-              id: "how-do-i-react-to-bar-clicks",
-              label: "How do I react to bar clicks?"
+              id: "how-do-i-react-to-bar-clicks-or-hover",
+              label: "How do I react to clicks or hover?"
+            },
+            {
+              id: "how-do-i-access-the-echarts-instance-directly",
+              label: "How do I access the ECharts instance?"
             },
             {
               id: "how-do-i-show-loading-and-empty-states",

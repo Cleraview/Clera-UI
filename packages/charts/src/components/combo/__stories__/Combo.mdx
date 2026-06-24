@@ -1,0 +1,223 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as ComboStories from "./Combo.stories"
+import { Canvas } from "@ui/stories/_components/Canvas"
+import { DocInfo } from "@ui/stories/_components/DocInfo"
+import { TableOfContents } from "@ui/stories/_components/TableOfContents"
+import { DocsLayout } from "@ui/stories/_components/DocsLayout"
+
+<Meta title="Charts/Combo" of={ComboStories} />
+
+<DocsLayout>
+  <div>
+    # Combo
+
+    To overlay different series types on a shared category axis.
+    <DocInfo importStatement={`import { Combo } from '@clera/charts'`} sourcePath={`components/combo`} />
+
+    <br />
+
+    ## **When To Use**
+    The Combo chart mixes `bar`, `line`, and `area` series on one cartesian grid — revenue bars with an orders line, rainfall bars with a temperature line, and so on. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`, and adapts to light/dark mode automatically.
+
+    In {config.title}, it is driven entirely by the `series` array:
+
+      - **Series types**: Each series picks its own `type`.
+        - `bar`: Discrete values (rounded columns).
+        - `line`: A trend line, optionally `smooth`.
+        - `area`: A line with a translucent fill.
+
+      - **Dual axes**: Set `axis: 'right'` on a series to plot it against a second value axis — ideal for two different units (e.g. mm vs. °C). Configure each side with `leftAxis` / `rightAxis` (`{ name, min, max, format }`).
+      - **Per-series color**: `variant` (a design-system token) or a raw `color`; otherwise the categorical palette is used.
+      - **Shared tooltip**: Hovering a category lists every series, each formatted by its own axis.
+      - **Legend, grid, labels, loading, empty, animation**: Same ergonomics as `Bar`.
+      - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
+
+    ## **Examples**
+    ### **Mixed line and bar**
+
+    Revenue bars on the left axis and an orders line on the right axis — two units in one chart, each formatting its own ticks and tooltip rows.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboStories.LineAndBar} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Combo } from '@clera/charts'
+
+          const Performance = () => (
+            <Combo
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              leftAxis={{ name: 'Revenue', format: (v) => '$' + (v / 1000).toFixed(0) + 'k' }}
+              rightAxis={{ name: 'Orders' }}
+              series={[
+                { name: 'Revenue', type: 'bar', data: [42000, 38500, 51200, 47800, 63400, 72100], variant: 'primary' },
+                { name: 'Orders', type: 'line', axis: 'right', smooth: true, data: [320, 290, 410, 380, 520, 610], variant: 'warning' },
+              ]}
+            />
+          )
+
+          export default Performance
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Rainfall and evaporation**
+
+    The classic weather combo: rainfall and evaporation bars (mm, left) with a temperature line (°C, right).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboStories.Rainfall} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Combo } from '@clera/charts'
+
+          const Weather = () => (
+            <Combo
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              leftAxis={{ name: 'mm' }}
+              rightAxis={{ name: '°C', format: (v) => v + '°' }}
+              series={[
+                { name: 'Rainfall', type: 'bar', data: [26, 59, 90, 264, 287, 707], variant: 'info' },
+                { name: 'Evaporation', type: 'bar', data: [20, 41, 78, 110, 142, 251], variant: 'success' },
+                { name: 'Temperature', type: 'line', axis: 'right', smooth: true, data: [6, 9, 14, 21, 25, 28], variant: 'destructive' },
+              ]}
+            />
+          )
+
+          export default Weather
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Area and bar**
+
+    An `area` series (a filled line) layered with a bar series on one axis.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboStories.AreaAndBar} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Combo } from '@clera/charts'
+
+          const Growth = () => (
+            <Combo
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              leftAxis={{ name: 'Users' }}
+              series={[
+                { name: 'New', type: 'bar', data: [120, 160, 140, 210, 260, 300], variant: 'primary' },
+                { name: 'Active', type: 'area', smooth: true, data: [400, 520, 610, 760, 980, 1180], variant: 'info' },
+              ]}
+            />
+          )
+
+          export default Growth
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Combo component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I plot two different units?**
+
+    Put one series on the right axis with `axis: 'right'`, then configure `leftAxis`/`rightAxis` independently — each `format` applies to its own ticks and tooltip rows.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Combo
+          categories={categories}
+          leftAxis={{ name: 'mm' }}
+          rightAxis={{ name: '°C', format: (v) => v + '°' }}
+          series={[
+            { name: 'Rainfall', type: 'bar', data: rain },
+            { name: 'Temp', type: 'line', axis: 'right', data: temp },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I make a smooth or filled line?**
+
+    Use `type: 'line'` with `smooth: true`, or `type: 'area'` for a translucent fill under the line.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Combo
+          categories={categories}
+          series={[{ name: 'Active', type: 'area', smooth: true, data }]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I access the ECharts instance?**
+
+    Pass `onReady` — it fires once on mount with the instance, so you can wire up dataZoom, brush, or any ECharts API directly.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Combo categories={categories} series={series} onReady={(chart) => { /* ... */ }} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "mixed-line-and-bar",
+              label: "Mixed line and bar"
+            },
+            {
+              id: "rainfall-and-evaporation",
+              label: "Rainfall and evaporation"
+            },
+            {
+              id: "area-and-bar",
+              label: "Area and bar"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-plot-two-different-units",
+              label: "How do I plot two units?"
+            },
+            {
+              id: "how-do-i-make-a-smooth-or-filled-line",
+              label: "Smooth or filled line?"
+            },
+            {
+              id: "how-do-i-access-the-echarts-instance",
+              label: "Access the ECharts instance?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

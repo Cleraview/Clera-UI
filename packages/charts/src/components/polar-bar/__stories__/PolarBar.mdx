@@ -1,0 +1,170 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as PolarBarStories from "./PolarBar.stories"
+import { Canvas } from "@ui/stories/_components/Canvas"
+import { DocInfo } from "@ui/stories/_components/DocInfo"
+import { TableOfContents } from "@ui/stories/_components/TableOfContents"
+import { DocsLayout } from "@ui/stories/_components/DocsLayout"
+
+<Meta title="Charts/PolarBar" of={PolarBarStories} />
+
+<DocsLayout>
+  <div>
+    # PolarBar
+
+    To plot bars on a circular (polar) coordinate system.
+    <DocInfo importStatement={`import { PolarBar } from '@clera/charts'`} sourcePath={`components/polar-bar`} />
+
+    <br />
+
+    ## **When To Use**
+    The PolarBar wraps bars around a circle. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`/`Combo`, and adapts to light/dark mode automatically.
+
+    Reach for it when the round layout itself carries meaning:
+
+      - **Orientation**: Choose how the circle is used.
+        - `angular`: Bars sweep around the circle — category on the angle axis, value on the radius. Great for cyclical data (weekdays, hours, compass directions).
+        - `radial`: Concentric rings — category on the radius axis, value sweeping around. Reads like a set of progress rings.
+
+      - **Single or grouped**: Pass `data` for one series, or `categories` + `series` for several. Add `stacked` to stack the series around the circle.
+      - **Coloring**: `palette="categorical"` gives each slice its own color; or set `variant`/`color` per datum or series.
+      - **Polar knobs**: `roundCap` rounds the bar ends, `startAngle` rotates the circle, `max`/`min` fix the value scale.
+
+    A caveat worth knowing: polar bars are eye-catching but harder to read precise values from than cartesian bars — prefer them for cyclical or comparative-at-a-glance data, and keep `Bar` for exact comparisons.
+
+    ## **Examples**
+    ### **Bar on polar**
+
+    Single-series bars sweeping around the circle — commits per weekday, one color per slice via `palette="categorical"`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Angular} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Commits = () => (
+            <PolarBar
+              orientation="angular"
+              palette="categorical"
+              showValues
+              data={[
+                { label: 'Mon', value: 42 },
+                { label: 'Tue', value: 58 },
+                { label: 'Wed', value: 51 },
+                { label: 'Thu', value: 64 },
+                { label: 'Fri', value: 70 },
+                { label: 'Sat', value: 22 },
+                { label: 'Sun', value: 18 },
+              ]}
+            />
+          )
+
+          export default Commits
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Stacked on polar**
+
+    Grouped series stacked around the circle, with a legend to toggle them.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Stacked} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Traffic = () => (
+            <PolarBar
+              orientation="angular"
+              stacked
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Direct', data: [20, 28, 24, 30, 34, 10, 8], variant: 'primary' },
+                { name: 'Search', data: [14, 18, 16, 20, 22, 8, 6], variant: 'info' },
+                { name: 'Social', data: [8, 12, 11, 14, 14, 4, 4], variant: 'success' },
+              ]}
+            />
+          )
+
+          export default Traffic
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Radial (concentric)**
+
+    `orientation="radial"` lays categories along the radius and sweeps the value around — like progress rings.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Radial} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Usage = () => (
+            <PolarBar
+              orientation="radial"
+              palette="categorical"
+              max={100}
+              showValues
+              formatValue={(v) => v + '%'}
+              data={[
+                { label: 'Storage', value: 82 },
+                { label: 'Bandwidth', value: 47 },
+                { label: 'Seats', value: 95 },
+                { label: 'API', value: 61 },
+              ]}
+            />
+          )
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the PolarBar component, along with their types, default values, and descriptions.
+    <ArgTypes />
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "bar-on-polar",
+              label: "Bar on polar"
+            },
+            {
+              id: "stacked-on-polar",
+              label: "Stacked on polar"
+            },
+            {
+              id: "radial-concentric",
+              label: "Radial (concentric)"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

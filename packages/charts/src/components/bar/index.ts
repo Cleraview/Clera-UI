@@ -1,4 +1,6 @@
 export { Bar } from './Bar'
+export { useBarDrilldown } from './useDrilldown'
+export type { UseBarDrilldownResult, BarDrilldownDatum } from './useDrilldown'
 export type {
   BarProps,
   BarDatum,
@@ -6,6 +8,9 @@ export type {
   BarVariant,
   BarPalette,
   BarSort,
+  BarStackMode,
+  BarZoom,
+  BarMarkPoint,
   BarLegendPosition,
   BarReferenceLine,
 } from './types'

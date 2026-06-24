@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Bar } from '../Bar'
+import { useBarDrilldown, type BarDrilldownDatum } from '../useDrilldown'
 
 const meta: Meta<typeof Bar> = {
   title: 'Charts/Bar',
@@ -154,10 +155,20 @@ const meta: Meta<typeof Bar> = {
     referenceLine: {
       control: 'object',
       description:
-        'Draw a dashed reference line across the value axis, e.g. a target or average. Shape is `{ value, label? }`.',
+        "Draw a dashed reference line on the value axis. `{ value, label? }` for a fixed line (a pill on the first series), or the string `'average'` for a per-series average line.",
       table: {
-        type: { summary: '{ value: number; label?: string }' },
+        type: { summary: "{ value: number; label?: string } | 'average'" },
         defaultValue: { summary: 'undefined' },
+      },
+    },
+    markPoints: {
+      control: { type: 'check' },
+      options: ['max', 'min'],
+      description:
+        'Pin the `max` and/or `min` value of each series with a labelled marker (like the ECharts rainfall example).',
+      table: {
+        type: { summary: "('max' | 'min')[]" },
+        defaultValue: { summary: '[]' },
       },
     },
     max: {
@@ -165,6 +176,68 @@ const meta: Meta<typeof Bar> = {
       description:
         'Force the value-axis maximum. When omitted, the axis auto-scales with headroom so the tallest bar and its label are never clipped.',
       table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
+    },
+    min: {
+      control: 'number',
+      description:
+        'Force the value-axis minimum (e.g. to anchor at 0 or include negative space). Auto when omitted.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
+    },
+    stackMode: {
+      control: { type: 'radio' },
+      options: ['normal', 'percent'],
+      description:
+        "Stacking mode for grouped series. `percent` normalizes each category to 100% (implies stacking). Pair with a percent `formatValue` like `v => Math.round(v) + '%'`.",
+      table: {
+        type: { summary: "'normal' | 'percent'" },
+        defaultValue: { summary: 'normal' },
+      },
+    },
+    zoom: {
+      control: { type: 'select' },
+      options: [false, true, 'category', 'value'],
+      description:
+        'Add a dataZoom slider + inside (scroll/drag) zoom. `true`/`category` zooms the category axis (page through many bars); `value` zooms the value axis.',
+      table: {
+        type: { summary: "boolean | 'category' | 'value'" },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    selectable: {
+      control: 'boolean',
+      description:
+        'Enable brush selection via a toolbox button. Drag across the chart to select a band of bars; results come back through `onBrushSelect`.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    axisLabelRotate: {
+      control: { type: 'range', min: -90, max: 90, step: 15 },
+      description:
+        'Rotate the category-axis labels by this many degrees — useful when labels are long or crowded.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
+    },
+    valueAxisName: {
+      control: 'text',
+      description: 'Axis title for the value axis.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
+    },
+    categoryAxisName: {
+      control: 'text',
+      description: 'Axis title for the category axis.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
+    },
+    onBrushSelect: {
+      action: 'bar:brush',
+      description:
+        'Called when a brush selection changes, with `{ indices, labels }` for the selected bars (requires `selectable`).',
+      table: {
+        type: {
+          summary:
+            '(selection: { indices: number[]; labels: string[] }) => void',
+        },
+      },
     },
     barRadius: {
       control: 'number',
@@ -228,6 +301,23 @@ const meta: Meta<typeof Bar> = {
         'Called with `(datum, index)` when a bar is clicked, mapped back to the original (unsorted) datum.',
       table: { type: { summary: '(datum: BarDatum, index: number) => void' } },
     },
+    onBarHover: {
+      action: 'bar:hover',
+      description:
+        'Called with `(datum, index)` when a bar is hovered. Useful for syncing external UI.',
+      table: { type: { summary: '(datum: BarDatum, index: number) => void' } },
+    },
+    onBarLeave: {
+      action: 'bar:leave',
+      description: 'Called when the pointer leaves a bar.',
+      table: { type: { summary: '() => void' } },
+    },
+    onReady: {
+      action: 'ready',
+      description:
+        'Escape hatch — called once on mount with the ECharts instance, so you can wire up dataZoom, brush, drilldown, or any ECharts API directly.',
+      table: { type: { summary: '(chart: ECharts) => void' } },
+    },
     className: {
       control: 'text',
       description: 'Class name merged onto the chart container.',
@@ -246,7 +336,7 @@ const meta: Meta<typeof Bar> = {
     loading: false,
     emptyMessage: 'No data',
     referenceLine: { value: 55000, label: 'Target' },
-    formatValue: v => `$${(v / 1000).toFixed(1)}k`,
+    formatValue: (v: number) => `$${(v / 1000).toFixed(1)}k`,
     data: [
       { label: 'Jan', value: 42000 },
       { label: 'Feb', value: 38500 },
@@ -262,8 +352,8 @@ export default meta
 
 type Story = StoryObj<typeof Bar>
 
-export const Ecommerce: Story = {
-  name: 'E-commerce revenue',
+export const Basic: Story = {
+  name: 'Basic',
   parameters: {
     docs: {
       description: {
@@ -495,4 +585,335 @@ export const Waterfall: Story = {
       <Bar {...args} />
     </div>
   ),
+}
+
+export const PercentStacked: Story = {
+  name: '100% stacked',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A recreation of the ECharts "Stacked Bar Normalization" example. `stackMode="percent"` normalizes each category to 100% (stacking is implied), and `showValues` prints each segment’s share inside the bar — pass the raw values and a percent `formatValue`; the component does the normalization.',
+      },
+    },
+  },
+  args: {
+    direction: 'horizontal',
+    height: 380,
+    stackMode: 'percent',
+    showLegend: true,
+    showValueAxis: false,
+    showValues: true,
+    referenceLine: undefined,
+    data: undefined,
+    formatValue: v => `${Math.round(v)}%`,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Direct', data: [100, 302, 301, 334, 390, 330, 320] },
+      { name: 'Mail Ad', data: [320, 132, 101, 134, 90, 230, 210] },
+      { name: 'Affiliate Ad', data: [220, 182, 191, 234, 290, 330, 310] },
+      { name: 'Video Ad', data: [150, 212, 201, 154, 190, 330, 410] },
+      { name: 'Search Engine', data: [820, 832, 901, 934, 1290, 1330, 1320] },
+    ],
+  },
+  render: args => (
+    <div className="w-[640px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const zoomData = Array.from({ length: 24 }, (_, i) => ({
+  label: `2024-${String(i + 1).padStart(2, '0')}`,
+  value: Math.round(120 + Math.sin(i / 2) * 60 + i * 4),
+}))
+
+export const Zoom: Story = {
+  name: 'Zoom & rotated labels',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'With many categories, set `zoom` for a dataZoom slider + scroll/drag zoom, and `axisLabelRotate` to keep long labels readable. `categoryAxisName`/`valueAxisName` add axis titles. Switch `zoom="value"` to zoom the value axis instead.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 340,
+    zoom: 'category',
+    axisLabelRotate: 45,
+    showValueAxis: true,
+    showValues: false,
+    categoryAxisName: 'Month',
+    valueAxisName: 'Units',
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: zoomData,
+  },
+  render: args => (
+    <div className="w-[640px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const BrushSelect: Story = {
+  name: 'Brush select',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `selectable` to add a brush toolbox button (top-right). Activate it, then drag across the bars to select a band — the selected `{ indices, labels }` come back through `onBrushSelect` (see the Actions panel).',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 320,
+    selectable: true,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: [
+      { label: 'Jan', value: 320 },
+      { label: 'Feb', value: 280 },
+      { label: 'Mar', value: 410 },
+      { label: 'Apr', value: 380 },
+      { label: 'May', value: 520 },
+      { label: 'Jun', value: 470 },
+    ],
+  },
+  render: args => (
+    <div className="w-[560px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const RainfallVsEvaporation: Story = {
+  name: 'Rainfall vs evaporation',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A recreation of the classic ECharts "Rainfall vs Evaporation" example with our `Bar`: two grouped series, `markPoints={["max", "min"]}` to pin each series’ extremes, and `referenceLine="average"` to draw each series’ own average line.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    markPoints: ['max', 'min'],
+    referenceLine: 'average',
+    formatValue: v => `${v}`,
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    data: undefined,
+    series: [
+      {
+        name: 'Rainfall',
+        variant: 'info',
+        data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3],
+      },
+      {
+        name: 'Evaporation',
+        variant: 'success',
+        data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[720px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const drilldownTree: BarDrilldownDatum[] = [
+  {
+    label: 'Americas',
+    value: 2260,
+    variant: 'info',
+    children: [
+      {
+        label: 'USA',
+        value: 1500,
+        children: [
+          { label: 'New York', value: 620 },
+          { label: 'San Francisco', value: 480 },
+          { label: 'Austin', value: 240 },
+          { label: 'Chicago', value: 160 },
+        ],
+      },
+      {
+        label: 'Canada',
+        value: 420,
+        children: [
+          { label: 'Toronto', value: 240 },
+          { label: 'Vancouver', value: 180 },
+        ],
+      },
+      {
+        label: 'Brazil',
+        value: 340,
+        children: [
+          { label: 'São Paulo', value: 210 },
+          { label: 'Rio', value: 130 },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'EMEA',
+    value: 1830,
+    variant: 'success',
+    children: [
+      {
+        label: 'UK',
+        value: 700,
+        children: [
+          { label: 'London', value: 520 },
+          { label: 'Manchester', value: 180 },
+        ],
+      },
+      {
+        label: 'Germany',
+        value: 560,
+        children: [
+          { label: 'Berlin', value: 300 },
+          { label: 'Munich', value: 260 },
+        ],
+      },
+      {
+        label: 'France',
+        value: 370,
+        children: [{ label: 'Paris', value: 370 }],
+      },
+      { label: 'UAE', value: 200, children: [{ label: 'Dubai', value: 200 }] },
+    ],
+  },
+  {
+    label: 'APAC',
+    value: 2010,
+    variant: 'warning',
+    children: [
+      {
+        label: 'China',
+        value: 900,
+        children: [
+          { label: 'Shanghai', value: 520 },
+          { label: 'Beijing', value: 380 },
+        ],
+      },
+      {
+        label: 'Japan',
+        value: 620,
+        children: [
+          { label: 'Tokyo', value: 440 },
+          { label: 'Osaka', value: 180 },
+        ],
+      },
+      {
+        label: 'India',
+        value: 490,
+        children: [
+          { label: 'Mumbai', value: 300 },
+          { label: 'Bengaluru', value: 190 },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Africa',
+    value: 540,
+    variant: 'destructive',
+    children: [
+      {
+        label: 'Nigeria',
+        value: 300,
+        children: [{ label: 'Lagos', value: 300 }],
+      },
+      {
+        label: 'South Africa',
+        value: 240,
+        children: [
+          { label: 'Cape Town', value: 140 },
+          { label: 'Johannesburg', value: 100 },
+        ],
+      },
+    ],
+  },
+]
+
+export const Drilldown: Story = {
+  name: 'Drilldown (multi-level)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Click a bar to drill into its children, and use the breadcrumb to jump back up — regions → countries → cities. Powered by the `useBarDrilldown` helper feeding `data` + `onBarClick`; the chart itself stays declarative. Leaf bars (no children) simply do nothing.',
+      },
+    },
+  },
+  render: () => {
+    const { data, path, depth, onBarClick, drillTo } =
+      useBarDrilldown(drilldownTree)
+    return (
+      <div className="w-[640px]">
+        <div className="mb-3 flex items-center gap-2 text-body-sm">
+          {path.map((label, i) => {
+            const isCurrent = i === path.length - 1
+            return (
+              <span key={`${label}-${i}`} className="flex items-center gap-2">
+                {i > 0 && (
+                  <span aria-hidden className="text-ds-subtlest">
+                    /
+                  </span>
+                )}
+                {isCurrent ? (
+                  <span className="font-medium text-ds-default">{label}</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => drillTo(i)}
+                    className="cursor-pointer text-ds-subtle hover:text-ds-default"
+                  >
+                    {label}
+                  </button>
+                )}
+              </span>
+            )
+          })}
+          {depth === 0 && (
+            <span className="text-ds-subtlest">— click a bar to drill in</span>
+          )}
+        </div>
+        <Bar
+          data={data}
+          direction="vertical"
+          showValueAxis
+          formatValue={v => `$${v}`}
+          height={320}
+          onBarClick={onBarClick}
+        />
+      </div>
+    )
+  },
 }

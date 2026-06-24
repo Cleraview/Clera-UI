@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import * as echarts from 'echarts/core'
-import type { ECharts } from 'echarts/core'
 import { BarChart as EBarChart } from 'echarts/charts'
 import {
   GridComponent,
@@ -10,13 +9,19 @@ import {
   TitleComponent,
   LegendComponent,
   MarkLineComponent,
+  MarkPointComponent,
+  DataZoomComponent,
+  BrushComponent,
+  ToolboxComponent,
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
 import { resolveVariant } from '@/utils'
-import { buildBarOption } from './buildOption'
+import { useEChart } from '@/hooks'
+import type { EChartEventParams, EChartEvents } from '@/hooks'
+import { buildBarOption, getBarCategories } from './buildOption'
 import { styles } from './styles'
-import type { BarProps } from './types'
+import type { BarProps, BarDatum } from './types'
 
 export type {
   BarProps,
@@ -36,14 +41,30 @@ echarts.use([
   TitleComponent,
   LegendComponent,
   MarkLineComponent,
+  MarkPointComponent,
+  DataZoomComponent,
+  BrushComponent,
+  ToolboxComponent,
   CanvasRenderer,
 ])
+
+function resolveBarDatum(
+  params: EChartEventParams,
+  data: BarDatum[]
+): [BarDatum, number] {
+  const name = params.name ?? ''
+  const index = data.findIndex(d => d.label === name)
+  if (index >= 0) return [data[index], index]
+  const value = typeof params.value === 'number' ? params.value : 0
+  return [{ label: name, value }, params.dataIndex ?? -1]
+}
 
 export const Bar: React.FC<BarProps> = ({
   data = [],
   categories,
   series,
   max,
+  min,
   showValues = true,
   formatValue = v => String(v),
   direction = 'horizontal',
@@ -53,6 +74,7 @@ export const Bar: React.FC<BarProps> = ({
   showLegend,
   legendPosition = 'top',
   stacked = false,
+  stackMode = 'normal',
   showTrack = false,
   trackColor,
   gridLines,
@@ -61,15 +83,23 @@ export const Bar: React.FC<BarProps> = ({
   barWidth,
   sort = 'none',
   referenceLine,
+  markPoints = [],
+  zoom = false,
+  selectable = false,
+  axisLabelRotate = 0,
+  valueAxisName,
+  categoryAxisName,
   loading = false,
   animate = true,
   emptyMessage = 'No data',
   onBarClick,
+  onBarHover,
+  onBarLeave,
+  onBrushSelect,
+  onReady,
   className,
   style,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const chartRef = useRef<ECharts | null>(null)
   const isHorizontal = direction === 'horizontal'
 
   const buildOption = useCallback(
@@ -79,6 +109,7 @@ export const Bar: React.FC<BarProps> = ({
         categories,
         series,
         max,
+        min,
         isHorizontal,
         showValues,
         formatValue,
@@ -87,6 +118,7 @@ export const Bar: React.FC<BarProps> = ({
         showLegend,
         legendPosition,
         stacked,
+        stackMode,
         showTrack,
         trackColor,
         gridLines,
@@ -95,6 +127,12 @@ export const Bar: React.FC<BarProps> = ({
         barWidth,
         sort,
         referenceLine,
+        markPoints,
+        zoom,
+        selectable,
+        axisLabelRotate,
+        valueAxisName,
+        categoryAxisName,
         animate,
         emptyMessage,
       }),
@@ -103,6 +141,7 @@ export const Bar: React.FC<BarProps> = ({
       categories,
       series,
       max,
+      min,
       isHorizontal,
       showValues,
       formatValue,
@@ -111,6 +150,7 @@ export const Bar: React.FC<BarProps> = ({
       showLegend,
       legendPosition,
       stacked,
+      stackMode,
       showTrack,
       trackColor,
       gridLines,
@@ -119,101 +159,68 @@ export const Bar: React.FC<BarProps> = ({
       barWidth,
       sort,
       referenceLine,
+      markPoints,
+      zoom,
+      selectable,
+      axisLabelRotate,
+      valueAxisName,
+      categoryAxisName,
       animate,
       emptyMessage,
     ]
   )
 
-  const buildOptionRef = useRef(buildOption)
-  useEffect(() => {
-    buildOptionRef.current = buildOption
-  }, [buildOption])
+  const events = useMemo<EChartEvents>(
+    () => ({
+      click: params => {
+        const [datum, index] = resolveBarDatum(params, data)
+        onBarClick?.(datum, index)
+      },
+      mouseover: params => {
+        if (params.componentType !== 'series') return
+        const [datum, index] = resolveBarDatum(params, data)
+        onBarHover?.(datum, index)
+      },
+      mouseout: () => onBarLeave?.(),
+      brushselected: params => {
+        if (!onBrushSelect) return
+        const selected = params.batch?.[0]?.selected ?? []
+        const indices = Array.from(
+          new Set(selected.flatMap(s => s.dataIndex ?? []))
+        )
+        const display = getBarCategories({
+          data,
+          categories,
+          series,
+          sort,
+          isHorizontal,
+        })
+        const labels = indices
+          .map(i => display[i])
+          .filter((label): label is string => Boolean(label))
+        onBrushSelect({ indices, labels })
+      },
+    }),
+    [
+      data,
+      categories,
+      series,
+      sort,
+      isHorizontal,
+      onBarClick,
+      onBarHover,
+      onBarLeave,
+      onBrushSelect,
+    ]
+  )
 
-  const dataRef = useRef(data)
-  useEffect(() => {
-    dataRef.current = data
-  }, [data])
-
-  const onBarClickRef = useRef(onBarClick)
-  useEffect(() => {
-    onBarClickRef.current = onBarClick
-  }, [onBarClick])
-
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-
-    const chart = echarts.init(el, undefined, { renderer: 'canvas' })
-    chartRef.current = chart
-
-    const handleClick = (params: {
-      name?: string
-      value?: unknown
-      dataIndex?: number
-    }) => {
-      const name = params.name ?? ''
-      const index = dataRef.current.findIndex(d => d.label === name)
-      if (index >= 0) {
-        onBarClickRef.current?.(dataRef.current[index], index)
-        return
-      }
-      const value = typeof params.value === 'number' ? params.value : 0
-      onBarClickRef.current?.({ label: name, value }, params.dataIndex ?? -1)
-    }
-    chart.on('click', handleClick)
-
-    const observer = new ResizeObserver(() => chart.resize())
-    observer.observe(el)
-
-    return () => {
-      observer.disconnect()
-      chart.dispose()
-      chartRef.current = null
-    }
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const apply = () =>
-      chartRef.current?.setOption(buildOptionRef.current(), true)
-
-    const observer = new MutationObserver(apply)
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme', 'class'],
-    })
-
-    const media =
-      typeof window.matchMedia === 'function'
-        ? window.matchMedia('(prefers-color-scheme: dark)')
-        : null
-    media?.addEventListener('change', apply)
-
-    return () => {
-      observer.disconnect()
-      media?.removeEventListener('change', apply)
-    }
-  }, [])
-
-  useEffect(() => {
-    const chart = chartRef.current
-    if (!chart) return
-    if (loading) {
-      chart.showLoading('default', {
-        text: '',
-        color: resolveVariant('primary'),
-        maskColor: 'rgba(0, 0, 0, 0)',
-        spinnerRadius: 8,
-        lineWidth: 2,
-      })
-    } else {
-      chart.hideLoading()
-    }
-  }, [loading])
-
-  useEffect(() => {
-    chartRef.current?.setOption(buildOption(), true)
-  }, [buildOption])
+  const { containerRef } = useEChart({
+    buildOption,
+    loading,
+    loadingColor: resolveVariant('primary'),
+    events,
+    onReady,
+  })
 
   return (
     <div
