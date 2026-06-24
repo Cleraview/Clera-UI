@@ -1,10 +1,10 @@
 import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
-import config from "@/config/site"
+import config from "@ui/config/site"
 import * as BarStories from "./Bar.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@ui/stories/_components/Canvas"
+import { DocInfo } from "@ui/stories/_components/DocInfo"
+import { TableOfContents } from "@ui/stories/_components/TableOfContents"
+import { DocsLayout } from "@ui/stories/_components/DocsLayout"
 
 <Meta title="Charts/Bar" of={BarStories} />
 
@@ -29,7 +29,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
       - **Palette & Variant**: Control coloring.
         - `palette="brand"`: A single primary color for every bar (default).
         - `palette="categorical"`: Cycles the eight design-system categorical colors.
-        - `variant` per datum: Recolor a single bar (`primary`, `success`, `info`, `warning`, `destructive`).
+        - `variant` per datum: Recolor a single bar (`primary`, `success`, `info`, `warning`, `destructive`, `neutral`).
 
     - **Grouped Series**: Provide `categories` + `series` to compare more than one measure per category, with an interactive **legend**.
     - **Value Axis & Grid Lines**: Turn on `showValueAxis` for a formatted scale; toggle `gridLines` independently.
@@ -42,6 +42,37 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     These options make the Bar a versatile building block for dashboards and KPI cards, while staying consistent with the rest of the system.
 
     ## **Examples**
+    ### **Single bar style**
+
+    Give one datum its own `variant` (or `color`) to make a single bar stand out. Here every bar is muted with the `neutral` variant except the peak, which uses `primary`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.SingleBarStyle} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Highlight = () => (
+            <Bar
+              direction="vertical"
+              data={[
+                { label: 'Jan', value: 320, variant: 'neutral' },
+                { label: 'Feb', value: 280, variant: 'neutral' },
+                { label: 'Mar', value: 410, variant: 'neutral' },
+                { label: 'Apr', value: 380, variant: 'neutral' },
+                { label: 'May', value: 520, variant: 'primary' },
+                { label: 'Jun', value: 470, variant: 'neutral' },
+              ]}
+            />
+          )
+
+          export default Highlight
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ### **E-commerce revenue**
 
     Monthly gross revenue as columns with a "Target" reference line. `showValueAxis` renders the y-axis scale and grid lines, while `formatValue` formats the ticks, tooltip, and reference label as currency.
@@ -115,6 +146,154 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **Stacked series**
+    Add `stacked` to a grouped chart to stack series into a single bar per category. Only the outer segment is rounded and value labels move inside each segment.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.Stacked} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const RevenueSplit = () => {
+            return (
+              <Bar
+                direction="vertical"
+                stacked
+                showLegend
+                showValueAxis
+                formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
+                height={360}
+                categories={['Q1', 'Q2', 'Q3', 'Q4']}
+                series={[
+                  { name: 'New', data: [28000, 24500, 31200, 40100] },
+                  { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+                ]}
+              />
+            )
+          }
+
+          export default RevenueSplit
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Track background**
+    Set `showTrack` to render a faint full-length rail behind each bar — ideal for usage/quota meters. Pair it with `max` so the rail represents a meaningful 100%.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.WithTrack} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const UsageMeters = () => {
+            return (
+              <Bar
+                direction="horizontal"
+                showTrack
+                max={100}
+                formatValue={(v) => v + '%'}
+                height={240}
+                data={[
+                  { label: 'Storage', value: 82, variant: 'warning' },
+                  { label: 'Bandwidth', value: 47, variant: 'info' },
+                  { label: 'Seats', value: 95, variant: 'destructive' },
+                  { label: 'API calls', value: 61, variant: 'success' },
+                ]}
+              />
+            )
+          }
+
+          export default UsageMeters
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Negative values**
+    Bars render above and below the zero baseline automatically. Color each bar by sign with a per-datum `variant`; the corner radius flips to the correct end for negative bars.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.NegativeValues} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const MonthlyGrowth = () => (
+            <Bar
+              direction="vertical"
+              showValueAxis
+              formatValue={(v) => (v > 0 ? '+' : '') + v + '%'}
+              data={[
+                { label: 'Jan', value: 12, variant: 'success' },
+                { label: 'Feb', value: -8, variant: 'destructive' },
+                { label: 'Mar', value: 5, variant: 'success' },
+                { label: 'Apr', value: -14, variant: 'destructive' },
+                { label: 'May', value: 9, variant: 'success' },
+                { label: 'Jun', value: 18, variant: 'success' },
+              ]}
+            />
+          )
+
+          export default MonthlyGrowth
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Waterfall**
+    A waterfall is a stacked chart with a transparent **base** series carrying the running offset and a visible **change** series on top. Mark the base series `silent` so it stays out of the tooltip, labels, and legend.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.Waterfall} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          // Turn deltas into a transparent base + a visible change series.
+          const steps = [
+            { label: 'Open', delta: 3200 },
+            { label: 'Sales', delta: 4800 },
+            { label: 'Refunds', delta: -1500 },
+            { label: 'Payroll', delta: -2600 },
+            { label: 'Marketing', delta: -1100 },
+            { label: 'Net', delta: 900 },
+          ]
+          let running = 0
+          const base = steps.map((s) => {
+            const before = running
+            running += s.delta
+            return Math.min(before, running)
+          })
+          const change = steps.map((s) => Math.abs(s.delta))
+
+          const CashFlow = () => (
+            <Bar
+              direction="vertical"
+              stacked
+              showLegend={false}
+              showValueAxis
+              formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
+              categories={steps.map((s) => s.label)}
+              series={[
+                { name: 'base', data: base, color: 'transparent', silent: true },
+                { name: 'Change', data: change, variant: 'primary' },
+              ]}
+            />
+          )
+
+          export default CashFlow
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ## **API**
     Below is a comprehensive list of all the props available for the Bar component, along with their types, default values, and descriptions.
     <ArgTypes />
@@ -154,14 +333,49 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     #### **How do I recolor individual bars?**
 
-    Set a `variant` on a datum to override the palette for that single bar, or switch the whole chart to `palette="categorical"`.
+    Colors resolve in this order: a custom `color` on the datum/series → its `variant` (a token) → the chart `palette` (token default). So use `variant` to stay on-token, switch the whole chart to `palette="categorical"`, or pass a raw `color` for a one-off.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Bar
           data={[
             { label: 'Mobile', value: 482, variant: 'success' },
-            { label: 'Desktop', value: 318, variant: 'warning' },
+            { label: 'Desktop', value: 318, color: '#7c3aed' },
           ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I create a stacked bar chart?**
+
+    Use grouped mode (`categories` + `series`) and add `stacked`. Series stack into one bar per category; only the outer segment is rounded and labels render inside the segments.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar
+          stacked
+          showLegend
+          categories={['Q1', 'Q2']}
+          series={[
+            { name: 'New', data: [28000, 24500] },
+            { name: 'Returning', data: [14000, 14000] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I show a background rail behind each bar?**
+
+    Set `showTrack` for a faint full-length rail (great for usage/quota meters). Pair it with `max` for a meaningful 100%, and override the rail color with `trackColor` if needed (it defaults to a theme token).
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar
+          showTrack
+          max={100}
+          formatValue={(v) => v + '%'}
+          data={[{ label: 'Storage', value: 82, variant: 'warning' }]}
         />
       `} />
     </Canvas.Source>
@@ -235,12 +449,32 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
           label: "Examples",
           children: [
             {
+              id: "single-bar-style",
+              label: "Single bar style"
+            },
+            {
               id: "e-commerce-revenue",
               label: "E-commerce revenue"
             },
             {
               id: "grouped-with-legend",
               label: "Grouped with legend"
+            },
+            {
+              id: "stacked-series",
+              label: "Stacked series"
+            },
+            {
+              id: "track-background",
+              label: "Track background"
+            },
+            {
+              id: "negative-values",
+              label: "Negative values"
+            },
+            {
+              id: "waterfall",
+              label: "Waterfall"
             },
           ]
         },
@@ -263,6 +497,14 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
             {
               id: "how-do-i-recolor-individual-bars",
               label: "How do I recolor individual bars?"
+            },
+            {
+              id: "how-do-i-create-a-stacked-bar-chart",
+              label: "How do I create a stacked bar?"
+            },
+            {
+              id: "how-do-i-show-a-background-rail-behind-each-bar",
+              label: "How do I show a background rail?"
             },
             {
               id: "how-do-i-add-a-target-or-average-line",

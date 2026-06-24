@@ -351,6 +351,159 @@ describe('components/charts/Bar', () => {
     expect(option.grid.right).toBeGreaterThanOrEqual(64)
   })
 
+  it('stacks grouped series onto a shared stack when stacked', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'New', data: [10, 20] },
+          { name: 'Returning', data: [5, 8] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].stack).toBe('total')
+    expect(series[1].stack).toBe('total')
+  })
+
+  it('rounds only the outer segment of a stack', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        barRadius={8}
+        categories={['Q1']}
+        series={[
+          { name: 'New', data: [10] },
+          { name: 'Returning', data: [5] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].itemStyle.borderRadius).toEqual([0, 0, 0, 0])
+    expect(series[1].itemStyle.borderRadius).toEqual([8, 8, 0, 0])
+  })
+
+  it('does not stack grouped series by default', () => {
+    render(
+      <Bar
+        direction="vertical"
+        categories={['Q1']}
+        series={[{ name: 'New', data: [10] }]}
+      />
+    )
+    expect(lastOption().series[0].stack).toBeUndefined()
+  })
+
+  it('places stacked value labels inside the segments', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        showValues
+        categories={['Q1']}
+        series={[{ name: 'New', data: [10] }]}
+      />
+    )
+    expect(lastOption().series[0].label.position).toBe('inside')
+  })
+
+  it('renders a track background behind bars when showTrack is set', () => {
+    render(<Bar data={sample} showTrack />)
+    const s = lastOption().series[0]
+    expect(s.showBackground).toBe(true)
+    expect(s.backgroundStyle.color).toMatch(/^rgb/)
+  })
+
+  it('uses a custom track color when provided', () => {
+    render(<Bar data={sample} showTrack trackColor="#abcdef" />)
+    expect(lastOption().series[0].backgroundStyle.color).toBe('#abcdef')
+  })
+
+  it('omits the track background by default', () => {
+    render(<Bar data={sample} />)
+    expect(lastOption().series[0].showBackground).toBe(false)
+  })
+
+  it('honors a per-datum custom color over the palette', () => {
+    render(
+      <Bar
+        data={[
+          { label: 'A', value: 10, color: '#ff0000' },
+          { label: 'B', value: 20 },
+        ]}
+      />
+    )
+    const colors = lastOption().series[0].data.map(
+      (d: { itemStyle: { color: string } }) => d.itemStyle.color
+    )
+    expect(colors).toContain('#ff0000')
+  })
+
+  it('honors a per-series custom color over the palette', () => {
+    render(
+      <Bar
+        direction="vertical"
+        categories={['Q1']}
+        series={[{ name: 'New', data: [10], color: '#00ff00' }]}
+      />
+    )
+    expect(lastOption().series[0].itemStyle.color).toBe('#00ff00')
+  })
+
+  it('flips the corner radius to the far end for negative bars', () => {
+    render(
+      <Bar
+        direction="vertical"
+        barRadius={6}
+        data={[
+          { label: 'Up', value: 10 },
+          { label: 'Down', value: -10 },
+        ]}
+      />
+    )
+    const items = lastOption().series[0].data
+    const up = items.find((d: { value: number }) => d.value === 10)
+    const down = items.find((d: { value: number }) => d.value === -10)
+    expect(up.itemStyle.borderRadius).toEqual([6, 6, 0, 0])
+    expect(down.itemStyle.borderRadius).toEqual([0, 0, 6, 6])
+  })
+
+  it('marks a silent series non-interactive and hides its label', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'base', data: [0, 5], color: 'transparent', silent: true },
+          { name: 'Change', data: [10, 8] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].silent).toBe(true)
+    expect(series[0].label.show).toBe(false)
+    expect(series[1].silent).toBe(false)
+  })
+
+  it('excludes silent series from the legend (waterfall base)', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'base', data: [0, 5], color: 'transparent', silent: true },
+          { name: 'Change', data: [10, 8] },
+        ]}
+      />
+    )
+    expect(lastOption().legend.data).toEqual(['Change'])
+  })
+
   it('animates on load by default', () => {
     render(<Bar data={sample} />)
     expect(lastOption().animation).toBe(true)

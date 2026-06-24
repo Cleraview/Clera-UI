@@ -109,6 +109,33 @@ const meta: Meta<typeof Bar> = {
         defaultValue: { summary: 'top' },
       },
     },
+    stacked: {
+      control: 'boolean',
+      description:
+        'Stack grouped `series` on top of each other instead of placing them side by side. Only the outer segment is rounded; labels move inside the segments.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    showTrack: {
+      control: 'boolean',
+      description:
+        'Render a faint full-length background rail behind each bar. Best with single-series or stacked charts; pair with `max` for a meaningful "100%" rail.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    trackColor: {
+      control: 'color',
+      description:
+        'Custom color for the track rail. Defaults to the `--background-color-ds-neutral` token (theme-aware).',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'token' },
+      },
+    },
     categories: {
       control: 'object',
       description:
@@ -118,7 +145,7 @@ const meta: Meta<typeof Bar> = {
     series: {
       control: 'object',
       description:
-        'Grouped series, each `{ name, data, variant? }`, where `data` aligns to `categories`. Renders a legend keyed by series name.',
+        'Grouped series, each `{ name, data, variant?, color?, silent? }`, where `data` aligns to `categories`. Renders a legend keyed by series name. A `silent` series (e.g. a waterfall base) is excluded from the tooltip, labels, and legend.',
       table: {
         type: { summary: 'BarSeries[]' },
         defaultValue: { summary: '-' },
@@ -276,6 +303,191 @@ export const WithLegend: Story = {
     series: [
       { name: 'New', data: [28000, 24500, 31200, 40100] },
       { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+    ],
+  },
+  render: args => (
+    <div className="w-[560px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const Stacked: Story = {
+  name: 'Stacked series',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `stacked` on a grouped chart to stack the series into a single bar per category. Only the outer segment is rounded, value labels move inside each segment, and the legend still toggles series. Here: revenue split into new vs. returning customers per quarter.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    stacked: true,
+    showLegend: true,
+    legendPosition: 'top',
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 6,
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Q1', 'Q2', 'Q3', 'Q4'],
+    series: [
+      { name: 'New', data: [28000, 24500, 31200, 40100] },
+      { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+    ],
+  },
+  render: args => (
+    <div className="w-[560px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const WithTrack: Story = {
+  name: 'Track background',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `showTrack` to render a faint full-length rail behind each bar — useful for showing progress toward a ceiling. Pairing it with an explicit `max` makes the rail represent a meaningful 100%. The track color defaults to a theme token and can be overridden with `trackColor`.',
+      },
+    },
+  },
+  args: {
+    direction: 'horizontal',
+    height: 240,
+    showTrack: true,
+    showValues: true,
+    showValueAxis: false,
+    max: 100,
+    referenceLine: undefined,
+    formatValue: v => `${v}%`,
+    data: [
+      { label: 'Storage', value: 82, variant: 'warning' },
+      { label: 'Bandwidth', value: 47, variant: 'info' },
+      { label: 'Seats', value: 95, variant: 'destructive' },
+      { label: 'API calls', value: 61, variant: 'success' },
+    ],
+  },
+  render: args => (
+    <div className="w-[480px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const SingleBarStyle: Story = {
+  name: 'Single bar style',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Give one datum its own `variant` (or `color`) to make a single bar stand out from the rest. Here every bar uses the muted `neutral` variant except the peak month, which uses `primary`.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 300,
+    showValues: true,
+    showValueAxis: false,
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: [
+      { label: 'Jan', value: 320, variant: 'neutral' },
+      { label: 'Feb', value: 280, variant: 'neutral' },
+      { label: 'Mar', value: 410, variant: 'neutral' },
+      { label: 'Apr', value: 380, variant: 'neutral' },
+      { label: 'May', value: 520, variant: 'primary' },
+      { label: 'Jun', value: 470, variant: 'neutral' },
+    ],
+  },
+  render: args => (
+    <div className="w-[520px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const NegativeValues: Story = {
+  name: 'Negative values',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Bars render above and below the zero baseline automatically. Color each bar by sign with a per-datum `variant`; the corner radius flips to the correct end for negative bars.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 320,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    formatValue: v => `${v > 0 ? '+' : ''}${v}%`,
+    data: [
+      { label: 'Jan', value: 12, variant: 'success' },
+      { label: 'Feb', value: -8, variant: 'destructive' },
+      { label: 'Mar', value: 5, variant: 'success' },
+      { label: 'Apr', value: -14, variant: 'destructive' },
+      { label: 'May', value: 9, variant: 'success' },
+      { label: 'Jun', value: 18, variant: 'success' },
+    ],
+  },
+  render: args => (
+    <div className="w-[520px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const waterfallSteps = [
+  { label: 'Open', delta: 3200 },
+  { label: 'Sales', delta: 4800 },
+  { label: 'Refunds', delta: -1500 },
+  { label: 'Payroll', delta: -2600 },
+  { label: 'Marketing', delta: -1100 },
+  { label: 'Net', delta: 900 },
+]
+
+const waterfallCategories = waterfallSteps.map(s => s.label)
+const waterfallChange = waterfallSteps.map(s => Math.abs(s.delta))
+let waterfallRunning = 0
+const waterfallBase = waterfallSteps.map(s => {
+  const before = waterfallRunning
+  waterfallRunning += s.delta
+  return Math.min(before, waterfallRunning)
+})
+
+export const Waterfall: Story = {
+  name: 'Waterfall',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A waterfall is a stacked chart with a transparent "base" series carrying the running offset and a visible "change" series on top. Mark the base series `silent` so it stays out of the tooltip, labels, and legend.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 340,
+    stacked: true,
+    showLegend: false,
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 4,
+    referenceLine: undefined,
+    data: undefined,
+    formatValue: v => `$${(v / 1000).toFixed(1)}k`,
+    categories: waterfallCategories,
+    series: [
+      { name: 'base', data: waterfallBase, color: 'transparent', silent: true },
+      { name: 'Change', data: waterfallChange, variant: 'primary' },
     ],
   },
   render: args => (
