@@ -121,6 +121,97 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **Multiple Y axes**
+
+    When two units aren't enough, pass `valueAxes` for three or more. Each axis sets its own `position` (`left`/`right`), an `offset` (px) to stack extra axes on the same side, and a `format`; series point at one with `axis: <index>`. Each axis adopts its series' color so they're easy to tell apart.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboStories.MultipleYAxes} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Combo } from '@clera/charts'
+
+          const Weather = () => (
+            <Combo
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
+              valueAxes={[
+                { name: 'Evaporation', position: 'right', format: (v) => v + ' ml' },
+                { name: 'Precipitation', position: 'right', offset: 80, format: (v) => v + ' ml' },
+                { name: 'Temperature', position: 'left', format: (v) => v + ' °C' },
+              ]}
+              series={[
+                { name: 'Evaporation', type: 'bar', axis: 0, variant: 'info', data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3] },
+                { name: 'Precipitation', type: 'bar', axis: 1, variant: 'success', data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3] },
+                { name: 'Temperature', type: 'line', axis: 2, variant: 'destructive', smooth: true, data: [2, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23, 16.5, 12, 6.2] },
+              ]}
+            />
+          )
+
+          export default Weather
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Dynamic data**
+
+    For a smooth streaming chart, grab the ECharts instance with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval. ECharts merges the update and animates each bar and point to its new slot, so the series slides to the left as the oldest reading drops off — much nicer than re-rendering the whole option.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ComboStories.DynamicData} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useEffect, useMemo, useRef } from 'react'
+          import { Combo } from '@clera/charts'
+
+          const clock = () => new Date().toLocaleTimeString(undefined, { hour12: false })
+          const price = () => +(Math.random() * 10 + 5).toFixed(1)
+          const orders = () => Math.round(Math.random() * 1000)
+
+          const Live = () => {
+            const chartRef = useRef(null)
+            const seed = useMemo(() => ({
+              categories: Array.from({ length: 10 }, clock),
+              price: Array.from({ length: 10 }, price),
+              orders: Array.from({ length: 10 }, orders),
+            }), [])
+
+            useEffect(() => {
+              const live = { ...seed }
+              const id = setInterval(() => {
+                live.categories = [...live.categories.slice(1), clock()]
+                live.price = [...live.price.slice(1), price()]
+                live.orders = [...live.orders.slice(1), orders()]
+                chartRef.current?.setOption({
+                  xAxis: { data: live.categories },
+                  series: [{ data: live.orders }, { data: live.price }],
+                })
+              }, 2100)
+              return () => clearInterval(id)
+            }, [seed])
+
+            return (
+              <Combo
+                categories={seed.categories}
+                leftAxis={{ name: 'Price', min: 0, max: 30 }}
+                rightAxis={{ name: 'Orders', min: 0, max: 1200 }}
+                series={[
+                  { name: 'Dynamic Bar', type: 'bar', axis: 'right', data: seed.orders, variant: 'primary' },
+                  { name: 'Dynamic Line', type: 'line', data: seed.price, variant: 'warning' },
+                ]}
+                onReady={(chart) => { chartRef.current = chart }}
+              />
+            )
+          }
+
+          export default Live
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ## **API**
     Below is a comprehensive list of all the props available for the Combo component, along with their types, default values, and descriptions.
     <ArgTypes />
@@ -192,6 +283,14 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "area-and-bar",
               label: "Area and bar"
+            },
+            {
+              id: "multiple-y-axes",
+              label: "Multiple Y axes"
+            },
+            {
+              id: "dynamic-data",
+              label: "Dynamic data"
             },
           ]
         },

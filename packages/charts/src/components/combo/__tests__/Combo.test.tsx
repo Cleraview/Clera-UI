@@ -94,6 +94,17 @@ describe('components/charts/Combo', () => {
     expect(lastOption().series[0].areaStyle).toBeDefined()
   })
 
+  it('shows the point markers on line series', () => {
+    render(
+      <Combo
+        categories={categories}
+        series={[{ name: 'Orders', type: 'line', data: [1, 2, 3] }]}
+      />
+    )
+    expect(lastOption().series[0].showSymbol).toBe(true)
+    expect(lastOption().series[0].symbol).toBe('circle')
+  })
+
   it('lightens line and area series on hover instead of dropping their color', () => {
     render(
       <Combo
@@ -153,9 +164,119 @@ describe('components/charts/Combo', () => {
     expect(right.min).toBe(0)
   })
 
+  it('builds one value axis per entry in valueAxes and routes series by index', () => {
+    render(
+      <Combo
+        categories={categories}
+        valueAxes={[
+          { name: 'A', position: 'right' },
+          { name: 'B', position: 'right', offset: 80 },
+          { name: 'C', position: 'left' },
+        ]}
+        series={[
+          { name: 'S0', type: 'bar', axis: 0, data: [1, 2, 3] },
+          { name: 'S1', type: 'bar', axis: 1, data: [4, 5, 6] },
+          { name: 'S2', type: 'line', axis: 2, data: [7, 8, 9] },
+        ]}
+      />
+    )
+    const option = lastOption()
+    expect(option.yAxis).toHaveLength(3)
+    expect(option.yAxis[1].position).toBe('right')
+    expect(option.yAxis[1].offset).toBe(80)
+    expect(
+      option.series.map((s: { yAxisIndex: number }) => s.yAxisIndex)
+    ).toEqual([0, 1, 2])
+  })
+
+  it('reserves extra top space when a top legend meets top axis names', () => {
+    const { rerender } = render(
+      <Combo
+        categories={categories}
+        showLegend
+        legendPosition="top"
+        series={[{ name: 'S', type: 'bar', data: [1, 2, 3] }]}
+      />
+    )
+    const plain = lastOption().grid.top
+
+    rerender(
+      <Combo
+        categories={categories}
+        showLegend
+        legendPosition="top"
+        valueAxes={[
+          { name: 'A' },
+          { name: 'B', position: 'right' },
+          { name: 'C', position: 'right', offset: 80 },
+        ]}
+        series={[
+          { name: 'S0', type: 'bar', axis: 0, data: [1, 2, 3] },
+          { name: 'S1', type: 'bar', axis: 1, data: [4, 5, 6] },
+          { name: 'S2', type: 'line', axis: 2, data: [7, 8, 9] },
+        ]}
+      />
+    )
+    expect(lastOption().grid.top).toBeGreaterThan(plain)
+  })
+
+  it('colors each multi-axis to match the series that targets it', () => {
+    render(
+      <Combo
+        categories={categories}
+        valueAxes={[{ name: 'A' }, { name: 'B', position: 'right' }]}
+        series={[
+          {
+            name: 'S0',
+            type: 'bar',
+            axis: 0,
+            color: 'rgb(1, 1, 1)',
+            data: [1],
+          },
+          {
+            name: 'S1',
+            type: 'line',
+            axis: 1,
+            color: 'rgb(2, 2, 2)',
+            data: [2],
+          },
+        ]}
+      />
+    )
+    const [a, b] = lastOption().yAxis
+    expect(a.axisLine.lineStyle.color).toBe('rgb(1, 1, 1)')
+    expect(b.axisLine.lineStyle.color).toBe('rgb(2, 2, 2)')
+  })
+
   it('uses an axis-trigger tooltip', () => {
     render(<Combo categories={categories} series={series} />)
     expect(lastOption().tooltip.trigger).toBe('axis')
+  })
+
+  it('does not emphasize series from the axis pointer (hover the bar itself)', () => {
+    render(<Combo categories={categories} series={series} />)
+    expect(lastOption().tooltip.axisPointer.triggerEmphasis).toBe(false)
+  })
+
+  it('uses a cross pointer with a shadow band on the category axis', () => {
+    render(<Combo categories={categories} series={series} />)
+    const option = lastOption()
+    expect(option.tooltip.axisPointer.type).toBe('cross')
+    expect(option.xAxis.axisPointer.type).toBe('shadow')
+  })
+
+  it('formats the floating value-axis pointer label with the axis format', () => {
+    render(
+      <Combo
+        categories={categories}
+        series={series}
+        leftAxis={{ format: v => `${v} ml` }}
+      />
+    )
+    const label = lastOption().yAxis[0].axisPointer.label.formatter({
+      value: 42.7,
+    })
+    expect(label).toBe('43 ml')
   })
 
   it('formats tooltip values with the per-axis formatter', () => {

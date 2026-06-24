@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+import type { ECharts } from 'echarts/core'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Combo } from '../Combo'
 
@@ -23,7 +25,7 @@ const meta: Meta<typeof Combo> = {
     series: {
       control: 'object',
       description:
-        'Mixed series, each `{ name, type, data, axis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`; `axis` (`left`|`right`) selects the value axis.',
+        'Mixed series, each `{ name, type, data, axis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`; `axis` is `left`|`right`, or a number to target an entry in `valueAxes` (multiple Y axes).',
       table: { type: { summary: 'ComboSeries[]' } },
     },
     showValues: {
@@ -96,6 +98,15 @@ const meta: Meta<typeof Combo> = {
       description: 'Right value axis config (same shape as `leftAxis`).',
       table: {
         type: { summary: 'ComboAxisConfig' },
+        defaultValue: { summary: '-' },
+      },
+    },
+    valueAxes: {
+      control: 'object',
+      description:
+        'For three or more value axes. Each is `{ name?, position?: left|right, offset?, min?, max?, format?, color? }`; series target one by index via `axis: <n>`. `offset` (px) stacks extra axes on the same side, and each axis auto-colors to match its series unless you set `color`. Overrides `leftAxis`/`rightAxis` when present.',
+      table: {
+        type: { summary: 'ComboValueAxis[]' },
         defaultValue: { summary: '-' },
       },
     },
@@ -222,6 +233,90 @@ export const Rainfall: Story = {
   ),
 }
 
+const WINDOW = 10
+const clockLabel = (d: Date) =>
+  d.toLocaleTimeString(undefined, { hour12: false })
+const randomPrice = () => +(Math.random() * 10 + 5).toFixed(1)
+const randomOrders = () => Math.round(Math.random() * 1000)
+
+function DynamicComboDemo() {
+  const chartRef = useRef<ECharts | null>(null)
+  const [seed] = useState(() => {
+    const categories: string[] = []
+    let now = Date.now()
+    for (let i = 0; i < WINDOW; i++) {
+      categories.unshift(clockLabel(new Date(now)))
+      now -= 2000
+    }
+    return {
+      categories,
+      price: Array.from({ length: WINDOW }, randomPrice),
+      orders: Array.from({ length: WINDOW }, randomOrders),
+    }
+  })
+
+  useEffect(() => {
+    const live = {
+      categories: [...seed.categories],
+      price: [...seed.price],
+      orders: [...seed.orders],
+    }
+    const id = setInterval(() => {
+      live.categories = [...live.categories.slice(1), clockLabel(new Date())]
+      live.price = [...live.price.slice(1), randomPrice()]
+      live.orders = [...live.orders.slice(1), randomOrders()]
+      chartRef.current?.setOption({
+        xAxis: { data: live.categories },
+        series: [{ data: live.orders }, { data: live.price }],
+      })
+    }, 2100)
+    return () => clearInterval(id)
+  }, [seed])
+
+  return (
+    <div className="w-[640px]">
+      <Combo
+        height={360}
+        categories={seed.categories}
+        leftAxis={{ name: 'Price', min: 0, max: 30 }}
+        rightAxis={{ name: 'Orders', min: 0, max: 1200 }}
+        series={[
+          {
+            name: 'Dynamic Bar',
+            type: 'bar',
+            axis: 'right',
+            data: seed.orders,
+            variant: 'primary',
+          },
+          {
+            name: 'Dynamic Line',
+            type: 'line',
+            data: seed.price,
+            variant: 'warning',
+          },
+        ]}
+        onReady={chart => {
+          chartRef.current = chart
+        }}
+      />
+    </div>
+  )
+}
+
+export const DynamicData: Story = {
+  name: 'Dynamic data',
+  parameters: {
+    chromatic: { disableSnapshot: true },
+    docs: {
+      description: {
+        story:
+          'Streaming data: a bar (orders, right axis) and a line (price, left axis) where a new reading arrives every ~2s and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval — ECharts merges and animates each bar and point to its new slot, so the whole series slides smoothly to the left.',
+      },
+    },
+  },
+  render: () => <DynamicComboDemo />,
+}
+
 export const AreaAndBar: Story = {
   name: 'Area + bar',
   parameters: {
@@ -254,6 +349,74 @@ export const AreaAndBar: Story = {
   },
   render: args => (
     <div className="w-[600px]">
+      <Combo {...args} />
+    </div>
+  ),
+}
+
+export const MultipleYAxes: Story = {
+  name: 'Multiple Y axes',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Three value axes in one chart via `valueAxes`. Evaporation and Precipitation each get their own right-hand axis (the second pushed out with `offset`), while Temperature keeps the left axis. Series point at an axis by index with `axis: <n>`, and each axis takes on its series’ color.',
+      },
+    },
+  },
+  args: {
+    height: 380,
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    valueAxes: [
+      { name: 'Evaporation', position: 'right', format: v => `${v} ml` },
+      {
+        name: 'Precipitation',
+        position: 'right',
+        offset: 80,
+        format: v => `${v} ml`,
+      },
+      { name: 'Temperature', position: 'left', format: v => `${v} °C` },
+    ],
+    series: [
+      {
+        name: 'Evaporation',
+        type: 'bar',
+        axis: 0,
+        variant: 'info',
+        data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3],
+      },
+      {
+        name: 'Precipitation',
+        type: 'bar',
+        axis: 1,
+        variant: 'success',
+        data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3],
+      },
+      {
+        name: 'Temperature',
+        type: 'line',
+        axis: 2,
+        variant: 'destructive',
+        smooth: true,
+        data: [2, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23, 16.5, 12, 6.2],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[720px]">
       <Combo {...args} />
     </div>
   ),

@@ -14,7 +14,7 @@ export type ComboSeries = {
   data: number[]
   variant?: ChartVariant
   color?: string
-  axis?: ComboAxis
+  axis?: ComboAxis | number
   smooth?: boolean
   stack?: string
 }
@@ -24,6 +24,16 @@ export type ComboAxisConfig = {
   min?: number
   max?: number
   format?: (value: number) => string
+}
+
+export type ComboValueAxis = {
+  name?: string
+  position?: ComboAxis
+  offset?: number
+  min?: number
+  max?: number
+  format?: (value: number) => string
+  color?: string
 }
 
 export interface ComboProps {
@@ -40,6 +50,7 @@ export interface ComboProps {
   categoryAxisName?: string
   leftAxis?: ComboAxisConfig
   rightAxis?: ComboAxisConfig
+  valueAxes?: ComboValueAxis[]
   loading?: boolean
   animate?: boolean
   emptyMessage?: string

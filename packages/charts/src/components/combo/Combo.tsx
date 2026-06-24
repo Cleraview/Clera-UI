@@ -24,6 +24,7 @@ export type {
   ComboSeriesType,
   ComboAxis,
   ComboAxisConfig,
+  ComboValueAxis,
   ComboLegendPosition,
 } from './types'
 
@@ -52,6 +53,7 @@ export const Combo: React.FC<ComboProps> = ({
   categoryAxisName,
   leftAxis,
   rightAxis,
+  valueAxes,
   loading = false,
   animate = true,
   emptyMessage = 'No data',
@@ -74,6 +76,7 @@ export const Combo: React.FC<ComboProps> = ({
         categoryAxisName,
         leftAxis,
         rightAxis,
+        valueAxes,
         animate,
         emptyMessage,
       }),
@@ -90,6 +93,7 @@ export const Combo: React.FC<ComboProps> = ({
       categoryAxisName,
       leftAxis,
       rightAxis,
+      valueAxes,
       animate,
       emptyMessage,
     ]
