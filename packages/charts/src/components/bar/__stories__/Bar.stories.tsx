@@ -91,6 +91,16 @@ const meta: Meta<typeof Bar> = {
         defaultValue: { summary: 'true' },
       },
     },
+    tooltipTrigger: {
+      control: { type: 'radio' },
+      options: ['item', 'axis'],
+      description:
+        'Tooltip mode. `item` shows just the hovered bar; `axis` lists every series in the hovered category, each with its color marker — useful for grouped/stacked charts.',
+      table: {
+        type: { summary: "'item' | 'axis'" },
+        defaultValue: { summary: 'item' },
+      },
+    },
     showLegend: {
       control: 'boolean',
       description:
@@ -114,6 +124,15 @@ const meta: Meta<typeof Bar> = {
       control: 'boolean',
       description:
         'Stack grouped `series` on top of each other instead of placing them side by side. Only the outer segment is rounded; labels move inside the segments.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    highlightSeries: {
+      control: 'boolean',
+      description:
+        'On hover, highlight the whole series the bar belongs to (every same-colored bar) and dim the other series. Grouped mode only; off by default (plain per-bar hover).',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -146,7 +165,7 @@ const meta: Meta<typeof Bar> = {
     series: {
       control: 'object',
       description:
-        'Grouped series, each `{ name, data, variant?, color?, silent? }`, where `data` aligns to `categories`. Renders a legend keyed by series name. A `silent` series (e.g. a waterfall base) is excluded from the tooltip, labels, and legend.',
+        'Grouped series, each `{ name, data, variant?, color?, silent?, stack? }`, where `data` aligns to `categories`. Give series a shared `stack` name to stack them together; different `stack` names sit side by side and series without one are standalone bars (so you can mix several stacks in one chart). A `silent` series (e.g. a waterfall base) is excluded from the tooltip, labels, and legend.',
       table: {
         type: { summary: 'BarSeries[]' },
         defaultValue: { summary: '-' },
@@ -169,6 +188,38 @@ const meta: Meta<typeof Bar> = {
       table: {
         type: { summary: "('max' | 'min')[]" },
         defaultValue: { summary: '[]' },
+      },
+    },
+    axisBreaks: {
+      control: 'object',
+      description:
+        'Collapse one or more ranges of the value axis with a zig-zag break — useful when a few bars dwarf the rest. Each break is `{ start, end, gap? }`.',
+      table: {
+        type: {
+          summary: '{ start: number; end: number; gap?: number | string }[]',
+        },
+        defaultValue: { summary: '[]' },
+      },
+    },
+    axisBreakExpandable: {
+      control: 'boolean',
+      description:
+        'When `true` (default), clicking a break area expands that range and a "Collapse breaks" button appears to restore it. Set to `false` for a static, non-interactive break.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    axisBreakCollapse: {
+      control: 'object',
+      description:
+        'Customise the "Collapse breaks" button that appears while a break is expanded. `text` sets the label, `offset` is `[left, top]` in px, `textStyle` ({ color, fontSize, fontWeight }) and `buttonStyle` ({ fill, stroke, borderRadius, paddingX }) override the theme-aware defaults.',
+      table: {
+        type: {
+          summary:
+            '{ text?; offset?: [number, number]; textStyle?; buttonStyle? }',
+        },
+        defaultValue: { summary: "{ text: 'Collapse breaks' }" },
       },
     },
     max: {
@@ -403,12 +454,12 @@ export const WithLegend: Story = {
 }
 
 export const Stacked: Story = {
-  name: 'Stacked series',
+  name: 'Stacked column',
   parameters: {
     docs: {
       description: {
         story:
-          'Set `stacked` on a grouped chart to stack the series into a single bar per category. Only the outer segment is rounded, value labels move inside each segment, and the legend still toggles series. Here: revenue split into new vs. returning customers per quarter.',
+          'A recreation of the ECharts "Stacked Bar" example — `stacked` columns of traffic sources per weekday. Each series is one color, the legend toggles them, and only the outer segment is rounded.',
       },
     },
   },
@@ -420,17 +471,84 @@ export const Stacked: Story = {
     legendPosition: 'top',
     showValueAxis: true,
     showValues: false,
-    barRadius: 6,
+    barRadius: 4,
     referenceLine: undefined,
     data: undefined,
-    categories: ['Q1', 'Q2', 'Q3', 'Q4'],
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     series: [
-      { name: 'New', data: [28000, 24500, 31200, 40100] },
-      { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+      { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+      { name: 'Email', data: [120, 132, 101, 134, 90, 230, 210] },
+      { name: 'Union Ads', data: [220, 182, 191, 234, 290, 330, 310] },
+      { name: 'Video Ads', data: [150, 232, 201, 154, 190, 330, 410] },
+      { name: 'Search Engine', data: [820, 932, 901, 934, 1290, 1330, 1320] },
     ],
   },
   render: args => (
-    <div className="w-[560px]">
+    <div className="w-[600px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const MultipleStacks: Story = {
+  name: 'Multiple stacks',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Several independent stacks in one chart, à la the advanced ECharts "Stacked Bar" example. Give a `stack` name to series that should stack together; series with different `stack` names (or none) sit side by side — here a standalone "Direct" bar, an "Ad" stack, and a "Search Engine" stack per weekday. `highlightSeries` lights up the hovered series (and dims the rest), and `tooltipTrigger="axis"` lists every series in the hovered weekday with its color.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showLegend: true,
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 4,
+    highlightSeries: true,
+    tooltipTrigger: 'axis',
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+      { name: 'Email', stack: 'Ad', data: [120, 132, 101, 134, 90, 230, 210] },
+      {
+        name: 'Union Ads',
+        stack: 'Ad',
+        data: [220, 182, 191, 234, 290, 330, 310],
+      },
+      {
+        name: 'Video Ads',
+        stack: 'Ad',
+        data: [150, 232, 201, 154, 190, 330, 410],
+      },
+      {
+        name: 'Baidu',
+        stack: 'Search Engine',
+        data: [620, 732, 701, 734, 1090, 1130, 1120],
+      },
+      {
+        name: 'Google',
+        stack: 'Search Engine',
+        data: [120, 132, 101, 134, 290, 230, 220],
+      },
+      {
+        name: 'Bing',
+        stack: 'Search Engine',
+        data: [60, 72, 71, 74, 190, 130, 110],
+      },
+      {
+        name: 'Others',
+        stack: 'Search Engine',
+        data: [62, 82, 91, 84, 109, 110, 120],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[680px]">
       <Bar {...args} />
     </div>
   ),
@@ -916,4 +1034,56 @@ export const Drilldown: Story = {
       </div>
     )
   },
+}
+
+const compact = (v: number) =>
+  v >= 1_000_000
+    ? `${(v / 1_000_000).toFixed(1)}M`
+    : v >= 1_000
+      ? `${(v / 1_000).toFixed(1)}k`
+      : String(v)
+
+export const AxisBreaks: Story = {
+  name: 'Axis breaks',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When some series dwarf the rest, `axisBreaks` collapses ranges of the value axis with a zig-zag break so small and large series stay readable together. Each break is `{ start, end, gap? }` and you can pass several. With `axisBreakExpandable` (on by default), **clicking a break area expands that range** to inspect it, and a **“Collapse breaks” button** appears to restore the view — exactly like the official ECharts demo.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    tooltipTrigger: 'axis',
+    referenceLine: undefined,
+    axisBreaks: [
+      { start: 5000, end: 100000, gap: '1.5%' },
+      { start: 105000, end: 3100000, gap: '1.5%' },
+    ],
+    axisBreakExpandable: true,
+    formatValue: compact,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Data A', data: [1500, 2032, 2001, 3154, 2190, 4330, 2410] },
+      { name: 'Data B', data: [1200, 1320, 1010, 1340, 900, 2300, 2100] },
+      {
+        name: 'Data C',
+        data: [103200, 100320, 103010, 102340, 103900, 103300, 103200],
+      },
+      {
+        name: 'Data D',
+        data: [3106212, 3102118, 3102643, 3104631, 3106679, 3100130, 3107022],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[640px]">
+      <Bar {...args} />
+    </div>
+  ),
 }

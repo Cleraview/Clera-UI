@@ -13,6 +13,7 @@ import type {
   BarStackMode,
   BarZoom,
   BarMarkPoint,
+  BarAxisBreak,
   BarLegendPosition,
   BarReferenceLine,
 } from './types'
@@ -27,11 +28,13 @@ export interface BuildBarOptionParams {
   showValues: boolean
   formatValue: (value: number) => string
   showTooltip: boolean
+  tooltipTrigger: 'item' | 'axis'
   showValueAxis: boolean
   showLegend?: boolean
   legendPosition: BarLegendPosition
   stacked: boolean
   stackMode: BarStackMode
+  highlightSeries: boolean
   showTrack: boolean
   trackColor?: string
   gridLines?: boolean
@@ -41,6 +44,8 @@ export interface BuildBarOptionParams {
   sort: BarSort
   referenceLine?: BarReferenceLine | 'average'
   markPoints: BarMarkPoint[]
+  axisBreaks: BarAxisBreak[]
+  axisBreakExpandable: boolean
   zoom: BarZoom
   selectable: boolean
   axisLabelRotate: number
@@ -84,11 +89,13 @@ export function buildBarOption(params: BuildBarOptionParams) {
     showValues,
     formatValue,
     showTooltip,
+    tooltipTrigger,
     showValueAxis,
     showLegend,
     legendPosition,
     stacked,
     stackMode,
+    highlightSeries,
     showTrack,
     trackColor,
     gridLines,
@@ -98,6 +105,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
     sort,
     referenceLine,
     markPoints,
+    axisBreaks,
+    axisBreakExpandable,
     zoom,
     selectable,
     axisLabelRotate,
@@ -148,24 +157,28 @@ export function buildBarOption(params: BuildBarOptionParams) {
     trackColor ??
     readCssColor('--background-color-ds-neutral', 'rgb(245, 245, 245)')
 
-  const labelStyle = {
-    show: showValues,
-    position: (stacking ? 'inside' : isHorizontal ? 'right' : 'top') as
-      | 'inside'
-      | 'right'
-      | 'top',
-    formatter: (p: { value: number }) => formatValue(p.value),
-    color: stacking
-      ? readCssColor('--text-color-ds-inverse', 'rgb(250, 250, 250)')
-      : labelColor,
-    textBorderWidth: 0,
-    fontSize: 12,
-  }
-
   const inverseColor = readCssColor(
     '--text-color-ds-inverse',
     'rgb(250, 250, 250)'
   )
+
+  const labelBase = {
+    show: showValues,
+    formatter: (p: { value: number }) => formatValue(p.value),
+    textBorderWidth: 0,
+    fontSize: 12,
+  }
+  const labelOutside = {
+    ...labelBase,
+    position: (isHorizontal ? 'right' : 'top') as 'right' | 'top',
+    color: labelColor,
+  }
+  const labelInside = {
+    ...labelBase,
+    position: 'inside' as const,
+    color: inverseColor,
+  }
+
   const isAverage = referenceLine === 'average'
   const fixedRef =
     referenceLine && referenceLine !== 'average' ? referenceLine : undefined
@@ -228,15 +241,21 @@ export function buildBarOption(params: BuildBarOptionParams) {
         }
       : undefined
 
-  const stack = grouped && stacking ? 'total' : undefined
-
   let cats: string[]
   let seriesList: unknown[]
 
   if (grouped) {
     cats = categories as string[]
     const list = series as BarSeries[]
-    const groupWidth = barWidth ?? (stacking ? (isHorizontal ? 12 : 40) : 28)
+    const defaultStack = stacking ? 'total' : undefined
+    const stackOf = (s: BarSeries) => s.stack ?? defaultStack
+    const anyStacked = list.some(s => Boolean(stackOf(s)))
+    const groupWidth = barWidth ?? (anyStacked ? (isHorizontal ? 12 : 40) : 28)
+    const lastInStack = new Map<string, number>()
+    list.forEach((s, i) => {
+      const sk = stackOf(s)
+      if (sk) lastInStack.set(sk, i)
+    })
     const totals = percent
       ? cats.map((_, ci) => list.reduce((sum, s) => sum + (s.data[ci] ?? 0), 0))
       : []
@@ -246,12 +265,11 @@ export function buildBarOption(params: BuildBarOptionParams) {
         (s.variant
           ? resolveVariant(s.variant)
           : categorical[i % categorical.length])
-      const isOuter = i === list.length - 1
-      const radius = stacking
-        ? isOuter
-          ? borderRadius
-          : flatRadius
-        : borderRadius
+      const seriesStack = stackOf(s)
+      const isInnerStacked = Boolean(
+        seriesStack && lastInStack.get(seriesStack) !== i
+      )
+      const radius = isInnerStacked ? flatRadius : borderRadius
       const withTrack = showTrack && i === 0
       const values = percent
         ? s.data.map((v, ci) => (totals[ci] > 0 ? (v / totals[ci]) * 100 : 0))
@@ -259,13 +277,20 @@ export function buildBarOption(params: BuildBarOptionParams) {
       return {
         name: s.name,
         type: 'bar',
-        stack,
+        stack: seriesStack,
         silent: s.silent ?? false,
         data: isHorizontal ? [...values].reverse() : values,
         itemStyle: { color, borderRadius: radius },
-        emphasis: { itemStyle: { color: lighten(color) } },
+        emphasis: highlightSeries
+          ? { focus: 'series', itemStyle: { color: lighten(color) } }
+          : { itemStyle: { color: lighten(color) } },
+        blur: highlightSeries ? { itemStyle: { opacity: 0.2 } } : undefined,
         barMaxWidth: groupWidth,
-        label: s.silent ? { show: false } : labelStyle,
+        label: s.silent
+          ? { show: false }
+          : seriesStack
+            ? labelInside
+            : labelOutside,
         markLine: s.silent
           ? undefined
           : isAverage
@@ -308,7 +333,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
         type: 'bar',
         data: isHorizontal ? [...seriesData].reverse() : seriesData,
         barMaxWidth: barWidth ?? (isHorizontal ? 12 : 40),
-        label: labelStyle,
+        label: labelOutside,
         markLine: isAverage
           ? makeAverageMarkLine(singleAverageColor)
           : fixedMarkLine,
@@ -344,6 +369,21 @@ export function buildBarOption(params: BuildBarOptionParams) {
       : { show: false },
     axisTick: { show: false },
     axisLine: { show: false },
+    breaks: axisBreaks.length ? axisBreaks : undefined,
+    breakArea: axisBreaks.length
+      ? {
+          show: true,
+          expandOnClick: axisBreakExpandable,
+          zigzagZ: 200,
+          itemStyle: {
+            color: surface,
+            borderColor: subtleColor,
+            borderType: 'dashed' as const,
+            borderWidth: 1,
+            opacity: 1,
+          },
+        }
+      : undefined,
   }
 
   const categoryAxis = {
@@ -404,6 +444,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
       }
     : null
 
+  const topLegendY = axisBreaks.length && axisBreakExpandable ? 12 : 0
+
   return {
     animation: animate && !prefersReducedMotion(),
     animationDuration: 600,
@@ -419,7 +461,11 @@ export function buildBarOption(params: BuildBarOptionParams) {
         | 'vertical'
         | 'horizontal',
       top:
-        legendPosition === 'bottom' ? undefined : legendVertical ? 'middle' : 0,
+        legendPosition === 'bottom'
+          ? undefined
+          : legendVertical
+            ? 'middle'
+            : topLegendY,
       bottom: legendPosition === 'bottom' ? 0 : undefined,
       left:
         legendPosition === 'left'
@@ -448,6 +494,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
         referenceLine && isHorizontal ? 30 : 0,
         selectable ? 26 : 0,
         markPoints.length && !isHorizontal ? 32 : 0,
+        axisBreaks.length && axisBreakExpandable ? 44 : 0,
         showValues && !isHorizontal ? 28 : 12
       ),
       bottom: Math.max(
@@ -460,24 +507,46 @@ export function buildBarOption(params: BuildBarOptionParams) {
     },
     tooltip: {
       show: showTooltip,
-      trigger: 'item',
+      trigger: tooltipTrigger,
+      axisPointer:
+        tooltipTrigger === 'axis' ? { type: 'none' as const } : undefined,
       backgroundColor: surface,
       borderColor: lineColor,
       borderWidth: 1,
-      padding: [4, 8],
+      padding: tooltipTrigger === 'axis' ? [6, 10] : [4, 8],
       textStyle: { color: labelColor, fontSize: 11 },
       extraCssText: 'border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.08);',
-      formatter: (
-        p:
-          | { name: string; value: number; seriesName?: string }
-          | { name: string; value: number; seriesName?: string }[]
-      ) => {
-        const item = Array.isArray(p) ? p[0] : p
-        const head = item.seriesName
-          ? `${item.name} · ${item.seriesName}`
-          : item.name
-        return `${head}: ${formatValue(item.value)}`
-      },
+      formatter:
+        tooltipTrigger === 'axis'
+          ? (
+              params: Array<{
+                name?: string
+                seriesName?: string
+                value: number
+                marker?: string
+              }>
+            ) => {
+              const arr = Array.isArray(params) ? params : [params]
+              const head = arr[0]?.name ?? ''
+              const rows = arr
+                .map(
+                  p =>
+                    `${p.marker ?? ''}${p.seriesName}: ${formatValue(p.value)}`
+                )
+                .join('<br/>')
+              return `${head}<br/>${rows}`
+            }
+          : (
+              p:
+                | { name: string; value: number; seriesName?: string }
+                | { name: string; value: number; seriesName?: string }[]
+            ) => {
+              const item = Array.isArray(p) ? p[0] : p
+              const head = item.seriesName
+                ? `${item.name} · ${item.seriesName}`
+                : item.name
+              return `${head}: ${formatValue(item.value)}`
+            },
     },
     xAxis: isHorizontal ? valueAxis : categoryAxis,
     yAxis: isHorizontal ? categoryAxis : valueAxis,

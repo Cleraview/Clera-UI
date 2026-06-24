@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import * as echarts from 'echarts/core'
+import type { ECharts } from 'echarts/core'
 import { BarChart as EBarChart } from 'echarts/charts'
 import {
   GridComponent,
@@ -13,10 +14,12 @@ import {
   DataZoomComponent,
   BrushComponent,
   ToolboxComponent,
+  GraphicComponent,
 } from 'echarts/components'
+import { AxisBreak } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
+import { resolveVariant, readCssColor } from '@/utils'
 import { useEChart } from '@/hooks'
 import type { EChartEventParams, EChartEvents } from '@/hooks'
 import { buildBarOption, getBarCategories } from './buildOption'
@@ -45,8 +48,12 @@ echarts.use([
   DataZoomComponent,
   BrushComponent,
   ToolboxComponent,
+  GraphicComponent,
+  AxisBreak,
   CanvasRenderer,
 ])
+
+const COLLAPSE_BTN_NAME = 'cleraCollapseAxisBreak'
 
 function resolveBarDatum(
   params: EChartEventParams,
@@ -70,11 +77,13 @@ export const Bar: React.FC<BarProps> = ({
   direction = 'horizontal',
   height = 300,
   showTooltip = true,
+  tooltipTrigger = 'item',
   showValueAxis = false,
   showLegend,
   legendPosition = 'top',
   stacked = false,
   stackMode = 'normal',
+  highlightSeries = false,
   showTrack = false,
   trackColor,
   gridLines,
@@ -84,6 +93,9 @@ export const Bar: React.FC<BarProps> = ({
   sort = 'none',
   referenceLine,
   markPoints = [],
+  axisBreaks = [],
+  axisBreakExpandable = true,
+  axisBreakCollapse,
   zoom = false,
   selectable = false,
   axisLabelRotate = 0,
@@ -114,11 +126,13 @@ export const Bar: React.FC<BarProps> = ({
         showValues,
         formatValue,
         showTooltip,
+        tooltipTrigger,
         showValueAxis,
         showLegend,
         legendPosition,
         stacked,
         stackMode,
+        highlightSeries,
         showTrack,
         trackColor,
         gridLines,
@@ -128,6 +142,8 @@ export const Bar: React.FC<BarProps> = ({
         sort,
         referenceLine,
         markPoints,
+        axisBreaks,
+        axisBreakExpandable,
         zoom,
         selectable,
         axisLabelRotate,
@@ -146,11 +162,13 @@ export const Bar: React.FC<BarProps> = ({
       showValues,
       formatValue,
       showTooltip,
+      tooltipTrigger,
       showValueAxis,
       showLegend,
       legendPosition,
       stacked,
       stackMode,
+      highlightSeries,
       showTrack,
       trackColor,
       gridLines,
@@ -160,6 +178,8 @@ export const Bar: React.FC<BarProps> = ({
       sort,
       referenceLine,
       markPoints,
+      axisBreaks,
+      axisBreakExpandable,
       zoom,
       selectable,
       axisLabelRotate,
@@ -170,11 +190,99 @@ export const Bar: React.FC<BarProps> = ({
     ]
   )
 
+  const chartRef = useRef<ECharts | null>(null)
+  const handleReady = useCallback(
+    (chart: ECharts) => {
+      chartRef.current = chart
+      onReady?.(chart)
+    },
+    [onReady]
+  )
+
   const events = useMemo<EChartEvents>(
     () => ({
       click: params => {
+        if (params.name === COLLAPSE_BTN_NAME) {
+          chartRef.current?.dispatchAction({
+            type: 'collapseAxisBreak',
+            [isHorizontal ? 'xAxisIndex' : 'yAxisIndex']: 0,
+            breaks: axisBreaks,
+          })
+          return
+        }
         const [datum, index] = resolveBarDatum(params, data)
         onBarClick?.(datum, index)
+      },
+      axisbreakchanged: params => {
+        const expanded = (params.breaks ?? []).some(b => b.isExpanded)
+        const text = axisBreakCollapse?.text ?? 'Collapse breaks'
+        const fontSize = axisBreakCollapse?.textStyle?.fontSize ?? 11
+        const fontWeight = axisBreakCollapse?.textStyle?.fontWeight ?? 'bold'
+        const paddingX = axisBreakCollapse?.buttonStyle?.paddingX ?? 12
+        const [left, top] = axisBreakCollapse?.offset ?? [8, 8]
+        const height = fontSize + 12
+        const width = Math.round(text.length * fontSize * 0.6) + paddingX * 2
+
+        chartRef.current?.setOption({
+          graphic: [
+            {
+              id: COLLAPSE_BTN_NAME,
+              type: 'group',
+              name: COLLAPSE_BTN_NAME,
+              ignore: !expanded,
+              left,
+              top,
+              z: 100,
+              children: [
+                {
+                  type: 'rect',
+                  name: COLLAPSE_BTN_NAME,
+                  shape: {
+                    x: 0,
+                    y: 0,
+                    width,
+                    height,
+                    r: axisBreakCollapse?.buttonStyle?.borderRadius ?? 4,
+                  },
+                  style: {
+                    fill:
+                      axisBreakCollapse?.buttonStyle?.fill ??
+                      readCssColor(
+                        '--background-color-ds-elevation-surface-raised',
+                        'rgb(255, 255, 255)'
+                      ),
+                    stroke:
+                      axisBreakCollapse?.buttonStyle?.stroke ??
+                      readCssColor(
+                        '--border-color-ds-default',
+                        'rgb(229, 229, 229)'
+                      ),
+                    lineWidth: 1,
+                  },
+                },
+                {
+                  type: 'text',
+                  silent: true,
+                  style: {
+                    text,
+                    x: width / 2,
+                    y: height / 2,
+                    align: 'center',
+                    verticalAlign: 'middle',
+                    fontSize,
+                    fontWeight,
+                    fill:
+                      axisBreakCollapse?.textStyle?.color ??
+                      readCssColor(
+                        '--text-color-ds-default',
+                        'rgb(23, 23, 23)'
+                      ),
+                  },
+                },
+              ],
+            },
+          ],
+        })
       },
       mouseover: params => {
         if (params.componentType !== 'series') return
@@ -207,6 +315,8 @@ export const Bar: React.FC<BarProps> = ({
       series,
       sort,
       isHorizontal,
+      axisBreaks,
+      axisBreakCollapse,
       onBarClick,
       onBarHover,
       onBarLeave,
@@ -219,7 +329,7 @@ export const Bar: React.FC<BarProps> = ({
     loading,
     loadingColor: resolveVariant('primary'),
     events,
-    onReady,
+    onReady: handleReady,
   })
 
   return (

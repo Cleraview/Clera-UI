@@ -146,8 +146,8 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
-    ### **Stacked series**
-    Add `stacked` to a grouped chart to stack series into a single bar per category. Only the outer segment is rounded and value labels move inside each segment.
+    ### **Stacked column**
+    Add `stacked` to a grouped chart to stack series into a single column per category — the ECharts "Stacked Bar" example, traffic sources per weekday. Only the outer segment is rounded; the legend toggles series.
     <Canvas>
       <Canvas.Story>
         <Story of={BarStories.Stacked} />
@@ -157,25 +157,61 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
         <Source className="my-0!" dark code={`
           import { Bar } from '@clera/charts'
 
-          const RevenueSplit = () => {
-            return (
-              <Bar
-                direction="vertical"
-                stacked
-                showLegend
-                showValueAxis
-                formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
-                height={360}
-                categories={['Q1', 'Q2', 'Q3', 'Q4']}
-                series={[
-                  { name: 'New', data: [28000, 24500, 31200, 40100] },
-                  { name: 'Returning', data: [14000, 14000, 20000, 32000] },
-                ]}
-              />
-            )
-          }
+          const Traffic = () => (
+            <Bar
+              direction="vertical"
+              stacked
+              showLegend
+              showValueAxis
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+                { name: 'Email', data: [120, 132, 101, 134, 90, 230, 210] },
+                { name: 'Union Ads', data: [220, 182, 191, 234, 290, 330, 310] },
+                { name: 'Video Ads', data: [150, 232, 201, 154, 190, 330, 410] },
+                { name: 'Search Engine', data: [820, 932, 901, 934, 1290, 1330, 1320] },
+              ]}
+            />
+          )
 
-          export default RevenueSplit
+          export default Traffic
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Multiple stacks**
+    Mix several independent stacks in one chart by giving series a `stack` name — series sharing a name stack together, different names sit side by side, and series without one are standalone bars. `highlightSeries` lights up the hovered series and dims the rest, while `tooltipTrigger="axis"` lists every series for the hovered category with its color.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.MultipleStacks} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Channels = () => (
+            <Bar
+              direction="vertical"
+              showLegend
+              showValueAxis
+              highlightSeries
+              tooltipTrigger="axis"
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+                { name: 'Email', stack: 'Ad', data: [120, 132, 101, 134, 90, 230, 210] },
+                { name: 'Union Ads', stack: 'Ad', data: [220, 182, 191, 234, 290, 330, 310] },
+                { name: 'Video Ads', stack: 'Ad', data: [150, 232, 201, 154, 190, 330, 410] },
+                { name: 'Baidu', stack: 'Search Engine', data: [620, 732, 701, 734, 1090, 1130, 1120] },
+                { name: 'Google', stack: 'Search Engine', data: [120, 132, 101, 134, 290, 230, 220] },
+                { name: 'Bing', stack: 'Search Engine', data: [60, 72, 71, 74, 190, 130, 110] },
+                { name: 'Others', stack: 'Search Engine', data: [62, 82, 91, 84, 109, 110, 120] },
+              ]}
+            />
+          )
+
+          export default Channels
         `} />
       </Canvas.Source>
     </Canvas>
@@ -453,6 +489,49 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **Axis breaks**
+
+    When some series dwarf the rest, `axisBreaks` collapses ranges of the value axis with a zig-zag break so small and large series stay readable together. Each break is `{ start, end, gap? }` and you can pass several. With `axisBreakExpandable` (on by default), **clicking a break area expands that range** to inspect it, and a **“Collapse breaks” button** appears to restore the view. Customise that button with `axisBreakCollapse` — `text`, `offset` `[left, top]`, `textStyle` and `buttonStyle` all override the theme-aware defaults.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.AxisBreaks} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const compact = (v) =>
+            v >= 1_000_000 ? \`\${(v / 1_000_000).toFixed(1)}M\`
+            : v >= 1_000 ? \`\${(v / 1_000).toFixed(1)}k\`
+            : String(v)
+
+          const Outliers = () => (
+            <Bar
+              direction="vertical"
+              showValueAxis
+              showLegend
+              tooltipTrigger="axis"
+              formatValue={compact}
+              axisBreaks={[
+                { start: 5000, end: 100000, gap: '1.5%' },
+                { start: 105000, end: 3100000, gap: '1.5%' },
+              ]}
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Data A', data: [1500, 2032, 2001, 3154, 2190, 4330, 2410] },
+                { name: 'Data B', data: [1200, 1320, 1010, 1340, 900, 2300, 2100] },
+                { name: 'Data C', data: [103200, 100320, 103010, 102340, 103900, 103300, 103200] },
+                { name: 'Data D', data: [3106212, 3102118, 3102643, 3104631, 3106679, 3100130, 3107022] },
+              ]}
+            />
+          )
+
+          export default Outliers
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ## **API**
     Below is a comprehensive list of all the props available for the Bar component, along with their types, default values, and descriptions.
     <ArgTypes />
@@ -642,8 +721,12 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
               label: "Grouped with legend"
             },
             {
-              id: "stacked-series",
-              label: "Stacked series"
+              id: "stacked-column",
+              label: "Stacked column"
+            },
+            {
+              id: "multiple-stacks",
+              label: "Multiple stacks"
             },
             {
               id: "100-stacked",
@@ -676,6 +759,10 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "drilldown-multi-level",
               label: "Drilldown (multi-level)"
+            },
+            {
+              id: "axis-breaks",
+              label: "Axis breaks"
             },
           ]
         },

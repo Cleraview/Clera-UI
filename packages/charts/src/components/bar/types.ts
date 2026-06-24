@@ -26,6 +26,28 @@ export type BarReferenceLine = {
 
 export type BarMarkPoint = 'max' | 'min'
 
+export type BarAxisBreak = {
+  start: number
+  end: number
+  gap?: number | string
+}
+
+export type BarAxisBreakCollapse = {
+  text?: string
+  offset?: [number, number]
+  textStyle?: {
+    color?: string
+    fontSize?: number
+    fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number
+  }
+  buttonStyle?: {
+    fill?: string
+    stroke?: string
+    borderRadius?: number
+    paddingX?: number
+  }
+}
+
 export type BarDatum = {
   label: string
   value: number
@@ -39,6 +61,7 @@ export type BarSeries = {
   variant?: BarVariant
   color?: string
   silent?: boolean
+  stack?: string
 }
 
 export interface BarProps {
@@ -52,11 +75,13 @@ export interface BarProps {
   direction?: 'horizontal' | 'vertical'
   height?: number | string
   showTooltip?: boolean
+  tooltipTrigger?: 'item' | 'axis'
   showValueAxis?: boolean
   showLegend?: boolean
   legendPosition?: BarLegendPosition
   stacked?: boolean
   stackMode?: BarStackMode
+  highlightSeries?: boolean
   showTrack?: boolean
   trackColor?: string
   gridLines?: boolean
@@ -66,6 +91,9 @@ export interface BarProps {
   sort?: BarSort
   referenceLine?: BarReferenceLine | 'average'
   markPoints?: BarMarkPoint[]
+  axisBreaks?: BarAxisBreak[]
+  axisBreakExpandable?: boolean
+  axisBreakCollapse?: BarAxisBreakCollapse
   zoom?: BarZoom
   selectable?: boolean
   axisLabelRotate?: number

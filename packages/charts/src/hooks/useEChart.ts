@@ -12,6 +12,7 @@ export interface EChartEventParams {
   value?: unknown
   dataIndex?: number
   batch?: Array<{ selected?: Array<{ dataIndex?: number[] }> }>
+  breaks?: Array<{ start?: number; end?: number; isExpanded?: boolean }>
 }
 
 export type EChartEvents = Record<string, (params: EChartEventParams) => void>

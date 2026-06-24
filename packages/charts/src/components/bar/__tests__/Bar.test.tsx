@@ -17,7 +17,9 @@ jest.mock('echarts/components', () => ({
   DataZoomComponent: {},
   BrushComponent: {},
   ToolboxComponent: {},
+  GraphicComponent: {},
 }))
+jest.mock('echarts/features', () => ({ AxisBreak: {} }))
 jest.mock('echarts/renderers', () => ({ CanvasRenderer: {} }))
 
 const mockObserve = jest.fn()
@@ -40,6 +42,7 @@ function makeMockChart() {
     resize: jest.fn(),
     on: jest.fn(),
     off: jest.fn(),
+    dispatchAction: jest.fn(),
     showLoading: jest.fn(),
     hideLoading: jest.fn(),
   }
@@ -564,6 +567,189 @@ describe('components/charts/Bar', () => {
     expect(lastOption().series[0].markPoint.data).toEqual([{ type: 'max' }])
   })
 
+  it('supports multiple independent stack groups via per-series stack', () => {
+    render(
+      <Bar
+        direction="vertical"
+        categories={['Mon', 'Tue']}
+        series={[
+          { name: 'Direct', data: [10, 12] },
+          { name: 'Email', stack: 'Ad', data: [5, 6] },
+          { name: 'Union', stack: 'Ad', data: [3, 4] },
+          { name: 'Baidu', stack: 'Search', data: [8, 9] },
+          { name: 'Google', stack: 'Search', data: [2, 1] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].stack).toBeUndefined()
+    expect(series[1].stack).toBe('Ad')
+    expect(series[2].stack).toBe('Ad')
+    expect(series[3].stack).toBe('Search')
+    expect(series[4].stack).toBe('Search')
+    // only the outer (last) segment of each stack is rounded
+    expect(series[1].itemStyle.borderRadius).toEqual([0, 0, 0, 0])
+    expect(series[2].itemStyle.borderRadius).toEqual([4, 4, 0, 0])
+    // a standalone bar keeps full rounding
+    expect(series[0].itemStyle.borderRadius).toEqual([4, 4, 0, 0])
+  })
+
+  it('lightens only the hovered bar on hover by default (no series-wide focus)', () => {
+    render(
+      <Bar
+        direction="vertical"
+        stacked
+        categories={['Q1', 'Q2']}
+        series={[
+          { name: 'A', data: [1, 2] },
+          { name: 'B', data: [3, 4] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].emphasis.itemStyle.color).toMatch(/^rgb/)
+    expect(series[0].emphasis.focus).toBeUndefined()
+    expect(series[0].blur).toBeUndefined()
+  })
+
+  it('highlights the whole series and dims the rest when highlightSeries is set', () => {
+    render(
+      <Bar
+        direction="vertical"
+        highlightSeries
+        categories={['Mon', 'Tue']}
+        series={[
+          { name: 'Blue', data: [3, 4] },
+          { name: 'Red', data: [2, 1] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].emphasis.focus).toBe('series')
+    expect(series[1].emphasis.focus).toBe('series')
+    expect(series[0].blur.itemStyle.opacity).toBeLessThan(1)
+  })
+
+  it('applies axis breaks to the value axis', () => {
+    render(
+      <Bar
+        direction="vertical"
+        showValueAxis
+        axisBreaks={[{ start: 200, end: 760, gap: '2%' }]}
+        data={sample}
+      />
+    )
+    const option = lastOption()
+    expect(option.yAxis.breaks).toEqual([{ start: 200, end: 760, gap: '2%' }])
+    expect(option.yAxis.breakArea.show).toBe(true)
+    expect(option.yAxis.breakArea.expandOnClick).toBe(true)
+  })
+
+  it('disables break expand when axisBreakExpandable is false', () => {
+    render(
+      <Bar
+        direction="vertical"
+        showValueAxis
+        axisBreakExpandable={false}
+        axisBreaks={[{ start: 200, end: 760, gap: '2%' }]}
+        data={sample}
+      />
+    )
+    expect(lastOption().yAxis.breakArea.expandOnClick).toBe(false)
+  })
+
+  it('omits axis breaks when none are given', () => {
+    render(<Bar data={sample} direction="vertical" />)
+    expect(lastOption().yAxis.breaks).toBeUndefined()
+  })
+
+  it('drops the top legend down to share the collapse button row', () => {
+    render(
+      <Bar
+        direction="vertical"
+        showValueAxis
+        showLegend
+        legendPosition="top"
+        axisBreaks={[{ start: 200, end: 760, gap: '2%' }]}
+        categories={['A', 'B']}
+        series={[{ name: 'X', data: [1, 2] }]}
+      />
+    )
+    expect(lastOption().legend.top).toBe(12)
+  })
+
+  it('draws a collapse button when a break expands and collapses it on click', () => {
+    render(
+      <Bar
+        direction="vertical"
+        showValueAxis
+        axisBreaks={[{ start: 200, end: 760, gap: '2%' }]}
+        data={sample}
+      />
+    )
+
+    const onBreakChange = mockChart.on.mock.calls.find(
+      c => c[0] === 'axisbreakchanged'
+    )?.[1]
+    act(() => onBreakChange?.({ breaks: [{ isExpanded: true }] }))
+
+    const graphicCall = mockChart.setOption.mock.calls
+      .map(c => c[0])
+      .reverse()
+      .find(o => o.graphic)
+    const button = graphicCall.graphic[0]
+    expect(button.ignore).toBe(false)
+    const textEl = button.children.find(
+      (c: { type: string }) => c.type === 'text'
+    )
+    expect(textEl.style.text).toBe('Collapse breaks')
+
+    const click = mockChart.on.mock.calls.find(c => c[0] === 'click')?.[1]
+    act(() => click?.({ name: 'cleraCollapseAxisBreak' }))
+    expect(mockChart.dispatchAction).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'collapseAxisBreak',
+        yAxisIndex: 0,
+        breaks: [{ start: 200, end: 760, gap: '2%' }],
+      })
+    )
+  })
+
+  it('honors a custom collapse-button label and styles', () => {
+    render(
+      <Bar
+        direction="vertical"
+        showValueAxis
+        axisBreaks={[{ start: 200, end: 760, gap: '2%' }]}
+        axisBreakCollapse={{
+          text: 'Reset axis',
+          textStyle: { color: 'rgb(1, 2, 3)' },
+          buttonStyle: { fill: 'rgb(4, 5, 6)' },
+        }}
+        data={sample}
+      />
+    )
+
+    const onBreakChange = mockChart.on.mock.calls.find(
+      c => c[0] === 'axisbreakchanged'
+    )?.[1]
+    act(() => onBreakChange?.({ breaks: [{ isExpanded: true }] }))
+
+    const button = mockChart.setOption.mock.calls
+      .map(c => c[0])
+      .reverse()
+      .find(o => o.graphic).graphic[0]
+    const rectEl = button.children.find(
+      (c: { type: string }) => c.type === 'rect'
+    )
+    const textEl = button.children.find(
+      (c: { type: string }) => c.type === 'text'
+    )
+    expect(textEl.style.text).toBe('Reset axis')
+    expect(textEl.style.fill).toBe('rgb(1, 2, 3)')
+    expect(rectEl.style.fill).toBe('rgb(4, 5, 6)')
+  })
+
   it('renders an empty-state title when data is empty', () => {
     render(<Bar data={[]} emptyMessage="Nothing here" />)
     const option = lastOption()
@@ -670,6 +856,28 @@ describe('components/charts/Bar', () => {
     render(<Bar data={sample} formatValue={v => `${v}%`} />)
     const { tooltip } = lastOption()
     expect(tooltip.formatter({ name: 'Mobile', value: 80 })).toBe('Mobile: 80%')
+  })
+
+  it('lists every series in the tooltip when tooltipTrigger is axis', () => {
+    render(
+      <Bar
+        direction="vertical"
+        tooltipTrigger="axis"
+        categories={['Mon', 'Tue']}
+        series={[
+          { name: 'A', data: [1, 2] },
+          { name: 'B', data: [3, 4] },
+        ]}
+      />
+    )
+    const { tooltip } = lastOption()
+    expect(tooltip.trigger).toBe('axis')
+    const html = tooltip.formatter([
+      { name: 'Mon', seriesName: 'A', value: 1, marker: '' },
+      { name: 'Mon', seriesName: 'B', value: 3, marker: '' },
+    ])
+    expect(html).toContain('A: 1')
+    expect(html).toContain('B: 3')
   })
 
   it('hides the value axis by default', () => {
