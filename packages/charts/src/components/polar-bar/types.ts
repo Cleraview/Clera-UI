@@ -29,6 +29,7 @@ export interface PolarBarProps {
   orientation?: PolarBarOrientation
   height?: number | string
   stacked?: boolean
+  highlightSeries?: boolean
   max?: number
   min?: number
   showValues?: boolean

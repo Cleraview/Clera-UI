@@ -19,6 +19,7 @@ export interface BuildPolarBarOptionParams {
   series?: PolarBarSeries[]
   orientation: PolarBarOrientation
   stacked: boolean
+  highlightSeries: boolean
   max?: number
   min?: number
   showValues: boolean
@@ -41,6 +42,7 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
     series,
     orientation,
     stacked,
+    highlightSeries,
     max,
     min,
     showValues,
@@ -114,8 +116,10 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
         roundCap,
         data: s.data,
         itemStyle: { color, borderRadius: barRadius },
-        emphasis: { focus: 'series', itemStyle: { color: lighten(color) } },
-        blur: { itemStyle: { opacity: 1 } },
+        emphasis: highlightSeries
+          ? { focus: 'series', itemStyle: { color: lighten(color) } }
+          : { itemStyle: { color: lighten(color) } },
+        blur: highlightSeries ? { itemStyle: { opacity: 0.2 } } : undefined,
         label,
       }
     })

@@ -124,6 +124,37 @@ describe('components/charts/PolarBar', () => {
     expect(lastOption().legend.data).toEqual(['X', 'Y'])
   })
 
+  it('focuses the whole series and dims the rest when highlightSeries', () => {
+    render(
+      <PolarBar
+        categories={['A', 'B']}
+        highlightSeries
+        series={[
+          { name: 'X', data: [1, 2] },
+          { name: 'Y', data: [3, 4] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].emphasis.focus).toBe('series')
+    expect(series[0].blur.itemStyle.opacity).toBeLessThan(1)
+  })
+
+  it('lightens only the hovered segment by default (no series focus)', () => {
+    render(
+      <PolarBar
+        categories={['A', 'B']}
+        series={[
+          { name: 'X', data: [1, 2] },
+          { name: 'Y', data: [3, 4] },
+        ]}
+      />
+    )
+    const { series } = lastOption()
+    expect(series[0].emphasis.focus).toBeUndefined()
+    expect(series[0].blur).toBeUndefined()
+  })
+
   it('honors a per-datum custom color', () => {
     render(
       <PolarBar
