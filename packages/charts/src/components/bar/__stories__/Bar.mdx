@@ -1,0 +1,292 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@/config/site"
+import * as BarStories from "./Bar.stories"
+import { Canvas } from "@/stories/_components/Canvas"
+import { DocInfo } from "@/stories/_components/DocInfo"
+import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { DocsLayout } from "@/stories/_components/DocsLayout"
+
+<Meta title="Charts/Bar" of={BarStories} />
+
+<DocsLayout>
+  <div>
+    # Bar
+
+    To compare values across categories.
+    <DocInfo importStatement={`import { Bar } from '@clera/charts'`} sourcePath={`components/bar`} />
+
+    <br />
+
+    ## **When To Use**
+    The Bar chart visualizes and compares a small set of named values — revenue by month, traffic by source, votes by option. It is powered by [Apache ECharts](https://echarts.apache.org/) and resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically.
+
+    In {config.title}, the chart is highly flexible and adapts to different contexts through its props:
+
+      - **Direction**: Choose the orientation that fits your data.
+        - `vertical`: Columns — category on the x-axis, value on the y-axis. Best for time series.
+        - `horizontal`: Bars — category on the y-axis, value on the x-axis. Best for long labels or rankings.
+
+      - **Palette & Variant**: Control coloring.
+        - `palette="brand"`: A single primary color for every bar (default).
+        - `palette="categorical"`: Cycles the eight design-system categorical colors.
+        - `variant` per datum: Recolor a single bar (`primary`, `success`, `info`, `warning`, `destructive`).
+
+    - **Grouped Series**: Provide `categories` + `series` to compare more than one measure per category, with an interactive **legend**.
+    - **Value Axis & Grid Lines**: Turn on `showValueAxis` for a formatted scale; toggle `gridLines` independently.
+    - **Value Labels**: Show the number on each bar with `showValues` (usually off when the value axis is on).
+    - **Reference Line**: Mark a target or average with `referenceLine`. The label renders as a pill that stays clear of the bars.
+    - **Sorting**: Order bars by value with `sort` (`none`, `asc`, `desc`).
+    - **Loading & Empty**: Show a spinner with `loading`, or a centered message with `emptyMessage` when there is no data.
+    - **Animation**: Bars grow in on load via `animate`; it is automatically disabled under `prefers-reduced-motion`.
+
+    These options make the Bar a versatile building block for dashboards and KPI cards, while staying consistent with the rest of the system.
+
+    ## **Examples**
+    ### **E-commerce revenue**
+
+    Monthly gross revenue as columns with a "Target" reference line. `showValueAxis` renders the y-axis scale and grid lines, while `formatValue` formats the ticks, tooltip, and reference label as currency.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.Ecommerce} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const MonthlyRevenue = () => {
+            return (
+              <Bar
+                direction="vertical"
+                showValueAxis
+                showValues={false}
+                barRadius={6}
+                referenceLine={{ value: 55000, label: 'Target' }}
+                formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
+                height={360}
+                data={[
+                  { label: 'Jan', value: 42000 },
+                  { label: 'Feb', value: 38500 },
+                  { label: 'Mar', value: 51200 },
+                  { label: 'Apr', value: 47800 },
+                  { label: 'May', value: 63400 },
+                  { label: 'Jun', value: 72100 },
+                ]}
+              />
+            )
+          }
+
+          export default MonthlyRevenue
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Grouped with legend**
+    Pass `categories` and `series` to compare more than one measure per category. Each series becomes a legend entry (click to toggle) and gets its own categorical color.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.WithLegend} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const RevenueByQuarter = () => {
+            return (
+              <Bar
+                direction="vertical"
+                showValueAxis
+                showLegend
+                barRadius={6}
+                formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'}
+                height={360}
+                categories={['Q1', 'Q2', 'Q3', 'Q4']}
+                series={[
+                  { name: 'New', data: [28000, 24500, 31200, 40100] },
+                  { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+                ]}
+              />
+            )
+          }
+
+          export default RevenueByQuarter
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Bar component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I show the value axis and grid lines?**
+
+    Set `showValueAxis` to render the numeric axis with a `formatValue`-formatted scale. Grid lines follow the axis by default; toggle them on their own with `gridLines`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar showValueAxis data={data} />
+        <Bar showValueAxis gridLines={false} data={data} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I render grouped bars with a legend?**
+
+    Provide shared `categories` and one or more `series`. Each series renders as a legend entry with its own color. Use `showLegend` to hide it, and `legendPosition` to move it to the `top`, `bottom`, `left`, or `right` — margin is reserved automatically so it never overlaps the plot.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar
+          showLegend
+          legendPosition="right"
+          categories={['Q1', 'Q2', 'Q3', 'Q4']}
+          series={[
+            { name: 'New', data: [28000, 24500, 31200, 40100] },
+            { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I recolor individual bars?**
+
+    Set a `variant` on a datum to override the palette for that single bar, or switch the whole chart to `palette="categorical"`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar
+          data={[
+            { label: 'Mobile', value: 482, variant: 'success' },
+            { label: 'Desktop', value: 318, variant: 'warning' },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I add a target or average line?**
+
+    Pass `referenceLine={{ value, label? }}`. The label renders as a pill positioned at the end of the line so it never overlaps the bar color, and it stays horizontal in both orientations.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar referenceLine={{ value: 55000, label: 'Target' }} data={data} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I format values as currency or percentages?**
+
+    Provide a `formatValue` callback. It is applied consistently to bar labels, value-axis ticks, the reference line, and the tooltip.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar formatValue={(v) => '$' + (v / 1000).toFixed(1) + 'k'} data={data} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I react to bar clicks?**
+
+    Pass `onBarClick`. It receives the clicked datum and its index, mapped back to the original (unsorted) data.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar onBarClick={(datum, index) => console.log(datum, index)} data={data} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I show loading and empty states?**
+
+    Set `loading` to overlay a spinner while data is being fetched. When `data` is empty, a centered `emptyMessage` is shown instead of the chart.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar loading data={data} />
+        <Bar data={[]} emptyMessage="No revenue yet" />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Does the chart adapt to light and dark themes?**
+
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Bar data={data} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "e-commerce-revenue",
+              label: "E-commerce revenue"
+            },
+            {
+              id: "grouped-with-legend",
+              label: "Grouped with legend"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-show-the-value-axis-and-grid-lines",
+              label: "How do I show the value axis?"
+            },
+            {
+              id: "how-do-i-render-grouped-bars-with-a-legend",
+              label: "How do I render grouped bars?"
+            },
+            {
+              id: "how-do-i-recolor-individual-bars",
+              label: "How do I recolor individual bars?"
+            },
+            {
+              id: "how-do-i-add-a-target-or-average-line",
+              label: "How do I add a target line?"
+            },
+            {
+              id: "how-do-i-format-values-as-currency-or-percentages",
+              label: "How do I format values?"
+            },
+            {
+              id: "how-do-i-react-to-bar-clicks",
+              label: "How do I react to bar clicks?"
+            },
+            {
+              id: "how-do-i-show-loading-and-empty-states",
+              label: "How do I show loading and empty states?"
+            },
+            {
+              id: "does-the-chart-adapt-to-light-and-dark-themes",
+              label: "Does it adapt to dark mode?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

@@ -1,1 +1,1 @@
-export * from './components/bar-chart'
+export * from './components/bar'
