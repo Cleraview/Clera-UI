@@ -10,7 +10,7 @@ export type BarSort = 'none' | 'asc' | 'desc'
 
 export type BarStackMode = 'normal' | 'percent'
 
-export type BarZoom = boolean | 'category' | 'value'
+export type BarZoom = boolean | 'category' | 'value' | 'both'
 
 export type BarBrushSelection = {
   indices: number[]
@@ -95,6 +95,7 @@ export interface BarProps {
   axisBreakExpandable?: boolean
   axisBreakCollapse?: BarAxisBreakCollapse
   zoom?: BarZoom
+  zoomSlider?: boolean
   selectable?: boolean
   axisLabelRotate?: number
   valueAxisName?: string

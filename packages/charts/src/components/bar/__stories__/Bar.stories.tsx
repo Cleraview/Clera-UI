@@ -246,12 +246,21 @@ const meta: Meta<typeof Bar> = {
     },
     zoom: {
       control: { type: 'select' },
-      options: [false, true, 'category', 'value'],
+      options: [false, true, 'category', 'value', 'both'],
       description:
-        'Add a dataZoom slider + inside (scroll/drag) zoom. `true`/`category` zooms the category axis (page through many bars); `value` zooms the value axis.',
+        'Add a dataZoom slider + inside (scroll/drag) zoom. `true`/`category` zooms the category axis (page through many bars); `value` zooms the value axis; `both` adds a slider on each axis (the horizontal one clears the labels, the vertical one clears the legend).',
       table: {
-        type: { summary: "boolean | 'category' | 'value'" },
+        type: { summary: "boolean | 'category' | 'value' | 'both'" },
         defaultValue: { summary: 'false' },
+      },
+    },
+    zoomSlider: {
+      control: 'boolean',
+      description:
+        'Show the draggable zoom slider(s). Set to `false` to hide the slider and keep only inside (scroll/drag-on-plot) zoom.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
       },
     },
     selectable: {
@@ -771,6 +780,81 @@ export const Zoom: Story = {
   },
   render: args => (
     <div className="w-[640px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const budgetData = [
+  { name: 'Agriculture', b2011: 26621, b2012: 23695 },
+  { name: 'Commerce', b2011: 13858, b2012: 11929 },
+  { name: 'Defense', b2011: 666712, b2012: 670422 },
+  { name: 'Education', b2011: 71280, b2012: 77428 },
+  { name: 'Energy', b2011: 31555, b2012: 29539 },
+  { name: 'Health & Human Services', b2011: 88262, b2012: 79993 },
+  { name: 'Homeland Security', b2011: 53760, b2012: 46862 },
+  { name: 'Housing & Urban Dev', b2011: 60702, b2012: 47964 },
+  { name: 'Interior', b2011: 13339, b2012: 12056 },
+  { name: 'Justice', b2011: 30834, b2012: 28178 },
+  { name: 'Labor', b2011: 14018, b2012: 12784 },
+  { name: 'State', b2011: 56720, b2012: 56961 },
+  { name: 'Transportation', b2011: 84168, b2012: 89372 },
+  { name: 'Treasury', b2011: 13466, b2012: 14032 },
+  { name: 'Veterans Affairs', b2011: 56428, b2012: 60384 },
+  { name: 'Corps of Engineers', b2011: 10218, b2012: 9189 },
+  { name: 'Environmental Protection', b2011: 10286, b2012: 8973 },
+  { name: 'Executive Office', b2011: 437, b2012: 379 },
+  { name: 'General Services', b2011: 1466, b2012: 1117 },
+  { name: 'Intl Assistance', b2011: 20420, b2012: 24467 },
+  { name: 'NASA', b2011: 18724, b2012: 18448 },
+  { name: 'National Science Fdn', b2011: 7424, b2012: 8056 },
+  { name: 'Office of Personnel Mgmt', b2011: 77216, b2012: 81160 },
+  { name: 'Small Business Admin', b2011: 1124, b2012: 985 },
+  { name: 'Social Security Admin', b2011: 884617, b2012: 921599 },
+  { name: 'Other Agencies', b2011: 13903, b2012: 12339 },
+]
+const budgetCategories = budgetData.map(d => d.name)
+
+export const MixZoom: Story = {
+  name: 'Zoom & pan',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A federal-budget recreation (Budget 2011 vs 2012 by department). `zoom="category"` pages through the departments with a bottom slider, the scroll wheel (zoom, anchored at the cursor, stopping once a single group fills the view), and grab-drag to pan. `tooltipTrigger="axis"` shows a shadow band over the hovered group listing both years with a sticky label on the x-axis, and `hideOverlap` thins the dense labels. (Use `zoom="both"` if you also want a value-axis slider.)',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 400,
+    zoom: 'category',
+    zoomSlider: true,
+    tooltipTrigger: 'axis',
+    axisLabelRotate: 0,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    legendPosition: 'top',
+    valueAxisName: 'Budget (million USD)',
+    referenceLine: undefined,
+    formatValue: v => `$${v.toLocaleString('en-US')}`,
+    categories: budgetCategories,
+    series: [
+      {
+        name: 'Budget 2011',
+        data: budgetData.map(d => d.b2011),
+        variant: 'info',
+      },
+      {
+        name: 'Budget 2012',
+        data: budgetData.map(d => d.b2012),
+        variant: 'primary',
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[720px]">
       <Bar {...args} />
     </div>
   ),

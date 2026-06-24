@@ -43,6 +43,7 @@ function makeMockChart() {
     on: jest.fn(),
     off: jest.fn(),
     dispatchAction: jest.fn(),
+    getOption: jest.fn(() => ({ dataZoom: [] })),
     showLoading: jest.fn(),
     hideLoading: jest.fn(),
   }
@@ -880,6 +881,56 @@ describe('components/charts/Bar', () => {
     expect(html).toContain('B: 3')
   })
 
+  it('uses a shadow group band for the axis tooltip (no emphasis on hover-near)', () => {
+    render(
+      <Bar
+        direction="vertical"
+        tooltipTrigger="axis"
+        categories={['Mon', 'Tue']}
+        series={[
+          { name: 'A', data: [1, 2] },
+          { name: 'B', data: [3, 4] },
+        ]}
+      />
+    )
+    const { axisPointer } = lastOption().tooltip
+    expect(axisPointer.type).toBe('shadow')
+    expect(axisPointer.triggerEmphasis).toBe(false)
+  })
+
+  it('keeps the axis pointer hidden when highlightSeries is on', () => {
+    render(
+      <Bar
+        direction="vertical"
+        tooltipTrigger="axis"
+        highlightSeries
+        categories={['Mon', 'Tue']}
+        series={[
+          { name: 'A', data: [1, 2] },
+          { name: 'B', data: [3, 4] },
+        ]}
+      />
+    )
+    expect(lastOption().tooltip.axisPointer.type).toBe('none')
+  })
+
+  it('shows a sticky category label on the axis pointer for the axis tooltip', () => {
+    render(
+      <Bar
+        direction="vertical"
+        tooltipTrigger="axis"
+        categories={['Mon', 'Tue']}
+        series={[{ name: 'A', data: [1, 2] }]}
+      />
+    )
+    expect(lastOption().tooltip.axisPointer.label.show).toBe(true)
+  })
+
+  it('hides overlapping category labels so dense axes stay readable', () => {
+    render(<Bar data={sample} direction="vertical" />)
+    expect(lastOption().xAxis.axisLabel.hideOverlap).toBe(true)
+  })
+
   it('hides the value axis by default', () => {
     render(<Bar data={sample} />)
     const option = lastOption()
@@ -952,6 +1003,125 @@ describe('components/charts/Bar', () => {
   it('targets the value axis when zoom="value"', () => {
     render(<Bar data={sample} direction="vertical" zoom="value" />)
     expect(lastOption().dataZoom[0].yAxisIndex).toBe(0)
+  })
+
+  it('left-aligns the vertical value-axis name so a long title is not clipped', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        showValueAxis
+        valueAxisName="Budget (USD)"
+      />
+    )
+    expect(lastOption().yAxis.nameTextStyle.align).toBe('left')
+  })
+
+  it('puts scroll (inside) zoom on the category axis only for zoom="both"', () => {
+    render(<Bar data={sample} direction="vertical" zoom="both" />)
+    const insides = lastOption().dataZoom.filter(
+      (d: { type: string }) => d.type === 'inside'
+    )
+    expect(insides).toHaveLength(1)
+    expect(insides[0].xAxisIndex).toBe(0)
+    expect(insides[0].yAxisIndex).toBeUndefined()
+  })
+
+  it('configures inside zoom to zoom-on-wheel and pan-on-drag (no wheel pan)', () => {
+    render(<Bar data={sample} direction="vertical" zoom="both" />)
+    const inside = lastOption().dataZoom.find(
+      (d: { type: string }) => d.type === 'inside'
+    )
+    expect(inside.zoomOnMouseWheel).toBe(true)
+    expect(inside.moveOnMouseMove).toBe(true)
+    expect(inside.moveOnMouseWheel).toBe(false)
+  })
+
+  it('marks the container as grab-pannable when zoom is enabled', () => {
+    const { container } = render(
+      <Bar data={sample} direction="vertical" zoom="both" />
+    )
+    expect(container.firstChild).toHaveClass('[&_canvas]:!cursor-grab')
+  })
+
+  const fireWheelIn = (el: HTMLElement) => {
+    const evt = new Event('wheel', { cancelable: true, bubbles: true })
+    Object.defineProperty(evt, 'deltaY', { value: -100 })
+    return !el.dispatchEvent(evt)
+  }
+
+  it('swallows zoom-in wheel events when already at the minimum span', () => {
+    mockChart.getOption.mockReturnValue({
+      dataZoom: [{ type: 'inside', start: 0, end: 4, minSpan: 4 }],
+    })
+    const { container } = render(
+      <Bar data={sample} direction="vertical" zoom="both" />
+    )
+    expect(fireWheelIn(container.firstChild as HTMLElement)).toBe(true)
+  })
+
+  it('lets zoom-in wheel events through when not at the minimum span', () => {
+    mockChart.getOption.mockReturnValue({
+      dataZoom: [{ type: 'inside', start: 0, end: 60, minSpan: 4 }],
+    })
+    const { container } = render(
+      <Bar data={sample} direction="vertical" zoom="both" />
+    )
+    expect(fireWheelIn(container.firstChild as HTMLElement)).toBe(false)
+  })
+
+  it('zooms both axes with a slider each when zoom="both"', () => {
+    render(<Bar data={sample} direction="vertical" zoom="both" />)
+    const { dataZoom } = lastOption()
+    const sliders = dataZoom.filter(
+      (d: { type: string }) => d.type === 'slider'
+    )
+    expect(sliders).toHaveLength(2)
+    expect(
+      sliders.some((s: { xAxisIndex?: number }) => s.xAxisIndex === 0)
+    ).toBe(true)
+    expect(
+      sliders.some((s: { yAxisIndex?: number }) => s.yAxisIndex === 0)
+    ).toBe(true)
+  })
+
+  it('sets a minSpan floor so zoom cannot shrink to nothing', () => {
+    render(<Bar data={sample} direction="vertical" zoom="both" />)
+    const { dataZoom } = lastOption()
+    expect(
+      dataZoom.every((d: { minSpan?: number }) => (d.minSpan ?? 0) > 0)
+    ).toBe(true)
+  })
+
+  it('keeps bars when zooming the value axis (filterMode none, no empty slots)', () => {
+    render(<Bar data={sample} direction="vertical" zoom="both" />)
+    const { dataZoom } = lastOption()
+    const valueZooms = dataZoom.filter(
+      (d: { yAxisIndex?: number }) => d.yAxisIndex === 0
+    )
+    const categoryZooms = dataZoom.filter(
+      (d: { xAxisIndex?: number }) => d.xAxisIndex === 0
+    )
+    expect(valueZooms.length).toBeGreaterThan(0)
+    expect(
+      valueZooms.every((d: { filterMode: string }) => d.filterMode === 'none')
+    ).toBe(true)
+    expect(
+      categoryZooms.every(
+        (d: { filterMode: string }) => d.filterMode === 'filter'
+      )
+    ).toBe(true)
+  })
+
+  it('hides the sliders but keeps inside zoom when zoomSlider is false', () => {
+    render(
+      <Bar data={sample} direction="vertical" zoom="both" zoomSlider={false} />
+    )
+    const { dataZoom } = lastOption()
+    expect(dataZoom.every((d: { type: string }) => d.type === 'inside')).toBe(
+      true
+    )
+    expect(dataZoom).toHaveLength(2)
   })
 
   it('enables a brush toolbox when selectable is set', () => {

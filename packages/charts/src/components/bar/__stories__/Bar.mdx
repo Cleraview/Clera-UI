@@ -391,6 +391,39 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **Zoom & pan**
+    `zoom="category"` pages through many categories with a bottom slider, the scroll wheel (zoom anchored at the cursor, stopping once one group fills the view), and grab-drag to pan. `tooltipTrigger="axis"` adds a shadow band over the hovered group listing every series plus a sticky label on the x-axis, and dense labels are thinned automatically. Use `zoom="both"` to add a value-axis slider on the right, or `zoomSlider={false}` to hide the slider and keep inside-only zoom.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.MixZoom} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Budgets = ({ departments, b2011, b2012 }) => (
+            <Bar
+              direction="vertical"
+              zoom="category"
+              tooltipTrigger="axis"
+              showValueAxis
+              showLegend
+              valueAxisName="Budget (million USD)"
+              formatValue={(v) => '$' + v.toLocaleString('en-US')}
+              categories={departments}
+              series={[
+                { name: 'Budget 2011', data: b2011, variant: 'info' },
+                { name: 'Budget 2012', data: b2012, variant: 'primary' },
+              ]}
+            />
+          )
+
+          export default Budgets
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ### **Brush select**
     `selectable` adds a brush toolbox button. Activate it and drag across the bars to select a band; the selected `{ indices, labels }` arrive via `onBrushSelect`.
     <Canvas>
@@ -747,6 +780,10 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "zoom-and-rotated-labels",
               label: "Zoom & rotated labels"
+            },
+            {
+              id: "zoom-and-pan",
+              label: "Zoom & pan"
             },
             {
               id: "brush-select",

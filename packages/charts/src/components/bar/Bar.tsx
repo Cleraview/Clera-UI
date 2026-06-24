@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as echarts from 'echarts/core'
 import type { ECharts } from 'echarts/core'
 import { BarChart as EBarChart } from 'echarts/charts'
@@ -97,6 +97,7 @@ export const Bar: React.FC<BarProps> = ({
   axisBreakExpandable = true,
   axisBreakCollapse,
   zoom = false,
+  zoomSlider = true,
   selectable = false,
   axisLabelRotate = 0,
   valueAxisName,
@@ -145,6 +146,7 @@ export const Bar: React.FC<BarProps> = ({
         axisBreaks,
         axisBreakExpandable,
         zoom,
+        zoomSlider,
         selectable,
         axisLabelRotate,
         valueAxisName,
@@ -181,6 +183,7 @@ export const Bar: React.FC<BarProps> = ({
       axisBreaks,
       axisBreakExpandable,
       zoom,
+      zoomSlider,
       selectable,
       axisLabelRotate,
       valueAxisName,
@@ -332,13 +335,46 @@ export const Bar: React.FC<BarProps> = ({
     onReady: handleReady,
   })
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || !zoom) return
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY >= 0) return
+      const opt = chartRef.current?.getOption() as
+        | {
+            dataZoom?: Array<{
+              type?: string
+              start?: number
+              end?: number
+              minSpan?: number
+            }>
+          }
+        | undefined
+      const atMin = (opt?.dataZoom ?? []).some(
+        d =>
+          d.type === 'inside' &&
+          (d.end ?? 100) - (d.start ?? 0) <= (d.minSpan ?? 0) + 0.1
+      )
+      if (atMin) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+    el.addEventListener('wheel', onWheel, { capture: true, passive: false })
+    return () => el.removeEventListener('wheel', onWheel, { capture: true })
+  }, [zoom, containerRef])
+
   return (
     <div
       role="img"
       aria-label="Bar chart"
       data-testid="bar-chart"
       ref={containerRef}
-      className={cn(styles.root, className)}
+      className={cn(
+        styles.root,
+        zoom && '[&_canvas]:!cursor-grab active:[&_canvas]:!cursor-grabbing',
+        className
+      )}
       style={{
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,

@@ -47,6 +47,7 @@ export interface BuildBarOptionParams {
   axisBreaks: BarAxisBreak[]
   axisBreakExpandable: boolean
   zoom: BarZoom
+  zoomSlider: boolean
   selectable: boolean
   axisLabelRotate: number
   valueAxisName?: string
@@ -108,6 +109,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
     axisBreaks,
     axisBreakExpandable,
     zoom,
+    zoomSlider,
     selectable,
     axisLabelRotate,
     valueAxisName,
@@ -355,7 +357,11 @@ export function buildBarOption(params: BuildBarOptionParams) {
     max: percent ? 100 : max,
     min: percent ? 0 : min,
     name: valueAxisName,
-    nameTextStyle: { color: subtleColor, fontSize: 11 },
+    nameTextStyle: {
+      color: subtleColor,
+      fontSize: 11,
+      align: isHorizontal ? ('right' as const) : ('left' as const),
+    },
     splitLine: {
       show: showGrid,
       lineStyle: { color: lineColor, type: 'dashed' as const },
@@ -397,23 +403,71 @@ export function buildBarOption(params: BuildBarOptionParams) {
       color: labelColor,
       fontSize: 12,
       rotate: axisLabelRotate,
+      hideOverlap: true,
       ...(isHorizontal ? { width: 80, overflow: 'truncate' as const } : {}),
     },
   }
 
-  const zoomDim = zoom
-    ? zoom === 'value'
-      ? isHorizontal
-        ? 'xAxisIndex'
-        : 'yAxisIndex'
-      : isHorizontal
-        ? 'yAxisIndex'
-        : 'xAxisIndex'
-    : null
-  const dataZoom = zoomDim
+  const categoryZoomDim = isHorizontal ? 'yAxisIndex' : 'xAxisIndex'
+  const valueZoomDim = isHorizontal ? 'xAxisIndex' : 'yAxisIndex'
+  const zoomCategory = zoom === true || zoom === 'category' || zoom === 'both'
+  const zoomValue = zoom === 'value' || zoom === 'both'
+  const zoomDims = [
+    ...(zoomCategory ? [categoryZoomDim] : []),
+    ...(zoomValue ? [valueZoomDim] : []),
+  ]
+  const showVSlider = zoomSlider && zoomDims.includes('yAxisIndex')
+  const showHSlider = zoomSlider && zoomDims.includes('xAxisIndex')
+
+  const filterModeFor = (dim: string) =>
+    dim === valueZoomDim ? ('none' as const) : ('filter' as const)
+
+  const catCount = Math.max(cats.length, 1)
+  const categoryMinSpan = Math.max(0.5, (1 / catCount) * 100 * 0.8)
+  const minSpanFor = (dim: string) =>
+    dim === valueZoomDim ? 2 : categoryMinSpan
+
+  const makeSlider = (dim: string) =>
+    dim === 'xAxisIndex'
+      ? {
+          type: 'slider' as const,
+          [dim]: 0,
+          filterMode: filterModeFor(dim),
+          minSpan: minSpanFor(dim),
+          brushSelect: false,
+          bottom: 8,
+          height: 16,
+          left: 8,
+          right: showVSlider ? 30 : 8,
+        }
+      : {
+          type: 'slider' as const,
+          [dim]: 0,
+          filterMode: filterModeFor(dim),
+          minSpan: minSpanFor(dim),
+          width: 14,
+          right: 8,
+          top: legendShown && legendPosition === 'top' ? 40 : 16,
+          bottom: showHSlider ? 34 : 16,
+        }
+
+  const insideDims = [
+    ...(zoomCategory ? [categoryZoomDim] : []),
+    ...(zoomValue && (!zoomCategory || !zoomSlider) ? [valueZoomDim] : []),
+  ]
+
+  const dataZoom = zoomDims.length
     ? [
-        { type: 'inside', [zoomDim]: 0 },
-        { type: 'slider', [zoomDim]: 0, brushSelect: false },
+        ...insideDims.map(dim => ({
+          type: 'inside' as const,
+          [dim]: 0,
+          filterMode: filterModeFor(dim),
+          minSpan: minSpanFor(dim),
+          zoomOnMouseWheel: true,
+          moveOnMouseMove: true,
+          moveOnMouseWheel: false,
+        })),
+        ...(zoomSlider ? zoomDims.map(makeSlider) : []),
       ]
     : undefined
 
@@ -486,7 +540,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
         legendShown && legendPosition === 'right' ? 96 : 0,
         referenceLine && !isHorizontal ? 72 : 0,
         isHorizontal && showValues ? 56 : 0,
-        zoomDim === 'yAxisIndex' ? 36 : 0,
+        showVSlider ? 40 : 0,
         8
       ),
       top: Math.max(
@@ -499,7 +553,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
       ),
       bottom: Math.max(
         legendShown && legendPosition === 'bottom' ? 36 : 0,
-        zoomDim === 'xAxisIndex' ? 36 : 0,
+        showHSlider ? 50 : 0,
         axisLabelRotate ? 24 : 0,
         8
       ),
@@ -509,7 +563,22 @@ export function buildBarOption(params: BuildBarOptionParams) {
       show: showTooltip,
       trigger: tooltipTrigger,
       axisPointer:
-        tooltipTrigger === 'axis' ? { type: 'none' as const } : undefined,
+        tooltipTrigger === 'axis'
+          ? {
+              type: highlightSeries ? ('none' as const) : ('shadow' as const),
+              triggerEmphasis: false,
+              shadowStyle: { color: 'rgba(127, 127, 127, 0.12)' },
+              label: {
+                show: true,
+                backgroundColor: surface,
+                color: labelColor,
+                borderColor: lineColor,
+                borderWidth: 1,
+                shadowBlur: 0,
+                fontSize: 11,
+              },
+            }
+          : undefined,
       backgroundColor: surface,
       borderColor: lineColor,
       borderWidth: 1,
