@@ -69,6 +69,15 @@ const meta: Meta<typeof Combo> = {
         defaultValue: { summary: 'true' },
       },
     },
+    highlightSeries: {
+      control: 'boolean',
+      description:
+        'On hover, focus the whole hovered series and dim the others. Off by default, where hovering a series highlights it without fading the rest.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
     barRadius: {
       control: 'number',
       description: 'Corner radius for bar series.',
@@ -360,12 +369,13 @@ export const MultipleYAxes: Story = {
     docs: {
       description: {
         story:
-          'Three value axes in one chart via `valueAxes`. Evaporation and Precipitation each get their own right-hand axis (the second pushed out with `offset`), while Temperature keeps the left axis. Series point at an axis by index with `axis: <n>`, and each axis takes on its series’ color.',
+          'Three value axes in one chart via `valueAxes`. Evaporation and Precipitation each get their own right-hand axis (the second pushed out with `offset`), while Temperature keeps the left axis. Series point at an axis by index with `axis: <n>`, and each axis takes on its series’ color. `highlightSeries` focuses the hovered series and dims the others.',
       },
     },
   },
   args: {
     height: 380,
+    highlightSeries: true,
     categories: [
       'Jan',
       'Feb',

@@ -40,7 +40,9 @@ export interface PolarBarProps {
   barRadius?: number
   roundCap?: boolean
   startAngle?: number
+  endAngle?: number
   formatValue?: (value: number) => string
+  labelFormatter?: (datum: { name: string; value: number }) => string
   loading?: boolean
   animate?: boolean
   emptyMessage?: string

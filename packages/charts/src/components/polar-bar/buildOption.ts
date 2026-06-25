@@ -30,7 +30,9 @@ export interface BuildPolarBarOptionParams {
   barRadius: number
   roundCap: boolean
   startAngle: number
+  endAngle?: number
   formatValue: (value: number) => string
+  labelFormatter?: (datum: { name: string; value: number }) => string
   animate: boolean
   emptyMessage: string
 }
@@ -53,7 +55,9 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
     barRadius,
     roundCap,
     startAngle,
+    endAngle,
     formatValue,
+    labelFormatter,
     animate,
     emptyMessage,
   } = params
@@ -91,12 +95,15 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
   const cats = grouped ? (categories as string[]) : data.map(d => d.label)
 
   const label = {
-    show: showValues,
+    show: showValues || Boolean(labelFormatter),
     position: 'middle' as const,
     color: readCssColor('--text-color-ds-inverse', 'rgb(250, 250, 250)'),
     fontSize: 11,
     textBorderWidth: 0,
-    formatter: (p: { value: number }) => formatValue(p.value),
+    formatter: (p: { name: string; value: number }) =>
+      labelFormatter
+        ? labelFormatter({ name: p.name, value: p.value })
+        : formatValue(p.value),
   }
 
   let seriesList: unknown[]
@@ -151,9 +158,22 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
   const categoryAxis = {
     type: 'category' as const,
     data: cats,
+    z: isAngular ? 0 : 60,
     axisLine: { lineStyle: { color: lineColor } },
     axisTick: { show: false },
-    axisLabel: { color: labelColor, fontSize: 12 },
+    axisLabel: {
+      color: labelColor,
+      fontSize: 12,
+      ...(isAngular
+        ? {}
+        : {
+            backgroundColor: surface,
+            borderColor: lineColor,
+            borderWidth: 1,
+            borderRadius: 4,
+            padding: [2, 6] as [number, number],
+          }),
+    },
   }
 
   const valueAxis = {
@@ -164,8 +184,20 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
       color: subtleColor,
       fontSize: 11,
       formatter: (value: number) => formatValue(value),
+      ...(isAngular
+        ? {
+            backgroundColor: surface,
+            borderColor: lineColor,
+            borderWidth: 1,
+            borderRadius: 4,
+            padding: [1, 5] as [number, number],
+          }
+        : {}),
     },
-    splitLine: { lineStyle: { color: lineColor, type: 'dashed' as const } },
+    splitLine: {
+      show: true,
+      lineStyle: { color: lineColor, type: 'dashed' as const },
+    },
     axisLine: { show: false },
   }
 
@@ -178,8 +210,8 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
     animationEasing: 'cubicOut' as const,
     polar: { radius: ['20%', '75%'] },
     angleAxis: isAngular
-      ? { ...categoryAxis, startAngle }
-      : { ...valueAxis, startAngle },
+      ? { ...categoryAxis, startAngle, endAngle }
+      : { ...valueAxis, startAngle, endAngle },
     radiusAxis: isAngular ? valueAxis : categoryAxis,
     legend: {
       show: legendShown,
@@ -218,9 +250,10 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
           | { name: string; value: number; seriesName?: string }[]
       ) => {
         const item = Array.isArray(p) ? p[0] : p
-        const head = item.seriesName
-          ? `${item.name} · ${item.seriesName}`
-          : item.name
+        const head =
+          grouped && item.seriesName
+            ? `${item.name} · ${item.seriesName}`
+            : item.name
         return `${head}: ${formatValue(item.value)}`
       },
     },

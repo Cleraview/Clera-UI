@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import type { ECharts } from 'echarts/core'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { PolarBar } from '../PolarBar'
 
@@ -90,6 +92,15 @@ const meta: Meta<typeof PolarBar> = {
       description: 'Starting angle (degrees) of the angle axis.',
       table: { type: { summary: 'number' }, defaultValue: { summary: '90' } },
     },
+    endAngle: {
+      control: { type: 'range', min: -360, max: 360, step: 15 },
+      description:
+        'Ending angle (degrees) of the angle axis. Set it (with `startAngle`) to sweep only part of the circle — e.g. `startAngle={180} endAngle={0}` for a semicircular fan.',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: 'full circle' },
+      },
+    },
     max: {
       control: 'number',
       description: 'Force the value-axis maximum.',
@@ -106,6 +117,15 @@ const meta: Meta<typeof PolarBar> = {
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
+      },
+    },
+    labelFormatter: {
+      control: false,
+      description:
+        'Customize the on-bar label from `{ name, value }` (e.g. `({ name, value }) => `${name}: ${value}``). Implies the labels are shown; positioned in the middle of each bar (tangential on polar).',
+      table: {
+        type: { summary: '(d: { name: string; value: number }) => string' },
+        defaultValue: { summary: '-' },
       },
     },
     showTooltip: {
@@ -264,4 +284,112 @@ export const Radial: Story = {
       <PolarBar {...args} />
     </div>
   ),
+}
+
+export const TangentialLabels: Story = {
+  name: 'Tangential labels',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Radial bars (category on the radius, value sweeping around to `max`) with a `labelFormatter` that prints `name: value` in the middle of each bar — ECharts lays the middle label out tangentially, curving along the arc. Recreates the official "Tangential Polar Bar Label Position" demo.',
+      },
+    },
+  },
+  args: {
+    height: 420,
+    orientation: 'radial',
+    palette: 'categorical',
+    max: 4,
+    startAngle: 75,
+    labelFormatter: ({ name, value }) => `${name}: ${value}`,
+    data: [
+      { label: 'a', value: 2 },
+      { label: 'b', value: 1.2 },
+      { label: 'c', value: 2.4 },
+      { label: 'd', value: 3.6 },
+    ],
+  },
+  render: args => (
+    <div className="w-[460px]">
+      <PolarBar {...args} />
+    </div>
+  ),
+}
+
+const twoPolarOption = {
+  polar: [{}, {}],
+  angleAxis: [
+    {
+      type: 'category',
+      polarIndex: 0,
+      startAngle: 90,
+      endAngle: 0,
+      data: ['S1', 'S2', 'S3'],
+    },
+    {
+      type: 'category',
+      polarIndex: 1,
+      startAngle: -90,
+      endAngle: -180,
+      data: ['T1', 'T2', 'T3'],
+    },
+  ],
+  radiusAxis: [{ polarIndex: 0 }, { polarIndex: 1 }],
+  series: [
+    {
+      type: 'bar',
+      coordinateSystem: 'polar',
+      polarIndex: 0,
+      roundCap: true,
+      data: [1, 2, 3],
+    },
+    {
+      type: 'bar',
+      coordinateSystem: 'polar',
+      polarIndex: 1,
+      roundCap: true,
+      data: [1, 2, 3],
+    },
+  ],
+}
+
+function TwoPolarArcs() {
+  const chartRef = useRef<ECharts | null>(null)
+  useEffect(() => {
+    const chart = chartRef.current
+    if (!chart) return
+    const { tooltip } = chart.getOption() as { tooltip?: unknown }
+    chart.setOption({ ...twoPolarOption, tooltip }, true)
+  }, [])
+  return (
+    <div className="w-[460px]">
+      <PolarBar
+        height={420}
+        orientation="angular"
+        showValues
+        data={[
+          { label: 'S1', value: 1 },
+          { label: 'S2', value: 2 },
+          { label: 'S3', value: 3 },
+        ]}
+        onReady={chart => {
+          chartRef.current = chart
+        }}
+      />
+    </div>
+  )
+}
+
+export const PartialArc: Story = {
+  name: 'Partial arc (endAngle)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Two polar systems sharing one center, each a quarter arc set by `startAngle`/`endAngle` — S1–S3 fan the top-right (90°→0°) and T1–T3 the bottom-left (-90°→-180°), the official polar-endAngle demo. A single `PolarBar` draws one polar system, so the second is composed by grabbing the instance via `onReady` and applying a two-polar option from an effect (after the chart has mounted). For a single partial arc, just pass `startAngle`/`endAngle` props.',
+      },
+    },
+  },
+  render: () => <TwoPolarArcs />,
 }

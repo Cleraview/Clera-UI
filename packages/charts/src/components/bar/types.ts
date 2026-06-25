@@ -76,6 +76,7 @@ export interface BarProps {
   height?: number | string
   showTooltip?: boolean
   tooltipTrigger?: 'item' | 'axis'
+  axisPointerLabel?: boolean
   showValueAxis?: boolean
   showLegend?: boolean
   legendPosition?: BarLegendPosition

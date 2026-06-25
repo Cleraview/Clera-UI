@@ -131,6 +131,13 @@ describe('components/charts/Combo', () => {
     expect(line.blur.lineStyle.opacity).toBe(1)
   })
 
+  it('dims the other series when highlightSeries is on', () => {
+    render(<Combo categories={categories} series={series} highlightSeries />)
+    const [bar, line] = lastOption().series
+    expect(bar.blur.itemStyle.opacity).toBeLessThan(1)
+    expect(line.blur.lineStyle.opacity).toBeLessThan(1)
+  })
+
   it('uses a single value axis when all series are on the left', () => {
     render(
       <Combo

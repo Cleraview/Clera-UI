@@ -29,6 +29,7 @@ export interface BuildBarOptionParams {
   formatValue: (value: number) => string
   showTooltip: boolean
   tooltipTrigger: 'item' | 'axis'
+  axisPointerLabel: boolean
   showValueAxis: boolean
   showLegend?: boolean
   legendPosition: BarLegendPosition
@@ -91,6 +92,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
     formatValue,
     showTooltip,
     tooltipTrigger,
+    axisPointerLabel,
     showValueAxis,
     showLegend,
     legendPosition,
@@ -360,7 +362,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
     nameTextStyle: {
       color: subtleColor,
       fontSize: 11,
-      align: isHorizontal ? ('right' as const) : ('left' as const),
+      align: 'right' as const,
+      padding: [0, 8, 0, 0] as [number, number, number, number],
     },
     splitLine: {
       show: showGrid,
@@ -404,7 +407,6 @@ export function buildBarOption(params: BuildBarOptionParams) {
       fontSize: 12,
       rotate: axisLabelRotate,
       hideOverlap: true,
-      ...(isHorizontal ? { width: 80, overflow: 'truncate' as const } : {}),
     },
   }
 
@@ -500,6 +502,11 @@ export function buildBarOption(params: BuildBarOptionParams) {
 
   const topLegendY = axisBreaks.length && axisBreakExpandable ? 12 : 0
 
+  const valueNameWidth =
+    !isHorizontal && valueAxisName
+      ? Math.min(168, Math.ceil(valueAxisName.length * 6.5) + 14)
+      : 0
+
   return {
     animation: animate && !prefersReducedMotion(),
     animationDuration: 600,
@@ -535,7 +542,10 @@ export function buildBarOption(params: BuildBarOptionParams) {
       textStyle: { color: labelColor, fontSize: 12 },
     },
     grid: {
-      left: legendShown && legendPosition === 'left' ? 96 : 8,
+      left: Math.max(
+        legendShown && legendPosition === 'left' ? 96 : 8,
+        valueNameWidth
+      ),
       right: Math.max(
         legendShown && legendPosition === 'right' ? 96 : 0,
         referenceLine && !isHorizontal ? 72 : 0,
@@ -549,12 +559,12 @@ export function buildBarOption(params: BuildBarOptionParams) {
         selectable ? 26 : 0,
         markPoints.length && !isHorizontal ? 32 : 0,
         axisBreaks.length && axisBreakExpandable ? 44 : 0,
+        !isHorizontal && valueAxisName ? 24 : 0,
         showValues && !isHorizontal ? 28 : 12
       ),
       bottom: Math.max(
         legendShown && legendPosition === 'bottom' ? 36 : 0,
-        showHSlider ? 50 : 0,
-        axisLabelRotate ? 24 : 0,
+        (showHSlider ? 26 : 0) + (axisLabelRotate ? 34 : showHSlider ? 16 : 8),
         8
       ),
       containLabel: true,
@@ -569,7 +579,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
               triggerEmphasis: false,
               shadowStyle: { color: 'rgba(127, 127, 127, 0.12)' },
               label: {
-                show: true,
+                show: axisPointerLabel,
                 backgroundColor: surface,
                 color: labelColor,
                 borderColor: lineColor,
@@ -611,9 +621,10 @@ export function buildBarOption(params: BuildBarOptionParams) {
                 | { name: string; value: number; seriesName?: string }[]
             ) => {
               const item = Array.isArray(p) ? p[0] : p
-              const head = item.seriesName
-                ? `${item.name} · ${item.seriesName}`
-                : item.name
+              const head =
+                grouped && item.seriesName
+                  ? `${item.name} · ${item.seriesName}`
+                  : item.name
               return `${head}: ${formatValue(item.value)}`
             },
     },

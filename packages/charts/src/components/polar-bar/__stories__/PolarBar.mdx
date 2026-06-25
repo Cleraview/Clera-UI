@@ -131,6 +131,91 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
       </Canvas.Source>
     </Canvas>
 
+    ### **Tangential labels**
+
+    Pass a `labelFormatter` to print `name: value` (or anything) in the middle of each bar. With the radial orientation ECharts lays the middle label out tangentially, curving along the arc.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.TangentialLabels} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Usage = () => (
+            <PolarBar
+              orientation="radial"
+              palette="categorical"
+              max={4}
+              startAngle={75}
+              labelFormatter={({ name, value }) => name + ': ' + value}
+              data={[
+                { label: 'a', value: 2 },
+                { label: 'b', value: 1.2 },
+                { label: 'c', value: 2.4 },
+                { label: 'd', value: 3.6 },
+              ]}
+            />
+          )
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Partial arc (endAngle)**
+
+    Pair `startAngle` with `endAngle` to sweep only part of the circle. For a single arc just pass the props; to place two polar systems side by side in one chart (the official polar-endAngle demo) — S1–S3 in the top-right quadrant, T1–T3 in the bottom-left — grab the instance via `onReady` and apply a two-polar option from an effect after mount.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.PartialArc} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useEffect, useRef } from 'react'
+          import { PolarBar } from '@clera/charts'
+
+          const twoPolar = {
+            polar: [{}, {}],
+            angleAxis: [
+              { type: 'category', polarIndex: 0, startAngle: 90, endAngle: 0, data: ['S1', 'S2', 'S3'] },
+              { type: 'category', polarIndex: 1, startAngle: -90, endAngle: -180, data: ['T1', 'T2', 'T3'] },
+            ],
+            radiusAxis: [{ polarIndex: 0 }, { polarIndex: 1 }],
+            series: [
+              { type: 'bar', coordinateSystem: 'polar', polarIndex: 0, roundCap: true, data: [1, 2, 3] },
+              { type: 'bar', coordinateSystem: 'polar', polarIndex: 1, roundCap: true, data: [1, 2, 3] },
+            ],
+          }
+
+          const Usage = () => {
+            const chartRef = useRef(null)
+            useEffect(() => {
+              const chart = chartRef.current
+              const { tooltip } = chart.getOption()
+              chart.setOption({ ...twoPolar, tooltip }, true)
+            }, [])
+            return (
+              <PolarBar
+                orientation="angular"
+                showValues
+                data={[
+                  { label: 'S1', value: 1 },
+                  { label: 'S2', value: 2 },
+                  { label: 'S3', value: 3 },
+                ]}
+                onReady={(chart) => { chartRef.current = chart }}
+              />
+            )
+          }
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
     ## **API**
     Below is a comprehensive list of all the props available for the PolarBar component, along with their types, default values, and descriptions.
     <ArgTypes />
@@ -158,6 +243,14 @@ import { DocsLayout } from "@ui/stories/_components/DocsLayout"
             {
               id: "radial-concentric",
               label: "Radial (concentric)"
+            },
+            {
+              id: "tangential-labels",
+              label: "Tangential labels"
+            },
+            {
+              id: "partial-arc-endangle",
+              label: "Partial arc (endAngle)"
             },
           ]
         },

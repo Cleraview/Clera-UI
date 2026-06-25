@@ -859,6 +859,14 @@ describe('components/charts/Bar', () => {
     expect(tooltip.formatter({ name: 'Mobile', value: 80 })).toBe('Mobile: 80%')
   })
 
+  it('omits the default series name (series0) from single-series tooltips', () => {
+    render(<Bar data={sample} />)
+    const { tooltip } = lastOption()
+    expect(
+      tooltip.formatter({ name: 'Mobile', value: 80, seriesName: 'series0' })
+    ).toBe('Mobile: 80')
+  })
+
   it('lists every series in the tooltip when tooltipTrigger is axis', () => {
     render(
       <Bar
@@ -926,9 +934,59 @@ describe('components/charts/Bar', () => {
     expect(lastOption().tooltip.axisPointer.label.show).toBe(true)
   })
 
+  it('can hide the sticky axis-pointer label via axisPointerLabel', () => {
+    render(
+      <Bar
+        direction="vertical"
+        tooltipTrigger="axis"
+        axisPointerLabel={false}
+        categories={['Mon', 'Tue']}
+        series={[{ name: 'A', data: [1, 2] }]}
+      />
+    )
+    expect(lastOption().tooltip.axisPointer.label.show).toBe(false)
+  })
+
+  it('right-aligns the value-axis name and reserves left room so it is not clipped', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        showValueAxis
+        valueAxisName="Budget (million USD)"
+      />
+    )
+    const option = lastOption()
+    expect(option.yAxis.nameTextStyle.align).toBe('right')
+    expect(option.grid.left).toBeGreaterThan(96)
+  })
+
+  it('reserves top room for the value-axis name so it is not clipped', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        showValueAxis
+        showValues={false}
+        valueAxisName="Units"
+      />
+    )
+    expect(lastOption().grid.top).toBeGreaterThanOrEqual(24)
+  })
+
   it('hides overlapping category labels so dense axes stay readable', () => {
     render(<Bar data={sample} direction="vertical" />)
     expect(lastOption().xAxis.axisLabel.hideOverlap).toBe(true)
+  })
+
+  it('does not truncate horizontal category labels', () => {
+    render(
+      <Bar
+        direction="horizontal"
+        data={[{ label: 'Health & Human Services', value: 5 }]}
+      />
+    )
+    expect(lastOption().yAxis.axisLabel.overflow).toBeUndefined()
   })
 
   it('hides the value axis by default', () => {
@@ -1003,18 +1061,6 @@ describe('components/charts/Bar', () => {
   it('targets the value axis when zoom="value"', () => {
     render(<Bar data={sample} direction="vertical" zoom="value" />)
     expect(lastOption().dataZoom[0].yAxisIndex).toBe(0)
-  })
-
-  it('left-aligns the vertical value-axis name so a long title is not clipped', () => {
-    render(
-      <Bar
-        data={sample}
-        direction="vertical"
-        showValueAxis
-        valueAxisName="Budget (USD)"
-      />
-    )
-    expect(lastOption().yAxis.nameTextStyle.align).toBe('left')
   })
 
   it('puts scroll (inside) zoom on the category axis only for zoom="both"', () => {

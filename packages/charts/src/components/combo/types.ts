@@ -45,6 +45,7 @@ export interface ComboProps {
   showLegend?: boolean
   legendPosition?: ComboLegendPosition
   gridLines?: boolean
+  highlightSeries?: boolean
   barRadius?: number
   axisLabelRotate?: number
   categoryAxisName?: string

@@ -101,6 +101,15 @@ const meta: Meta<typeof Bar> = {
         defaultValue: { summary: 'item' },
       },
     },
+    axisPointerLabel: {
+      control: 'boolean',
+      description:
+        'With `tooltipTrigger="axis"`, show the sticky tag on the category axis marking the hovered group. Set to `false` to keep the shadow band and tooltip without the axis tag.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
     showLegend: {
       control: 'boolean',
       description:

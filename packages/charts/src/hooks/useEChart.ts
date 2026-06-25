@@ -75,6 +75,10 @@ export function useEChart({
     const observer = new ResizeObserver(() => chart.resize())
     observer.observe(el)
 
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      document.fonts.ready.then(() => chartRef.current?.resize())
+    }
+
     return () => {
       observer.disconnect()
       chart.dispose()

@@ -20,6 +20,7 @@ export interface BuildComboOptionParams {
   showLegend: boolean
   legendPosition: ComboLegendPosition
   gridLines: boolean
+  highlightSeries: boolean
   barRadius: number
   axisLabelRotate: number
   categoryAxisName?: string
@@ -41,6 +42,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
     showLegend,
     legendPosition,
     gridLines,
+    highlightSeries,
     barRadius,
     axisLabelRotate,
     categoryAxisName,
@@ -111,6 +113,9 @@ export function buildComboOption(params: BuildComboOptionParams) {
     return s.axis === 'right' ? formatRight : formatLeft
   }
 
+  const blurOpacity = highlightSeries ? 0.2 : 1
+  const areaBlurOpacity = highlightSeries ? 0.06 : 0.15
+
   const seriesList = series.map((s, i) => {
     const color = seriesColors[i]
     const yAxisIndex = yAxisIndexFor(s)
@@ -136,7 +141,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
           borderRadius: [barRadius, barRadius, 0, 0],
         },
         emphasis: { focus: 'series', itemStyle: { color: lighten(color) } },
-        blur: { itemStyle: { opacity: 1 } },
+        blur: { itemStyle: { opacity: blurOpacity } },
         label,
       }
     }
@@ -162,9 +167,11 @@ export function buildComboOption(params: BuildComboOptionParams) {
           : {}),
       },
       blur: {
-        lineStyle: { opacity: 1 },
-        itemStyle: { opacity: 1 },
-        ...(s.type === 'area' ? { areaStyle: { opacity: 0.15 } } : {}),
+        lineStyle: { opacity: blurOpacity },
+        itemStyle: { opacity: blurOpacity },
+        ...(s.type === 'area'
+          ? { areaStyle: { opacity: areaBlurOpacity } }
+          : {}),
       },
       ...(s.type === 'area' ? { areaStyle: { color, opacity: 0.15 } } : {}),
       label,

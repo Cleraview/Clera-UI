@@ -92,6 +92,64 @@ describe('components/charts/PolarBar', () => {
     expect(option.angleAxis.type).toBe('value')
   })
 
+  it('gives radial category labels a readable chip above the bars', () => {
+    render(<PolarBar data={sample} orientation="radial" />)
+    const { radiusAxis } = lastOption()
+    expect(radiusAxis.axisLabel.backgroundColor).toMatch(/^rgb/)
+    expect(radiusAxis.z).toBeGreaterThan(2)
+  })
+
+  it('keeps angular category labels plain (no chip)', () => {
+    render(<PolarBar data={sample} orientation="angular" />)
+    expect(lastOption().angleAxis.axisLabel.backgroundColor).toBeUndefined()
+  })
+
+  it('gives angular value labels a readable chip for contrast', () => {
+    render(<PolarBar data={sample} orientation="angular" />)
+    expect(lastOption().radiusAxis.axisLabel.backgroundColor).toMatch(/^rgb/)
+  })
+
+  it('keeps the dashed value splitline behind the bars (shown, default depth)', () => {
+    render(<PolarBar data={sample} orientation="angular" />)
+    const { radiusAxis } = lastOption()
+    expect(radiusAxis.splitLine.show).toBe(true)
+    expect(radiusAxis.z).toBeUndefined()
+  })
+
+  it('limits the sweep with endAngle on the angle axis', () => {
+    render(
+      <PolarBar
+        data={sample}
+        orientation="angular"
+        startAngle={180}
+        endAngle={0}
+      />
+    )
+    expect(lastOption().angleAxis.startAngle).toBe(180)
+    expect(lastOption().angleAxis.endAngle).toBe(0)
+  })
+
+  it('renders an on-bar label from labelFormatter (name + value)', () => {
+    render(
+      <PolarBar
+        data={sample}
+        orientation="radial"
+        labelFormatter={({ name, value }) => `${name}: ${value}`}
+      />
+    )
+    const { label } = lastOption().series[0]
+    expect(label.show).toBe(true)
+    expect(label.formatter({ name: 'Mon', value: 12 })).toBe('Mon: 12')
+  })
+
+  it('omits the default series name (series0) from single-series tooltips', () => {
+    render(<PolarBar data={sample} />)
+    const { tooltip } = lastOption()
+    expect(
+      tooltip.formatter({ name: 'Mon', value: 12, seriesName: 'series0' })
+    ).toBe('Mon: 12')
+  })
+
   it('applies startAngle to the angle axis', () => {
     render(<PolarBar data={sample} startAngle={45} />)
     expect(lastOption().angleAxis.startAngle).toBe(45)
