@@ -62,7 +62,7 @@
 
   .sbdocs.sbdocs-wrapper {
     background: var(--background-color-ds-elevation-surface);
-    padding: 1rem 4rem;
+    padding: 1rem 2rem;
   }
 
   .sb-previewBlock {
@@ -240,6 +240,52 @@
   /* true, false */
   span.token.boolean {
     color: var(--text-color-ds-accent-magenta)!important;
+  }
+
+  /* Keep story content within the viewport on small screens */
+  @media (max-width: 600px) {
+    .sb-show-main.sb-main-centered,
+    .sb-show-main.sb-main-padded {
+      max-width: 100vw;
+    }
+    #storybook-root,
+    #storybook-docs {
+      max-width: 100%;
+    }
+  }
+
+  /* Mobile docs */
+  @media (max-width: 600px) {
+    .sbdocs.sbdocs-wrapper {
+      padding: 1rem 1rem !important;
+    }
+    .sbdocs.sbdocs-content {
+      max-width: 100% !important;
+    }
+    .sbdocs.sbdocs-content :where(h1:not(.sb-unstyled)) {
+      font-size: 1.6rem !important;
+    }
+    .sbdocs.sbdocs-content :where(h2:not(.sb-unstyled)) {
+      font-size: 1.3rem !important;
+    }
+    .sbdocs.sbdocs-content :where(h3:not(.sb-unstyled)) {
+      font-size: 1.1rem !important;
+    }
+    .sbdocs.sbdocs-content pre,
+    .sbdocs.sbdocs-content .docblock-source,
+    .sbdocs.sbdocs-content .docblock-source pre {
+      max-width: 100% !important;
+      overflow-x: auto !important;
+    }
+    .sbdocs.sbdocs-content :where(table:not(.sb-unstyled)) {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .sbdocs.sbdocs-content img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
   }
 </style>
 <script>

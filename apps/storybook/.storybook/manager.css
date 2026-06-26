@@ -9,6 +9,15 @@ body {
 svg {
   fill: var(--fill-ds-icon-subtlest);
 }
+/* Stroke icons */
+.header-icon,
+.search-icon,
+.theme-icon,
+.sidebar-toggle-handle svg {
+  fill: none;
+  stroke: var(--fill-ds-icon-subtlest);
+  color: var(--fill-ds-icon-subtlest);
+}
 
 button:has(> svg) {
   color: inherit!important;
@@ -24,7 +33,26 @@ button:has(> svg) {
   top: 0;
   width: 100%;
   background-color: var(--background-color-ds-elevation-surface);
+  border-bottom: 1px solid var(--border-color-ds-default);
   z-index: 9999;
+}
+.manager-header .manager-header-wrapper .icon-button {
+  background-color: transparent;
+  color: var(--text-color-ds-default);
+  border: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+.manager-header .manager-header-wrapper .icon-button:hover {
+  background-color: var(--background-color-ds-elevation-surface-hovered);
+}
+.manager-header .manager-header-wrapper .header-icon {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }
 .manager-header .manager-header-wrapper {
   margin: 0 auto;
@@ -61,23 +89,40 @@ button:has(> svg) {
 .manager-header .manager-header-wrapper .nav-menu .nav-button:not(.active):hover {
   background-color: var(--background-color-ds-neutral-hovered)!important;
 }
-.manager-header .manager-header-wrapper .search-container {
-  position: relative;
+.manager-header .manager-header-wrapper .search-trigger {
   display: flex;
   align-items: center;
-}
-.manager-header .manager-header-wrapper .search-icon {
-  position: absolute;
-  left: 8px;
-  color: var(--icon-color-ds-default);
-}
-.manager-header .manager-header-wrapper .search-input {
-  padding: 8px 10px 8px 30px;
+  gap: 8px;
+  min-width: 220px;
+  padding: 7px 8px 7px 10px;
   border-radius: 6px;
   border: 1px solid var(--border-color-ds-default);
-  font-size: 13px;
   background: transparent;
-  color: inherit;
+  color: var(--text-color-ds-subtle);
+  font-size: 13px;
+  cursor: pointer;
+}
+.manager-header .manager-header-wrapper .search-trigger:hover {
+  background-color: var(--background-color-ds-elevation-surface-hovered);
+}
+.manager-header .manager-header-wrapper .search-trigger .search-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.manager-header .manager-header-wrapper .search-trigger-label {
+  flex: 1;
+  text-align: left;
+}
+.manager-header .manager-header-wrapper .search-kbd {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-color-ds-subtle);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 4px;
+  padding: 2px 5px;
 }
 .manager-header .manager-header-wrapper .divider {
   width: 1px;
@@ -111,10 +156,92 @@ button:has(> svg) {
   height: 16px;
   pointer-events: none;
 }
+.manager-header .manager-header-wrapper .control-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-color-ds-default);
+  color: var(--text-color-ds-default);
+  padding: 6px 8px 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.manager-header .manager-header-wrapper .control-toggle:hover {
+  background-color: var(--background-color-ds-elevation-surface-hovered);
+}
+.manager-header .manager-header-wrapper .control-toggle-label {
+  color: var(--text-color-ds-subtle);
+}
+.manager-header .manager-header-wrapper .control-toggle-kbd {
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-color-ds-subtle);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+.manager-header .manager-header-wrapper .theme-dropdown {
+  position: relative;
+}
+.manager-header .manager-header-wrapper .theme-trigger {
+  gap: 2px;
+}
+.manager-header .manager-header-wrapper .theme-caret {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--fill-ds-icon-subtlest);
+  color: var(--fill-ds-icon-subtlest);
+}
+.manager-header .manager-header-wrapper .theme-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+}
+.manager-header .manager-header-wrapper .theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 10001;
+  min-width: 152px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--background-color-ds-elevation-surface-raised);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+.manager-header .manager-header-wrapper .theme-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-color-ds-default);
+}
+.manager-header .manager-header-wrapper .theme-menu-item:hover {
+  background-color: var(--background-color-ds-neutral-subtle-hovered);
+}
+.manager-header .manager-header-wrapper .theme-menu-item.active {
+  background-color: var(--background-color-ds-selected, oklch(0.49 0.27 292.58 / .2));
+  color: var(--text-color-ds-accent-violet);
+}
+.manager-header .manager-header-wrapper .theme-menu-item.active .header-icon {
+  stroke: var(--text-color-ds-accent-violet);
+  color: var(--text-color-ds-accent-violet);
+}
 
 /* SIDEBAR */
 section:has(> div[role="toolbar"]) {
-  height: 70px;
+  height: var(--header-height);
   position: fixed;
   left: 0;
 }
@@ -129,7 +256,16 @@ div:has(> .sidebar-header) {
   height: 100%;
   z-index: 4;
   background: var(--background-color-ds-elevation-surface);
+  border-right: 1px solid var(--border-color-ds-default);
   padding-top: 69px!important;
+  transition: transform 0.2s ease;
+}
+div:has(> div > nav.container.sidebar-container) {
+  grid-template-columns: 300px minmax(0, 1fr) 0 !important;
+  transition: grid-template-columns 0.2s ease;
+}
+body.clera-nav-hidden div:has(> div > nav.container.sidebar-container) {
+  grid-template-columns: 0 minmax(0, 1fr) 0 !important;
 }
 div:has(> nav[aria-label="Global"]) {
   border-right: 0!important;
@@ -144,6 +280,11 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
   display: none !important;
 }
 .sidebar-container label[for="storybook-explorer-searchfield"] + div {
+  display: none !important;
+}
+/* Remove the native search row entirely (replaced by the header palette) so it
+   doesn't leave an empty gap at the top of the sidebar. */
+.sidebar-container div:has(> .search-field) {
   display: none !important;
 }
 .sidebar-subheading:not(:first-child) {
@@ -199,10 +340,20 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
   display: flex;
   align-items: center;
   gap: 24px;
-  font-weight: 600;
+  font-weight: 400;
+}
+.sidebar-item[data-nodetype="component"] a,
+.sidebar-item[data-nodetype="component"] button,
+.sidebar-item[data-nodetype="group"] a,
+.sidebar-item[data-nodetype="group"] button {
+  font-weight: 700;
 }
 .sidebar-item[data-parent-id="foundations"] a {
   padding-left: 0;
+  font-weight: 700;
+}
+.sidebar-item a[href="#storybook-preview-wrapper"] {
+  display: none;
 }
 .sidebar-subheading-action:hover,
 .sidebar-subheading-action:focus {
@@ -217,6 +368,11 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
 
 main section[aria-labelledby="main-preview-heading"] {
   margin-top: var(--header-height);
+}
+
+/* Hide the panel "change position" (perspective) toggle in the panel header */
+button[aria-label^="Move addon panel"] {
+  display: none !important;
 }
 
 /* Panel Resize Toggle */
@@ -310,4 +466,301 @@ div[data-key="addon-controls"] > div > div[class*="css-"] {
 }
 .docblock-argstable-body > tr > * {
   background-color: var(--background-color-ds-elevation-surface)!important;
+}
+
+/* Sidebar collapse handle */
+body.clera-nav-hidden .container.sidebar-container {
+  transform: translateX(-100%);
+}
+.sidebar-toggle-handle {
+  position: fixed;
+  top: 84px;
+  left: 300px;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-color-ds-default);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 50%;
+  background-color: var(--background-color-ds-elevation-surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition: left 0.2s ease;
+}
+.sidebar-toggle-handle:hover {
+  background-color: var(--background-color-ds-elevation-surface-hovered);
+}
+.sidebar-toggle-handle .header-icon {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+body.clera-nav-hidden .sidebar-toggle-handle {
+  left: 8px;
+  transform: none;
+}
+
+/* Hide Storybook's "Skip to ..." accessibility links */
+a[title="Skip to canvas"],
+a[title="Skip to sidebar"] {
+  display: none !important;
+}
+
+/* Sidebar overlay backdrop (mobile) */
+.clera-nav-backdrop {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 52px;
+  }
+  .manager-header {
+    height: var(--header-height);
+  }
+  .manager-header .manager-header-wrapper {
+    gap: 6px;
+    padding: 0 10px;
+    height: 100%;
+  }
+  .manager-header .manager-header-wrapper .brand-logo {
+    width: 96px;
+  }
+  .manager-header .manager-header-wrapper .nav-menu {
+    display: none;
+  }
+  .manager-header .manager-header-wrapper .search-trigger {
+    min-width: 0;
+  }
+  .manager-header .manager-header-wrapper .search-trigger-label,
+  .manager-header .manager-header-wrapper .search-kbd,
+  .manager-header .manager-header-wrapper .control-toggle-label,
+  .manager-header .manager-header-wrapper .control-toggle-kbd,
+  .manager-header .manager-header-wrapper .icon-link,
+  .manager-header .manager-header-wrapper .divider {
+    display: none;
+  }
+
+  /* Force one stacked column below the desktop breakpoint (overriding
+     Storybook's >=600px grid) so the sidebar floats over full-width content
+     and the panel docks below it consistently across all mobile widths. */
+  div:has(> div > nav.container.sidebar-container) {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  div:has(> div > nav.container.sidebar-container)
+    > div:has(section[aria-labelledby="main-preview-heading"]) {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+  .container.sidebar-container {
+    width: min(86vw, 320px);
+    z-index: 9998;
+    /* padding-top: var(--header-height) !important; */
+    padding-top: 0!important;
+    box-shadow: 2px 0 18px rgba(0, 0, 0, 0.28);
+  }
+  main section[aria-labelledby="main-preview-heading"] {
+    margin-left: 0 !important;
+  }
+
+  /* The addons panel is hidden by default and docks below the preview only
+     while open (toggled via the header Controls button). */
+  div:has(> div[orientation]) {
+    display: none !important;
+  }
+  body.clera-panel-open div:has(> div[orientation]) {
+    display: block !important;
+    width: 100% !important;
+    height: 45vh !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    border-top: 1px solid var(--border-color-ds-default);
+  }
+  div:has(> div[orientation]) > div[orientation] {
+    display: none !important;
+  }
+  /* The panel content sits in a Radix ScrollArea whose viewport is
+     vertical-only (overflow-x: hidden inline), so a wide controls table gets
+     clipped. Force the viewport to allow horizontal scrolling and let the
+     table keep its natural width so it can be scrolled to instead of squeezed. */
+  body.clera-panel-open div:has(> div[orientation]) [data-radix-scroll-area-viewport] {
+    overflow-x: auto !important;
+  }
+  body.clera-panel-open div:has(> div[orientation]) .docblock-argstable {
+    min-width: 34rem !important;
+    width: 100% !important;
+  }
+  /* The native "hide panel" (X) is replaced by the header Controls toggle. */
+  button[aria-label="Hide addon panel"] {
+    display: none !important;
+  }
+
+  .clera-nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    background: rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* Search palette */
+.clera-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  background: rgba(0, 0, 0, 0.4);
+}
+.clera-search-dialog {
+  width: min(92vw, 560px);
+  max-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background-color-ds-elevation-surface-raised);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.24);
+}
+.clera-search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-color-ds-default);
+}
+.clera-search-input-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--fill-ds-icon-subtlest);
+  color: var(--fill-ds-icon-subtlest);
+}
+.clera-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-color-ds-default);
+  font-size: 15px;
+}
+.clera-search-input::placeholder {
+  color: var(--text-color-ds-subtle);
+}
+.clera-search-esc {
+  font-size: 11px;
+  color: var(--text-color-ds-subtle);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.clera-search-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color-ds-bold, #9ca3af) transparent;
+}
+.clera-search-list::-webkit-scrollbar {
+  width: 10px;
+}
+.clera-search-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.clera-search-list::-webkit-scrollbar-thumb {
+  background-color: var(--border-color-ds-bold, var(--border-color-ds-default));
+  border-radius: 8px;
+  border: 2px solid var(--background-color-ds-elevation-surface-raised);
+}
+.clera-search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-color-ds-subtle);
+  font-size: 13px;
+}
+.clera-search-group + .clera-search-group {
+  margin-top: 8px;
+}
+.clera-search-group-heading {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-color-ds-default);
+}
+.clera-search-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-color-ds-default);
+}
+.clera-search-item.active {
+  background-color: var(--background-color-ds-selected, oklch(0.49 0.27 292.58 / .2));
+  color: var(--text-color-ds-accent-violet);
+}
+.clera-search-item-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+.clera-search-item-desc {
+  font-size: 12px;
+  color: var(--text-color-ds-subtle);
+}
+.clera-search-item.active .clera-search-item-desc {
+  color: var(--text-color-ds-accent-violet);
+}
+.clera-search-mark {
+  background-color: rgba(250, 204, 21, 0.4);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.clera-search-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-color-ds-default);
+  font-size: 12px;
+  color: var(--text-color-ds-subtle);
+}
+.clera-search-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.clera-search-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 11px;
+  color: var(--text-color-ds-default);
+  background: var(--background-color-ds-neutral);
+  border: 1px solid var(--border-color-ds-default);
+  border-radius: 4px;
 }

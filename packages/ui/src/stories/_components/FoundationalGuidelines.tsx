@@ -28,7 +28,7 @@ export const FoundationalGuidelines = () => (
       <a key={index} href={principle.link} className="flex flex-col">
         <div className="rounded-lg overflow-hidden">
           <img
-            className="h-full aspect-[16/9] object-cover"
+            className="w-full aspect-[16/9] object-cover"
             src={principle.thumb}
             alt={principle.title}
           />

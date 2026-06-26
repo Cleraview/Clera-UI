@@ -15,12 +15,12 @@ export const DocsLayout: React.FC<Props> = ({ children, className }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className={cn('relative flex gap-space-4xl', className)}>
-      <div className="w-full max-w-[800px]">{main}</div>
+    <div className={cn('relative flex gap-space-2xl', className)}>
+      <div className="flex-1 min-w-0 max-w-[800px]">{main}</div>
 
       {side.length > 0 && (
         <>
-          <div className="hidden md:block flex-1">
+          <div className="hidden sm:block w-[220px] shrink-0">
             <div className="sticky top-10">{side}</div>
           </div>
 

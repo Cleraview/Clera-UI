@@ -7,7 +7,7 @@ const meta: Meta<typeof Bar> = {
   component: Bar,
   tags: ['dev', 'status:new'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
         component:

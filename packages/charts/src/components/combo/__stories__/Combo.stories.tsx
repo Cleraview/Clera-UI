@@ -8,7 +8,7 @@ const meta: Meta<typeof Combo> = {
   component: Combo,
   tags: ['dev', 'status:new'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
         component:

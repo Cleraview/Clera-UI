@@ -136,7 +136,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
       role="navigation"
       aria-label="Table of contents"
       className={cn(
-        'md:relative md:sticky md:top-10 md:right-20 md:w-[200px] md:max-h-[calc(100vh-5rem)] px-space-md py-space-xs border-l border-ds-default bg-ds-surface rounded-md',
+        'relative w-full md:w-[200px] md:max-h-[calc(100vh-5rem)] md:overflow-y-auto overscroll-contain px-space-md py-space-xs border-l border-ds-default bg-ds-surface rounded-md',
         className
       )}
     >

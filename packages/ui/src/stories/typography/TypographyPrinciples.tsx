@@ -3,7 +3,7 @@ const principles = [
     thumb: '/assets/readability.jpg',
     title: 'Prioritize Readability',
     description:
-      "Present content in a way that's easy to scan, understand, and enjoy — ensuring accessibility for all users.",
+      "Present content in a way that's easy to scan, understand, and enjoy ensuring accessibility for all users.",
   },
   {
     thumb: '/assets/visual-harmony.jpg',
@@ -25,7 +25,7 @@ export const TypographyPrinciples = () => (
       <div key={index} className="flex flex-col">
         <div className="rounded-lg overflow-hidden">
           <img
-            className="h-full aspect-[16/9] object-cover"
+            className="aspect-[16/9] object-cover"
             src={principle.thumb}
             alt={principle.title}
           />

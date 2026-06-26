@@ -8,7 +8,7 @@ const meta: Meta<typeof PolarBar> = {
   component: PolarBar,
   tags: ['dev', 'status:new'],
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
         component:
