@@ -72,6 +72,7 @@ const config: StorybookConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         '@ui': fromRoot('packages/ui/src'),
+        '@clera/docs': fromRoot('packages/docs/src'),
       };
     }
 

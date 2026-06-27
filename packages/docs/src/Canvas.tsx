@@ -7,11 +7,11 @@ import {
   RiArrowUpSLine,
 } from 'react-icons/ri'
 import { GoChevronDown } from 'react-icons/go'
-import { Dropdown } from '@/components/dropdown-menu'
-import { Button } from '@/components/button'
-import { Tooltip } from '@/components/tooltip'
-import { useTheme } from '../../theme'
-import { cn } from '@/utils/tailwind'
+import { Dropdown } from '@ui/components/dropdown-menu'
+import { Button } from '@ui/components/button'
+import { Tooltip } from '@ui/components/tooltip'
+import { useTheme } from '@ui/theme'
+import { cn } from '@ui/utils/tailwind'
 
 type CanvasProps = {
   children: React.ReactNode

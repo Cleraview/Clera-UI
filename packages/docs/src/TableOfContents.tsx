@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@ui/utils/tailwind'
 
 export interface TOCItem {
   id: string

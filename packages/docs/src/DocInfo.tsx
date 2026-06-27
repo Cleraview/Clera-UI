@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import config from '@/config/site'
+import config from '@ui/config/site'
 import { FiGithub, FiCopy } from 'react-icons/fi'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@ui/utils/tailwind'
 
 type DocInfoProps = {
   importStatement: string

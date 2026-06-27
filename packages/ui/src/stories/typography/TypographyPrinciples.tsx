@@ -20,7 +20,7 @@ const principles = [
 ]
 
 export const TypographyPrinciples = () => (
-  <div className="grid grid-cols-3 gap-space-md">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
     {principles.map((principle, index) => (
       <div key={index} className="flex flex-col">
         <div className="rounded-lg overflow-hidden">

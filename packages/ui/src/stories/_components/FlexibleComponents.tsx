@@ -13,17 +13,17 @@ const flexibleComponents = [
     description:
       'Cards are flexible containers used to group related information. They provide hierarchy, structure, and clear entry points for interaction.',
   },
-  {
-    thumb: '/assets/form-illustration.jpg',
-    title: 'Form',
-    link: '/?path=/docs/ui-form-input--docs',
-    description:
-      'Forms collect and validate user input. They must be intuitive, efficient, and consistent while ensuring accessibility and usability.',
-  },
+  // {
+  //   thumb: '/assets/form-illustration.jpg',
+  //   title: 'Form',
+  //   link: '/?path=/docs/ui-form-input--docs',
+  //   description:
+  //     'Forms collect and validate user input. They must be intuitive, efficient, and consistent while ensuring accessibility and usability.',
+  // },
 ]
 
 export const FlexibleComponents = () => (
-  <div className="grid grid-cols-3 gap-space-md">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
     {flexibleComponents.map((principle, index) => (
       <a key={index} href={principle.link} className="flex flex-col">
         <div className="rounded-lg overflow-hidden">

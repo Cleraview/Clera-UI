@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FiX, FiList } from 'react-icons/fi'
-import { cn } from '@/utils/tailwind'
+import { cn } from '@ui/utils/tailwind'
 
 type Props = {
   children: React.ReactNode
