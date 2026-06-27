@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FiX } from 'react-icons/fi'
+import { FiX, FiList } from 'react-icons/fi'
 import { cn } from '@/utils/tailwind'
 
 type Props = {
@@ -15,36 +15,53 @@ export const DocsLayout: React.FC<Props> = ({ children, className }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className={cn('relative flex gap-space-2xl', className)}>
-      <div className="flex-1 min-w-0 max-w-[800px]">{main}</div>
+    <div className={cn('relative', className)}>
+      <div className="@container flex gap-space-lg">
+        <div className="flex-1 min-w-0 max-w-[800px] overflow-x-hidden">
+          {main}
+        </div>
 
-      {side.length > 0 && (
-        <>
-          <div className="hidden sm:block w-[220px] shrink-0">
+        {side.length > 0 && (
+          <div className="@max-lg:hidden w-[300px] shrink-0">
             <div className="sticky top-10">{side}</div>
           </div>
+        )}
+      </div>
 
-          {/* <button
-            aria-label={open ? 'Close contents' : 'Open contents'}
-            onClick={() => setOpen(v => !v)}
-            className="md:hidden fixed z-50 bottom-space-md right-space-md bg-ds-surface px-space-sm py-space-xs rounded-full shadow-md border border-ds-muted"
+      {/* On narrow screens the side column is hidden; a floating button opens
+          the table of contents in a drawer instead. Kept outside the
+          @container above because container-type breaks fixed positioning. */}
+      {side.length > 0 && (
+        <>
+          <button
+            type="button"
+            aria-label="Open table of contents"
+            onClick={() => setOpen(true)}
+            className="hidden max-[34rem]:flex fixed bottom-6 right-6 z-50 h-12 w-12 items-center justify-center rounded-full bg-ds-primary-bold text-white shadow-lg"
           >
-            {open ? <CloseIcon className="w-4 h-4" /> : <OpenIcon className="w-4 h-4" />}
-          </button> */}
+            <FiList className="h-5 w-5" />
+          </button>
 
           {open && (
-            <div className="md:hidden fixed inset-0 z-40 bg-black/40">
-              <div className="absolute right-0 top-0 bottom-0 w-[85%] max-w-[360px] bg-ds-surface p-space-md overflow-auto">
-                <div className="flex justify-end mb-space-sm">
+            <div
+              className="fixed inset-0 z-50 bg-black/40"
+              onClick={() => setOpen(false)}
+            >
+              <div
+                className="absolute right-0 top-0 bottom-0 w-[82%] max-w-[320px] overflow-auto bg-ds-surface p-space-md shadow-xl"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="mb-space-sm flex justify-end">
                   <button
-                    aria-label="Close contents"
+                    type="button"
+                    aria-label="Close table of contents"
                     onClick={() => setOpen(false)}
-                    className="px-space-sm py-space-xs rounded bg-ds-muted/20"
+                    className="rounded p-space-xs hover:bg-ds-neutral"
                   >
-                    {FiX ? <FiX className="w-4 h-4" /> : null}
+                    <FiX className="h-5 w-5" />
                   </button>
                 </div>
-                <div>{side}</div>
+                <div onClick={() => setOpen(false)}>{side}</div>
               </div>
             </div>
           )}

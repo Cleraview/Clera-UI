@@ -139,18 +139,34 @@ export const Canvas = ({ children }: CanvasProps) => {
     </div>
   )
 
+  const prefersDark = () =>
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  const effectiveDark =
+    canvasTheme == null
+      ? theme === 'dark'
+      : canvasTheme === 'system'
+        ? prefersDark()
+        : canvasTheme === 'dark'
+
+  // Default: inherit the root theme. Once the user picks a theme, scope it to
+  // this canvas only via a nested data-theme attribute.
+  const scopedTheme =
+    canvasTheme == null ? undefined : effectiveDark ? 'dark' : 'light'
+
   return (
     <div className="my-space-sm border border-ds-default rounded-lg overflow-hidden">
       {story && (
         <div
+          data-theme={scopedTheme}
           className={cn(
-            'flex justify-center items-center p-space-sm',
-            (theme === 'dark' && !canvasTheme) || canvasTheme === 'dark'
+            'flex justify-center items-center p-space-sm overflow-x-auto',
+            effectiveDark
               ? 'bg-[linear-gradient(45deg,#18191a_25%,transparent_25%),linear-gradient(-45deg,#18191a_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#18191a_75%),linear-gradient(-45deg,transparent_75%,#18191a_75%)]'
               : 'bg-[linear-gradient(45deg,#f8f8f8_25%,transparent_25%),linear-gradient(-45deg,#f8f8f8_25%,transparent_25%),linear-gradient(45deg,#ffffff_75%,#f8f8f8_75%),linear-gradient(-45deg,#ffffff_75%,#f8f8f8_75%)]',
             'bg-[length:20px_20px] bg-[position:0_0,0_10px,10px_-10px,-10px_0]',
-            ((theme === 'dark' && !canvasTheme) || canvasTheme === 'dark') &&
-              'bg-[#232323] text-ds-default'
+            effectiveDark && 'bg-[#232323] text-ds-default'
           )}
         >
           <div className="w-full">{story}</div>

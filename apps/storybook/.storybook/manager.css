@@ -586,10 +586,6 @@ a[title="Skip to sidebar"] {
   div:has(> div[orientation]) > div[orientation] {
     display: none !important;
   }
-  /* The panel content sits in a Radix ScrollArea whose viewport is
-     vertical-only (overflow-x: hidden inline), so a wide controls table gets
-     clipped. Force the viewport to allow horizontal scrolling and let the
-     table keep its natural width so it can be scrolled to instead of squeezed. */
   body.clera-panel-open div:has(> div[orientation]) [data-radix-scroll-area-viewport] {
     overflow-x: auto !important;
   }
@@ -671,19 +667,13 @@ a[title="Skip to sidebar"] {
   min-height: 0;
   overflow-y: auto;
   padding: 8px;
+  /* Match the sidebar's scrollbar (Storybook's ScrollArea uses textMutedColor
+     @ 0.5: #737F8C in light, #95999D in dark). */
   scrollbar-width: thin;
-  scrollbar-color: var(--border-color-ds-bold, #9ca3af) transparent;
+  scrollbar-color: rgba(115, 127, 140, 0.5) transparent;
 }
-.clera-search-list::-webkit-scrollbar {
-  width: 10px;
-}
-.clera-search-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-.clera-search-list::-webkit-scrollbar-thumb {
-  background-color: var(--border-color-ds-bold, var(--border-color-ds-default));
-  border-radius: 8px;
-  border: 2px solid var(--background-color-ds-elevation-surface-raised);
+[data-theme='dark'] .clera-search-list {
+  scrollbar-color: rgba(149, 153, 157, 0.5) transparent;
 }
 .clera-search-empty {
   padding: 24px;

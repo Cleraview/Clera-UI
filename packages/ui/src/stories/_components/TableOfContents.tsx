@@ -136,7 +136,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
       role="navigation"
       aria-label="Table of contents"
       className={cn(
-        'relative w-full md:w-[200px] md:max-h-[calc(100vh-5rem)] md:overflow-y-auto overscroll-contain px-space-md py-space-xs border-l border-ds-default bg-ds-surface rounded-md',
+        'relative w-full max-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain px-space-md py-space-xs border-l border-ds-default bg-ds-surface rounded-md',
+        // Match the sidebar's scrollbar (Storybook's ScrollArea uses
+        // textMutedColor @ 0.5: #737F8C in light, #95999D in dark).
+        '[scrollbar-width:thin] [scrollbar-color:rgba(115,127,140,0.5)_transparent] dark:[scrollbar-color:rgba(149,153,157,0.5)_transparent]',
         className
       )}
     >

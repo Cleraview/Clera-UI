@@ -4,6 +4,7 @@ import { withThemeProvider } from './decorator/withThemeProvider'
 import { DocsContainerArgs, DocWrapper } from './components/DocWrapper'
 import '@clera/ui/styles/globals.css'
 import '@clera/ui/styles/prose.css'
+import './theme-light-scope.css'
 
 type DecoratorFn = (Story: React.ComponentType<Record<string, unknown>>) => React.ReactElement
 

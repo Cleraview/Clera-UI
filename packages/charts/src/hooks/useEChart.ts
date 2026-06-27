@@ -3,6 +3,7 @@
 import { useRef, useEffect } from 'react'
 import * as echarts from 'echarts/core'
 import type { ECharts, EChartsCoreOption } from 'echarts/core'
+import { setColorScope } from '@/utils'
 
 export interface EChartEventParams {
   componentType?: string
@@ -88,13 +89,19 @@ export function useEChart({
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const apply = () =>
+    const apply = () => {
+      setColorScope(containerRef.current)
       chartRef.current?.setOption(buildOptionRef.current(), true)
+    }
 
+    // Subtree so a nested `data-theme` scope (e.g. a themed canvas) re-themes
+    // the chart, not just the root <html>. Limited to `data-theme` only —
+    // watching `class` across the subtree would fire on every hover/focus.
     const observer = new MutationObserver(apply)
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['data-theme', 'class'],
+      subtree: true,
+      attributeFilter: ['data-theme'],
     })
 
     const media =
@@ -126,6 +133,7 @@ export function useEChart({
   }, [loading, loadingColor])
 
   useEffect(() => {
+    setColorScope(containerRef.current)
     chartRef.current?.setOption(buildOption(), true)
   }, [buildOption])
 
