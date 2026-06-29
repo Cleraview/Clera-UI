@@ -1032,6 +1032,39 @@ describe('components/charts/Bar', () => {
     expect(lastOption().xAxis.name).toBe('Month')
   })
 
+  it('moves the value axis to the right for vertical bars when valueAxisPosition is right', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        showValueAxis
+        valueAxisPosition="right"
+      />
+    )
+    expect(lastOption().yAxis.position).toBe('right')
+  })
+
+  it('does not apply a left/right position to the value axis when horizontal', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="horizontal"
+        showValueAxis
+        valueAxisPosition="right"
+      />
+    )
+    // value axis is the x-axis when horizontal, so left/right does not apply
+    expect(lastOption().xAxis.position).toBeUndefined()
+  })
+
+  it('merges the xAxisLabel escape hatch onto the x-axis labels', () => {
+    const formatter = (v: string | number) => `icon ${v}`
+    render(
+      <Bar data={sample} direction="vertical" xAxisLabel={{ formatter }} />
+    )
+    expect(lastOption().xAxis.axisLabel.formatter).toBe(formatter)
+  })
+
   it('normalizes stacked series to 100% with stackMode="percent"', () => {
     render(
       <Bar

@@ -4,9 +4,9 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { PolarBar } from '../PolarBar'
 
 const meta: Meta<typeof PolarBar> = {
-  title: 'Charts/PolarBar',
+  title: 'Charts/Polar Bar',
   component: PolarBar,
-  tags: ['dev', 'status:new'],
+  tags: [],
   parameters: {
     layout: 'padded',
     docs: {

@@ -58,8 +58,38 @@ export function lighten(color: string, amount = 0.25): string {
   return `color-mix(in srgb, ${color} ${(1 - amount) * 100}%, white)`
 }
 
+/** Turn an `rgb()/rgba()` color into an `rgba()` with the given alpha. */
+export function withAlpha(color: string, alpha: number): string {
+  const m = color.match(/[\d.]+/g)
+  if (color.startsWith('rgb') && m && m.length >= 3) {
+    const [r, g, b] = m
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
+  return color
+}
+
 export function resolveVariant(variant: ChartVariant = 'primary'): string {
   return readCssColor(VARIANT_VAR[variant], VARIANT_FALLBACK[variant])
+}
+
+const VARIANT_NAMES: ChartVariant[] = [
+  'primary',
+  'success',
+  'info',
+  'warning',
+  'destructive',
+  'neutral',
+]
+
+/**
+ * Resolve a value that may be a token variant name (e.g. `'success'`) or a raw
+ * CSS color string. Returns `undefined` when no value is given.
+ */
+export function resolveVariantOrColor(value?: string): string | undefined {
+  if (!value) return undefined
+  return VARIANT_NAMES.includes(value as ChartVariant)
+    ? resolveVariant(value as ChartVariant)
+    : value
 }
 
 export function resolveCategoricalPalette(): string[] {

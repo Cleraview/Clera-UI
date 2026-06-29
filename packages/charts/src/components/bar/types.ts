@@ -1,6 +1,10 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant } from '@/utils'
+import type {
+  ChartVariant,
+  AxisLabelOverride,
+  ValueAxisPosition,
+} from '@/utils'
 
 export type BarVariant = ChartVariant
 
@@ -101,6 +105,10 @@ export interface BarProps {
   axisLabelRotate?: number
   valueAxisName?: string
   categoryAxisName?: string
+  /** Which side the value axis sits on (vertical charts: left/right). */
+  valueAxisPosition?: ValueAxisPosition
+  /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
+  xAxisLabel?: AxisLabelOverride
   loading?: boolean
   animate?: boolean
   emptyMessage?: string

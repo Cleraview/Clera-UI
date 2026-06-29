@@ -1,3 +1,6 @@
+export type { AxisLabelOverride, ValueAxisPosition } from './utils'
 export * from './components/bar'
 export * from './components/combo'
+export * from './components/line'
+export * from './components/line-matrix'
 export * from './components/polar-bar'
