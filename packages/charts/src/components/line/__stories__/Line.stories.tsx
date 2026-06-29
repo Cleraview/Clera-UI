@@ -641,7 +641,7 @@ export const RightAxisIcons: Story = {
     formatValue: (v: number) => `${(v / 1000).toFixed(0)}k`,
     xAxisLabel: {
       margin: 12,
-      formatter: value => `{icon|}\n{label|${value}}`,
+      formatter: (value: string) => `{icon|}\n{label|${value}}`,
       rich: {
         icon: { height: 16, width: 16, backgroundColor: { image: PLAY_ICON } },
         label: { fontSize: 12, color: '#71717a', padding: [4, 0, 0, 0] },
@@ -650,7 +650,8 @@ export const RightAxisIcons: Story = {
     series: [
       {
         name: 'Views',
-        variant: 'destructive',
+        stack: 'rev',
+        variant: 'info',
         data: [42000, 51000, 47000, 63000, 72000, 38000, 31000],
       },
     ],

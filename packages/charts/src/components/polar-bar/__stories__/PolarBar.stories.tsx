@@ -190,6 +190,9 @@ const meta: Meta<typeof PolarBar> = {
       },
     },
   },
+  args: {
+    animate: true,
+  },
 }
 
 export default meta
