@@ -42,6 +42,8 @@ export function useEChart({
 }: UseEChartOptions) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<ECharts | null>(null)
+  // Set before each option-driven render; consumed once the animation finishes.
+  const settleQueuedRef = useRef(false)
 
   const buildOptionRef = useRef(buildOption)
   useEffect(() => {
@@ -73,11 +75,37 @@ export function useEChart({
 
     onReadyRef.current?.(chart)
 
-    const observer = new ResizeObserver(() => chart.resize())
+    // Some series (notably polar bars) compute label positions mid-animation
+    // and don't reposition once it ends. After each option-driven render, re-run
+    // layout one extra time *after* the animation has finished so labels settle —
+    // doing it here (not during) keeps the grow-in animation intact.
+    const settle = () => {
+      if (!settleQueuedRef.current) return
+      settleQueuedRef.current = false
+      chartRef.current?.resize()
+    }
+    chart.on('finished', settle)
+
+    // ECharts' grow-in animation is wiped if `resize()` runs while it's playing.
+    // A ResizeObserver fires its callback once immediately on `observe()`, and
+    // `fonts.ready` resolves right away when fonts are cached — both land during
+    // the appear animation and snap it to the end. Only resize on a *real* size
+    // change so the load animation isn't cut short.
+    let lastWidth = el.clientWidth
+    let lastHeight = el.clientHeight
+    const resizeIfChanged = () => {
+      const { clientWidth, clientHeight } = el
+      if (clientWidth === lastWidth && clientHeight === lastHeight) return
+      lastWidth = clientWidth
+      lastHeight = clientHeight
+      chartRef.current?.resize()
+    }
+
+    const observer = new ResizeObserver(resizeIfChanged)
     observer.observe(el)
 
     if (typeof document !== 'undefined' && 'fonts' in document) {
-      document.fonts.ready.then(() => chartRef.current?.resize())
+      document.fonts.ready.then(resizeIfChanged)
     }
 
     return () => {
@@ -91,6 +119,7 @@ export function useEChart({
     if (typeof window === 'undefined') return
     const apply = () => {
       setColorScope(containerRef.current)
+      settleQueuedRef.current = true
       chartRef.current?.setOption(buildOptionRef.current(), true)
     }
 
@@ -134,6 +163,7 @@ export function useEChart({
 
   useEffect(() => {
     setColorScope(containerRef.current)
+    settleQueuedRef.current = true
     chartRef.current?.setOption(buildOption(), true)
   }, [buildOption])
 
