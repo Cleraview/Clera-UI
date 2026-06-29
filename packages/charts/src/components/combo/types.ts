@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant } from '@/utils'
+import type { ChartVariant, AxisLabelOverride } from '@/utils'
+
+export type { AxisLabelOverride }
 
 export type ComboSeriesType = 'bar' | 'line' | 'area'
 
@@ -49,6 +51,8 @@ export interface ComboProps {
   barRadius?: number
   axisLabelRotate?: number
   categoryAxisName?: string
+  /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
+  xAxisLabel?: AxisLabelOverride
   leftAxis?: ComboAxisConfig
   rightAxis?: ComboAxisConfig
   valueAxes?: ComboValueAxis[]

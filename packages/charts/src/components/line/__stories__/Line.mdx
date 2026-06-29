@@ -1,0 +1,628 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as LineStories from "./Line.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+
+<Meta title="Charts/Line" of={LineStories} />
+
+<DocsLayout>
+  <div>
+    # Line
+
+    To show how values move over time.
+    <DocInfo importStatement={`import { Line } from '@clera/charts'`} sourcePath={`components/line`} />
+
+    <br />
+
+    ## **When To Use**
+    The Line chart visualizes trends — a stock price through the day, traffic over the week, a metric over the year. It is powered by [Apache ECharts](https://echarts.apache.org/) and resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically. Where [`Combo`](?path=/docs/charts-combo--docs) mixes bars and lines on a category axis, `Line` specializes in time-series and trend work.
+
+    In {config.title}, the chart adapts to different contexts through its props:
+
+      - **X axis**: Choose how points are positioned.
+        - `category`: Evenly spaced labels — best for periodic data (days, months).
+        - `time`: A real time axis that positions each point by its timestamp — pass `[x, y]` pairs. Best for intraday or irregular data.
+
+      - **Curve**: Choose the line shape.
+        - `straight`: Segments between points.
+        - `smooth`: A spline through the points.
+        - `stepped`: Holds each value until the next — for things that change in jumps.
+
+    - **Area Fill**: Add `area` (a flat tint) or `area="gradient"` (fades to transparent) under any line; override per series.
+    - **Threshold Coloring**: Color the line green-above / red-below a baseline with `threshold` — the classic finance look.
+    - **Annotations**: Mark a `referenceLine` (target, SLA, previous close) or shade a `markArea` (an incident window, after-hours).
+    - **Zoom**: Turn on `zoom` to page through long series with a slider plus scroll/drag.
+    - **Sparkline**: The `sparkline` preset strips everything down to a pure trend line for KPI cards.
+    - **Loading & Empty**: Show a spinner with `loading`, or a centered message with `emptyMessage` when there is no data.
+
+    These options make the Line a versatile building block for dashboards, finance, and observability, while staying consistent with the rest of the system.
+
+    ## **Examples**
+    ### **Stock price (intraday)**
+
+    A Google-Finance-style intraday chart on a real `time` axis: a single line with a gradient area fill, a dashed **previous close** reference line, and a color driven by whether the day is up or down. Points stay hidden until you hover.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.StockPrice} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const PREV_CLOSE = 178.6
+
+          const StockChart = ({ points, last }) => (
+            <Line
+              xAxisType="time"
+              area="gradient"
+              series={[{ name: 'ACME', variant: last >= PREV_CLOSE ? 'success' : 'destructive', data: points }]}
+              referenceLine={{ value: PREV_CLOSE, label: 'Prev close $' + PREV_CLOSE.toFixed(2) }}
+              formatValue={(v) => '$' + v.toFixed(2)}
+              formatX={(v) => new Date(v).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+            />
+          )
+
+          export default StockChart
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Threshold (above / below)**
+
+    Color the line by where each point sits relative to a baseline with `threshold`. Here daily net P&L is green above break-even and red below it; the segments switch color as the line crosses zero.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.ThresholdSplit} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const PnL = ({ days, values }) => (
+            <Line
+              threshold={{ value: 0, above: 'success', below: 'destructive' }}
+              referenceLine={{ value: 0, label: 'Break-even' }}
+              formatValue={(v) => (v > 0 ? '+' : '') + '$' + (v / 1000).toFixed(1) + 'k'}
+              categories={days}
+              series={[{ name: 'Net P&L', data: values }]}
+            />
+          )
+
+          export default PnL
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Multi-ticker comparison**
+
+    Compare several instruments by **normalized return** — each line starts at 0% so different price levels become comparable. A dashed line marks flat (0%).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.MultiTicker} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Returns = () => (
+            <Line
+              curve="smooth"
+              valueAxisName="Return"
+              referenceLine={{ value: 0, label: 'Flat' }}
+              formatValue={(v) => (v > 0 ? '+' : '') + v.toFixed(0) + '%'}
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
+              series={[
+                { name: 'NVDA', variant: 'success', data: [0, 8.4, 15.2, 11.8, 22.5, 35.1, 41.8, 38.2, 52.6, 68.3, 61.5, 84.2] },
+                { name: 'AAPL', variant: 'info', data: [0, 3.2, 5.1, 2.8, 7.4, 11.2, 9.8, 14.5, 12.1, 18.3, 22.6, 26.4] },
+                { name: 'MSFT', variant: 'primary', data: [0, 2.1, 4.8, 6.2, 5.5, 8.9, 12.4, 11, 15.7, 19.2, 17.8, 24.1] },
+                { name: 'SPY', variant: 'neutral', data: [0, 1.5, 2.8, 1.2, 3.6, 5.1, 4.4, 6.8, 5.9, 8.2, 7.5, 10.3] },
+              ]}
+            />
+          )
+
+          export default Returns
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Web traffic**
+
+    Sessions and users over the week as two smooth lines with translucent area fills and a legend (click an entry to toggle it).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.WebTraffic} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Traffic = () => (
+            <Line
+              curve="smooth"
+              area
+              min={0}
+              formatValue={(v) => (v / 1000).toFixed(1) + 'k'}
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Sessions', variant: 'primary', data: [5200, 6100, 5800, 6800, 7400, 4200, 3600] },
+                { name: 'Users', variant: 'info', data: [3800, 4400, 4100, 4900, 5300, 3100, 2700] },
+              ]}
+            />
+          )
+
+          export default Traffic
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Server monitoring**
+
+    An observability panel on a `time` axis: CPU and memory over the last hour, an **SLA reference line** at 80%, and a shaded **`markArea`** marking an incident window.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.ServerMonitoring} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Monitor = ({ cpu, memory, incidentStart, incidentEnd }) => (
+            <Line
+              xAxisType="time"
+              curve="smooth"
+              min={0}
+              max={100}
+              formatValue={(v) => v + '%'}
+              formatX={(v) => new Date(v).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+              referenceLine={{ value: 80, label: 'SLA 80%', color: 'rgb(220, 38, 38)' }}
+              markArea={{ from: incidentStart, to: incidentEnd, label: 'Incident' }}
+              series={[
+                { name: 'CPU', variant: 'warning', data: cpu },
+                { name: 'Memory', variant: 'info', data: memory },
+              ]}
+            />
+          )
+
+          export default Monitor
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Stacked area**
+
+    Give series a shared `stack` name and an `area` fill to stack them into a cumulative composition — here monthly revenue split across product lines.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.StackedArea} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Revenue = () => (
+            <Line
+              curve="smooth"
+              area
+              min={0}
+              formatValue={(v) => '$' + v + 'k'}
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              series={[
+                { name: 'Core', stack: 'rev', variant: 'primary', data: [42, 45, 48, 52, 58, 64] },
+                { name: 'Add-ons', stack: 'rev', variant: 'info', data: [12, 14, 13, 18, 22, 28] },
+                { name: 'Services', stack: 'rev', variant: 'success', data: [8, 9, 11, 10, 14, 19] },
+              ]}
+            />
+          )
+
+          export default Revenue
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Stepped line**
+
+    A `stepped` line holds each value until the next reading — the right shape for things that change in discrete jumps and stay put, like a benchmark interest rate.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.Stepped} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const PolicyRate = () => (
+            <Line
+              curve="stepped"
+              area
+              showSymbol
+              valueAxisName="Rate"
+              formatValue={(v) => v.toFixed(2) + '%'}
+              categories={['Jan 22', 'Mar 22', 'Jun 22', 'Sep 22', 'Dec 22', 'Mar 23', 'May 23', 'Jul 23', 'Now']}
+              series={[{ name: 'Policy rate', variant: 'destructive', data: [0.25, 0.5, 1.75, 3.25, 4.5, 5.0, 5.25, 5.5, 5.5] }]}
+            />
+          )
+
+          export default PolicyRate
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Sparkline (KPI card)**
+
+    The `sparkline` preset strips the axes, grid, legend, and tooltip down to a pure trend line — ideal inside a KPI card or a table cell. Pair it with an `area` fill and a short, fixed `height`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.Sparkline} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Kpi = ({ label, value, data }) => (
+            <div className="rounded-lg border p-4">
+              <div>{label}</div>
+              <div>{value}</div>
+              <Line
+                sparkline
+                height={48}
+                area
+                series={[{ name: label, variant: 'success', data }]}
+              />
+            </div>
+          )
+
+          export default Kpi
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Zoom & pan**
+
+    A full year of daily readings on a `time` axis. `zoom` adds a bottom slider plus scroll-to-zoom and grab-to-pan, so a long series stays explorable without crowding.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.ZoomPan} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Yearly = ({ points }) => (
+            <Line
+              xAxisType="time"
+              area="gradient"
+              zoom
+              min={0}
+              valueAxisName="Daily active"
+              formatValue={(v) => (v / 1000).toFixed(1) + 'k'}
+              formatX={(v) => new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              series={[{ name: 'DAU', variant: 'primary', data: points }]}
+            />
+          )
+
+          export default Yearly
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Live streaming**
+
+    A new reading arrives every second and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval — ECharts animates each point to its new slot.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.LiveStreaming} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useEffect, useRef, useState } from 'react'
+          import { Line } from '@clera/charts'
+
+          const Live = () => {
+            const chartRef = useRef(null)
+            const [seed] = useState(() => makeWindow())
+
+            useEffect(() => {
+              const live = { categories: [...seed.categories], values: [...seed.values] }
+              const id = setInterval(() => {
+                live.categories = [...live.categories.slice(1), clock(new Date())]
+                live.values = [...live.values.slice(1), nextReading()]
+                chartRef.current?.setOption({
+                  xAxis: { data: live.categories },
+                  series: [{ data: live.values }],
+                })
+              }, 1100)
+              return () => clearInterval(id)
+            }, [seed])
+
+            return (
+              <Line
+                curve="smooth"
+                area
+                categories={seed.categories}
+                series={[{ name: 'Throughput', variant: 'primary', data: seed.values }]}
+                onReady={(chart) => { chartRef.current = chart }}
+              />
+            )
+          }
+
+          export default Live
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Line component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I use a real time axis?**
+
+    Set `xAxisType="time"` and give each series `[x, y]` pairs, where `x` is a timestamp (ms) or a date string. The axis spaces points by their actual time, and `formatX` formats the ticks and tooltip header.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          xAxisType="time"
+          formatX={(v) => new Date(v).toLocaleDateString()}
+          series={[{ name: 'Price', data: [[1710420600000, 179.1], [1710420900000, 179.4]] }]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I color a line above/below a baseline?**
+
+    Pass `threshold={{ value, above?, below? }}`. Segments at or above `value` use the `above` color, below use `below` — each accepts a token variant (`success`, `destructive`, …) or a raw color. Applies to the first series, which is drawn with straight segments (per-segment color mapping does not support smoothing).
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          threshold={{ value: 0, above: 'success', below: 'destructive' }}
+          series={[{ name: 'P&L', data: pnl }]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I add an area fill?**
+
+    Set `area` for a flat tint or `area="gradient"` to fade to transparent. Set it on the whole chart, or per series with `series[].area`. Give two or more series a shared `stack` name to stack their areas.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line area="gradient" series={[{ name: 'Visits', data }]} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I mark a target, SLA, or previous close?**
+
+    Pass `referenceLine={{ value, label?, axis?, color? }}` (or an array for several). It defaults to the value (`y`) axis and renders a dashed line with a pill label.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          referenceLine={[{ value: 80, label: 'SLA' }, { value: 95, label: 'Critical', color: 'rgb(220, 38, 38)' }]}
+          series={[{ name: 'CPU', data: cpu }]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I shade a region?**
+
+    Pass `markArea={{ from, to, label?, color?, axis? }}` (or an array). It defaults to a vertical band over the x-axis — handy for an incident window or an after-hours range.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          markArea={{ from: '13:30', to: '13:39', label: 'Incident' }}
+          series={[{ name: 'Latency', data }]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I render a sparkline?**
+
+    Set `sparkline` to strip the axes, grid, legend, and tooltip down to a pure trend line. Pair it with a short, fixed `height` and an `area` fill.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line sparkline height={48} area series={[{ name: 'MRR', data }]} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I handle long series?**
+
+    Turn on `zoom` for a bottom slider plus scroll-to-zoom and grab-to-pan. Rendering uses LTTB down-sampling, so hundreds of points stay smooth.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line xAxisType="time" zoom series={[{ name: 'DAU', data: yearOfDays }]} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I move the value axis to the right?**
+
+    Set `valueAxisPosition="right"`. The axis (and its label space) flips to the right side — common in analytics/finance dashboards. This prop is shared across the cartesian charts (`Bar`, `Line`); `Combo` controls each axis side via `leftAxis`/`rightAxis`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line valueAxisPosition="right" series={[{ name: 'Views', data }]} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I put icons on the x-axis labels (like YouTube analytics)?**
+
+    Use the `xAxisLabel` escape hatch. Its `formatter` is the render function — return ECharts rich-text markup — and `rich` defines the style blocks, including images via `backgroundColor.image` (any URL or data URI, e.g. a video thumbnail). Available on `Bar`, `Line`, and `Combo`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          categories={['Mon', 'Tue', 'Wed']}
+          series={[{ name: 'Views', data }]}
+          xAxisLabel={{
+            formatter: (value) => '{icon|}\\n{label|' + value + '}',
+            rich: {
+              icon: { height: 16, width: 16, backgroundColor: { image: thumbUrl } },
+              label: { fontSize: 12 },
+            },
+          }}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I access the ECharts instance directly?**
+
+    Pass `onReady` — it's called once on mount with the underlying ECharts instance. Use it for streaming updates or anything the props don't cover.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line
+          series={[{ name: 'Live', data }]}
+          onReady={(chart) => chart.setOption({ series: [{ data: next }] })}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Does the chart adapt to light and dark themes?**
+
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <Line series={[{ name: 'Visits', data }]} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "stock-price-intraday",
+              label: "Stock price (intraday)"
+            },
+            {
+              id: "threshold-above-below",
+              label: "Threshold (above / below)"
+            },
+            {
+              id: "multi-ticker-comparison",
+              label: "Multi-ticker comparison"
+            },
+            {
+              id: "web-traffic",
+              label: "Web traffic"
+            },
+            {
+              id: "server-monitoring",
+              label: "Server monitoring"
+            },
+            {
+              id: "stacked-area",
+              label: "Stacked area"
+            },
+            {
+              id: "stepped-line",
+              label: "Stepped line"
+            },
+            {
+              id: "sparkline-kpi-card",
+              label: "Sparkline (KPI card)"
+            },
+            {
+              id: "zoom-and-pan",
+              label: "Zoom & pan"
+            },
+            {
+              id: "live-streaming",
+              label: "Live streaming"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-use-a-real-time-axis",
+              label: "How do I use a time axis?"
+            },
+            {
+              id: "how-do-i-color-a-line-above-below-a-baseline",
+              label: "How do I color above/below a baseline?"
+            },
+            {
+              id: "how-do-i-add-an-area-fill",
+              label: "How do I add an area fill?"
+            },
+            {
+              id: "how-do-i-mark-a-target-sla-or-previous-close",
+              label: "How do I mark a target or SLA?"
+            },
+            {
+              id: "how-do-i-shade-a-region",
+              label: "How do I shade a region?"
+            },
+            {
+              id: "how-do-i-render-a-sparkline",
+              label: "How do I render a sparkline?"
+            },
+            {
+              id: "how-do-i-handle-long-series",
+              label: "How do I handle long series?"
+            },
+            {
+              id: "how-do-i-move-the-value-axis-to-the-right",
+              label: "How do I move the value axis right?"
+            },
+            {
+              id: "how-do-i-put-icons-on-the-x-axis-labels-like-youtube-analytics",
+              label: "How do I put icons on the x-axis?"
+            },
+            {
+              id: "how-do-i-access-the-echarts-instance-directly",
+              label: "How do I access the ECharts instance?"
+            },
+            {
+              id: "does-the-chart-adapt-to-light-and-dark-themes",
+              label: "Does it adapt to dark mode?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

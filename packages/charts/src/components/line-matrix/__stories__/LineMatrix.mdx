@@ -1,0 +1,275 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as LineMatrixStories from "./LineMatrix.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+
+<Meta title="Charts/Line Matrix" of={LineMatrixStories} />
+
+<DocsLayout>
+  <div>
+    # Line Matrix
+
+    To compare many small trends at once.
+    <DocInfo importStatement={`import { LineMatrix } from '@clera/charts'`} sourcePath={`components/line-matrix`} />
+
+    <br />
+
+    ## **When To Use**
+    The Line Matrix is a **small-multiples** grid: a single chart, built on the [Apache ECharts](https://echarts.apache.org/) matrix coordinate system, lays out one tiny line per cell so you can scan a whole table of trends at a glance — FX pairs by weekday, sectors by quarter, servers by region. It resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically, and shares the same `useEChart` runtime as the other charts.
+
+    In {config.title}, the matrix adapts through its props:
+
+    - **Columns & Rows**: `columns` are the x dimension, `rows` are the y dimension. A row can be a plain string, or `{ label, divider }` to render a **merged group header** that spans the full width (like a section break).
+    - **Cells**: each `{ col, row, data }` places one mini line at that intersection. `data` is plain values or `[x, y]` pairs.
+    - **Trend coloring**: `colorByTrend` paints each cell green or red by whether its line ended up or down — a fast read across the grid.
+    - **Area & Curve**: fill under each line with `area`, and choose the line shape with `curve` (`straight`, `smooth`, `stepped`).
+    - **Zoom**: `zoom` adds a single shared dataZoom that scrubs every cell's x range together.
+    - **Cell label**: `showCellLabel` prints the per-cell value on the y axis; `cornerLabel` labels the top-left corner.
+
+    This makes the Line Matrix ideal for dashboards that would otherwise need a wall of separate charts or legends.
+
+    ## **Examples**
+    ### **FX rates**
+
+    Rows are currency pairs, columns are weekdays, and each cell trends that pair's weekly mid-rate. A merged divider row separates the majors from the commodity / safe-haven block, `colorByTrend` colors each cell by direction, and the shared slider zooms every cell at once.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineMatrixStories.FxRates} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { LineMatrix } from '@clera/charts'
+
+          const FxMatrix = ({ cells }) => (
+            <LineMatrix
+              columns={['Mon', 'Tue', 'Wed', 'Thu', 'Fri']}
+              rows={[
+                'EUR/USD',
+                'GBP/USD',
+                'USD/JPY',
+                { label: 'Commodity & safe-haven', divider: true },
+                'AUD/USD',
+                'USD/CHF',
+                'USD/CAD',
+              ]}
+              cells={cells}
+              cornerLabel="Pair / Day"
+              colorByTrend
+              area
+              zoom
+              formatValue={(v) => (v >= 10 ? v.toFixed(2) : v.toFixed(4))}
+            />
+          )
+
+          export default FxMatrix
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Sector returns**
+
+    The same component on a different topic: sectors by quarter, indexed returns. A compact way to scan many series without a wall of legends.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineMatrixStories.SectorReturns} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { LineMatrix } from '@clera/charts'
+
+          const Sectors = ({ cells }) => (
+            <LineMatrix
+              columns={['Q1', 'Q2', 'Q3', 'Q4']}
+              rows={['Tech', 'Energy', 'Financials', 'Health']}
+              cells={cells}
+              cornerLabel="Sector / Q"
+              colorByTrend
+              area
+              curve="smooth"
+              formatValue={(v) => v.toFixed(0)}
+            />
+          )
+
+          export default Sectors
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Interactive playground**
+
+    A live example wired up with {config.title} UI: a `Dropdown` switches the dataset and curve, `Button` toggles control the area/trend/zoom props, and `Badge` chips show or hide individual rows. The matrix re-renders from the resulting `columns` / `rows` / `cells`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineMatrixStories.Playground} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useState } from 'react'
+          import { Badge, Button, Dropdown } from '@clera/ui'
+          import { LineMatrix } from '@clera/charts'
+
+          const Playground = ({ datasets }) => {
+            const [key, setKey] = useState('fx')
+            const [hidden, setHidden] = useState(new Set())
+            const dataset = datasets.find((d) => d.key === key)
+            const rows = dataset.rows.filter((r) => typeof r !== 'string' || !hidden.has(r))
+            const cells = dataset.cells.filter((c) => !hidden.has(c.row))
+
+            return (
+              <div>
+                <Dropdown
+                  trigger={<Button size="sm" variant="outlineSecondary">{dataset.label} ▾</Button>}
+                  items={datasets.map((d) => ({ type: 'radio', label: d.label, value: d.key, checked: d.key === key }))}
+                  onSelect={(value) => setKey(value)}
+                />
+
+                {dataset.instruments.map((label) => (
+                  <Badge key={label} variant="outlineSecondary" onClick={() => toggle(label)}>
+                    {label}
+                  </Badge>
+                ))}
+
+                <LineMatrix columns={dataset.columns} rows={rows} cells={cells} colorByTrend area zoom />
+              </div>
+            )
+          }
+
+          export default Playground
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the LineMatrix component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I add a group divider row?**
+
+    Pass a row as `{ label, divider: true }` instead of a string. It renders as a single merged cell spanning all columns — useful for separating groups (majors vs. commodity pairs, for example). Don't give that row any cells.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LineMatrix
+          columns={['Mon', 'Tue']}
+          rows={['EUR/USD', { label: 'Commodity', divider: true }, 'AUD/USD']}
+          cells={cells}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I color cells by direction?**
+
+    Set `colorByTrend` and each cell turns green if its line ended up over the data and red if it ended down. Override any single cell with its own `color` or `variant`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LineMatrix columns={cols} rows={rows} cells={cells} colorByTrend />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I zoom a long series?**
+
+    Turn on `zoom` for a single shared dataZoom slider (plus scroll/drag) that scrubs the x range of **every** cell at once, so the whole grid stays in sync.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LineMatrix columns={cols} rows={rows} cells={cells} zoom />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I use real timestamps?**
+
+    Give each cell `[x, y]` pairs, where `x` is a date string or timestamp, and format the tooltip header with `formatX`.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LineMatrix
+          columns={cols}
+          rows={rows}
+          cells={[{ col: 'Mon', row: 'EUR/USD', data: [['2024-01-01', 1.08], ['2024-01-08', 1.09]] }]}
+          formatX={(v) => new Date(v).toLocaleDateString()}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Does the chart adapt to light and dark themes?**
+
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LineMatrix columns={cols} rows={rows} cells={cells} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "fx-rates",
+              label: "FX rates"
+            },
+            {
+              id: "sector-returns",
+              label: "Sector returns"
+            },
+            {
+              id: "interactive-playground",
+              label: "Interactive playground"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-add-a-group-divider-row",
+              label: "How do I add a divider row?"
+            },
+            {
+              id: "how-do-i-color-cells-by-direction",
+              label: "How do I color cells by direction?"
+            },
+            {
+              id: "how-do-i-zoom-a-long-series",
+              label: "How do I zoom a long series?"
+            },
+            {
+              id: "how-do-i-use-real-timestamps",
+              label: "How do I use real timestamps?"
+            },
+            {
+              id: "does-the-chart-adapt-to-light-and-dark-themes",
+              label: "Does it adapt to dark mode?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

@@ -5,6 +5,7 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
 } from '@/utils'
+import type { AxisLabelOverride, ValueAxisPosition } from '@/utils'
 import type {
   BarDatum,
   BarSeries,
@@ -53,6 +54,8 @@ export interface BuildBarOptionParams {
   axisLabelRotate: number
   valueAxisName?: string
   categoryAxisName?: string
+  valueAxisPosition: ValueAxisPosition
+  xAxisLabel?: AxisLabelOverride
   animate: boolean
   emptyMessage: string
 }
@@ -116,6 +119,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
     axisLabelRotate,
     valueAxisName,
     categoryAxisName,
+    valueAxisPosition,
+    xAxisLabel,
     animate,
     emptyMessage,
   } = params
@@ -359,6 +364,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
     max: percent ? 100 : max,
     min: percent ? 0 : min,
     name: valueAxisName,
+    // Side only applies when the value axis is vertical (column charts).
+    position: isHorizontal ? undefined : valueAxisPosition,
     nameTextStyle: {
       color: subtleColor,
       fontSize: 11,
@@ -507,6 +514,14 @@ export function buildBarOption(params: BuildBarOptionParams) {
       ? Math.min(168, Math.ceil(valueAxisName.length * 6.5) + 14)
       : 0
 
+  // The x-axis label escape hatch (rich labels / icons) merges over whichever
+  // axis is horizontal — the category axis for column charts.
+  const xAxisBase = isHorizontal ? valueAxis : categoryAxis
+  const yAxisBase = isHorizontal ? categoryAxis : valueAxis
+  const xAxisFinal = xAxisLabel
+    ? { ...xAxisBase, axisLabel: { ...xAxisBase.axisLabel, ...xAxisLabel } }
+    : xAxisBase
+
   return {
     animation: animate && !prefersReducedMotion(),
     animationDuration: 600,
@@ -628,8 +643,8 @@ export function buildBarOption(params: BuildBarOptionParams) {
               return `${head}: ${formatValue(item.value)}`
             },
     },
-    xAxis: isHorizontal ? valueAxis : categoryAxis,
-    yAxis: isHorizontal ? categoryAxis : valueAxis,
+    xAxis: xAxisFinal,
+    yAxis: yAxisBase,
     series: seriesList,
   }
 }

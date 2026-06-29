@@ -5,6 +5,7 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
 } from '@/utils'
+import type { AxisLabelOverride } from '@/utils'
 import type {
   ComboSeries,
   ComboAxisConfig,
@@ -24,6 +25,7 @@ export interface BuildComboOptionParams {
   barRadius: number
   axisLabelRotate: number
   categoryAxisName?: string
+  xAxisLabel?: AxisLabelOverride
   leftAxis?: ComboAxisConfig
   rightAxis?: ComboAxisConfig
   valueAxes?: ComboValueAxis[]
@@ -46,6 +48,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
     barRadius,
     axisLabelRotate,
     categoryAxisName,
+    xAxisLabel,
     leftAxis,
     rightAxis,
     valueAxes,
@@ -371,7 +374,13 @@ export function buildComboOption(params: BuildComboOptionParams) {
       nameTextStyle: { color: subtleColor, fontSize: 11 },
       axisLine: { show: true, lineStyle: { color: lineColor } },
       axisTick: { show: false },
-      axisLabel: { color: labelColor, fontSize: 12, rotate: axisLabelRotate },
+      axisLabel: {
+        color: labelColor,
+        fontSize: 12,
+        rotate: axisLabelRotate,
+        // Escape hatch: a custom formatter (rich text + icons) / styling wins.
+        ...xAxisLabel,
+      },
       axisPointer: { type: 'shadow' },
     },
     yAxis,

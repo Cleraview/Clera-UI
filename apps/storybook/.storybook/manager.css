@@ -391,6 +391,18 @@ div[data-key="addon-controls"] > div > div[class*="css-"] {
   color: var(--text-color-ds-accent-violet);
 }
 
+/* Controls panel sizing: the panel already spans the main column (so it tracks
+   the sidebar collapsing in/out), but Storybook's scroll viewport defaults to
+   `overflow-x: hidden`, which clips the rightmost control column on wide tables.
+   Let the table fill the available width and scroll horizontally instead of
+   truncating, regardless of whether the sidebar is open. */
+div:has(> div[orientation]) [data-radix-scroll-area-viewport] {
+  overflow-x: auto !important;
+}
+#panel-tab-content .docblock-argstable {
+  width: 100% !important;
+}
+
 /* Panel Tab */
 #panel-tab-content input,
 #panel-tab-content select,

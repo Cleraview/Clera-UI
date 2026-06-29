@@ -297,6 +297,22 @@ const meta: Meta<typeof Bar> = {
       description: 'Axis title for the category axis.',
       table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
     },
+    valueAxisPosition: {
+      control: { type: 'radio' },
+      options: ['left', 'right'],
+      description:
+        'Which side the value axis sits on (vertical/column charts only).',
+      table: {
+        type: { summary: "'left' | 'right'" },
+        defaultValue: { summary: 'left' },
+      },
+    },
+    xAxisLabel: {
+      control: false,
+      description:
+        'Escape hatch for the x-axis labels. Pass a `formatter` (text or ECharts rich-text markup) plus `rich` style blocks to render icons/images on each label.',
+      table: { type: { summary: 'AxisLabelOverride' } },
+    },
     onBrushSelect: {
       action: 'bar:brush',
       description:
