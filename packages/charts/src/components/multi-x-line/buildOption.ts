@@ -1,0 +1,224 @@
+import {
+  readCssColor,
+  lighten,
+  resolveVariant,
+  resolveCategoricalPalette,
+  prefersReducedMotion,
+} from '@/utils'
+import { curveProps, gradientFill } from '../line/helpers'
+import type { MultiXAxis, LineCurve } from './types'
+
+export interface BuildMultiXLineOptionParams {
+  axes: MultiXAxis[]
+  curve: LineCurve
+  area?: boolean | 'gradient'
+  showLegend: boolean
+  min?: number
+  max?: number
+  valueAxisName?: string
+  showTooltip: boolean
+  formatValue: (value: number) => string
+  animate: boolean
+  emptyMessage: string
+}
+
+export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
+  const {
+    axes,
+    curve,
+    area,
+    showLegend,
+    min,
+    max,
+    valueAxisName,
+    showTooltip,
+    formatValue,
+    animate,
+    emptyMessage,
+  } = params
+
+  const labelColor = readCssColor('--text-color-ds-default', 'rgb(23, 23, 23)')
+  const subtle = readCssColor('--text-color-ds-subtle', 'rgb(82, 82, 82)')
+  const lineColor = readCssColor(
+    '--border-color-ds-default',
+    'rgb(229, 229, 229)'
+  )
+  const surface = readCssColor(
+    '--background-color-ds-elevation-surface-raised',
+    'rgb(255, 255, 255)'
+  )
+
+  const hasData = axes.some(a => a.series.some(s => s.data.length > 0))
+  if (!axes.length || !hasData) {
+    return {
+      title: {
+        text: emptyMessage,
+        left: 'center',
+        top: 'middle',
+        textStyle: {
+          color: subtle,
+          fontSize: 13,
+          fontWeight: 'normal' as const,
+        },
+      },
+    }
+  }
+
+  const categorical = resolveCategoricalPalette()
+  const shape = curveProps(curve)
+
+  const axisColor = (a: MultiXAxis, i: number): string =>
+    a.color ??
+    (a.series[0]?.variant
+      ? resolveVariant(a.series[0].variant)
+      : (a.series[0]?.color ?? categorical[i % categorical.length]))
+
+  const xAxis: Record<string, unknown>[] = []
+  const series: Record<string, unknown>[] = []
+  const legendNames: string[] = []
+  let topCount = 0
+  let bottomCount = 0
+
+  axes.forEach((axis, i) => {
+    const accent = axisColor(axis, i)
+    const onTop = i % 2 === 1
+    if (onTop) topCount++
+    else bottomCount++
+    const offset = Math.floor(i / 2) * 28
+
+    xAxis.push({
+      type: 'category',
+      data: axis.categories,
+      position: onTop ? 'top' : 'bottom',
+      offset,
+      axisTick: { show: true, alignWithLabel: true },
+      axisLine: { onZero: false, lineStyle: { color: accent } },
+      axisLabel: { color: accent, fontSize: 12, hideOverlap: true },
+      axisPointer: {
+        label: {
+          backgroundColor: surface,
+          color: labelColor,
+          borderColor: lineColor,
+          borderWidth: 1,
+          shadowBlur: 0,
+          fontSize: 11,
+          formatter: (p: {
+            value: string | number
+            seriesData?: Array<{ data: number }>
+          }) => {
+            const prefix = axis.name ? `${axis.name}  ` : ''
+            const point = p.seriesData?.length
+              ? `：${formatValue(p.seriesData[0].data)}`
+              : ''
+            return `${prefix}${p.value}${point}`
+          },
+        },
+      },
+    })
+
+    axis.series.forEach(s => {
+      const color = s.color ?? (s.variant ? resolveVariant(s.variant) : accent)
+      const hover = lighten(color)
+      const areaMode = s.area ?? area
+      const isGradient = areaMode === 'gradient'
+      const fill = areaMode
+        ? isGradient
+          ? { color: gradientFill(color), opacity: 1 }
+          : { color, opacity: 0.15 }
+        : undefined
+      legendNames.push(s.name)
+
+      series.push({
+        name: s.name,
+        type: 'line',
+        xAxisIndex: i,
+        yAxisIndex: 0,
+        data: s.data,
+        ...shape,
+        showSymbol: false,
+        symbol: 'circle',
+        symbolSize: 6,
+        lineStyle: { color, width: 2 },
+        itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
+        emphasis: {
+          focus: 'series' as const,
+          lineStyle: { color: hover },
+          itemStyle: { color: hover },
+          ...(fill
+            ? { areaStyle: isGradient ? fill : { color: hover, opacity: 0.25 } }
+            : {}),
+        },
+        blur: {
+          lineStyle: { opacity: 0.28 },
+          itemStyle: { opacity: 0.28 },
+          ...(fill ? { areaStyle: { opacity: 0.05 } } : {}),
+        },
+        ...(fill ? { areaStyle: fill } : {}),
+      })
+    })
+  })
+
+  const anyGradient = axes.some(a =>
+    a.series.some(s => (s.area ?? area) === 'gradient')
+  )
+
+  return {
+    animation: animate && !prefersReducedMotion(),
+    animationDuration: 600,
+    animationEasing: 'cubicOut' as const,
+    stateAnimation: {
+      duration: anyGradient ? 0 : 300,
+      easing: 'cubicOut' as const,
+    },
+    legend: {
+      show: showLegend,
+      data: legendNames,
+      top: 0,
+      icon: 'roundRect',
+      itemWidth: 10,
+      itemHeight: 10,
+      itemGap: 16,
+      textStyle: { color: labelColor, fontSize: 12 },
+    },
+    tooltip: {
+      show: showTooltip,
+      trigger: 'none' as const,
+      axisPointer: {
+        type: 'cross' as const,
+        crossStyle: { color: subtle, type: 'dashed' as const },
+        lineStyle: { color: subtle, type: 'dashed' as const },
+      },
+    },
+    grid: {
+      left: 12,
+      right: 24,
+      top: (showLegend ? 34 : 12) + topCount * 26,
+      bottom: 12 + bottomCount * 26,
+      containLabel: true,
+    },
+    xAxis,
+    yAxis: {
+      type: 'value' as const,
+      min,
+      max,
+      scale: min == null && max == null,
+      name: valueAxisName,
+      nameLocation: 'middle' as const,
+      nameGap: 44,
+      nameRotate: 90,
+      nameTextStyle: { color: subtle, fontSize: 11 },
+      axisLabel: {
+        color: subtle,
+        fontSize: 11,
+        formatter: (v: number) => formatValue(v),
+      },
+      axisLine: { show: false },
+      axisTick: { show: false },
+      splitLine: {
+        show: true,
+        lineStyle: { color: lineColor, type: 'dashed' as const },
+      },
+    },
+    series,
+  }
+}

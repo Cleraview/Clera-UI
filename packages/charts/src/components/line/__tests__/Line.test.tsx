@@ -403,12 +403,9 @@ describe('components/charts/Line', () => {
     )
     const option = lastOption()
     const s = option.series[0]
-    // Base fill is the flat line color; emphasis brightens to the lightened
-    // color at a higher opacity — exactly Combo's area hover.
     expect(s.areaStyle.color).toBe(s.lineStyle.color)
     expect(s.emphasis.areaStyle.color).not.toBe(s.areaStyle.color)
     expect(s.emphasis.areaStyle.opacity).toBe(0.25)
-    // Flat fills can interpolate, so the hover transition animates.
     expect(option.stateAnimation.duration).toBeGreaterThan(0)
   })
 
@@ -416,11 +413,7 @@ describe('components/charts/Line', () => {
     render(<Line categories={categories} series={single} area="gradient" />)
     const option = lastOption()
     const s = option.series[0]
-    // Gradient emphasis is identical to the base fill, so the band never
-    // brightens or flickers...
     expect(s.emphasis.areaStyle).toEqual(s.areaStyle)
-    // ...and state changes are instant, so ECharts never interpolates the
-    // gradient between states (which froze the canvas on hover).
     expect(option.stateAnimation.duration).toBe(0)
   })
 

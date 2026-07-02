@@ -65,7 +65,7 @@ export function withAlpha(color: string, alpha: number): string {
     const [r, g, b] = m
     return `rgba(${r}, ${g}, ${b}, ${alpha})`
   }
-  return color
+  return `color-mix(in srgb, ${color} ${alpha * 100}%, transparent)`
 }
 
 export function resolveVariant(variant: ChartVariant = 'primary'): string {

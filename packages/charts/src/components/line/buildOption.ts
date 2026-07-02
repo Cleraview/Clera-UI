@@ -130,8 +130,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
     }
   }
 
-  // On a category axis, fall back to numeric indices when no labels are given
-  // (e.g. sparklines), so the line still renders from the series data alone.
   const cats =
     xAxisType === 'category'
       ? categories?.length
@@ -153,8 +151,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
   const seriesColors = series.map((s, i) => colorFor(s, i))
 
   const multi = series.length > 1
-  // Gradient fills can't be interpolated cheaply between hover states, so state
-  // changes switch instantly for them; flat fills brighten smoothly like Combo.
   const anyGradient = series.some(s => (s.area ?? area) === 'gradient')
   const legendShown = !sparkline && (showLegend ?? multi)
   const legendVertical = legendPosition === 'left' || legendPosition === 'right'
@@ -166,9 +162,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
     const symbolOn = s.showSymbol ?? showSymbol
     const width = s.width ?? lineWidth
 
-    // The threshold series is colored per-segment by the piecewise visualMap.
-    // ECharts throws when that runs over a smooth line, so it stays straight,
-    // skips LTTB sampling, and keeps its mapped colors on hover.
     const isThreshold = Boolean(threshold) && i === 0
     const shape = isThreshold
       ? { smooth: false as const }
@@ -181,10 +174,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
         : { color, opacity: 0.15 }
       : undefined
 
-    // Hover state for the fill — reuses Combo's area emphasis. A flat fill
-    // brightens to the lightened color (a smooth flat→flat transition); a
-    // gradient fill can't be interpolated, so it stays put and only the line
-    // lightens (the chart also drops state animation when a gradient is present).
     const emphasisArea = fill
       ? isGradient
         ? fill
@@ -203,8 +192,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
       showSymbol: symbolOn,
       symbol: 'circle' as const,
       symbolSize,
-      // Down-sample only very dense series; LTTB is needless for short data and
-      // conflicts with the threshold visualMap.
       ...(s.data.length > 200 && !isThreshold
         ? { sampling: 'lttb' as const }
         : {}),
@@ -214,11 +201,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
         type: s.dashed ? ('dashed' as const) : ('solid' as const),
       },
       itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
-      // Hover lightens the line and its points via the same `lighten` helper Bar
-      // uses, and brightens a flat fill the same way Combo does. `focus` dims the
-      // other series only when `highlightSeries` is on. The threshold series is
-      // colored per-segment by the visualMap, so its emphasis is disabled
-      // entirely — any hover state fights the visualMap and drops the line.
       emphasis: isThreshold
         ? { disabled: true }
         : {
@@ -317,12 +299,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
     }
   }
 
-  // Green-above / red-below baseline coloring for the first series. The pieces
-  // are bounded by the series' own value range and the visualMap is given an
-  // explicit min/max — open-ended pieces leave the range ill-defined, which
-  // makes ECharts' line-gradient builder throw (`colorStopsInRange[0].coord`).
-  // `dimension` is left to its default (the value dimension) like the official
-  // ECharts demos.
   const visualMap = threshold
     ? (() => {
         const values = series[0].data.map(valueOf).filter(Number.isFinite)
@@ -401,14 +377,10 @@ export function buildLineOption(params: BuildLineOptionParams) {
           hideOverlap: true,
           formatter:
             xAxisType === 'time' ? (value: number) => fmtX(value) : undefined,
-          // Escape hatch: a custom formatter (rich text + icons) / styling wins.
           ...xAxisLabel,
         },
   }
 
-  // Floor the zoom window at ~4 points so scrolling in can never collapse the
-  // line to an empty range (which leaves nothing to draw and no way to wheel
-  // back out).
   const minSpan = Math.min(100, Math.max(2, (4 / maxLen) * 100))
 
   const dataZoom =
@@ -464,9 +436,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
     animation: animate && !prefersReducedMotion(),
     animationDuration: 600,
     animationEasing: 'cubicOut' as const,
-    // Hover/blur state changes animate (a smooth lighten/brighten, like Combo
-    // and Bar), but switch instantly when a gradient fill is present —
-    // interpolating an area gradient between states every frame froze the canvas.
     stateAnimation: {
       duration: anyGradient ? 0 : 300,
       easing: 'cubicOut' as const,

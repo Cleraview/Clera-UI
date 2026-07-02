@@ -1,0 +1,201 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as LinePanelsStories from "./LinePanels.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+
+<Meta title="Charts/Line Panels" of={LinePanelsStories} />
+
+<DocsLayout>
+  <div>
+    # Line Panels
+
+    To correlate several series on different scales.
+    <DocInfo importStatement={`import { LinePanels } from '@clera/charts'`} sourcePath={`components/line-panels`} />
+
+    <br />
+
+    ## **When To Use**
+    Line Panels stacks two or more line charts as **synced panels** on a shared x-axis. Each panel is its own grid and value axis, so series on very different scales (river flow vs. rainfall, CPU vs. memory vs. network) sit together without fighting over one axis. Powered by [Apache ECharts](https://echarts.apache.org/), it resolves colors from `@clera/tokens` and shares the `useEChart` runtime with the other charts.
+
+    What makes it a *panel* chart rather than N separate charts:
+
+    - **One shared x-axis** with a **linked crosshair** — hovering lines up the same instant across every panel, and the tooltip lists all series at that x.
+    - **One dataZoom** spanning every panel, so zoom/pan stays in sync.
+    - **Per-panel value axis** — each `{ label, min, max, formatValue }` is independent, and `inverse` grows a panel downward (the classic rainfall-vs-flow look).
+
+    It stays declarative: pass `categories` (or `[x, y]` pairs on a `time` axis) and a `panels` array — the component lays out the grids, axes, linked pointer, and zoom for you.
+
+    ## **Examples**
+    ### **Rainfall vs evaporation**
+
+    The hydrology pattern: flow on top, rainfall below with an **inverted** axis so storms read as spikes hanging from the divider. One crosshair aligns both panels; the slider zooms them together.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LinePanelsStories.RainfallVsEvaporation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { LinePanels } from '@clera/charts'
+
+          const Hydrology = ({ flow, rain }) => (
+            <LinePanels
+              xAxisType="time"
+              area="gradient"
+              zoom
+              panels={[
+                { label: 'Flow (m³/s)', max: 500, series: [{ name: 'Flow', variant: 'info', data: flow }] },
+                { label: 'Rainfall (mm)', inverse: true, series: [{ name: 'Rainfall', variant: 'primary', data: rain }] },
+              ]}
+            />
+          )
+
+          export default Hydrology
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Server metrics**
+
+    Three metrics on their own scales, stacked so a CPU spike lines up with memory and network at the same instant. Each panel formats its own axis (`%` vs. `MB/s`).
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LinePanelsStories.ServerMetrics} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { LinePanels } from '@clera/charts'
+
+          const Metrics = ({ cpu, mem, net }) => (
+            <LinePanels
+              xAxisType="time"
+              curve="smooth"
+              area
+              zoom
+              panels={[
+                { label: 'CPU %', min: 0, max: 100, formatValue: (v) => v + '%', series: [{ name: 'CPU', variant: 'warning', data: cpu }] },
+                { label: 'Memory %', min: 0, max: 100, formatValue: (v) => v + '%', series: [{ name: 'Memory', variant: 'info', data: mem }] },
+                { label: 'Network (MB/s)', min: 0, series: [{ name: 'Network', variant: 'success', data: net }] },
+              ]}
+            />
+          )
+
+          export default Metrics
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the LinePanels component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I invert a panel (grow downward)?**
+
+    Set `inverse: true` on that panel. Its value axis flips, so the series reads as spikes hanging from the top — ideal for a rainfall panel beneath a flow panel.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LinePanels
+          panels={[
+            { label: 'Flow', series: [{ name: 'Flow', data: flow }] },
+            { label: 'Rain', inverse: true, series: [{ name: 'Rain', data: rain }] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I give each panel its own scale and format?**
+
+    Every panel takes its own `min`, `max`, and `formatValue`, so a percentage panel and a throughput panel can sit together without sharing an axis.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LinePanels
+          panels={[
+            { label: 'CPU %', min: 0, max: 100, formatValue: (v) => v + '%', series: [{ name: 'CPU', data: cpu }] },
+            { label: 'Net', min: 0, formatValue: (v) => v + ' MB/s', series: [{ name: 'Net', data: net }] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I zoom all panels together?**
+
+    Turn on `zoom` for a single dataZoom that scrubs every panel’s x range at once (with `zoomSlider={false}` for inside-only scroll/drag). The crosshair is linked across panels automatically.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LinePanels zoom panels={panels} />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Does the chart adapt to light and dark themes?**
+
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <LinePanels panels={panels} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "rainfall-vs-evaporation",
+              label: "Rainfall vs evaporation"
+            },
+            {
+              id: "server-metrics",
+              label: "Server metrics"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-invert-a-panel-grow-downward",
+              label: "How do I invert a panel?"
+            },
+            {
+              id: "how-do-i-give-each-panel-its-own-scale-and-format",
+              label: "How do I set per-panel scale/format?"
+            },
+            {
+              id: "how-do-i-zoom-all-panels-together",
+              label: "How do I zoom all panels?"
+            },
+            {
+              id: "does-the-chart-adapt-to-light-and-dark-themes",
+              label: "Does it adapt to dark mode?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>
