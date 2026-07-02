@@ -191,7 +191,6 @@ export function buildLineMatrixOption(params: BuildLineMatrixOptionParams) {
                 height: 20,
                 throttle: 100,
                 borderColor: lineColor,
-                // Neutral selected-window highlight (not the brand accent).
                 fillerColor: withAlpha(subtle, 0.12),
                 dataBackground: {
                   lineStyle: { color: lineColor },

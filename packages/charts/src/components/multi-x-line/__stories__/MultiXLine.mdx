@@ -1,0 +1,178 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as MultiXLineStories from "./MultiXLine.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+
+<Meta title="Charts/Multi-X Line" of={MultiXLineStories} />
+
+<DocsLayout>
+  <div>
+    # Multi-X Line
+
+    To compare series that don't share an x-axis.
+    <DocInfo importStatement={`import { MultiXLine } from '@clera/charts'`} sourcePath={`components/multi-x-line`} />
+
+    <br />
+
+    ## **When To Use**
+    Multi-X Line overlays series that have **different x categories** on a single shared value axis, giving each its own x-axis — the first on the bottom, the second on top. Powered by [Apache ECharts](https://echarts.apache.org/), it resolves colors from `@clera/tokens` and shares the `useEChart` runtime with the other charts.
+
+    Reach for it when the x labels line up index-by-index but belong to different scales — the classic case is **period over period** (this year vs. last year), where January 2016 sits above January 2015 but the two axes are distinct.
+
+    - **Per-axis data**: each `{ categories, name?, color?, series }` carries its own labels — unlike `Line`/`Combo`, where every series shares one `categories` axis.
+    - **Color-matched axes**: each x-axis line and labels take the series' color, so you can tell them apart at a glance.
+    - **Crosshair readout**: a cross axis-pointer reads out every axis at the hovered position; hovering a series isolates it and dims the rest.
+
+    > For series that **share** an x-axis, use [`Line`](?path=/docs/charts-line--docs) (or [`Combo`](?path=/docs/charts-combo--docs) for a second value axis) instead.
+
+    ## **Examples**
+    ### **Precipitation year over year**
+
+    Two years of monthly precipitation on one value axis: 2016 on the bottom axis, 2015 on the top, each colored to match. Hover to isolate a year and read both off the crosshair.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={MultiXLineStories.Precipitation} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { MultiXLine } from '@clera/charts'
+
+          const months = (year) => Array.from({ length: 12 }, (_, i) => year + '-' + (i + 1))
+
+          const Rainfall = () => (
+            <MultiXLine
+              valueAxisName="Precipitation (mm)"
+              axes={[
+                {
+                  name: '2016',
+                  categories: months(2016),
+                  series: [{ name: 'Precipitation (2016)', variant: 'info', data: p2016 }],
+                },
+                {
+                  name: '2015',
+                  categories: months(2015),
+                  series: [{ name: 'Precipitation (2015)', variant: 'destructive', data: p2015 }],
+                },
+              ]}
+            />
+          )
+
+          export default Rainfall
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **With gradient fill**
+
+    The same comparison with an `area="gradient"` fill under each line.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={MultiXLineStories.WithArea} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <MultiXLine area="gradient" valueAxisName="Precipitation (mm)" axes={axes} />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the MultiXLine component, along with their types, default values, and descriptions.
+    <ArgTypes />
+
+    ## **FAQ**
+
+    #### **How do I add a second x-axis?**
+
+    Pass a second entry in `axes`. The first renders on the bottom, the second on top; each has its own `categories` and `series`. Further axes alternate bottom/top, offset outward.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <MultiXLine
+          axes={[
+            { name: '2016', categories: months2016, series: [{ name: '2016', data: a }] },
+            { name: '2015', categories: months2015, series: [{ name: '2015', data: b }] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **How do I color each axis?**
+
+    Set `color` on the axis (or a `variant`/`color` on its series). The x-axis line, its labels, and the series all pick up that color so the two axes stay distinguishable.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <MultiXLine
+          axes={[
+            { color: 'rgb(84,112,198)', categories: c1, series: [{ name: 'A', data: a }] },
+            { color: 'rgb(238,102,102)', categories: c2, series: [{ name: 'B', data: b }] },
+          ]}
+        />
+      `} />
+    </Canvas.Source>
+
+    <br />
+
+    #### **Does the chart adapt to light and dark themes?**
+
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    <Canvas.Source>
+      <Source className="my-0!" dark code={`
+        <MultiXLine axes={axes} />
+      `} />
+    </Canvas.Source>
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "precipitation-year-over-year",
+              label: "Precipitation year over year"
+            },
+            {
+              id: "with-gradient-fill",
+              label: "With gradient fill"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+        {
+          id: "faq",
+          label: "FAQ",
+          children: [
+            {
+              id: "how-do-i-add-a-second-x-axis",
+              label: "How do I add a second x-axis?"
+            },
+            {
+              id: "how-do-i-color-each-axis",
+              label: "How do I color each axis?"
+            },
+            {
+              id: "does-the-chart-adapt-to-light-and-dark-themes",
+              label: "Does it adapt to dark mode?"
+            },
+          ]
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

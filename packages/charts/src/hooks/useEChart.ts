@@ -42,7 +42,6 @@ export function useEChart({
 }: UseEChartOptions) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<ECharts | null>(null)
-  // Set before each option-driven render; consumed once the animation finishes.
   const settleQueuedRef = useRef(false)
 
   const buildOptionRef = useRef(buildOption)
@@ -75,10 +74,6 @@ export function useEChart({
 
     onReadyRef.current?.(chart)
 
-    // Some series (notably polar bars) compute label positions mid-animation
-    // and don't reposition once it ends. After each option-driven render, re-run
-    // layout one extra time *after* the animation has finished so labels settle —
-    // doing it here (not during) keeps the grow-in animation intact.
     const settle = () => {
       if (!settleQueuedRef.current) return
       settleQueuedRef.current = false
@@ -86,11 +81,6 @@ export function useEChart({
     }
     chart.on('finished', settle)
 
-    // ECharts' grow-in animation is wiped if `resize()` runs while it's playing.
-    // A ResizeObserver fires its callback once immediately on `observe()`, and
-    // `fonts.ready` resolves right away when fonts are cached — both land during
-    // the appear animation and snap it to the end. Only resize on a *real* size
-    // change so the load animation isn't cut short.
     let lastWidth = el.clientWidth
     let lastHeight = el.clientHeight
     const resizeIfChanged = () => {

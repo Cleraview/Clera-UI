@@ -111,7 +111,6 @@ describe('components/charts/LineMatrix', () => {
       <LineMatrix columns={columns} rows={rows} cells={cells} colorByTrend />
     )
     const { series } = lastOption()
-    // first cell rises (1.08 -> 1.10), second falls (1.10 -> 1.08)
     expect(series[0].lineStyle.color).not.toBe(series[1].lineStyle.color)
   })
 

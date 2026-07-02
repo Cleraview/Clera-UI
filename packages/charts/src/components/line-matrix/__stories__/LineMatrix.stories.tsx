@@ -132,10 +132,6 @@ export default meta
 
 type Story = StoryObj<typeof LineMatrix>
 
-// ---------------------------------------------------------------------------
-// Deterministic FX data
-// ---------------------------------------------------------------------------
-
 type Pair = { label: string; base: number; vol: number }
 
 const PAIRS: Pair[] = [
@@ -181,7 +177,6 @@ function cellData(dayIdx: number, pairIdx: number, pair: Pair): LinePoint[] {
   return out
 }
 
-// Rows: 3 majors, a divider, then 3 commodity / safe-haven pairs.
 const ROWS = [
   PAIRS[0].label,
   PAIRS[1].label,
@@ -230,7 +225,6 @@ export const FxRates: Story = {
   ),
 }
 
-// A second, smaller topic to show the same component is general-purpose.
 const SECTORS = ['Tech', 'Energy', 'Financials', 'Health']
 const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4']
 

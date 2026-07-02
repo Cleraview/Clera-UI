@@ -378,7 +378,6 @@ export function buildComboOption(params: BuildComboOptionParams) {
         color: labelColor,
         fontSize: 12,
         rotate: axisLabelRotate,
-        // Escape hatch: a custom formatter (rich text + icons) / styling wins.
         ...xAxisLabel,
       },
       axisPointer: { type: 'shadow' },
