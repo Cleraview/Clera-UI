@@ -22,7 +22,7 @@ import { DocsLayout } from "@clera/docs"
 
     Reach for it when the x labels line up index-by-index but belong to different scales — the classic case is **period over period** (this year vs. last year), where January 2016 sits above January 2015 but the two axes are distinct.
 
-    - **Per-axis data**: each `{ categories, name?, color?, series }` carries its own labels — unlike `Line`/`Combo`, where every series shares one `categories` axis.
+    - **Per-axis data**: each entry in `xAxes` — `{ categories, name?, color?, series }` — carries its own labels, unlike `Line`/`Combo`, where every series shares one `categories` axis. The shared value axis is configured through `yAxis`.
     - **Color-matched axes**: each x-axis line and labels take the series' color, so you can tell them apart at a glance.
     - **Crosshair readout**: a cross axis-pointer reads out every axis at the hovered position; hovering a series isolates it and dims the rest.
 
@@ -45,8 +45,8 @@ import { DocsLayout } from "@clera/docs"
 
           const Rainfall = () => (
             <MultiXLine
-              valueAxisName="Precipitation (mm)"
-              axes={[
+              yAxis={{ name: 'Precipitation (mm)' }}
+              xAxes={[
                 {
                   name: '2016',
                   categories: months(2016),
@@ -76,7 +76,25 @@ import { DocsLayout } from "@clera/docs"
 
       <Canvas.Source>
         <Source className="my-0!" dark code={`
-          <MultiXLine area="gradient" valueAxisName="Precipitation (mm)" axes={axes} />
+          <MultiXLine area="gradient" yAxis={{ name: 'Precipitation (mm)' }} xAxes={xAxes} />
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Value-axis title (position)**
+
+    The shared value axis carries its own title through `yAxis`. `position` places it (`top`, `middle` (default, rotated), or `bottom`), `format` adds a unit to every tick, and `min`/`max` pin the scale.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={MultiXLineStories.ValueAxisTitle} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          <MultiXLine
+            yAxis={{ name: 'Precipitation (mm)', position: 'top', min: 0, max: 260, format: (v) => v + ' mm' }}
+            xAxes={xAxes}
+          />
         `} />
       </Canvas.Source>
     </Canvas>
@@ -89,11 +107,11 @@ import { DocsLayout } from "@clera/docs"
 
     #### **How do I add a second x-axis?**
 
-    Pass a second entry in `axes`. The first renders on the bottom, the second on top; each has its own `categories` and `series`. Further axes alternate bottom/top, offset outward.
+    Pass a second entry in `xAxes`. The first renders on the bottom, the second on top; each has its own `categories` and `series`. Further axes alternate bottom/top, offset outward.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <MultiXLine
-          axes={[
+          xAxes={[
             { name: '2016', categories: months2016, series: [{ name: '2016', data: a }] },
             { name: '2015', categories: months2015, series: [{ name: '2015', data: b }] },
           ]}
@@ -109,7 +127,7 @@ import { DocsLayout } from "@clera/docs"
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <MultiXLine
-          axes={[
+          xAxes={[
             { color: 'rgb(84,112,198)', categories: c1, series: [{ name: 'A', data: a }] },
             { color: 'rgb(238,102,102)', categories: c2, series: [{ name: 'B', data: b }] },
           ]}
@@ -124,7 +142,7 @@ import { DocsLayout } from "@clera/docs"
     Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <MultiXLine axes={axes} />
+        <MultiXLine xAxes={xAxes} />
       `} />
     </Canvas.Source>
   </div>
@@ -147,6 +165,10 @@ import { DocsLayout } from "@clera/docs"
             {
               id: "with-gradient-fill",
               label: "With gradient fill"
+            },
+            {
+              id: "value-axis-title-position",
+              label: "Value-axis title (position)"
             },
           ]
         },

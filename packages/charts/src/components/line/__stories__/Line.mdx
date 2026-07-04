@@ -113,7 +113,7 @@ import { DocsLayout } from "@clera/docs"
           const Returns = () => (
             <Line
               curve="smooth"
-              valueAxisName="Return"
+              yAxes={[{ name: 'Return' }]}
               referenceLine={{ value: 0, label: 'Flat' }}
               formatValue={(v) => (v > 0 ? '+' : '') + v.toFixed(0) + '%'}
               categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
@@ -245,7 +245,7 @@ import { DocsLayout } from "@clera/docs"
               curve="stepped"
               area
               showSymbol
-              valueAxisName="Rate"
+              yAxes={[{ name: 'Rate' }]}
               formatValue={(v) => v.toFixed(2) + '%'}
               categories={['Jan 22', 'Mar 22', 'Jun 22', 'Sep 22', 'Dec 22', 'Mar 23', 'May 23', 'Jul 23', 'Now']}
               series={[{ name: 'Policy rate', variant: 'destructive', data: [0.25, 0.5, 1.75, 3.25, 4.5, 5.0, 5.25, 5.5, 5.5] }]}
@@ -305,7 +305,7 @@ import { DocsLayout } from "@clera/docs"
               area="gradient"
               zoom
               min={0}
-              valueAxisName="Daily active"
+              yAxes={[{ name: 'Daily active', min: 0 }]}
               formatValue={(v) => (v / 1000).toFixed(1) + 'k'}
               formatX={(v) => new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               series={[{ name: 'DAU', variant: 'primary', data: points }]}
@@ -313,6 +313,78 @@ import { DocsLayout } from "@clera/docs"
           )
 
           export default Yearly
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+
+    ### **Y-axes (`yAxes`)**
+
+    The y-axes are a list — any number on the left and/or right, each self-describing its `name` (title), `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id` (or array index) via `series[].yAxis`; a series with no `yAxis` uses the first axis. Multiple axes on the same side auto-offset outward, and each axis's title gutter is reserved so nothing overlaps the ticks or the zoom slider. (The x-axis is a single `xAxis` object; several x-axes are `MultiXLine`.)
+
+    Here flow reads off the left axis and the rainfall axis on the right is `inverse`d so showers fall from the top:
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.RainfallAndFlow} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const RainfallFlow = ({ flow, rainfall }) => (
+            <Line
+              xAxisType="time"
+              curve="smooth"
+              area="gradient"
+              zoom
+              zoomWindow={[60, 85]}
+              toolbox
+              yAxes={[
+                { id: 'flow', name: 'Flow (m³/s)', side: 'left' },
+                { id: 'rain', name: 'Rainfall (mm)', side: 'right', inverse: true, min: 0 },
+              ]}
+              formatX={(v) => new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              series={[
+                { name: 'Flow', variant: 'info', yAxis: 'flow', data: flow },
+                { name: 'Rainfall', variant: 'primary', yAxis: 'rain', data: rainfall },
+              ]}
+            />
+          )
+
+          export default RainfallFlow
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    Two axes can stack on one side and a third sit opposite — each title placed separately (`position` + `orientation`):
+    <Canvas>
+      <Canvas.Story>
+        <Story of={LineStories.MultipleAxes} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Line } from '@clera/charts'
+
+          const Weather = ({ categories, temp, rain, pressure }) => (
+            <Line
+              categories={categories}
+              curve="smooth"
+              yAxes={[
+                { id: 'temp', name: 'Temp (°C)', side: 'left', position: 'middle', format: (v) => v + '°' },
+                { id: 'rain', name: 'Rain (mm)', side: 'left', position: 'middle', min: 0 },
+                { id: 'pressure', name: 'Pressure (hPa)', side: 'right', position: 'middle' },
+              ]}
+              series={[
+                { name: 'Temperature', yAxis: 'temp', variant: 'destructive', data: temp },
+                { name: 'Rainfall', yAxis: 'rain', variant: 'info', area: true, data: rain },
+                { name: 'Pressure', yAxis: 'pressure', variant: 'warning', data: pressure },
+              ]}
+            />
+          )
+
+          export default Weather
         `} />
       </Canvas.Source>
     </Canvas>
@@ -460,12 +532,12 @@ import { DocsLayout } from "@clera/docs"
 
     <br />
 
-    #### **How do I move the value axis to the right?**
+    #### **How do I move the y-axis to the right?**
 
-    Set `valueAxisPosition="right"`. The axis (and its label space) flips to the right side — common in analytics/finance dashboards. This prop is shared across the cartesian charts (`Bar`, `Line`); `Combo` controls each axis side via `leftAxis`/`rightAxis`.
+    Give the axis `side: 'right'` — `yAxes={[{ side: 'right' }]}` — and it (with its label space) flips to the right. The same array holds a left-and-right pair, or several axes, each with its own `side`.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
-        <Line valueAxisPosition="right" series={[{ name: 'Views', data }]} />
+        <Line yAxes={[{ side: 'right' }]} series={[{ name: 'Views', data }]} />
       `} />
     </Canvas.Source>
 

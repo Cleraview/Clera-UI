@@ -4,9 +4,18 @@ import type {
   ChartVariant,
   AxisLabelOverride,
   ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
 } from '@/utils'
 
-export type { AxisLabelOverride, ValueAxisPosition }
+export type {
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
+}
 
 export type LineVariant = ChartVariant
 
@@ -43,6 +52,48 @@ export type LineSeries = {
   showSymbol?: boolean
   /** Per-series line thickness in px. */
   width?: number
+  /**
+   * Which y-axis this series is plotted against — an axis `id` or index from
+   * `yAxes` (or `'left'`/`'right'`). Defaults to the first axis.
+   */
+  yAxis?: string | number
+}
+
+/**
+ * A y-axis. Pass one or more to `yAxes` to build any layout — several on the
+ * left and/or right, each with its own title and scale. Series bind to an axis
+ * via `series[].yAxis` (its `id` or array index).
+ */
+export type LineYAxis = {
+  /** Stable id to bind series to this axis. Falls back to the array index. */
+  id?: string | number
+  /** The axis title text. */
+  name?: string
+  /** Which side this axis sits on. Defaults to `'left'`. */
+  side?: ValueAxisPosition
+  min?: number
+  max?: number
+  /** Flip the axis so values grow downward — e.g. rainfall falling from the top. */
+  inverse?: boolean
+  /** Where the title sits along the axis: `top` (default), `middle`, or `bottom`. */
+  position?: ValueAxisNamePosition
+  /** Title text direction: `horizontal` or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
+  /** Format for this axis's tick labels and tooltip values. */
+  format?: (value: number) => string
+}
+
+/**
+ * The x-axis. A Line has a single x-axis (multiple x-axes are `MultiXLine`), so
+ * this is one object rather than a list.
+ */
+export type LineXAxis = {
+  /** The axis title text. */
+  name?: string
+  /** Where the title sits along the axis: `left`, `middle`, or `right` (default). */
+  position?: CategoryAxisNamePosition
+  /** Title text direction: `horizontal` (default) or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
 }
 
 export type LineReferenceLine = {
@@ -86,14 +137,20 @@ export interface LineProps {
   symbolSize?: number
   lineWidth?: number
   connectNulls?: boolean
-  min?: number
-  max?: number
   showValueAxis?: boolean
   gridLines?: boolean
-  valueAxisName?: string
-  categoryAxisName?: string
-  /** Which side the value (y) axis sits on. */
-  valueAxisPosition?: ValueAxisPosition
+  /**
+   * The y-axes: one or more, each `{ id?, name?, side?, min?, max?, inverse?,
+   * position?, orientation?, format? }`. `name` is the axis title; `position`
+   * (top/middle/bottom) and `orientation` place it. Bind series via
+   * `series[].yAxis`. When omitted, a single auto-scaled axis is used.
+   */
+  yAxes?: LineYAxis[]
+  /** The x-axis: `{ name?, position?, orientation? }` — `name` is its title. */
+  xAxis?: LineXAxis
+  /** Force the single y-axis min/max (ignored when `yAxes` is set). */
+  min?: number
+  max?: number
   axisLabelRotate?: number
   /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
@@ -109,6 +166,10 @@ export interface LineProps {
   markPoints?: LineMarkPoint[]
   zoom?: boolean
   zoomSlider?: boolean
+  /** Initial zoom window as `[startPercent, endPercent]` (0–100). Requires `zoom`. */
+  zoomWindow?: [number, number]
+  /** Show the ECharts toolbox (box-zoom, restore, save as image). */
+  toolbox?: boolean
   /** Minimal axis-less trend line for KPI cards and inline sparklines. */
   sparkline?: boolean
   formatValue?: (value: number) => string

@@ -15,6 +15,9 @@ import {
   cpuSeries,
   memSeries,
   clock,
+  rainfallFlow,
+  rainDay,
+  RAIN_START,
   LIVE_WINDOW,
   liveLabel,
   PLAY_ICON,
@@ -268,31 +271,49 @@ const meta: Meta<typeof Line> = {
     min: {
       control: 'number',
       description:
-        'Force the value-axis minimum (e.g. anchor at 0). Auto when omitted.',
+        'Force the single y-axis minimum (ignored when `yAxes` is set). Auto when omitted.',
       table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
     },
     max: {
       control: 'number',
-      description: 'Force the value-axis maximum. Auto when omitted.',
+      description:
+        'Force the single y-axis maximum (ignored when `yAxes` is set).',
       table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
     },
-    valueAxisName: {
-      control: 'text',
-      description: 'Axis title for the value axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
-    },
-    categoryAxisName: {
-      control: 'text',
-      description: 'Axis title for the x-axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
-    },
-    valueAxisPosition: {
-      control: { type: 'radio' },
-      options: ['left', 'right'],
-      description: 'Which side the value (y) axis sits on.',
+    yAxes: {
+      control: 'object',
+      description:
+        'The y-axes — one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format? }`. `name` is the axis title; `position` (top/middle/bottom) and `orientation` place it. Bind series with `series[].yAxis` (the axis id or index).',
       table: {
-        type: { summary: "'left' | 'right'" },
-        defaultValue: { summary: 'left' },
+        type: { summary: 'LineYAxis[]' },
+        defaultValue: { summary: '-' },
+      },
+    },
+    xAxis: {
+      control: 'object',
+      description:
+        'The x-axis — `{ name?, position?, orientation? }`. `name` is its title; `position` is `left`/`middle`/`right` (default `right`).',
+      table: {
+        type: { summary: 'LineXAxis' },
+        defaultValue: { summary: '-' },
+      },
+    },
+    toolbox: {
+      control: 'boolean',
+      description:
+        'Show the ECharts toolbox: box-zoom, restore, and save-as-image, styled to the theme.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    zoomWindow: {
+      control: 'object',
+      description:
+        'Initial zoom window as `[startPercent, endPercent]` (0–100). Requires `zoom`.',
+      table: {
+        type: { summary: '[number, number]' },
+        defaultValue: { summary: '-' },
       },
     },
     xAxisLabel: {
@@ -432,7 +453,7 @@ export const ThresholdSplit: Story = {
     curve: 'straight',
     showValueAxis: true,
     tooltipTrigger: 'axis',
-    categoryAxisName: 'Trading day',
+    xAxis: { name: 'Trading day' },
     formatValue: (v: number) => `${v > 0 ? '+' : ''}$${(v / 1000).toFixed(1)}k`,
     threshold: { value: 0, above: 'success', below: 'destructive' },
     referenceLine: { value: 0, label: 'Break-even' },
@@ -465,8 +486,7 @@ export const MultiTicker: Story = {
     curve: 'smooth',
     showValueAxis: true,
     legendPosition: 'top',
-    categoryAxisName: undefined,
-    valueAxisName: 'Return',
+    yAxes: [{ name: 'Return' }],
     formatValue: (v: number) => `${v > 0 ? '+' : ''}${v.toFixed(0)}%`,
     referenceLine: { value: 0, label: 'Flat' },
     categories: [
@@ -552,17 +572,16 @@ export const RightAxisIcons: Story = {
     docs: {
       description: {
         story:
-          'Two axis escape hatches: `valueAxisPosition="right"` moves the value axis to the right (common in analytics/finance dashboards), and `xAxisLabel` renders **rich labels** — here a small image icon above each weekday via an ECharts rich-text formatter. Point `xAxisLabel.rich.<name>.backgroundColor.image` at any URL (e.g. a channel/video thumbnail) for the YouTube-analytics look.',
+          'Two axis escape hatches: `yAxes={[{ side: "right" }]}` moves the y-axis to the right (common in analytics/finance dashboards), and `xAxisLabel` renders **rich labels** — here a small image icon above each weekday via an ECharts rich-text formatter. Point `xAxisLabel.rich.<name>.backgroundColor.image` at any URL (e.g. a channel/video thumbnail) for the YouTube-analytics look.',
       },
     },
   },
   args: {
     height: 320,
-    valueAxisPosition: 'right',
+    yAxes: [{ side: 'right', min: 0 }],
     curve: 'smooth',
     area: 'gradient',
     showValueAxis: true,
-    min: 0,
     categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     formatValue: (v: number) => `${(v / 1000).toFixed(0)}k`,
     xAxisLabel: {
@@ -679,7 +698,7 @@ export const Stepped: Story = {
     area: true,
     showValueAxis: true,
     showSymbol: true,
-    valueAxisName: 'Rate',
+    yAxes: [{ name: 'Rate' }],
     formatValue: (v: number) => `${v.toFixed(2)}%`,
     categories: [
       'Jan 22',
@@ -783,13 +802,130 @@ export const ZoomPan: Story = {
     curve: 'straight',
     area: 'gradient',
     showValueAxis: true,
-    min: 0,
     zoom: true,
-    valueAxisName: 'Daily active',
+    yAxes: [{ name: 'Daily active', min: 0 }],
     categories: undefined,
     formatValue: (v: number) => `${(v / 1000).toFixed(1)}k`,
     formatX: dayMonth,
     series: [{ name: 'DAU', variant: 'primary', data: dailyYear }],
+  },
+  render: args => <Line {...args} />,
+}
+
+export const RainfallAndFlow: Story = {
+  name: 'Rainfall & flow (dual axis)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Two gradient area-lines on opposing value axes: flow reads off the left axis (`Flow (m³/s)`), while the rainfall axis on the right (`Rainfall (mm)`) is `inverse`d so showers fall from the top and visibly precede the flow response. The one light-gray vertical band is a `markArea` highlighting a storm window; `zoomWindow` opens pre-zoomed on it, and the `toolbox` adds box-zoom / restore / save-as-image.',
+      },
+    },
+  },
+  args: {
+    height: 420,
+    xAxisType: 'time',
+    curve: 'smooth',
+    area: 'gradient',
+    zoom: true,
+    zoomWindow: [60, 85],
+    toolbox: true,
+    categories: undefined,
+    formatX: rainDay,
+    yAxes: [
+      {
+        id: 'flow',
+        name: 'Flow (m³/s)',
+        side: 'left',
+        format: (v: number) => `${v}`,
+      },
+      {
+        id: 'rain',
+        name: 'Rainfall (mm)',
+        side: 'right',
+        inverse: true,
+        min: 0,
+        format: (v: number) => `${v}`,
+      },
+    ],
+    markArea: {
+      from: RAIN_START + 20.5 * 24 * 3600 * 1000,
+      to: RAIN_START + 21.25 * 24 * 3600 * 1000,
+    },
+    series: [
+      { name: 'Flow', variant: 'info', yAxis: 'flow', data: rainfallFlow.flow },
+      {
+        name: 'Rainfall',
+        variant: 'primary',
+        yAxis: 'rain',
+        data: rainfallFlow.rainfall,
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <div className="mb-3 text-center text-heading-sm font-semibold text-ds-default">
+        Rainfall and Flow Relationship
+      </div>
+      <Line {...args} />
+    </div>
+  ),
+}
+
+const weatherMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+
+export const MultipleAxes: Story = {
+  name: 'Multiple value axes (left + right)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The `yAxes` array is the general model: any number of axes on either side, each self-describing its `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id`. Here two axes stack on the left (temperature, rainfall) and one sits on the right (pressure) — each title placed separately, and gutters sized so nothing overlaps.',
+      },
+    },
+  },
+  args: {
+    height: 420,
+    categories: weatherMonths,
+    curve: 'smooth',
+    formatX: (v: string | number) => String(v),
+    yAxes: [
+      {
+        id: 'temp',
+        name: 'Temp (°C)',
+        side: 'left',
+        position: 'middle',
+        format: (v: number) => `${v}°`,
+      },
+      {
+        id: 'pressure',
+        name: 'Pressure (hPa)',
+        side: 'right',
+        position: 'middle',
+        format: (v: number) => `${v}`,
+      },
+    ],
+    series: [
+      {
+        name: 'Temperature',
+        yAxis: 'temp',
+        variant: 'destructive',
+        data: [4, 6, 10, 15, 20, 24, 27, 26],
+      },
+      {
+        name: 'Rainfall',
+        yAxis: 'rain',
+        variant: 'info',
+        area: true,
+        data: [78, 62, 55, 48, 60, 40, 35, 44],
+      },
+      {
+        name: 'Pressure',
+        yAxis: 'pressure',
+        variant: 'warning',
+        data: [1018, 1016, 1013, 1011, 1009, 1012, 1014, 1015],
+      },
+    ],
   },
   render: args => <Line {...args} />,
 }
@@ -839,9 +975,7 @@ function LiveLineDemo() {
       curve="smooth"
       area
       showValueAxis
-      min={0}
-      max={130}
-      valueAxisName="req/s"
+      yAxes={[{ name: 'req/s', min: 0, max: 130 }]}
       categories={seed.categories}
       series={[{ name: 'Throughput', variant: 'primary', data: seed.values }]}
       onReady={chart => {

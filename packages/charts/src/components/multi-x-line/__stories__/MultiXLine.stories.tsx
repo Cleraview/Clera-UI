@@ -33,11 +33,11 @@ const meta: Meta<typeof MultiXLine> = {
     },
   },
   argTypes: {
-    axes: {
+    xAxes: {
       control: 'object',
       description:
         'The x-axes to overlay, each `{ categories, name?, color?, series }`. The first sits on the bottom, the second on top.',
-      table: { type: { summary: 'MultiXAxis[]' } },
+      table: { type: { summary: 'MultiXLineXAxis[]' } },
     },
     curve: {
       control: { type: 'radio' },
@@ -65,10 +65,14 @@ const meta: Meta<typeof MultiXLine> = {
         defaultValue: { summary: 'true' },
       },
     },
-    valueAxisName: {
-      control: 'text',
-      description: 'Axis title for the shared value axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
+    yAxis: {
+      control: 'object',
+      description:
+        'The shared value (y) axis — `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. `name` is its title; `position` is `top`/`middle`/`bottom` (default `middle`, rotated).',
+      table: {
+        type: { summary: 'MultiXLineYAxis' },
+        defaultValue: { summary: '-' },
+      },
     },
     showTooltip: {
       control: 'boolean',
@@ -101,8 +105,62 @@ export const Precipitation: Story = {
   args: {
     height: 380,
     curve: 'smooth',
-    valueAxisName: 'Precipitation (mm)',
-    axes: [
+    yAxis: { name: 'Precipitation (mm)' },
+    xAxes: [
+      {
+        name: '2016',
+        categories: months(2016),
+        series: [
+          {
+            name: 'Precipitation (2016)',
+            variant: 'info',
+            data: [
+              3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3,
+              0.7,
+            ],
+          },
+        ],
+      },
+      {
+        name: '2015',
+        categories: months(2015),
+        series: [
+          {
+            name: 'Precipitation (2015)',
+            variant: 'destructive',
+            data: [
+              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0,
+              2.3,
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  render: args => <MultiXLine {...args} />,
+}
+
+export const ValueAxisTitle: Story = {
+  name: 'Value-axis title (position)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The shared value axis carries its own title via `yAxis`. Here `position: "top"` sits it above the axis (instead of the default rotated `middle`), `format` adds the unit to every tick, and `min`/`max` pin the scale.',
+      },
+    },
+  },
+  args: {
+    height: 380,
+    curve: 'smooth',
+    yAxis: {
+      name: 'Precipitation (mm)',
+      position: 'top',
+      min: 0,
+      max: 260,
+      format: v => `${v} mm`,
+    },
+    xAxes: [
       {
         name: '2016',
         categories: months(2016),
@@ -142,8 +200,8 @@ export const WithArea: Story = {
     height: 380,
     curve: 'smooth',
     area: 'gradient',
-    valueAxisName: 'Precipitation (mm)',
-    axes: [
+    yAxis: { name: 'Precipitation (mm)' },
+    xAxes: [
       {
         name: '2016',
         categories: months(2016),

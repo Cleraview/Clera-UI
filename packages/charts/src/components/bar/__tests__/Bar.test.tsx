@@ -953,7 +953,7 @@ describe('components/charts/Bar', () => {
         data={sample}
         direction="vertical"
         showValueAxis
-        valueAxisName="Budget (million USD)"
+        yAxis={{ name: 'Budget (million USD)' }}
       />
     )
     const option = lastOption()
@@ -968,7 +968,7 @@ describe('components/charts/Bar', () => {
         direction="vertical"
         showValueAxis
         showValues={false}
-        valueAxisName="Units"
+        yAxis={{ name: 'Units' }}
       />
     )
     expect(lastOption().grid.top).toBeGreaterThanOrEqual(24)
@@ -1019,26 +1019,26 @@ describe('components/charts/Bar', () => {
     expect(lastOption().yAxis.min).toBe(-20)
   })
 
-  it('sets axis titles from valueAxisName and categoryAxisName', () => {
+  it('sets axis titles from xAxis.name and yAxis.name', () => {
     render(
       <Bar
         data={sample}
         direction="vertical"
-        valueAxisName="Revenue"
-        categoryAxisName="Month"
+        yAxis={{ name: 'Revenue' }}
+        xAxis={{ name: 'Month' }}
       />
     )
     expect(lastOption().yAxis.name).toBe('Revenue')
     expect(lastOption().xAxis.name).toBe('Month')
   })
 
-  it('moves the value axis to the right for vertical bars when valueAxisPosition is right', () => {
+  it('moves the value axis to the right for vertical bars when yAxis.side is right', () => {
     render(
       <Bar
         data={sample}
         direction="vertical"
         showValueAxis
-        valueAxisPosition="right"
+        yAxis={{ side: 'right' }}
       />
     )
     expect(lastOption().yAxis.position).toBe('right')
@@ -1050,7 +1050,7 @@ describe('components/charts/Bar', () => {
         data={sample}
         direction="horizontal"
         showValueAxis
-        valueAxisPosition="right"
+        yAxis={{ side: 'right' }}
       />
     )
     // value axis is the x-axis when horizontal, so left/right does not apply
@@ -1254,5 +1254,33 @@ describe('components/charts/Bar', () => {
     render(<Bar data={sample} />)
     const yLabels: string[] = lastOption().yAxis.data
     expect(yLabels[0]).toBe(sample[sample.length - 1].label)
+  })
+
+  it('rotates the value-axis title on a vertical bar when middle', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="vertical"
+        yAxis={{ name: 'Revenue', position: 'middle' }}
+      />
+    )
+    const y = lastOption().yAxis
+    expect(y.nameLocation).toBe('middle')
+    expect(y.nameRotate).toBe(90)
+    expect(lastOption().grid.left).toBeGreaterThan(40)
+  })
+
+  it('places a horizontal-bar value title along the x axis (bottom gutter)', () => {
+    render(
+      <Bar
+        data={sample}
+        direction="horizontal"
+        xAxis={{ name: 'Revenue', position: 'middle' }}
+      />
+    )
+    const x = lastOption().xAxis
+    expect(x.nameLocation).toBe('middle')
+    expect(x.nameRotate).toBe(0)
+    expect(lastOption().grid.bottom).toBeGreaterThan(20)
   })
 })

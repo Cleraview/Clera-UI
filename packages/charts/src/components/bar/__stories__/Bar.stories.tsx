@@ -5,7 +5,7 @@ import { useBarDrilldown, type BarDrilldownDatum } from '../useDrilldown'
 const meta: Meta<typeof Bar> = {
   title: 'Charts/Bar',
   component: Bar,
-  tags: ['dev', 'status:new'],
+  tags: [],
   parameters: {
     layout: 'padded',
     docs: {
@@ -287,25 +287,17 @@ const meta: Meta<typeof Bar> = {
         'Rotate the category-axis labels by this many degrees — useful when labels are long or crowded.',
       table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
     },
-    valueAxisName: {
-      control: 'text',
-      description: 'Axis title for the value axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
-    },
-    categoryAxisName: {
-      control: 'text',
-      description: 'Axis title for the category axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
-    },
-    valueAxisPosition: {
-      control: { type: 'radio' },
-      options: ['left', 'right'],
+    xAxis: {
+      control: 'object',
       description:
-        'Which side the value axis sits on (vertical/column charts only).',
-      table: {
-        type: { summary: "'left' | 'right'" },
-        defaultValue: { summary: 'left' },
-      },
+        'The x-axis — `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. For vertical bars this is the category axis (`position` is `left`/`middle`/`right`); for horizontal bars it holds the values, so `min`/`max`/`inverse`/`format` apply.',
+      table: { type: { summary: 'BarXAxis' }, defaultValue: { summary: '-' } },
+    },
+    yAxis: {
+      control: 'object',
+      description:
+        'The y-axis — `{ name?, side?, position?, orientation?, min?, max?, inverse?, format? }`. For vertical bars this holds the values (`side` is `left`/`right`, `position` is `top`/`middle`/`bottom`); for horizontal bars it is the category axis.',
+      table: { type: { summary: 'BarYAxis' }, defaultValue: { summary: '-' } },
     },
     xAxisLabel: {
       control: false,
@@ -786,7 +778,7 @@ export const Zoom: Story = {
     docs: {
       description: {
         story:
-          'With many categories, set `zoom` for a dataZoom slider + scroll/drag zoom, and `axisLabelRotate` to keep long labels readable. `categoryAxisName`/`valueAxisName` add axis titles. Switch `zoom="value"` to zoom the value axis instead.',
+          'With many categories, set `zoom` for a dataZoom slider + scroll/drag zoom, and `axisLabelRotate` to keep long labels readable. `xAxis.name`/`yAxis.name` add axis titles. Switch `zoom="value"` to zoom the value axis instead.',
       },
     },
   },
@@ -797,8 +789,8 @@ export const Zoom: Story = {
     axisLabelRotate: 45,
     showValueAxis: true,
     showValues: false,
-    categoryAxisName: 'Month',
-    valueAxisName: 'Units',
+    xAxis: { name: 'Month' },
+    yAxis: { name: 'Units' },
     referenceLine: undefined,
     formatValue: v => String(v),
     data: zoomData,
@@ -861,7 +853,7 @@ export const MixZoom: Story = {
     showValues: false,
     showLegend: true,
     legendPosition: 'top',
-    valueAxisName: 'Budget (million USD)',
+    yAxis: { name: 'Budget (million USD)' },
     referenceLine: undefined,
     formatValue: v => `$${v.toLocaleString('en-US')}`,
     categories: budgetCategories,
@@ -968,6 +960,45 @@ export const RainfallVsEvaporation: Story = {
   },
   render: args => (
     <div className="w-[720px]">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const AxisTitles: Story = {
+  name: 'Axis titles (position)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Each axis carries its own title. Because the axes are spatial, `xAxis`/`yAxis` follow the `direction`: for these vertical bars the values live on `yAxis` (`position: "middle"` gives a rotated, centered title, `side` moves it left/right) and the categories on `xAxis` (`position: "right"` tucks the title after the last label). Flip `direction` to `horizontal` and the roles swap.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    data: undefined,
+    series: [
+      {
+        name: 'Revenue',
+        variant: 'primary',
+        data: [42000, 38500, 51200, 47800, 63400, 72100],
+      },
+    ],
+    xAxis: { name: 'Month', position: 'right' },
+    yAxis: {
+      name: 'Revenue (Rp)',
+      position: 'middle',
+      format: v => `${(v / 1000).toFixed(0)}k`,
+    },
+  },
+  render: args => (
+    <div className="w-[620px]">
       <Bar {...args} />
     </div>
   ),

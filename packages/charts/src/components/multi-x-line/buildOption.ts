@@ -4,18 +4,19 @@ import {
   resolveVariant,
   resolveCategoricalPalette,
   prefersReducedMotion,
+  resolveAxisName,
 } from '@/utils'
 import { curveProps, gradientFill } from '../line/helpers'
-import type { MultiXAxis, LineCurve } from './types'
+import type { MultiXLineXAxis, MultiXLineYAxis, LineCurve } from './types'
 
 export interface BuildMultiXLineOptionParams {
-  axes: MultiXAxis[]
+  xAxes: MultiXLineXAxis[]
   curve: LineCurve
   area?: boolean | 'gradient'
   showLegend: boolean
   min?: number
   max?: number
-  valueAxisName?: string
+  yAxis?: MultiXLineYAxis
   showTooltip: boolean
   formatValue: (value: number) => string
   animate: boolean
@@ -24,18 +25,34 @@ export interface BuildMultiXLineOptionParams {
 
 export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
   const {
-    axes,
+    xAxes: axes,
     curve,
     area,
     showLegend,
     min,
     max,
-    valueAxisName,
+    yAxis,
     showTooltip,
     formatValue,
     animate,
     emptyMessage,
   } = params
+
+  const valueAxisName = yAxis?.name
+  const valueAxisNamePosition = yAxis?.position ?? 'middle'
+  const valueFormat = yAxis?.format ?? formatValue
+  const valueMin = yAxis?.min ?? min
+  const valueMax = yAxis?.max ?? max
+
+  const valuePlacement = valueAxisName
+    ? resolveAxisName(valueAxisNamePosition, {
+        orientation: 'vertical',
+        side: 'left',
+        inverse: yAxis?.inverse,
+        rotation: yAxis?.orientation,
+        labelExtent: 30,
+      })
+    : undefined
 
   const labelColor = readCssColor('--text-color-ds-default', 'rgb(23, 23, 23)')
   const subtle = readCssColor('--text-color-ds-subtle', 'rgb(82, 82, 82)')
@@ -67,7 +84,7 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
   const categorical = resolveCategoricalPalette()
   const shape = curveProps(curve)
 
-  const axisColor = (a: MultiXAxis, i: number): string =>
+  const axisColor = (a: MultiXLineXAxis, i: number): string =>
     a.color ??
     (a.series[0]?.variant
       ? resolveVariant(a.series[0].variant)
@@ -108,7 +125,7 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
           }) => {
             const prefix = axis.name ? `${axis.name}  ` : ''
             const point = p.seriesData?.length
-              ? `：${formatValue(p.seriesData[0].data)}`
+              ? `：${valueFormat(p.seriesData[0].data)}`
               : ''
             return `${prefix}${p.value}${point}`
           },
@@ -199,18 +216,27 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
     xAxis,
     yAxis: {
       type: 'value' as const,
-      min,
-      max,
-      scale: min == null && max == null,
+      min: valueMin,
+      max: valueMax,
+      scale: valueMin == null && valueMax == null,
+      inverse: yAxis?.inverse,
       name: valueAxisName,
-      nameLocation: 'middle' as const,
-      nameGap: 44,
-      nameRotate: 90,
-      nameTextStyle: { color: subtle, fontSize: 11 },
+      ...(valuePlacement
+        ? {
+            nameLocation: valuePlacement.nameLocation,
+            nameRotate: valuePlacement.nameRotate,
+            nameGap: valuePlacement.nameGap,
+          }
+        : {}),
+      nameTextStyle: {
+        color: subtle,
+        fontSize: 11,
+        ...(valuePlacement?.nameTextStyle ?? {}),
+      },
       axisLabel: {
         color: subtle,
         fontSize: 11,
-        formatter: (v: number) => formatValue(v),
+        formatter: (v: number) => valueFormat(v),
       },
       axisLine: { show: false },
       axisTick: { show: false },
