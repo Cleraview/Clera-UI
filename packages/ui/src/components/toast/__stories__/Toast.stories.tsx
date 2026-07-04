@@ -32,7 +32,7 @@ const meta: Meta<ToastStoryArgs> = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['dev', 'status:new'],
+  tags: [],
   argTypes: {
     variant: {
       control: { type: 'select' },

@@ -9,7 +9,7 @@ const meta: Meta<typeof Drawer> = {
   component: Drawer,
   tags: ['dev'],
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
   },
   argTypes: {
     open: {
@@ -123,7 +123,7 @@ export const LeftPosition: Story = {
             unCheckedChildren="Right"
           />
 
-          <p>Change Position</p>
+          <p className="text-ds-default text-body-sm">Change Position</p>
         </div>
 
         <Button onClick={() => setOpen(true)}>Open Drawer</Button>
