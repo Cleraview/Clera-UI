@@ -1,8 +1,14 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
+import type { ValueAxisNamePosition, AxisNameOrientation } from '@/utils'
 import type { LineVariant, LineCurve } from '../line/types'
 
-export type { LineVariant, LineCurve }
+export type {
+  LineVariant,
+  LineCurve,
+  ValueAxisNamePosition,
+  AxisNameOrientation,
+}
 
 export type MultiXSeries = {
   name: string
@@ -13,7 +19,11 @@ export type MultiXSeries = {
   area?: boolean | 'gradient'
 }
 
-export type MultiXAxis = {
+/**
+ * One x-axis and the series plotted against it. The first sits on the bottom,
+ * the second on top, and any further axes alternate (offset outward).
+ */
+export type MultiXLineXAxis = {
   /** Category labels for this x-axis. */
   categories: (string | number)[]
   /** Axis title; also used in the crosshair readout. */
@@ -24,13 +34,28 @@ export type MultiXAxis = {
   series: MultiXSeries[]
 }
 
+/** The shared value (y) axis. */
+export type MultiXLineYAxis = {
+  name?: string
+  /** Where the title sits along the axis: `top`, `middle` (default, rotated), or `bottom`. */
+  position?: ValueAxisNamePosition
+  /** Title text direction: `horizontal` or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
+  min?: number
+  max?: number
+  inverse?: boolean
+  format?: (value: number) => string
+}
+
 export interface MultiXLineProps {
   /**
    * The x-axes to overlay on a shared value axis. The first sits on the bottom,
    * the second on top, and any further axes alternate (offset outward). Each
    * carries its own categories, color, and series.
    */
-  axes: MultiXAxis[]
+  xAxes: MultiXLineXAxis[]
+  /** The shared value (y) axis: `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. */
+  yAxis?: MultiXLineYAxis
   height?: number | string
   curve?: LineCurve
   /** Default fill under each line; override per series. */
@@ -39,7 +64,6 @@ export interface MultiXLineProps {
   /** Force the value-axis minimum / maximum. */
   min?: number
   max?: number
-  valueAxisName?: string
   /** Show the hover crosshair with a per-axis value readout. */
   showTooltip?: boolean
   formatValue?: (value: number) => string

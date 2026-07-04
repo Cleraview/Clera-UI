@@ -364,7 +364,7 @@ import { DocsLayout } from "@clera/docs"
     </Canvas>
 
     ### **Zoom and rotated labels**
-    For many categories, `zoom` adds a dataZoom slider plus scroll/drag zoom, and `axisLabelRotate` keeps long labels legible. `categoryAxisName`/`valueAxisName` add axis titles. Use `zoom="value"` to zoom the value axis instead.
+    For many categories, `zoom` adds a dataZoom slider plus scroll/drag zoom, and `axisLabelRotate` keeps long labels legible. `xAxis.name`/`yAxis.name` add axis titles. Use `zoom="value"` to zoom the value axis instead.
     <Canvas>
       <Canvas.Story>
         <Story of={BarStories.Zoom} />
@@ -380,8 +380,8 @@ import { DocsLayout } from "@clera/docs"
               zoom="category"
               axisLabelRotate={45}
               showValueAxis
-              categoryAxisName="Month"
-              valueAxisName="Units"
+              xAxis={{ name: 'Month' }}
+              yAxis={{ name: 'Units' }}
               data={data}
             />
           )
@@ -409,7 +409,7 @@ import { DocsLayout } from "@clera/docs"
               tooltipTrigger="axis"
               showValueAxis
               showLegend
-              valueAxisName="Budget (million USD)"
+              yAxis={{ name: 'Budget (million USD)' }}
               formatValue={(v) => '$' + v.toLocaleString('en-US')}
               categories={departments}
               series={[
@@ -476,6 +476,36 @@ import { DocsLayout } from "@clera/docs"
           )
 
           export default Weather
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Axis titles (position)**
+
+    The axes are spatial: `xAxis` is always horizontal and `yAxis` always vertical, so which one holds the values follows `direction`. For these vertical bars the values live on `yAxis` (`position: 'middle'` gives a rotated, centered title; `side` moves the whole axis left/right) and the categories on `xAxis` (`position: 'right'` tucks the title after the last label). Flip to `direction="horizontal"` and the roles swap.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={BarStories.AxisTitles} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Bar } from '@clera/charts'
+
+          const Revenue = () => (
+            <Bar
+              direction="vertical"
+              showValueAxis
+              categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              series={[
+                { name: 'Revenue', variant: 'primary', data: [42000, 38500, 51200, 47800, 63400, 72100] },
+              ]}
+              xAxis={{ name: 'Month', position: 'right' }}
+              yAxis={{ name: 'Revenue (Rp)', position: 'middle', format: (v) => (v / 1000).toFixed(0) + 'k' }}
+            />
+          )
+
+          export default Revenue
         `} />
       </Canvas.Source>
     </Canvas>
@@ -792,6 +822,10 @@ import { DocsLayout } from "@clera/docs"
             {
               id: "rainfall-vs-evaporation",
               label: "Rainfall vs evaporation"
+            },
+            {
+              id: "axis-titles-position",
+              label: "Axis titles (position)"
             },
             {
               id: "drilldown-multi-level",

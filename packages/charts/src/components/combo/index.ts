@@ -3,7 +3,7 @@ export type {
   ComboProps,
   ComboSeries,
   ComboSeriesType,
-  ComboAxis,
-  ComboAxisConfig,
+  ComboYAxis,
+  ComboXAxis,
   ComboLegendPosition,
 } from './types'

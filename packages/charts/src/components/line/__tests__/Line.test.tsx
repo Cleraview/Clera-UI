@@ -19,6 +19,7 @@ jest.mock('echarts/components', () => ({
   DataZoomComponent: {},
   VisualMapComponent: {},
   AxisPointerComponent: {},
+  ToolboxComponent: {},
 }))
 jest.mock('echarts/renderers', () => ({ CanvasRenderer: {} }))
 
@@ -557,13 +558,13 @@ describe('components/charts/Line', () => {
     expect(yAxis.max).toBe(100)
   })
 
-  it('sets axis titles from valueAxisName and categoryAxisName', () => {
+  it('sets axis titles from yAxes[].name and xAxis.name', () => {
     render(
       <Line
         categories={categories}
         series={single}
-        valueAxisName="Revenue"
-        categoryAxisName="Day"
+        yAxes={[{ name: 'Revenue' }]}
+        xAxis={{ name: 'Day' }}
       />
     )
     expect(lastOption().yAxis.name).toBe('Revenue')
@@ -575,9 +576,13 @@ describe('components/charts/Line', () => {
     expect(lastOption().yAxis.position).toBe('left')
   })
 
-  it('moves the value axis to the right when valueAxisPosition is right', () => {
+  it('moves the y-axis to the right via yAxes[].side', () => {
     render(
-      <Line categories={categories} series={single} valueAxisPosition="right" />
+      <Line
+        categories={categories}
+        series={single}
+        yAxes={[{ side: 'right' }]}
+      />
     )
     expect(lastOption().yAxis.position).toBe('right')
   })
@@ -677,5 +682,332 @@ describe('components/charts/Line', () => {
   it('observes the container for resize', () => {
     render(<Line categories={categories} series={single} />)
     expect(mockObserve).toHaveBeenCalledWith(expect.any(HTMLDivElement))
+  })
+
+  it('keeps a single value axis as an object (not a 1-element array)', () => {
+    render(<Line categories={categories} series={dual} />)
+    const option = lastOption()
+    expect(Array.isArray(option.yAxis)).toBe(false)
+    expect(option.series[0].yAxisIndex).toBe(0)
+  })
+
+  it('builds multiple y-axes from yAxes and binds series by id', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'Flow', yAxis: 'flow', data: [1, 2, 3, 4, 5] },
+          { name: 'Rain', yAxis: 'rain', data: [5, 4, 3, 2, 1] },
+        ]}
+        yAxes={[
+          { id: 'flow', name: 'Flow', side: 'left' },
+          { id: 'rain', name: 'Rain', side: 'right', inverse: true, min: 0 },
+        ]}
+      />
+    )
+    const option = lastOption()
+    expect(Array.isArray(option.yAxis)).toBe(true)
+    expect(option.yAxis[1].position).toBe('right')
+    expect(option.yAxis[1].inverse).toBe(true)
+    expect(option.yAxis[1].min).toBe(0)
+    expect(option.series[0].yAxisIndex).toBe(0)
+    expect(option.series[1].yAxisIndex).toBe(1)
+  })
+
+  it('defaults a series with no yAxis to the first axis', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'Flow', data: [1, 2, 3, 4, 5] },
+          { name: 'Rain', yAxis: 'rain', data: [5, 4, 3, 2, 1] },
+        ]}
+        yAxes={[{ id: 'flow' }, { id: 'rain', side: 'right' }]}
+      />
+    )
+    const option = lastOption()
+    expect(option.series[0].yAxisIndex).toBe(0)
+    expect(option.series[1].yAxisIndex).toBe(1)
+  })
+
+  it('formats each series with its own axis formatter in the tooltip', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'Flow', yAxis: 'flow', data: [1, 2, 3, 4, 5] },
+          { name: 'Rain', yAxis: 'rain', data: [5, 4, 3, 2, 1] },
+        ]}
+        yAxes={[
+          { id: 'flow', format: v => `${v} m3` },
+          { id: 'rain', side: 'right', format: v => `${v} mm` },
+        ]}
+      />
+    )
+    const html = lastOption().tooltip.formatter([
+      { seriesName: 'Flow', value: 3, axisValue: 'Wed' },
+      { seriesName: 'Rain', value: 3, axisValue: 'Wed' },
+    ])
+    expect(html).toContain('Flow: 3 m3')
+    expect(html).toContain('Rain: 3 mm')
+  })
+
+  it('adds a themed toolbox only when toolbox is set', () => {
+    const { rerender } = render(
+      <Line categories={categories} series={single} />
+    )
+    expect(lastOption().toolbox).toBeUndefined()
+    rerender(<Line categories={categories} series={single} toolbox />)
+    const tb = lastOption().toolbox
+    expect(tb.feature.saveAsImage).toBeDefined()
+    expect(tb.feature.dataZoom.yAxisIndex).toBe('none')
+    expect(tb.feature.restore).toBeDefined()
+  })
+
+  it('opens on the given zoomWindow when zoom is on', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        zoom
+        zoomWindow={[60, 85]}
+      />
+    )
+    const dz = lastOption().dataZoom
+    expect(
+      dz.every(
+        (z: { start: number; end: number }) => z.start === 60 && z.end === 85
+      )
+    ).toBe(true)
+  })
+
+  it('keeps the value-axis title at the top by default', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        yAxes={[{ name: 'Revenue' }]}
+      />
+    )
+    const y = lastOption().yAxis
+    expect(y.nameLocation).toBe('end')
+    expect(y.nameRotate).toBe(0)
+  })
+
+  it('rotates the value-axis title and widens the left gutter when middle', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        yAxes={[{ name: 'Revenue', position: 'middle' }]}
+      />
+    )
+    const option = lastOption()
+    expect(option.yAxis.nameLocation).toBe('middle')
+    expect(option.yAxis.nameRotate).toBe(90)
+    expect(option.grid.left).toBeGreaterThan(40)
+  })
+
+  it('moves the category-axis title to the start when set to left', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        xAxis={{ name: 'Weekday', position: 'left' }}
+      />
+    )
+    expect(lastOption().xAxis.nameLocation).toBe('start')
+  })
+
+  it('keeps a middle title horizontal when orientation is set, widening the gutter to fit', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        yAxes={[
+          {
+            name: 'Revenue',
+            position: 'middle',
+            orientation: 'horizontal',
+          },
+        ]}
+      />
+    )
+    const option = lastOption()
+    expect(option.yAxis.nameLocation).toBe('middle')
+    expect(option.yAxis.nameRotate).toBe(0)
+    // an upright middle title needs more left room than a thin rotated one
+    expect(option.grid.left).toBeGreaterThan(70)
+  })
+
+  it('can rotate a top title to vertical via orientation', () => {
+    render(
+      <Line
+        categories={categories}
+        series={single}
+        yAxes={[{ name: 'Revenue', position: 'top', orientation: 'vertical' }]}
+      />
+    )
+    expect(lastOption().yAxis.nameRotate).toBe(90)
+  })
+
+  it('rotates a right-axis title from its own orientation', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'Flow', yAxis: 'flow', data: [1, 2, 3, 4, 5] },
+          { name: 'Rain', yAxis: 'rain', data: [5, 4, 3, 2, 1] },
+        ]}
+        yAxes={[
+          { id: 'flow' },
+          {
+            id: 'rain',
+            name: 'Rain',
+            side: 'right',
+            position: 'top',
+            orientation: 'vertical',
+          },
+        ]}
+      />
+    )
+    expect(lastOption().yAxis[1].nameRotate).toBe(90)
+  })
+
+  it('honors each axis side and offsets multiple axes stacked on one side', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'A', yAxis: 0, data: [1, 2, 3, 4, 5] },
+          { name: 'B', yAxis: 1, data: [5, 4, 3, 2, 1] },
+          { name: 'C', yAxis: 2, data: [2, 3, 4, 5, 6] },
+        ]}
+        yAxes={[
+          { id: 'a', name: 'A', side: 'left' },
+          { id: 'b', name: 'B', side: 'left' },
+          { id: 'c', name: 'C', side: 'right' },
+        ]}
+      />
+    )
+    const yAxis = lastOption().yAxis
+    expect(yAxis.map((y: { position: string }) => y.position)).toEqual([
+      'left',
+      'left',
+      'right',
+    ])
+    expect(yAxis[0].offset).toBe(0)
+    expect(yAxis[1].offset).toBeGreaterThan(0)
+  })
+
+  it('positions a right-axis title from its own position', () => {
+    render(
+      <Line
+        categories={categories}
+        series={[
+          { name: 'Flow', yAxis: 'flow', data: [1, 2, 3, 4, 5] },
+          { name: 'Rain', yAxis: 'rain', data: [5, 4, 3, 2, 1] },
+        ]}
+        yAxes={[
+          { id: 'flow' },
+          { id: 'rain', name: 'Rain', side: 'right', position: 'middle' },
+        ]}
+      />
+    )
+    const right = lastOption().yAxis[1]
+    expect(right.nameLocation).toBe('middle')
+    expect(right.nameRotate).toBe(90)
+    expect(lastOption().grid.right).toBeGreaterThan(40)
+  })
+
+  it('stacks a left legend and the value-axis title so they do not overlap', () => {
+    render(
+      <Line
+        categories={categories}
+        series={dual}
+        legendPosition="left"
+        yAxes={[{ name: 'Revenue', position: 'middle' }]}
+      />
+    )
+    const option = lastOption()
+    // legend lane (96) plus the middle-title gutter, added — not max'd
+    expect(option.grid.left).toBeGreaterThan(96)
+    expect(option.legend.left).toBe(0)
+  })
+
+  it('does not reserve a side lane when the legend is hidden', () => {
+    render(
+      <Line
+        categories={categories}
+        series={dual}
+        legendPosition="left"
+        showLegend={false}
+      />
+    )
+    expect(lastOption().grid.left).toBeLessThan(96)
+  })
+
+  it('stacks a bottom legend below the x-axis title so they do not overlap', () => {
+    const titleOnly = (() => {
+      render(
+        <Line
+          categories={categories}
+          series={single}
+          xAxis={{ name: 'Weekday', position: 'middle' }}
+        />
+      )
+      return lastOption().grid.bottom
+    })()
+    render(
+      <Line
+        categories={categories}
+        series={dual}
+        legendPosition="bottom"
+        xAxis={{ name: 'Weekday', position: 'middle' }}
+      />
+    )
+    // bottom legend lane is added on top of the x-title gutter, not max'd
+    expect(lastOption().grid.bottom).toBeGreaterThan(titleOnly)
+  })
+
+  it('reserves no bottom legend lane when the legend sits elsewhere', () => {
+    render(
+      <Line
+        categories={categories}
+        series={dual}
+        legendPosition="top"
+        xAxis={{ name: 'Weekday', position: 'middle' }}
+      />
+    )
+    const withTop = lastOption().grid.bottom
+    render(
+      <Line
+        categories={categories}
+        series={dual}
+        legendPosition="bottom"
+        xAxis={{ name: 'Weekday', position: 'middle' }}
+      />
+    )
+    expect(lastOption().grid.bottom).toBeGreaterThan(withTop)
+  })
+
+  it('clears the zoom slider for a middle category title (bottom gutter grows)', () => {
+    const { rerender } = render(
+      <Line
+        categories={categories}
+        series={single}
+        xAxis={{ name: 'Weekday', position: 'middle' }}
+      />
+    )
+    const withoutZoom = lastOption().grid.bottom
+    rerender(
+      <Line
+        categories={categories}
+        series={single}
+        xAxis={{ name: 'Weekday', position: 'middle' }}
+        zoom
+      />
+    )
+    expect(lastOption().grid.bottom).toBeGreaterThan(withoutZoom)
   })
 })

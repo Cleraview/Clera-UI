@@ -1,2 +1,7 @@
 export { MultiXLine } from './MultiXLine'
-export type { MultiXLineProps, MultiXAxis, MultiXSeries } from './types'
+export type {
+  MultiXLineProps,
+  MultiXLineXAxis,
+  MultiXLineYAxis,
+  MultiXSeries,
+} from './types'

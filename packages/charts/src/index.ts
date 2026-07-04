@@ -1,4 +1,10 @@
-export type { AxisLabelOverride, ValueAxisPosition } from './utils'
+export type {
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
+} from './utils'
 export * from './components/bar'
 export * from './components/combo'
 export * from './components/line'

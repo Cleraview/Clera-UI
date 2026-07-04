@@ -4,12 +4,18 @@ import {
   resolveVariant,
   resolveCategoricalPalette,
   prefersReducedMotion,
+  resolveAxisName,
 } from '@/utils'
-import type { AxisLabelOverride } from '@/utils'
+import type {
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  AxisNameOrientation,
+} from '@/utils'
 import type {
   ComboSeries,
-  ComboAxisConfig,
-  ComboValueAxis,
+  ComboYAxis,
+  ComboXAxis,
   ComboLegendPosition,
 } from './types'
 
@@ -24,11 +30,9 @@ export interface BuildComboOptionParams {
   highlightSeries: boolean
   barRadius: number
   axisLabelRotate: number
-  categoryAxisName?: string
+  yAxes?: ComboYAxis[]
+  xAxis?: ComboXAxis
   xAxisLabel?: AxisLabelOverride
-  leftAxis?: ComboAxisConfig
-  rightAxis?: ComboAxisConfig
-  valueAxes?: ComboValueAxis[]
   animate: boolean
   emptyMessage: string
 }
@@ -47,16 +51,12 @@ export function buildComboOption(params: BuildComboOptionParams) {
     highlightSeries,
     barRadius,
     axisLabelRotate,
-    categoryAxisName,
+    yAxes,
+    xAxis,
     xAxisLabel,
-    leftAxis,
-    rightAxis,
-    valueAxes,
     animate,
     emptyMessage,
   } = params
-
-  const multiAxis = (valueAxes?.length ?? 0) > 0
 
   const labelColor = readCssColor('--text-color-ds-default', 'rgb(23, 23, 23)')
   const subtleColor = readCssColor('--text-color-ds-subtle', 'rgb(82, 82, 82)')
@@ -85,7 +85,6 @@ export function buildComboOption(params: BuildComboOptionParams) {
   }
 
   const categorical = resolveCategoricalPalette()
-  const hasRightAxis = series.some(s => s.axis === 'right')
 
   const colorFor = (s: ComboSeries, i: number): string =>
     s.color ??
@@ -95,33 +94,80 @@ export function buildComboOption(params: BuildComboOptionParams) {
 
   const seriesColors = series.map((s, i) => colorFor(s, i))
 
-  const formatLeft = leftAxis?.format ?? identity
-  const formatRight = rightAxis?.format ?? identity
-
-  const yAxisIndexFor = (s: ComboSeries) =>
-    multiAxis
-      ? typeof s.axis === 'number'
-        ? s.axis
-        : 0
-      : s.axis === 'right'
-        ? 1
-        : 0
-
-  const formatForSeries = (s?: ComboSeries) => {
-    if (!s) return identity
-    if (multiAxis)
-      return (
-        (valueAxes as ComboValueAxis[])[yAxisIndexFor(s)]?.format ?? identity
-      )
-    return s.axis === 'right' ? formatRight : formatLeft
+  type NormAxis = {
+    key: string
+    name?: string
+    side: ValueAxisPosition
+    position: ValueAxisNamePosition
+    orientation?: AxisNameOrientation
+    min?: number
+    max?: number
+    inverse: boolean
+    format: (value: number) => string
+    color?: string
   }
+
+  const axes: NormAxis[] = yAxes?.length
+    ? yAxes.map((a, i) => ({
+        key: String(a.id ?? i),
+        name: a.name,
+        side: a.side ?? 'left',
+        position: a.position ?? 'top',
+        orientation: a.orientation,
+        min: a.min,
+        max: a.max,
+        inverse: a.inverse ?? false,
+        format: a.format ?? identity,
+        color: a.color,
+      }))
+    : [
+        {
+          key: 'left',
+          side: 'left',
+          position: 'top',
+          inverse: false,
+          format: identity,
+        },
+      ]
+
+  const manyAxes = axes.length > 1
+  const axisIndex = new Map(axes.map((a, i) => [a.key, i]))
+  const OFFSET_STEP = 52
+  const axisOffset = new Map<string, number>()
+  ;(['left', 'right'] as const).forEach(side => {
+    let k = 0
+    axes.forEach(a => {
+      if (a.side === side) {
+        axisOffset.set(a.key, k * OFFSET_STEP)
+        k++
+      }
+    })
+  })
+
+  const seriesAxisIndex = (y: string | number | undefined): number => {
+    if (y == null) return 0
+    if (typeof y === 'number') return y >= 0 && y < axes.length ? y : 0
+    if (axisIndex.has(y)) return axisIndex.get(y) as number
+    if (y === 'right') {
+      const r = axes.findIndex(a => a.side === 'right')
+      return r >= 0 ? r : 0
+    }
+    if (y === 'left') {
+      const l = axes.findIndex(a => a.side === 'left')
+      return l >= 0 ? l : 0
+    }
+    return 0
+  }
+
+  const formatForSeries = (s?: ComboSeries) =>
+    axes[seriesAxisIndex(s?.yAxis)]?.format ?? identity
 
   const blurOpacity = highlightSeries ? 0.2 : 1
   const areaBlurOpacity = highlightSeries ? 0.06 : 0.15
 
   const seriesList = series.map((s, i) => {
     const color = seriesColors[i]
-    const yAxisIndex = yAxisIndexFor(s)
+    const yAxisIndex = seriesAxisIndex(s.yAxis)
     const label = {
       show: showValues,
       position: 'top' as const,
@@ -181,70 +227,74 @@ export function buildComboOption(params: BuildComboOptionParams) {
     }
   })
 
-  const buildValueAxis = (
-    cfg: ComboAxisConfig | undefined,
-    showGrid: boolean
-  ) => ({
-    type: 'value' as const,
-    name: cfg?.name,
-    min: cfg?.min,
-    max: cfg?.max,
-    nameTextStyle: { color: subtleColor, fontSize: 11 },
-    splitLine: {
-      show: showGrid,
-      lineStyle: { color: lineColor, type: 'dashed' as const },
-    },
-    axisLabel: {
-      color: labelColor,
-      fontSize: 12,
-      formatter: (value: number) => (cfg?.format ?? identity)(value),
-    },
-    axisTick: { show: false },
-    axisLine: { show: false },
-    axisPointer: {
-      label: {
-        formatter: (p: { value: number }) =>
-          (cfg?.format ?? identity)(Math.round(p.value)),
-        backgroundColor: surface,
-        color: labelColor,
-        borderColor: lineColor,
-        borderWidth: 1,
-        shadowBlur: 0,
-      },
-    },
-  })
+  const catName = xAxis?.name
+  const catPlacement = catName
+    ? resolveAxisName(xAxis?.position ?? 'right', {
+        orientation: 'horizontal',
+        rotation: xAxis?.orientation,
+        nameWidth: Math.ceil(catName.length * 6.5),
+        labelExtent: 22 + (axisLabelRotate ? 12 : 0),
+      })
+    : undefined
+
+  const placements = axes.map(a =>
+    a.name
+      ? resolveAxisName(a.position, {
+          orientation: 'vertical',
+          side: a.side,
+          inverse: a.inverse,
+          rotation: a.orientation,
+          labelExtent: 44 + (axisOffset.get(a.key) ?? 0),
+          nameWidth: Math.ceil(a.name.length * 6.5),
+        })
+      : undefined
+  )
 
   const colorForAxisIndex = (idx: number) => {
-    const si = series.findIndex(s => yAxisIndexFor(s) === idx)
+    const si = series.findIndex(s => seriesAxisIndex(s.yAxis) === idx)
     return si >= 0 ? seriesColors[si] : undefined
   }
 
-  const buildMultiAxis = (cfg: ComboValueAxis, idx: number) => {
-    const accent = cfg.color ?? colorForAxisIndex(idx) ?? subtleColor
+  const yAxisList = axes.map((a, i) => {
+    const p = placements[i]
+    const accent = a.color ?? colorForAxisIndex(i) ?? subtleColor
+    const off = axisOffset.get(a.key) ?? 0
     return {
       type: 'value' as const,
-      name: cfg.name,
-      min: cfg.min,
-      max: cfg.max,
-      position: cfg.position ?? 'left',
-      offset: cfg.offset ?? 0,
-      alignTicks: true,
-      nameTextStyle: { color: accent, fontSize: 11 },
+      name: a.name,
+      ...(p
+        ? {
+            nameLocation: p.nameLocation,
+            nameRotate: p.nameRotate,
+            nameGap: p.nameGap,
+          }
+        : {}),
+      min: a.min,
+      max: a.max,
+      inverse: a.inverse,
+      position: a.side,
+      ...(manyAxes ? { offset: off, alignTicks: true } : {}),
+      nameTextStyle: {
+        color: manyAxes ? accent : subtleColor,
+        fontSize: 11,
+        ...(p?.nameTextStyle ?? {}),
+      },
       splitLine: {
-        show: idx === 0 && gridLines,
+        show: i === 0 && gridLines,
         lineStyle: { color: lineColor, type: 'dashed' as const },
       },
-      axisLine: { show: true, lineStyle: { color: accent } },
+      axisLine: manyAxes
+        ? { show: true, lineStyle: { color: accent } }
+        : { show: false },
       axisTick: { show: false },
       axisLabel: {
-        color: accent,
+        color: manyAxes ? accent : labelColor,
         fontSize: 12,
-        formatter: (value: number) => (cfg.format ?? identity)(value),
+        formatter: (value: number) => a.format(value),
       },
       axisPointer: {
         label: {
-          formatter: (p: { value: number }) =>
-            (cfg.format ?? identity)(Math.round(p.value)),
+          formatter: (pt: { value: number }) => a.format(Math.round(pt.value)),
           backgroundColor: surface,
           color: labelColor,
           borderColor: lineColor,
@@ -253,28 +303,56 @@ export function buildComboOption(params: BuildComboOptionParams) {
         },
       },
     }
+  })
+
+  const yAxis = yAxisList
+
+  const reserveFor = (s: 'left' | 'right' | 'top' | 'bottom') => {
+    let m =
+      catPlacement && catPlacement.reserveSide === s ? catPlacement.reserve : 0
+    placements.forEach((p, i) => {
+      if (p && p.reserveSide === s) {
+        m = Math.max(m, p.reserve + (axisOffset.get(axes[i].key) ?? 0))
+      }
+    })
+    if (s === 'left' || s === 'right') {
+      const maxOff = axes.reduce(
+        (o, a) => (a.side === s ? Math.max(o, axisOffset.get(a.key) ?? 0) : o),
+        0
+      )
+      if (maxOff > 0) m = Math.max(m, maxOff + 56)
+    }
+    return m
   }
-
-  const yAxis = multiAxis
-    ? (valueAxes as ComboValueAxis[]).map(buildMultiAxis)
-    : hasRightAxis
-      ? [buildValueAxis(leftAxis, gridLines), buildValueAxis(rightAxis, false)]
-      : [buildValueAxis(leftAxis, gridLines)]
-
-  const axisExtent = (side: 'left' | 'right') => {
-    if (!multiAxis) return 0
-    const on = (valueAxes as ComboValueAxis[]).filter(
-      a => (a.position ?? 'left') === side
-    )
-    if (!on.length) return 0
-    return Math.max(...on.map(a => a.offset ?? 0)) + 56
-  }
-
-  const hasTopAxisName = multiAxis
-    ? (valueAxes as ComboValueAxis[]).some(a => a.name)
-    : Boolean(leftAxis?.name || rightAxis?.name)
 
   const legendVertical = legendPosition === 'left' || legendPosition === 'right'
+
+  const xAxisOption = {
+    type: 'category' as const,
+    data: categories,
+    name: catName,
+    ...(catPlacement
+      ? {
+          nameLocation: catPlacement.nameLocation,
+          nameRotate: catPlacement.nameRotate,
+          nameGap: catPlacement.nameGap,
+        }
+      : {}),
+    nameTextStyle: {
+      color: subtleColor,
+      fontSize: 11,
+      ...(catPlacement?.nameTextStyle ?? {}),
+    },
+    axisLine: { show: true, lineStyle: { color: lineColor } },
+    axisTick: { show: false },
+    axisLabel: {
+      color: labelColor,
+      fontSize: 12,
+      rotate: axisLabelRotate,
+      ...xAxisLabel,
+    },
+    axisPointer: { type: 'shadow' as const },
+  }
 
   return {
     animation: animate && !prefersReducedMotion(),
@@ -304,21 +382,21 @@ export function buildComboOption(params: BuildComboOptionParams) {
     },
     grid: {
       left: Math.max(
-        legendVertical && legendPosition === 'left' ? 96 : 8,
-        axisExtent('left')
+        8,
+        (showLegend && legendPosition === 'left' ? 96 : 0) + reserveFor('left')
       ),
       right: Math.max(
-        legendVertical && legendPosition === 'right' ? 96 : 8,
-        axisExtent('right')
+        8,
+        (showLegend && legendPosition === 'right' ? 96 : 0) +
+          reserveFor('right')
       ),
       top: Math.max(
-        (showLegend && legendPosition === 'top' ? 36 : 0) +
-          (hasTopAxisName ? 24 : 0),
-        hasTopAxisName ? 28 : 0,
+        (showLegend && legendPosition === 'top' ? 36 : 0) + reserveFor('top'),
         12
       ),
       bottom: Math.max(
-        showLegend && legendPosition === 'bottom' ? 36 : 0,
+        (showLegend && legendPosition === 'bottom' ? 36 : 0) +
+          reserveFor('bottom'),
         axisLabelRotate ? 24 : 0,
         8
       ),
@@ -367,21 +445,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
         return `${head}<br/>${rows}`
       },
     },
-    xAxis: {
-      type: 'category',
-      data: categories,
-      name: categoryAxisName,
-      nameTextStyle: { color: subtleColor, fontSize: 11 },
-      axisLine: { show: true, lineStyle: { color: lineColor } },
-      axisTick: { show: false },
-      axisLabel: {
-        color: labelColor,
-        fontSize: 12,
-        rotate: axisLabelRotate,
-        ...xAxisLabel,
-      },
-      axisPointer: { type: 'shadow' },
-    },
+    xAxis: xAxisOption,
     yAxis,
     series: seriesList,
   }

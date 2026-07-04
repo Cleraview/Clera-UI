@@ -1,12 +1,23 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant, AxisLabelOverride } from '@/utils'
+import type {
+  ChartVariant,
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
+} from '@/utils'
 
-export type { AxisLabelOverride }
+export type {
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
+}
 
 export type ComboSeriesType = 'bar' | 'line' | 'area'
-
-export type ComboAxis = 'left' | 'right'
 
 export type ComboLegendPosition = 'top' | 'bottom' | 'left' | 'right'
 
@@ -16,26 +27,48 @@ export type ComboSeries = {
   data: number[]
   variant?: ChartVariant
   color?: string
-  axis?: ComboAxis | number
+  /**
+   * Which y-axis this series is plotted against — an axis `id` or index from
+   * `yAxes` (or `'left'`/`'right'`). Defaults to the first axis.
+   */
+  yAxis?: string | number
   smooth?: boolean
   stack?: string
 }
 
-export type ComboAxisConfig = {
+/**
+ * A y-axis. Pass one or more to `yAxes` — several on the left and/or right, each
+ * with its own title and scale. Series bind to an axis via `series[].yAxis`.
+ */
+export type ComboYAxis = {
+  /** Stable id to bind series to this axis. Falls back to the array index. */
+  id?: string | number
+  /** The axis title text. */
   name?: string
+  /** Which side this axis sits on. Defaults to `'left'`. */
+  side?: ValueAxisPosition
   min?: number
   max?: number
+  /** Flip the axis so values grow downward. */
+  inverse?: boolean
+  /** Where the title sits along the axis: `top` (default), `middle`, or `bottom`. */
+  position?: ValueAxisNamePosition
+  /** Title text direction: `horizontal` or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
+  /** Format for this axis's tick labels and tooltip values. */
   format?: (value: number) => string
+  /** Accent color for this axis's line, labels, and title. */
+  color?: string
 }
 
-export type ComboValueAxis = {
+/** The x-axis. */
+export type ComboXAxis = {
+  /** The axis title text. */
   name?: string
-  position?: ComboAxis
-  offset?: number
-  min?: number
-  max?: number
-  format?: (value: number) => string
-  color?: string
+  /** Where the title sits along the axis: `left`, `middle`, or `right` (default). */
+  position?: CategoryAxisNamePosition
+  /** Title text direction: `horizontal` (default) or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
 }
 
 export interface ComboProps {
@@ -50,12 +83,16 @@ export interface ComboProps {
   highlightSeries?: boolean
   barRadius?: number
   axisLabelRotate?: number
-  categoryAxisName?: string
+  /**
+   * The y-axes: one or more, each `{ id?, name?, side?, min?, max?, inverse?,
+   * position?, orientation?, format?, color? }`. `name` is the axis title;
+   * `position`/`orientation` place it. Bind series with `series[].yAxis`.
+   */
+  yAxes?: ComboYAxis[]
+  /** The x-axis: `{ name?, position?, orientation? }` — `name` is its title. */
+  xAxis?: ComboXAxis
   /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
-  leftAxis?: ComboAxisConfig
-  rightAxis?: ComboAxisConfig
-  valueAxes?: ComboValueAxis[]
   loading?: boolean
   animate?: boolean
   emptyMessage?: string

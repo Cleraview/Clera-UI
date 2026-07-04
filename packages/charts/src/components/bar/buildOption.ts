@@ -4,8 +4,9 @@ import {
   resolveVariant,
   resolveCategoricalPalette,
   prefersReducedMotion,
+  resolveAxisName,
 } from '@/utils'
-import type { AxisLabelOverride, ValueAxisPosition } from '@/utils'
+import type { AxisLabelOverride } from '@/utils'
 import type {
   BarDatum,
   BarSeries,
@@ -17,6 +18,8 @@ import type {
   BarAxisBreak,
   BarLegendPosition,
   BarReferenceLine,
+  BarXAxis,
+  BarYAxis,
 } from './types'
 
 export interface BuildBarOptionParams {
@@ -52,9 +55,8 @@ export interface BuildBarOptionParams {
   zoomSlider: boolean
   selectable: boolean
   axisLabelRotate: number
-  valueAxisName?: string
-  categoryAxisName?: string
-  valueAxisPosition: ValueAxisPosition
+  xAxis?: BarXAxis
+  yAxis?: BarYAxis
   xAxisLabel?: AxisLabelOverride
   animate: boolean
   emptyMessage: string
@@ -117,13 +119,22 @@ export function buildBarOption(params: BuildBarOptionParams) {
     zoomSlider,
     selectable,
     axisLabelRotate,
-    valueAxisName,
-    categoryAxisName,
-    valueAxisPosition,
+    xAxis,
+    yAxis,
     xAxisLabel,
     animate,
     emptyMessage,
   } = params
+
+  // Spatial axes: which of x/y holds values flips with `direction`.
+  const valueCfg = isHorizontal ? xAxis : yAxis
+  const catCfg = isHorizontal ? yAxis : xAxis
+  const valueAxisName = valueCfg?.name
+  const categoryAxisName = catCfg?.name
+  const valueAxisNamePosition = valueCfg?.position ?? 'top'
+  const categoryAxisNamePosition = catCfg?.position ?? 'right'
+  const valueAxisPosition = yAxis?.side ?? 'left'
+  const valueFormat = valueCfg?.format ?? formatValue
 
   const labelColor = readCssColor('--text-color-ds-default', 'rgb(23, 23, 23)')
   const subtleColor = readCssColor('--text-color-ds-subtle', 'rgb(82, 82, 82)')
@@ -173,7 +184,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
 
   const labelBase = {
     show: showValues,
-    formatter: (p: { value: number }) => formatValue(p.value),
+    formatter: (p: { value: number }) => valueFormat(p.value),
     textBorderWidth: 0,
     fontSize: 12,
   }
@@ -209,7 +220,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
           borderWidth: 1,
           borderRadius: 4,
           padding: [2, 6] as [number, number],
-          formatter: () => fixedRef.label ?? formatValue(fixedRef.value),
+          formatter: () => fixedRef.label ?? valueFormat(fixedRef.value),
         },
         data: [
           isHorizontal ? { xAxis: fixedRef.value } : { yAxis: fixedRef.value },
@@ -225,7 +236,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
       position: 'end' as const,
       color,
       fontSize: 11,
-      formatter: (p: { value: number }) => formatValue(Math.round(p.value)),
+      formatter: (p: { value: number }) => valueFormat(Math.round(p.value)),
     },
     data: [{ type: 'average' as const, name: 'Avg' }],
   })
@@ -245,7 +256,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
           label: {
             color: inverseColor,
             fontSize: 11,
-            formatter: (p: { value: number }) => formatValue(p.value),
+            formatter: (p: { value: number }) => valueFormat(p.value),
           },
         }
       : undefined
@@ -361,8 +372,9 @@ export function buildBarOption(params: BuildBarOptionParams) {
 
   const valueAxis = {
     type: 'value' as const,
-    max: percent ? 100 : max,
-    min: percent ? 0 : min,
+    max: percent ? 100 : (valueCfg?.max ?? max),
+    min: percent ? 0 : (valueCfg?.min ?? min),
+    inverse: valueCfg?.inverse,
     name: valueAxisName,
     position: isHorizontal ? undefined : valueAxisPosition,
     nameTextStyle: {
@@ -379,7 +391,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
       ? {
           color: labelColor,
           fontSize: 12,
-          formatter: (value: number) => formatValue(value),
+          formatter: (value: number) => valueFormat(value),
         }
       : { show: false },
     axisTick: { show: false },
@@ -513,8 +525,52 @@ export function buildBarOption(params: BuildBarOptionParams) {
       ? Math.min(168, Math.ceil(valueAxisName.length * 6.5) + 14)
       : 0
 
-  const xAxisBase = isHorizontal ? valueAxis : categoryAxis
-  const yAxisBase = isHorizontal ? categoryAxis : valueAxis
+  const valuePlacement = valueAxisName
+    ? resolveAxisName(valueAxisNamePosition, {
+        orientation: isHorizontal ? 'horizontal' : 'vertical',
+        side: valueAxisPosition,
+        inverse: valueCfg?.inverse,
+        rotation: valueCfg?.orientation,
+        nameWidth: valueNameWidth || undefined,
+        labelExtent: isHorizontal ? 22 + (showHSlider ? 30 : 0) : 44,
+      })
+    : undefined
+
+  const catPlacement = categoryAxisName
+    ? resolveAxisName(categoryAxisNamePosition, {
+        orientation: isHorizontal ? 'vertical' : 'horizontal',
+        rotation: catCfg?.orientation,
+        labelExtent: isHorizontal
+          ? 56
+          : 22 + (showHSlider ? 30 : 0) + (axisLabelRotate ? 12 : 0),
+      })
+    : undefined
+
+  const reserveFor = (s: 'left' | 'right' | 'top' | 'bottom') =>
+    [valuePlacement, catPlacement].reduce(
+      (m, p) => (p && p.reserveSide === s ? Math.max(m, p.reserve) : m),
+      0
+    )
+
+  const applyName = <T extends { nameTextStyle?: Record<string, unknown> }>(
+    axis: T,
+    p: ReturnType<typeof resolveAxisName> | undefined
+  ) =>
+    p
+      ? {
+          ...axis,
+          nameLocation: p.nameLocation,
+          nameRotate: p.nameRotate,
+          nameGap: p.nameGap,
+          nameTextStyle: { ...axis.nameTextStyle, ...p.nameTextStyle },
+        }
+      : axis
+
+  const valueAxisNamed = applyName(valueAxis, valuePlacement)
+  const categoryAxisNamed = applyName(categoryAxis, catPlacement)
+
+  const xAxisBase = isHorizontal ? valueAxisNamed : categoryAxisNamed
+  const yAxisBase = isHorizontal ? categoryAxisNamed : valueAxisNamed
   const xAxisFinal = xAxisLabel
     ? { ...xAxisBase, axisLabel: { ...xAxisBase.axisLabel, ...xAxisLabel } }
     : xAxisBase
@@ -556,13 +612,15 @@ export function buildBarOption(params: BuildBarOptionParams) {
     grid: {
       left: Math.max(
         legendShown && legendPosition === 'left' ? 96 : 8,
-        valueNameWidth
+        valueNameWidth,
+        reserveFor('left')
       ),
       right: Math.max(
         legendShown && legendPosition === 'right' ? 96 : 0,
         referenceLine && !isHorizontal ? 72 : 0,
         isHorizontal && showValues ? 56 : 0,
         showVSlider ? 40 : 0,
+        reserveFor('right'),
         8
       ),
       top: Math.max(
@@ -572,11 +630,13 @@ export function buildBarOption(params: BuildBarOptionParams) {
         markPoints.length && !isHorizontal ? 32 : 0,
         axisBreaks.length && axisBreakExpandable ? 44 : 0,
         !isHorizontal && valueAxisName ? 24 : 0,
+        reserveFor('top'),
         showValues && !isHorizontal ? 28 : 12
       ),
       bottom: Math.max(
         legendShown && legendPosition === 'bottom' ? 36 : 0,
         (showHSlider ? 26 : 0) + (axisLabelRotate ? 34 : showHSlider ? 16 : 8),
+        reserveFor('bottom'),
         8
       ),
       containLabel: true,
@@ -622,7 +682,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
               const rows = arr
                 .map(
                   p =>
-                    `${p.marker ?? ''}${p.seriesName}: ${formatValue(p.value)}`
+                    `${p.marker ?? ''}${p.seriesName}: ${valueFormat(p.value)}`
                 )
                 .join('<br/>')
               return `${head}<br/>${rows}`
@@ -637,7 +697,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
                 grouped && item.seriesName
                   ? `${item.name} · ${item.seriesName}`
                   : item.name
-              return `${head}: ${formatValue(item.value)}`
+              return `${head}: ${valueFormat(item.value)}`
             },
     },
     xAxis: xAxisFinal,

@@ -19,7 +19,12 @@ import { buildMultiXLineOption } from './buildOption'
 import { styles } from './styles'
 import type { MultiXLineProps } from './types'
 
-export type { MultiXLineProps, MultiXAxis, MultiXSeries } from './types'
+export type {
+  MultiXLineProps,
+  MultiXLineXAxis,
+  MultiXLineYAxis,
+  MultiXSeries,
+} from './types'
 
 echarts.use([
   LineChart,
@@ -32,14 +37,14 @@ echarts.use([
 ])
 
 export const MultiXLine: React.FC<MultiXLineProps> = ({
-  axes,
+  xAxes,
+  yAxis,
   height = 360,
   curve = 'smooth',
   area = false,
   showLegend = true,
   min,
   max,
-  valueAxisName,
   showTooltip = true,
   formatValue = v => String(v),
   loading = false,
@@ -52,26 +57,26 @@ export const MultiXLine: React.FC<MultiXLineProps> = ({
   const buildOption = useCallback(
     () =>
       buildMultiXLineOption({
-        axes,
+        xAxes,
         curve,
         area,
         showLegend,
         min,
         max,
-        valueAxisName,
+        yAxis,
         showTooltip,
         formatValue,
         animate,
         emptyMessage,
       }) as unknown as EChartsCoreOption,
     [
-      axes,
+      xAxes,
       curve,
       area,
       showLegend,
       min,
       max,
-      valueAxisName,
+      yAxis,
       showTooltip,
       formatValue,
       animate,

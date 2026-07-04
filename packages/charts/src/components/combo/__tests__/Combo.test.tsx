@@ -48,7 +48,7 @@ const series = [
     name: 'Orders',
     type: 'line' as const,
     data: [3, 5, 4],
-    axis: 'right' as const,
+    yAxis: 'right' as const,
   },
 ]
 
@@ -148,8 +148,14 @@ describe('components/charts/Combo', () => {
     expect(lastOption().yAxis).toHaveLength(1)
   })
 
-  it('adds a second value axis when a series targets the right', () => {
-    render(<Combo categories={categories} series={series} />)
+  it('routes a series to a declared right-side y-axis', () => {
+    render(
+      <Combo
+        categories={categories}
+        series={series}
+        yAxes={[{ name: 'Left' }, { name: 'Right', side: 'right' }]}
+      />
+    )
     const option = lastOption()
     expect(option.yAxis).toHaveLength(2)
     expect(option.series[1].yAxisIndex).toBe(1)
@@ -160,8 +166,10 @@ describe('components/charts/Combo', () => {
       <Combo
         categories={categories}
         series={series}
-        leftAxis={{ name: 'USD', max: 100 }}
-        rightAxis={{ name: 'Count', min: 0 }}
+        yAxes={[
+          { name: 'USD', max: 100 },
+          { name: 'Count', side: 'right', min: 0 },
+        ]}
       />
     )
     const [left, right] = lastOption().yAxis
@@ -171,26 +179,27 @@ describe('components/charts/Combo', () => {
     expect(right.min).toBe(0)
   })
 
-  it('builds one value axis per entry in valueAxes and routes series by index', () => {
+  it('builds one y-axis per entry in yAxes and routes series by index', () => {
     render(
       <Combo
         categories={categories}
-        valueAxes={[
-          { name: 'A', position: 'right' },
-          { name: 'B', position: 'right', offset: 80 },
-          { name: 'C', position: 'left' },
+        yAxes={[
+          { name: 'A', side: 'right' },
+          { name: 'B', side: 'right' },
+          { name: 'C', side: 'left' },
         ]}
         series={[
-          { name: 'S0', type: 'bar', axis: 0, data: [1, 2, 3] },
-          { name: 'S1', type: 'bar', axis: 1, data: [4, 5, 6] },
-          { name: 'S2', type: 'line', axis: 2, data: [7, 8, 9] },
+          { name: 'S0', type: 'bar', yAxis: 0, data: [1, 2, 3] },
+          { name: 'S1', type: 'bar', yAxis: 1, data: [4, 5, 6] },
+          { name: 'S2', type: 'line', yAxis: 2, data: [7, 8, 9] },
         ]}
       />
     )
     const option = lastOption()
     expect(option.yAxis).toHaveLength(3)
     expect(option.yAxis[1].position).toBe('right')
-    expect(option.yAxis[1].offset).toBe(80)
+    // same-side axes auto-offset outward
+    expect(option.yAxis[1].offset).toBeGreaterThan(0)
     expect(
       option.series.map((s: { yAxisIndex: number }) => s.yAxisIndex)
     ).toEqual([0, 1, 2])
@@ -212,15 +221,15 @@ describe('components/charts/Combo', () => {
         categories={categories}
         showLegend
         legendPosition="top"
-        valueAxes={[
+        yAxes={[
           { name: 'A' },
-          { name: 'B', position: 'right' },
-          { name: 'C', position: 'right', offset: 80 },
+          { name: 'B', side: 'right' },
+          { name: 'C', side: 'right' },
         ]}
         series={[
-          { name: 'S0', type: 'bar', axis: 0, data: [1, 2, 3] },
-          { name: 'S1', type: 'bar', axis: 1, data: [4, 5, 6] },
-          { name: 'S2', type: 'line', axis: 2, data: [7, 8, 9] },
+          { name: 'S0', type: 'bar', yAxis: 0, data: [1, 2, 3] },
+          { name: 'S1', type: 'bar', yAxis: 1, data: [4, 5, 6] },
+          { name: 'S2', type: 'line', yAxis: 2, data: [7, 8, 9] },
         ]}
       />
     )
@@ -231,19 +240,19 @@ describe('components/charts/Combo', () => {
     render(
       <Combo
         categories={categories}
-        valueAxes={[{ name: 'A' }, { name: 'B', position: 'right' }]}
+        yAxes={[{ name: 'A' }, { name: 'B', side: 'right' }]}
         series={[
           {
             name: 'S0',
             type: 'bar',
-            axis: 0,
+            yAxis: 0,
             color: 'rgb(1, 1, 1)',
             data: [1],
           },
           {
             name: 'S1',
             type: 'line',
-            axis: 1,
+            yAxis: 1,
             color: 'rgb(2, 2, 2)',
             data: [2],
           },
@@ -277,7 +286,7 @@ describe('components/charts/Combo', () => {
       <Combo
         categories={categories}
         series={series}
-        leftAxis={{ format: v => `${v} ml` }}
+        yAxes={[{ format: v => `${v} ml` }]}
       />
     )
     const label = lastOption().yAxis[0].axisPointer.label.formatter({
@@ -291,8 +300,10 @@ describe('components/charts/Combo', () => {
       <Combo
         categories={categories}
         series={series}
-        leftAxis={{ format: v => `$${v}` }}
-        rightAxis={{ format: v => `${v} orders` }}
+        yAxes={[
+          { format: v => `$${v}` },
+          { side: 'right', format: v => `${v} orders` },
+        ]}
       />
     )
     const html = lastOption().tooltip.formatter([

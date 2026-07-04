@@ -4,7 +4,51 @@ import type {
   ChartVariant,
   AxisLabelOverride,
   ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
 } from '@/utils'
+
+export type {
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  CategoryAxisNamePosition,
+  AxisNameOrientation,
+}
+
+/**
+ * The x-axis (horizontal). For vertical bars this is the category axis; for
+ * horizontal bars it's the value axis, so `min`/`max`/`format`/`inverse` apply.
+ */
+export type BarXAxis = {
+  name?: string
+  /** Where the title sits along the axis: `left`, `middle`, or `right` (default). */
+  position?: CategoryAxisNamePosition
+  /** Title text direction: `horizontal` (default) or `vertical`. */
+  orientation?: AxisNameOrientation
+  min?: number
+  max?: number
+  inverse?: boolean
+  format?: (value: number) => string
+}
+
+/**
+ * The y-axis (vertical). For vertical bars this is the value axis, so
+ * `min`/`max`/`format`/`inverse` apply; for horizontal bars it's the category axis.
+ */
+export type BarYAxis = {
+  name?: string
+  /** Which side the axis sits on: `left` (default) or `right`. */
+  side?: ValueAxisPosition
+  /** Where the title sits along the axis: `top` (default), `middle`, or `bottom`. */
+  position?: ValueAxisNamePosition
+  /** Title text direction: `horizontal` or `vertical` (rotated 90°). */
+  orientation?: AxisNameOrientation
+  min?: number
+  max?: number
+  inverse?: boolean
+  format?: (value: number) => string
+}
 
 export type BarVariant = ChartVariant
 
@@ -103,10 +147,10 @@ export interface BarProps {
   zoomSlider?: boolean
   selectable?: boolean
   axisLabelRotate?: number
-  valueAxisName?: string
-  categoryAxisName?: string
-  /** Which side the value axis sits on (vertical charts: left/right). */
-  valueAxisPosition?: ValueAxisPosition
+  /** The x-axis (horizontal): `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. */
+  xAxis?: BarXAxis
+  /** The y-axis (vertical): `{ name?, side?, position?, orientation?, min?, max?, inverse?, format? }`. */
+  yAxis?: BarYAxis
   /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
   loading?: boolean

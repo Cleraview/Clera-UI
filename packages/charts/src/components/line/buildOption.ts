@@ -7,7 +7,13 @@ import {
   prefersReducedMotion,
   withAlpha,
 } from '@/utils'
-import type { AxisLabelOverride, ValueAxisPosition } from '@/utils'
+import { resolveAxisName } from '@/utils'
+import type {
+  AxisLabelOverride,
+  ValueAxisPosition,
+  ValueAxisNamePosition,
+  AxisNameOrientation,
+} from '@/utils'
 import { gradientFill, curveProps, toArray, valueOf } from './helpers'
 import type {
   LineSeries,
@@ -19,6 +25,8 @@ import type {
   LineReferenceLine,
   LineMarkArea,
   LineThreshold,
+  LineYAxis,
+  LineXAxis,
 } from './types'
 
 export interface BuildLineOptionParams {
@@ -36,9 +44,8 @@ export interface BuildLineOptionParams {
   max?: number
   showValueAxis: boolean
   gridLines?: boolean
-  valueAxisName?: string
-  categoryAxisName?: string
-  valueAxisPosition: ValueAxisPosition
+  yAxes?: LineYAxis[]
+  xAxis?: LineXAxis
   axisLabelRotate: number
   xAxisLabel?: AxisLabelOverride
   showTooltip: boolean
@@ -52,6 +59,8 @@ export interface BuildLineOptionParams {
   markPoints: LineMarkPoint[]
   zoom: boolean
   zoomSlider: boolean
+  zoomWindow?: [number, number]
+  toolbox: boolean
   sparkline: boolean
   formatValue: (value: number) => string
   formatX?: (value: string | number) => string
@@ -75,9 +84,8 @@ export function buildLineOption(params: BuildLineOptionParams) {
     max,
     showValueAxis,
     gridLines,
-    valueAxisName,
-    categoryAxisName,
-    valueAxisPosition,
+    yAxes,
+    xAxis,
     axisLabelRotate,
     xAxisLabel,
     showTooltip,
@@ -91,6 +99,8 @@ export function buildLineOption(params: BuildLineOptionParams) {
     markPoints,
     zoom,
     zoomSlider,
+    zoomWindow,
+    toolbox,
     sparkline,
     formatValue,
     formatX,
@@ -150,6 +160,77 @@ export function buildLineOption(params: BuildLineOptionParams) {
 
   const seriesColors = series.map((s, i) => colorFor(s, i))
 
+  type NormAxis = {
+    key: string
+    name?: string
+    side: ValueAxisPosition
+    position: ValueAxisNamePosition
+    orientation?: AxisNameOrientation
+    min?: number
+    max?: number
+    inverse: boolean
+    format: (value: number) => string
+  }
+
+  const axes: NormAxis[] = yAxes?.length
+    ? yAxes.map((a, i) => ({
+        key: String(a.id ?? i),
+        name: a.name,
+        side: a.side ?? 'left',
+        position: a.position ?? 'top',
+        orientation: a.orientation,
+        min: a.min,
+        max: a.max,
+        inverse: a.inverse ?? false,
+        format: a.format ?? formatValue,
+      }))
+    : [
+        {
+          key: 'left',
+          name: undefined,
+          side: 'left',
+          position: 'top',
+          orientation: undefined,
+          min,
+          max,
+          inverse: false,
+          format: formatValue,
+        },
+      ]
+
+  const axisIndex = new Map(axes.map((a, i) => [a.key, i]))
+  const OFFSET_STEP = 52
+  const axisOffset = new Map<string, number>()
+  ;(['left', 'right'] as const).forEach(side => {
+    let k = 0
+    axes.forEach(a => {
+      if (a.side === side) {
+        axisOffset.set(a.key, k * OFFSET_STEP)
+        k++
+      }
+    })
+  })
+
+  const seriesAxisIndex = (y: string | number | undefined): number => {
+    if (y == null) return 0
+    if (typeof y === 'number') return y >= 0 && y < axes.length ? y : 0
+    if (axisIndex.has(y)) return axisIndex.get(y) as number
+    if (y === 'right') {
+      const r = axes.findIndex(a => a.side === 'right')
+      return r >= 0 ? r : 0
+    }
+    if (y === 'left') {
+      const l = axes.findIndex(a => a.side === 'left')
+      return l >= 0 ? l : 0
+    }
+    return 0
+  }
+
+  const fmtFor = (name?: string) => {
+    const s = series.find(x => x.name === name)
+    return axes[seriesAxisIndex(s?.yAxis)]?.format ?? formatValue
+  }
+
   const multi = series.length > 1
   const anyGradient = series.some(s => (s.area ?? area) === 'gradient')
   const legendShown = !sparkline && (showLegend ?? multi)
@@ -187,6 +268,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
       type: 'line' as const,
       data: s.data,
       stack: s.stack,
+      yAxisIndex: seriesAxisIndex(s.yAxis),
       ...shape,
       connectNulls,
       showSymbol: symbolOn,
@@ -334,35 +416,125 @@ export function buildLineOption(params: BuildLineOptionParams) {
 
   const showGrid = !sparkline && (gridLines ?? showValueAxis)
 
-  const valueAxis = {
-    type: 'value' as const,
-    min,
-    max,
-    name: sparkline ? undefined : valueAxisName,
-    position: valueAxisPosition,
-    scale: true,
-    nameTextStyle: { color: subtleColor, fontSize: 11 },
-    splitLine: {
-      show: showGrid,
-      lineStyle: { color: lineColor, type: 'dashed' as const },
-    },
-    axisLabel:
-      sparkline || !showValueAxis
-        ? { show: false }
-        : {
-            color: labelColor,
-            fontSize: 12,
-            formatter: (value: number) => formatValue(value),
-          },
-    axisTick: { show: false },
-    axisLine: { show: false },
+  const willShowSlider = zoom && !sparkline && zoomSlider
+
+  const placements = axes.map(a =>
+    !sparkline && a.name
+      ? resolveAxisName(a.position, {
+          orientation: 'vertical',
+          side: a.side,
+          inverse: a.inverse,
+          rotation: a.orientation,
+          labelExtent: 44 + (axisOffset.get(a.key) ?? 0),
+          nameWidth: Math.ceil(a.name.length * 6.5),
+        })
+      : undefined
+  )
+
+  const catName = xAxis?.name
+  const catPosition = xAxis?.position ?? 'right'
+
+  const catPlacement =
+    !sparkline && catName
+      ? resolveAxisName(catPosition, {
+          orientation: 'horizontal',
+          rotation: xAxis?.orientation,
+          nameWidth: Math.ceil(catName.length * 6.5),
+          labelExtent:
+            22 + (willShowSlider ? 30 : 0) + (axisLabelRotate ? 12 : 0),
+        })
+      : undefined
+
+  const reserveFor = (s: 'left' | 'right' | 'top' | 'bottom') => {
+    let m =
+      catPlacement && catPlacement.reserveSide === s ? catPlacement.reserve : 0
+    placements.forEach((p, i) => {
+      if (p && p.reserveSide === s) {
+        m = Math.max(m, p.reserve + (axisOffset.get(axes[i].key) ?? 0))
+      }
+    })
+    if (s === 'left' || s === 'right') {
+      const maxOff = axes.reduce(
+        (o, a) => (a.side === s ? Math.max(o, axisOffset.get(a.key) ?? 0) : o),
+        0
+      )
+      if (maxOff > 0) m = Math.max(m, maxOff + 44)
+    }
+    return m
   }
 
-  const xAxis = {
+  const yAxisList = axes.map((a, i) => {
+    const p = placements[i]
+    const nameStyle: Record<string, unknown> = p
+      ? p.nameLocation === 'middle'
+        ? p.nameTextStyle
+        : a.side === 'right'
+          ? { align: 'right', padding: [0, -20, 0, 0] }
+          : p.nameTextStyle
+      : {}
+    return {
+      type: 'value' as const,
+      position: a.side,
+      offset: axisOffset.get(a.key) ?? 0,
+      min: a.min,
+      max: a.max,
+      inverse: a.inverse,
+      scale: true,
+      name: sparkline ? undefined : a.name,
+      ...(p
+        ? {
+            nameLocation: p.nameLocation,
+            nameRotate: p.nameRotate,
+            nameGap: p.nameGap,
+          }
+        : {}),
+      nameTextStyle: { color: subtleColor, fontSize: 11, ...nameStyle },
+      splitLine: {
+        show: i === 0 && showGrid,
+        lineStyle: { color: lineColor, type: 'dashed' as const },
+      },
+      axisLabel:
+        sparkline || !showValueAxis
+          ? { show: false }
+          : {
+              color: labelColor,
+              fontSize: 12,
+              formatter: (value: number) => a.format(value),
+            },
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisPointer: {
+        label: {
+          backgroundColor: surface,
+          color: labelColor,
+          borderColor: lineColor,
+          borderWidth: 1,
+          shadowBlur: 0,
+          fontSize: 11,
+          formatter: (pt: { value: number }) => a.format(Math.round(pt.value)),
+        },
+      },
+    }
+  })
+
+  const yAxis = yAxisList.length === 1 ? yAxisList[0] : yAxisList
+
+  const xAxisOption = {
     type: xAxisType,
     ...(xAxisType === 'category' ? { data: cats, boundaryGap: false } : {}),
-    name: sparkline ? undefined : categoryAxisName,
-    nameTextStyle: { color: subtleColor, fontSize: 11 },
+    name: sparkline ? undefined : catName,
+    ...(catPlacement
+      ? {
+          nameLocation: catPlacement.nameLocation,
+          nameRotate: catPlacement.nameRotate,
+          nameGap: catPlacement.nameGap,
+        }
+      : {}),
+    nameTextStyle: {
+      color: subtleColor,
+      fontSize: 11,
+      ...(catPlacement?.nameTextStyle ?? {}),
+    },
     axisLine: {
       show: !sparkline,
       lineStyle: { color: lineColor },
@@ -383,6 +555,8 @@ export function buildLineOption(params: BuildLineOptionParams) {
 
   const minSpan = Math.min(100, Math.max(2, (4 / maxLen) * 100))
 
+  const window = zoomWindow ? { start: zoomWindow[0], end: zoomWindow[1] } : {}
+
   const dataZoom =
     zoom && !sparkline
       ? [
@@ -390,6 +564,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
             type: 'inside' as const,
             xAxisIndex: 0,
             minSpan,
+            ...window,
             zoomOnMouseWheel: true,
             moveOnMouseMove: true,
             moveOnMouseWheel: false,
@@ -400,6 +575,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
                   type: 'slider' as const,
                   xAxisIndex: 0,
                   minSpan,
+                  ...window,
                   height: 18,
                   bottom: 8,
                   left: 8,
@@ -411,20 +587,47 @@ export function buildLineOption(params: BuildLineOptionParams) {
         ]
       : undefined
 
+  const toolboxOpt =
+    toolbox && !sparkline
+      ? {
+          right: 12,
+          top: 6,
+          itemSize: 14,
+          itemGap: 8,
+          iconStyle: { borderColor: subtleColor },
+          emphasis: { iconStyle: { borderColor: labelColor } },
+          feature: {
+            dataZoom: { yAxisIndex: 'none' as const },
+            restore: {},
+            saveAsImage: { backgroundColor: surface, pixelRatio: 2 },
+          },
+        }
+      : undefined
+
   const showHSlider = Boolean(dataZoom && zoomSlider)
 
   const grid = sparkline
     ? { left: 2, right: 2, top: 2, bottom: 2, containLabel: false }
     : {
-        left: legendVertical && legendPosition === 'left' ? 96 : 8,
-        right: legendVertical && legendPosition === 'right' ? 96 : 12,
+        left: Math.max(
+          8,
+          (legendShown && legendPosition === 'left' ? 96 : 0) +
+            reserveFor('left')
+        ),
+        right: Math.max(
+          12,
+          (legendShown && legendPosition === 'right' ? 96 : 0) +
+            reserveFor('right')
+        ),
         top: Math.max(
           legendShown && legendPosition === 'top' ? 32 : 0,
-          valueAxisName ? 24 : 0,
+          reserveFor('top'),
+          toolboxOpt ? 80 : 0,
           12
         ),
         bottom: Math.max(
-          legendShown && legendPosition === 'bottom' ? 32 : 0,
+          (legendShown && legendPosition === 'bottom' ? 32 : 0) +
+            reserveFor('bottom'),
           showHSlider ? 36 : 0,
           axisLabelRotate ? 24 : 0,
           8
@@ -442,6 +645,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
     },
     ...(visualMap ? { visualMap } : {}),
     ...(dataZoom ? { dataZoom } : {}),
+    ...(toolboxOpt ? { toolbox: toolboxOpt } : {}),
     legend: {
       show: legendShown,
       data: series.map(s => s.name),
@@ -513,7 +717,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
               const rows = arr
                 .map(
                   p =>
-                    `${p.marker ?? ''}${p.seriesName}: ${formatValue(valueOf(p.value))}`
+                    `${p.marker ?? ''}${p.seriesName}: ${fmtFor(p.seriesName)(valueOf(p.value))}`
                 )
                 .join('<br/>')
               return `${head}<br/>${rows}`
@@ -531,11 +735,11 @@ export function buildLineOption(params: BuildLineOptionParams) {
                 : (item.name ?? '')
               const head =
                 multi && item.seriesName ? `${x} · ${item.seriesName}` : x
-              return `${item.marker ?? ''}${head}: ${formatValue(valueOf(item.value))}`
+              return `${item.marker ?? ''}${head}: ${fmtFor(item.seriesName)(valueOf(item.value))}`
             },
     },
-    xAxis,
-    yAxis: valueAxis,
+    xAxis: xAxisOption,
+    yAxis,
     series: seriesList,
   }
 }

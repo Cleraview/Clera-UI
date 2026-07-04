@@ -6,7 +6,7 @@ import { Combo } from '../Combo'
 const meta: Meta<typeof Combo> = {
   title: 'Charts/Combo',
   component: Combo,
-  tags: ['dev', 'status:new'],
+  tags: [],
   parameters: {
     layout: 'padded',
     docs: {
@@ -25,7 +25,7 @@ const meta: Meta<typeof Combo> = {
     series: {
       control: 'object',
       description:
-        'Mixed series, each `{ name, type, data, axis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`; `axis` is `left`|`right`, or a number to target an entry in `valueAxes` (multiple Y axes).',
+        'Mixed series, each `{ name, type, data, yAxis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`; `yAxis` binds to an axis in `yAxes` by `id` or index (or the shorthand `left`/`right`).',
       table: { type: { summary: 'ComboSeries[]' } },
     },
     showValues: {
@@ -88,34 +88,21 @@ const meta: Meta<typeof Combo> = {
       description: 'Rotate the category-axis labels.',
       table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
     },
-    categoryAxisName: {
-      control: 'text',
-      description: 'Axis title for the category axis.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
-    },
-    leftAxis: {
+    yAxes: {
       control: 'object',
       description:
-        'Left value axis config: `{ name?, min?, max?, format? }`. `format` is applied to its ticks and tooltip rows.',
+        'The y-axes — one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format?, color? }`. `name` is the axis title; `position` (top/middle/bottom) and `orientation` place it. Bind series with `series[].yAxis` (id or index). With two+ axes each gets its series’ color and stacks outward automatically.',
       table: {
-        type: { summary: 'ComboAxisConfig' },
+        type: { summary: 'ComboYAxis[]' },
         defaultValue: { summary: '-' },
       },
     },
-    rightAxis: {
-      control: 'object',
-      description: 'Right value axis config (same shape as `leftAxis`).',
-      table: {
-        type: { summary: 'ComboAxisConfig' },
-        defaultValue: { summary: '-' },
-      },
-    },
-    valueAxes: {
+    xAxis: {
       control: 'object',
       description:
-        'For three or more value axes. Each is `{ name?, position?: left|right, offset?, min?, max?, format?, color? }`; series target one by index via `axis: <n>`. `offset` (px) stacks extra axes on the same side, and each axis auto-colors to match its series unless you set `color`. Overrides `leftAxis`/`rightAxis` when present.',
+        'The x-axis — `{ name?, position?, orientation? }`. `name` is its title; `position` is `left`/`middle`/`right` (default `right`).',
       table: {
-        type: { summary: 'ComboValueAxis[]' },
+        type: { summary: 'ComboXAxis' },
         defaultValue: { summary: '-' },
       },
     },
@@ -171,8 +158,10 @@ export const LineAndBar: Story = {
   args: {
     height: 340,
     categories: months,
-    leftAxis: { name: 'Revenue', format: v => `$${(v / 1000).toFixed(0)}k` },
-    rightAxis: { name: 'Orders', format: v => `${v}` },
+    yAxes: [
+      { name: 'Revenue', format: v => `$${(v / 1000).toFixed(0)}k` },
+      { name: 'Orders', side: 'right', format: v => `${v}` },
+    ],
     series: [
       {
         name: 'Revenue',
@@ -183,7 +172,7 @@ export const LineAndBar: Story = {
       {
         name: 'Orders',
         type: 'line',
-        axis: 'right',
+        yAxis: 'right',
         smooth: true,
         data: [320, 290, 410, 380, 520, 610],
         variant: 'warning',
@@ -210,8 +199,10 @@ export const Rainfall: Story = {
   args: {
     height: 360,
     categories: months,
-    leftAxis: { name: 'mm', format: v => `${v}` },
-    rightAxis: { name: '°C', format: v => `${v}°` },
+    yAxes: [
+      { name: 'mm', format: v => `${v}` },
+      { name: '°C', side: 'right', format: v => `${v}°` },
+    ],
     series: [
       {
         name: 'Rainfall',
@@ -228,7 +219,7 @@ export const Rainfall: Story = {
       {
         name: 'Temperature',
         type: 'line',
-        axis: 'right',
+        yAxis: 'right',
         smooth: true,
         data: [6, 9, 14, 21, 25, 28],
         variant: 'destructive',
@@ -287,13 +278,15 @@ function DynamicComboDemo() {
       <Combo
         height={360}
         categories={seed.categories}
-        leftAxis={{ name: 'Price', min: 0, max: 30 }}
-        rightAxis={{ name: 'Orders', min: 0, max: 1200 }}
+        yAxes={[
+          { name: 'Price', min: 0, max: 30 },
+          { name: 'Orders', side: 'right', min: 0, max: 1200 },
+        ]}
         series={[
           {
             name: 'Dynamic Bar',
             type: 'bar',
-            axis: 'right',
+            yAxis: 'right',
             data: seed.orders,
             variant: 'primary',
           },
@@ -339,7 +332,7 @@ export const AreaAndBar: Story = {
   args: {
     height: 320,
     categories: months,
-    leftAxis: { name: 'Users' },
+    yAxes: [{ name: 'Users' }],
     series: [
       {
         name: 'New',
@@ -369,7 +362,7 @@ export const MultipleYAxes: Story = {
     docs: {
       description: {
         story:
-          'Three value axes in one chart via `valueAxes`. Evaporation and Precipitation each get their own right-hand axis (the second pushed out with `offset`), while Temperature keeps the left axis. Series point at an axis by index with `axis: <n>`, and each axis takes on its series’ color. `highlightSeries` focuses the hovered series and dims the others.',
+          'Three value axes in one chart via `yAxes`. Evaporation and Precipitation each get their own right-hand axis (same-side axes auto-stack outward), while Temperature keeps the left. Series point at an axis by index with `yAxis: <n>`, and each axis takes on its series’ color. `highlightSeries` focuses the hovered series and dims the others.',
       },
     },
   },
@@ -390,35 +383,30 @@ export const MultipleYAxes: Story = {
       'Nov',
       'Dec',
     ],
-    valueAxes: [
-      { name: 'Evaporation', position: 'right', format: v => `${v} ml` },
-      {
-        name: 'Precipitation',
-        position: 'right',
-        offset: 80,
-        format: v => `${v} ml`,
-      },
-      { name: 'Temperature', position: 'left', format: v => `${v} °C` },
+    yAxes: [
+      { name: 'Evaporation', side: 'right', format: v => `${v} ml` },
+      { name: 'Precipitation', side: 'right', format: v => `${v} ml` },
+      { name: 'Temperature', side: 'left', format: v => `${v} °C` },
     ],
     series: [
       {
         name: 'Evaporation',
         type: 'bar',
-        axis: 0,
+        yAxis: 0,
         variant: 'info',
         data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3],
       },
       {
         name: 'Precipitation',
         type: 'bar',
-        axis: 1,
+        yAxis: 1,
         variant: 'success',
         data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3],
       },
       {
         name: 'Temperature',
         type: 'line',
-        axis: 2,
+        yAxis: 2,
         variant: 'destructive',
         smooth: true,
         data: [2, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23, 16.5, 12, 6.2],
@@ -427,6 +415,52 @@ export const MultipleYAxes: Story = {
   },
   render: args => (
     <div className="w-[720px]">
+      <Combo {...args} />
+    </div>
+  ),
+}
+
+export const AxisTitles: Story = {
+  name: 'Axis titles (position)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Each axis places its own title: the left value axis uses `position: "middle"` (a rotated, centered title), the right axis keeps the default `top`, and the x-axis title tucks after the last label with `position: "right"`. Same `position` / `orientation` knobs as the other charts.',
+      },
+    },
+  },
+  args: {
+    height: 360,
+    categories: months,
+    xAxis: { name: 'Month', position: 'right' },
+    yAxes: [
+      {
+        name: 'Revenue (Rp)',
+        position: 'middle',
+        format: v => `${(v / 1000).toFixed(0)}k`,
+      },
+      { name: 'Orders', side: 'right', position: 'middle' },
+    ],
+    series: [
+      {
+        name: 'Revenue',
+        type: 'bar',
+        data: [42000, 38500, 51200, 47800, 63400, 72100],
+        variant: 'primary',
+      },
+      {
+        name: 'Orders',
+        type: 'line',
+        yAxis: 'right',
+        smooth: true,
+        data: [320, 290, 410, 380, 520, 610],
+        variant: 'warning',
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-[620px]">
       <Combo {...args} />
     </div>
   ),

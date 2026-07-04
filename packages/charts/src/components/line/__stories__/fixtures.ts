@@ -79,6 +79,38 @@ export const clock = (v: string | number) =>
     minute: '2-digit',
   })
 
+const HOUR = 60 * 60 * 1000
+export const RAIN_START = new Date('2009-06-12T00:00:00').getTime()
+const RAIN_HOURS = 24 * 30
+
+function buildRainfallFlow(): { flow: LinePoint[]; rainfall: LinePoint[] } {
+  const rnd = lcg(1349)
+  const flow: LinePoint[] = []
+  const rainfall: LinePoint[] = []
+  let f = 110
+  let storm = 0
+  for (let i = 0; i < RAIN_HOURS; i++) {
+    const t = RAIN_START + i * HOUR
+    if (storm === 0 && rnd() > 0.985) storm = 3 + Math.floor(rnd() * 8)
+    const rain =
+      storm > 0
+        ? Math.round((4 + rnd() * 12) * 10) / 10
+        : rnd() > 0.9
+          ? Math.round(rnd() * 20) / 10
+          : 0
+    if (storm > 0) storm--
+    rainfall.push([t, rain])
+    f += rain * 5 - (f - 90) * 0.05 + (rnd() - 0.5) * 8
+    f = Math.max(40, Math.min(850, f))
+    flow.push([t, Math.round(f)])
+  }
+  return { flow, rainfall }
+}
+export const rainfallFlow = buildRainfallFlow()
+
+export const rainDay = (v: string | number) =>
+  new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+
 export const LIVE_WINDOW = 40
 export const liveLabel = (d: Date) =>
   d.toLocaleTimeString(undefined, { hour12: false })
