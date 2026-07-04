@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
 import { Badge, Button, Dropdown } from '@clera/ui'
 import type { DropdownItemDef } from '@clera/ui'
@@ -14,16 +14,14 @@ import type {
 const centerStory: Decorator = (Story, { viewMode }) => {
   if (viewMode === 'docs') {
     return (
-      <div className="mx-auto w-full max-w-[960px]">
+      <div className="w-full">
         <Story />
       </div>
     )
   }
   return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
-      <div className="w-full max-w-[960px]">
-        <Story />
-      </div>
+    <div className="min-h-screen w-full py-6">
+      <Story />
     </div>
   )
 }
@@ -132,6 +130,44 @@ export default meta
 
 type Story = StoryObj<typeof LineMatrix>
 
+function columnsForWidth(width: number): number {
+  if (width < 480) return 1
+  if (width < 768) return 2
+  return Infinity
+}
+
+function useMaxColumns(): number {
+  const [max, setMax] = useState(() =>
+    typeof window === 'undefined'
+      ? Infinity
+      : columnsForWidth(window.innerWidth)
+  )
+  useEffect(() => {
+    const update = () => setMax(columnsForWidth(window.innerWidth))
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+  return max
+}
+
+function ResponsiveMatrix({
+  columns,
+  cells,
+  ...rest
+}: ComponentProps<typeof LineMatrix>) {
+  const max = useMaxColumns()
+  const visibleColumns = columns.slice(0, max)
+  const visible = new Set(visibleColumns)
+  return (
+    <LineMatrix
+      columns={visibleColumns}
+      cells={cells.filter(c => visible.has(c.col))}
+      {...rest}
+    />
+  )
+}
+
 type Pair = { label: string; base: number; vol: number }
 
 const PAIRS: Pair[] = [
@@ -210,19 +246,7 @@ export const FxRates: Story = {
     height: 560,
     formatValue: fmtRate,
   },
-  render: args => (
-    <div className="w-full rounded-xl border border-ds-default bg-ds-surface p-5">
-      <div className="mb-1 text-heading-sm font-semibold text-ds-default">
-        FX rates · weekday seasonality
-      </div>
-      <p className="mb-4 max-w-[60ch] text-body-sm text-ds-subtle">
-        Each cell trends a pair’s weekly mid-rate sampled on that weekday —
-        green when it closed up over the window, red when it closed down. Drag
-        the slider to zoom the date range across every cell at once.
-      </p>
-      <LineMatrix {...args} />
-    </div>
-  ),
+  render: args => <ResponsiveMatrix {...args} />,
 }
 
 const SECTORS = ['Tech', 'Energy', 'Financials', 'Health']
@@ -254,18 +278,7 @@ export const SectorReturns: Story = {
     height: 420,
     formatValue: (v: number) => v.toFixed(0),
   },
-  render: args => (
-    <div className="w-full rounded-xl border border-ds-default bg-ds-surface p-5">
-      <div className="mb-1 text-heading-sm font-semibold text-ds-default">
-        Sector performance
-      </div>
-      <p className="mb-4 max-w-[60ch] text-body-sm text-ds-subtle">
-        Indexed return per sector across the four quarters — a compact way to
-        scan many series at once without a wall of legends.
-      </p>
-      <LineMatrix {...args} />
-    </div>
-  ),
+  render: args => <ResponsiveMatrix {...args} />,
 }
 
 const CRYPTO: Pair[] = [
@@ -381,10 +394,15 @@ function PlaygroundDemo() {
       dataset.rows.filter(r => (typeof r === 'string' ? !hidden.has(r) : true)),
     [dataset, hidden]
   )
-  const cells = useMemo(
-    () => dataset.cells.filter(c => !hidden.has(c.row)),
-    [dataset, hidden]
+  const maxColumns = useMaxColumns()
+  const columns = useMemo(
+    () => dataset.columns.slice(0, maxColumns),
+    [dataset, maxColumns]
   )
+  const cells = useMemo(() => {
+    const visible = new Set(columns)
+    return dataset.cells.filter(c => !hidden.has(c.row) && visible.has(c.col))
+  }, [dataset, hidden, columns])
 
   const datasetItems: DropdownItemDef[] = [
     { type: 'label', label: 'Dataset' },
@@ -406,96 +424,111 @@ function PlaygroundDemo() {
   ]
 
   return (
-    <div className="w-full rounded-xl border border-ds-default bg-ds-surface p-5">
-      <div className="mb-1 text-heading-sm font-semibold text-ds-default">
-        Market matrix
-      </div>
-      <p className="mb-4 text-body-sm text-ds-subtle">
-        Switch datasets, tweak the rendering, and click an instrument chip to
-        show or hide its row.
-      </p>
+    <div className="w-full">
+      <div className="mx-auto mb-4 w-[92%]">
+        <div className="mb-1 text-heading-sm font-semibold text-ds-default">
+          Market matrix
+        </div>
+        <p className="mb-4 text-body-sm text-ds-subtle">
+          Switch datasets, tweak the rendering, and click an instrument chip to
+          show or hide its row.
+        </p>
 
-      {/* Toolbar */}
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <Dropdown
-          align="start"
-          trigger={
-            <Button size="sm" variant="outlineSecondary">
-              {dataset.label}
-              <span aria-hidden className="ml-1.5 text-ds-subtle">
-                ▾
-              </span>
-            </Button>
-          }
-          items={datasetItems}
-          onSelect={selectDataset}
-        />
+        <div className="mb-3 flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center">
+          <div className="grid grid-cols-2 gap-2 md:contents">
+            <Dropdown
+              align="start"
+              trigger={
+                <Button
+                  size="sm"
+                  variant="outlineSecondary"
+                  className="w-full md:w-auto"
+                >
+                  {dataset.label}
+                  <span aria-hidden className="ml-1.5 text-ds-subtle">
+                    ▾
+                  </span>
+                </Button>
+              }
+              items={datasetItems}
+              onSelect={selectDataset}
+            />
 
-        <Dropdown
-          align="start"
-          trigger={
-            <Button size="sm" variant="outlineSecondary">
-              Curve: {curve}
-              <span aria-hidden className="ml-1.5 text-ds-subtle">
-                ▾
-              </span>
-            </Button>
-          }
-          items={curveItems}
-          onSelect={value => setCurve(value as LineCurve)}
-        />
-
-        <span className="mx-1 h-5 w-px bg-ds-default" aria-hidden />
-
-        <Toggle active={area} onClick={() => setArea(a => !a)}>
-          Area
-        </Toggle>
-        <Toggle active={trend} onClick={() => setTrend(t => !t)}>
-          Trend colors
-        </Toggle>
-        <Toggle active={zoom} onClick={() => setZoom(z => !z)}>
-          Zoom
-        </Toggle>
-
-        {trend && (
-          <div className="ml-auto flex items-center gap-1.5">
-            <Badge variant="success" size="sm">
-              Up
-            </Badge>
-            <Badge variant="destructive" size="sm">
-              Down
-            </Badge>
+            <Dropdown
+              align="start"
+              trigger={
+                <Button
+                  size="sm"
+                  variant="outlineSecondary"
+                  className="w-full md:w-auto"
+                >
+                  Curve: {curve}
+                  <span aria-hidden className="ml-1.5 text-ds-subtle">
+                    ▾
+                  </span>
+                </Button>
+              }
+              items={curveItems}
+              onSelect={value => setCurve(value as LineCurve)}
+            />
           </div>
-        )}
-      </div>
 
-      {/* Instrument filter chips */}
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        {dataset.instruments.map(label => {
-          const isHidden = hidden.has(label)
-          return (
-            <button
-              key={label}
-              type="button"
-              onClick={() => toggleRow(label)}
-              className="cursor-pointer"
-              aria-pressed={!isHidden}
-            >
-              <Badge
-                variant={isHidden ? 'outlineLight' : 'outlineSecondary'}
-                size="sm"
-                className={isHidden ? 'opacity-50' : undefined}
-              >
-                {label}
+          <span
+            className="hidden h-5 w-px bg-ds-default md:mx-1 md:block"
+            aria-hidden
+          />
+
+          <div className="flex flex-wrap gap-2 md:contents">
+            <Toggle active={area} onClick={() => setArea(a => !a)}>
+              Area
+            </Toggle>
+            <Toggle active={trend} onClick={() => setTrend(t => !t)}>
+              Trend colors
+            </Toggle>
+            <Toggle active={zoom} onClick={() => setZoom(z => !z)}>
+              Zoom
+            </Toggle>
+          </div>
+
+          {trend && (
+            <div className="flex items-center gap-1.5 md:ml-auto">
+              <Badge variant="success" size="sm">
+                Up
               </Badge>
-            </button>
-          )
-        })}
+              <Badge variant="destructive" size="sm">
+                Down
+              </Badge>
+            </div>
+          )}
+        </div>
+
+        <div className="mb-4 flex flex-wrap gap-1.5">
+          {dataset.instruments.map(label => {
+            const isHidden = hidden.has(label)
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => toggleRow(label)}
+                className="cursor-pointer"
+                aria-pressed={!isHidden}
+              >
+                <Badge
+                  variant={isHidden ? 'outlineLight' : 'outlineSecondary'}
+                  size="sm"
+                  className={isHidden ? 'opacity-50' : undefined}
+                >
+                  {label}
+                </Badge>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {cells.length ? (
         <LineMatrix
-          columns={dataset.columns}
+          columns={columns}
           rows={rows}
           cells={cells}
           cornerLabel={dataset.cornerLabel}

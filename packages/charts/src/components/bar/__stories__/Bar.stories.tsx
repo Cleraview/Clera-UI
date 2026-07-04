@@ -1,13 +1,31 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
 import { Bar } from '../Bar'
 import { useBarDrilldown, type BarDrilldownDatum } from '../useDrilldown'
+
+const centerStory: Decorator = (Story, { viewMode }) => {
+  if (viewMode === 'docs') {
+    return (
+      <div className="mx-auto w-full max-w-[820px]">
+        <Story />
+      </div>
+    )
+  }
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center p-6">
+      <div className="w-full max-w-[820px]">
+        <Story />
+      </div>
+    </div>
+  )
+}
 
 const meta: Meta<typeof Bar> = {
   title: 'Charts/Bar',
   component: Bar,
   tags: [],
+  decorators: [centerStory],
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
     docs: {
       description: {
         component:
@@ -440,7 +458,7 @@ export const Basic: Story = {
     },
   },
   render: args => (
-    <div className="w-[560px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -473,7 +491,7 @@ export const WithLegend: Story = {
     ],
   },
   render: args => (
-    <div className="w-[560px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -510,7 +528,7 @@ export const Stacked: Story = {
     ],
   },
   render: args => (
-    <div className="w-[600px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -574,7 +592,7 @@ export const MultipleStacks: Story = {
     ],
   },
   render: args => (
-    <div className="w-[680px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -607,7 +625,7 @@ export const WithTrack: Story = {
     ],
   },
   render: args => (
-    <div className="w-[480px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -640,7 +658,7 @@ export const SingleBarStyle: Story = {
     ],
   },
   render: args => (
-    <div className="w-[520px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -673,7 +691,7 @@ export const NegativeValues: Story = {
     ],
   },
   render: args => (
-    <div className="w-[520px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -725,7 +743,7 @@ export const Waterfall: Story = {
     ],
   },
   render: args => (
-    <div className="w-[560px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -761,7 +779,7 @@ export const PercentStacked: Story = {
     ],
   },
   render: args => (
-    <div className="w-[640px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -796,7 +814,7 @@ export const Zoom: Story = {
     data: zoomData,
   },
   render: args => (
-    <div className="w-[640px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -871,7 +889,7 @@ export const MixZoom: Story = {
     ],
   },
   render: args => (
-    <div className="w-[720px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -905,7 +923,7 @@ export const BrushSelect: Story = {
     ],
   },
   render: args => (
-    <div className="w-[560px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -959,7 +977,7 @@ export const RainfallVsEvaporation: Story = {
     ],
   },
   render: args => (
-    <div className="w-[720px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -998,7 +1016,7 @@ export const AxisTitles: Story = {
     },
   },
   render: args => (
-    <div className="w-[620px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),
@@ -1134,7 +1152,7 @@ export const Drilldown: Story = {
     const { data, path, depth, onBarClick, drillTo } =
       useBarDrilldown(drilldownTree)
     return (
-      <div className="w-[640px]">
+      <div className="w-full">
         <div className="mb-3 flex items-center gap-2 text-body-sm">
           {path.map((label, i) => {
             const isCurrent = i === path.length - 1
@@ -1222,7 +1240,7 @@ export const AxisBreaks: Story = {
     ],
   },
   render: args => (
-    <div className="w-[640px]">
+    <div className="w-full">
       <Bar {...args} />
     </div>
   ),

@@ -392,15 +392,24 @@ div[data-key="addon-controls"] > div > div[class*="css-"] {
 }
 
 /* Controls panel sizing: the panel already spans the main column (so it tracks
-   the sidebar collapsing in/out), but Storybook's scroll viewport defaults to
-   `overflow-x: hidden`, which clips the rightmost control column on wide tables.
-   Let the table fill the available width and scroll horizontally instead of
-   truncating, regardless of whether the sidebar is open. */
+   the sidebar collapsing in/out). On desktop we want the args table to *fit*
+   that width rather than scroll horizontally: `table-layout: fixed` makes the
+   four columns share the available width and wrap long text, so the section
+   fits the device width whether the sidebar is open or closed. A horizontal
+   scroll stays available as a safety valve if a single control can't shrink,
+   and the mobile block below re-enables scrolling where four columns can't
+   fit at all. */
 div:has(> div[orientation]) [data-radix-scroll-area-viewport] {
   overflow-x: auto !important;
 }
 #panel-tab-content .docblock-argstable {
   width: 100% !important;
+  table-layout: fixed !important;
+}
+#panel-tab-content .docblock-argstable th,
+#panel-tab-content .docblock-argstable td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Panel Tab */
