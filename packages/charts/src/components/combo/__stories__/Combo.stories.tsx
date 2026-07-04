@@ -1,14 +1,32 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
 import { Combo } from '../Combo'
+
+const centerStory: Decorator = (Story, { viewMode }) => {
+  if (viewMode === 'docs') {
+    return (
+      <div className="mx-auto w-full max-w-[820px]">
+        <Story />
+      </div>
+    )
+  }
+  return (
+    <div className="flex min-h-screen w-full items-center justify-center p-6">
+      <div className="w-full max-w-[820px]">
+        <Story />
+      </div>
+    </div>
+  )
+}
 
 const meta: Meta<typeof Combo> = {
   title: 'Charts/Combo',
   component: Combo,
   tags: [],
+  decorators: [centerStory],
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
     docs: {
       description: {
         component:
@@ -180,7 +198,7 @@ export const LineAndBar: Story = {
     ],
   },
   render: args => (
-    <div className="w-[600px]">
+    <div className="w-full">
       <Combo {...args} />
     </div>
   ),
@@ -227,7 +245,7 @@ export const Rainfall: Story = {
     ],
   },
   render: args => (
-    <div className="w-[620px]">
+    <div className="w-full">
       <Combo {...args} />
     </div>
   ),
@@ -274,7 +292,7 @@ function DynamicComboDemo() {
   }, [seed])
 
   return (
-    <div className="w-[640px]">
+    <div className="w-full">
       <Combo
         height={360}
         categories={seed.categories}
@@ -350,7 +368,7 @@ export const AreaAndBar: Story = {
     ],
   },
   render: args => (
-    <div className="w-[600px]">
+    <div className="w-full">
       <Combo {...args} />
     </div>
   ),
@@ -414,7 +432,7 @@ export const MultipleYAxes: Story = {
     ],
   },
   render: args => (
-    <div className="w-[720px]">
+    <div className="w-full">
       <Combo {...args} />
     </div>
   ),
@@ -460,7 +478,7 @@ export const AxisTitles: Story = {
     ],
   },
   render: args => (
-    <div className="w-[620px]">
+    <div className="w-full">
       <Combo {...args} />
     </div>
   ),

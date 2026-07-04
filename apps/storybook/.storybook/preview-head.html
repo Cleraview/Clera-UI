@@ -73,10 +73,35 @@
     background-color: var(--background-color-ds-skeleton);
   }
 
+  /* Props table: full width on desktop (no truncation), and on narrow screens
+     it reflows to a single stacked column instead of forcing a wide stretch. */
   div:has(> .docblock-argstable.sb-unstyled) {
     border: 1px solid var(--border-color-ds-default);
     border-radius: var(--radius-lg);
     overflow: hidden;
+  }
+  @media (max-width: 640px) {
+    .docblock-argstable.sb-unstyled,
+    .docblock-argstable.sb-unstyled tbody,
+    .docblock-argstable.sb-unstyled tr,
+    .docblock-argstable.sb-unstyled td {
+      display: block;
+      width: 100%;
+    }
+    .docblock-argstable.sb-unstyled thead {
+      display: none;
+    }
+    .docblock-argstable.sb-unstyled td {
+      border: 0 !important;
+      padding: 4px 16px !important;
+    }
+    .docblock-argstable.sb-unstyled tbody > tr {
+      padding: 10px 0;
+      border-top: 1px solid var(--border-color-ds-default);
+    }
+    .docblock-argstable.sb-unstyled tbody > tr:first-of-type {
+      border-top: 0;
+    }
   }
   .docblock-argstable.sb-unstyled {
     color: var(--text-color-ds-default)!important;

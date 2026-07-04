@@ -51,7 +51,17 @@ export const ManagerHeader = () => {
   ], [])
 
   const [searchOpen, setSearchOpen] = useState(false)
-  const [navHidden, setNavHidden] = useState(false)
+  const [navHidden, setNavHidden] = useState<boolean>(() => {
+    try {
+      const stored = window.localStorage.getItem('sidebarCollapsed')
+      if (stored === 'true') return true
+      if (stored === 'false') return false
+    } catch {}
+    return (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 768px)').matches
+    )
+  })
   const [panelOpen, setPanelOpen] = useState(false)
   const isMac =
     typeof navigator !== 'undefined' && /mac/i.test(navigator.platform)
@@ -88,7 +98,13 @@ export const ManagerHeader = () => {
     window.matchMedia('(max-width: 768px)').matches
 
   const onToggleNav = () => {
-    setNavHidden(h => !h)
+    setNavHidden(h => {
+      const next = !h
+      try {
+        window.localStorage.setItem('sidebarCollapsed', String(next))
+      } catch {}
+      return next
+    })
   }
 
   const onTogglePanel = () => {
@@ -122,8 +138,12 @@ export const ManagerHeader = () => {
   }, [panelOpen])
 
   useEffect(() => {
-    if (!isMobile()) return
-    setNavHidden(true)
+    let stored: string | null = null
+    try {
+      stored = window.localStorage.getItem('sidebarCollapsed')
+    } catch {}
+    if (stored != null) return
+    if (isMobile()) setNavHidden(true)
   }, [])
 
   useEffect(() => {
