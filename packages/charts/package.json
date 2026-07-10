@@ -38,6 +38,8 @@
   },
   "devDependencies": {
     "@clera/config-jest": "workspace:*",
+    "@storybook/addon-docs": "^10.1.8",
+    "@storybook/nextjs": "^10.1.8",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^29.5.14",

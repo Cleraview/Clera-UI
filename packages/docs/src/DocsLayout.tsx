@@ -22,7 +22,7 @@ export const DocsLayout: React.FC<Props> = ({ children, className }) => {
         </div>
 
         {side.length > 0 && (
-          <div className="@max-lg:hidden w-[300px] shrink-0">
+          <div className="@max-2xl:hidden w-[300px] shrink-0">
             <div className="sticky top-10">{side}</div>
           </div>
         )}
