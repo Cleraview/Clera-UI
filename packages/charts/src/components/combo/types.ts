@@ -71,6 +71,26 @@ export type ComboXAxis = {
   orientation?: AxisNameOrientation
 }
 
+/**
+ * A part-to-whole pie drawn above the grid, sharing the chart's series, colors
+ * and legend. It re-encodes to whichever category the axis pointer is on, so
+ * hovering the plot moves the pie with it.
+ */
+export type ComboSummaryPie = {
+  /** Which category the pie starts on. Defaults to the last. */
+  activeIndex?: number
+  /** Share of the chart height given to the pie, `0`–`1`. Defaults to `0.5`. */
+  share?: number
+  /** Inner hole radius (px or `%`). Set it for a doughnut. */
+  innerRadius?: number | string
+  /** Outer radius (px or `%` of the chart's shorter side). */
+  outerRadius?: number | string
+  /** Draw `name: value (percent%)` beside each slice. Defaults to `true`. */
+  showLabels?: boolean
+  /** Fired when the axis pointer moves the pie to a new category. */
+  onActiveIndexChange?: (index: number, category: string) => void
+}
+
 export interface ComboProps {
   categories: string[]
   series: ComboSeries[]
@@ -93,6 +113,11 @@ export interface ComboProps {
   xAxis?: ComboXAxis
   /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
+  /**
+   * Draw a part-to-whole pie above the grid, linked to the axis pointer. Pass
+   * `true` for defaults, or an object to tune it.
+   */
+  summaryPie?: boolean | ComboSummaryPie
   loading?: boolean
   animate?: boolean
   emptyMessage?: string

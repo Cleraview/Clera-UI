@@ -1,0 +1,633 @@
+import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as PieStories from "./Pie.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+
+<Meta title="Charts/Pie" of={PieStories} />
+
+<DocsLayout>
+  <div>
+    # Pie
+
+    To show a part-to-whole breakdown as slices of a circle.
+    <DocInfo importStatement={`import { Pie } from '@clera/charts'`} sourcePath={`components/pie`} />
+
+    <br />
+
+    ## **When To Use**
+    The Pie shows how a total splits into parts. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime, hover/emphasis behavior, and `@clera/tokens` colors as `Bar`/`Combo`/`PolarBar`, and adapts to light/dark mode automatically.
+
+    Reach for it when the whole matters as much as the parts:
+
+      - **Shape**: `innerRadius` turns the pie into a doughnut; `startAngle`/`endAngle` make a half doughnut; `padAngle` and `borderRadius` add breathing room and rounded corners.
+      - **Nightingale**: `roseType="area"` (or `"radius"`) grows slices by radius instead of angle, so small differences read more clearly.
+      - **Labels**: put labels `outside`/`inside`/`center`, line them up with `labelAlignTo`, or format them with `labelFormatter` (`{ name, value, percent }`).
+      - **Legend**: on for a single pie, off for multiple; set `scrollableLegend` when there are many slices.
+      - **Multiple pies**: pass `series` to draw several pies in one chart — nested rings, partitioned, or one per facet.
+
+    A caveat worth knowing: pies are hard to read precisely once you pass ~6 slices — prefer a `Bar` for exact comparison, and keep the pie for at-a-glance share.
+
+    ## **Examples**
+    ### **Basic**
+
+    One slice per datum, outside labels with leader lines, and a legend below. A `labelFormatter` prints each share as a percentage.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Basic} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Traffic = () => (
+            <Pie
+              data={[
+                { label: 'Search', value: 1048 },
+                { label: 'Direct', value: 735 },
+                { label: 'Email', value: 580 },
+                { label: 'Affiliate', value: 484 },
+                { label: 'Video Ads', value: 300 },
+              ]}
+              labelFormatter={({ name, percent }) => name + '  ' + percent + '%'}
+            />
+          )
+
+          export default Traffic
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Doughnut**
+
+    Set `innerRadius` to cut a hole. Add `borderRadius` (and a little `padAngle`) to round the slice corners.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Doughnut} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Doughnut = () => (
+            <Pie
+              data={data}
+              innerRadius="55%"
+              borderRadius={10}
+              padAngle={2}
+            />
+          )
+
+          export default Doughnut
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Half doughnut**
+
+    Sweep only the top half with `startAngle={180}` and `endAngle={360}` — handy for gauge-like sentiment or budget readouts.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.HalfDoughnut} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Sentiment = () => (
+            <Pie
+              data={[
+                { label: 'Positive', value: 62, variant: 'success' },
+                { label: 'Neutral', value: 26, variant: 'neutral' },
+                { label: 'Negative', value: 12, variant: 'destructive' },
+              ]}
+              innerRadius="50%"
+              outerRadius="90%"
+              startAngle={180}
+              endAngle={360}
+              center={['50%', '72%']}
+            />
+          )
+
+          export default Sentiment
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Pad angle**
+
+    `padAngle` inserts an even gap between slices; pair it with `borderRadius` for a clean segmented ring.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.PadAngle} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Devices = () => (
+            <Pie data={data} innerRadius="45%" padAngle={3} borderRadius={8} />
+          )
+
+          export default Devices
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Nightingale**
+
+    The Nightingale rose, in both modes side by side. `roseType="radius"` keeps equal angles and grows each slice by radius; `roseType="area"` grows the area. Keep the rose clean with `showLabels={false}` and set `labelOnHover` so a slice only labels itself under the cursor.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Nightingale} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Rose = () => (
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              <Pie
+                data={radiusData}
+                roseType="radius"
+                innerRadius="15%"
+                outerRadius="72%"
+                borderRadius={5}
+                showLabels={false}
+                labelOnHover
+              />
+              <Pie
+                data={areaData}
+                roseType="area"
+                innerRadius="15%"
+                outerRadius="72%"
+                borderRadius={5}
+                showLabels={false}
+                labelOnHover
+              />
+            </div>
+          )
+
+          export default Rose
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Label align**
+
+    `labelAlignTo` tidies outside labels. `"labelLine"` aligns text to the leader-line elbow; `"edge"` flushes every label to the chart edge for a clean column.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.LabelAlign} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Aligned = () => (
+            <Pie data={data} innerRadius="40%" labelAlignTo="edge" showLegend={false} />
+          )
+
+          export default Aligned
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Label align adjust**
+
+    Flush labels to the edge and stack a bold name over a muted value line with a multiline `labelFormatter` — a compact, aligned label block.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.LabelAlignAdjust} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Spend = () => (
+            <Pie
+              data={data}
+              innerRadius="42%"
+              labelAlignTo="edge"
+              showLegend={false}
+              labelFormatter={({ name, value, percent }) =>
+                name + '\\n$' + (value / 1000).toFixed(1) + 'k · ' + percent + '%'
+              }
+            />
+          )
+
+          export default Spend
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Scrollable legend**
+
+    With many slices, put the legend down the side and set `scrollableLegend` so it pages instead of wrapping into a wall of text.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.ScrollableLegend} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Languages = () => (
+            <Pie
+              data={data}
+              innerRadius="40%"
+              showLabels={false}
+              legendPosition="right"
+              scrollableLegend
+              highlightOnHover
+            />
+          )
+
+          export default Languages
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Special label**
+
+    Two custom labels, both injected through the data — no `onReady`, no overlay. **Aurora** uses a structured `detail` table (title, header, a row per device with an inline icon, count, and share). **Cedar** uses a raw `richLabel` — an ECharts `formatter` + `rich` config with an inline SVG sparkline image, exactly the shape you'd hand ECharts. Both are drawn at rest, toggled by `showLabels`, and revealed on hover when hidden — the Pie owns all of it. Icons/sparkline are self-contained inline SVG data URIs; colors resolve from `@clera/tokens`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.SpecialLabel} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          // Inline SVG -> data URI (no external asset)
+          const icon = (paths) =>
+            'data:image/svg+xml,' + encodeURIComponent(
+              '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="22" viewBox="0 0 64 22" fill="none" stroke="#737373" stroke-width="2"><g transform="translate(1 1) scale(0.83)">' + paths + '</g></svg>'
+            )
+          const sparkline = (pts, color) => '...svg polyline -> data URI...'
+
+          const SpecialLabel = () => (
+            <Pie
+              selectedMode="single"
+              outerRadius="46%"
+              data={[
+                {
+                  label: 'Aurora',
+                  value: 7200,
+                  // structured table label
+                  detail: {
+                    title: 'Aurora',
+                    columns: ['Device', 'Sessions', 'Share'],
+                    rows: [
+                      { icon: icon('<rect x="6" y="2" width="12" height="20" rx="2"/>'), cells: ['4,210', '58.5%'] },
+                      { icon: icon('<rect x="2" y="3" width="20" height="14" rx="2"/>'), cells: ['2,290', '31.8%'] },
+                      { icon: icon('<rect x="4" y="2" width="16" height="20" rx="2"/>'), cells: ['700', '9.7%'] },
+                    ],
+                  },
+                },
+                { label: 'Belmont', value: 5100 },
+                {
+                  label: 'Cedar',
+                  value: 4300,
+                  // raw ECharts rich label (formatter + rich)
+                  richLabel: {
+                    formatter: ['{title|Cedar}', '{spark|}', '{value|4,300 sessions}'].join('\\n'),
+                    padding: [8, 12, 10, 12],
+                    rich: {
+                      title: { fontSize: 12, fontWeight: 700, align: 'left', padding: [0, 0, 6, 0] },
+                      spark: { height: 26, width: 88, align: 'left', backgroundColor: { image: sparkline([12,18,14,22,19,26,24,30], '#7c3aed') } },
+                      value: { fontSize: 11, align: 'left', padding: [6, 0, 0, 0] },
+                    },
+                  },
+                },
+                { label: 'Dover', value: 3050 },
+                { label: 'Elgin', value: 2600 },
+              ]}
+            />
+          )
+
+          export default SpecialLabel
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Custom label (component)**
+
+    When you want full control, skip the rich-text label and attach your own React component. A doughnut leaves a hole (`innerRadius`), and a component is absolutely centered over it — a live React node (any markup, links, buttons), not a canvas label. Slice labels reveal on hover (`labelOnHover`) so the center card stays the focus.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.CustomLabel} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const TotalCard = ({ total, top }) => (
+            <div className="rounded-2xl border bg-white/90 px-5 py-3 text-center shadow-sm backdrop-blur">
+              <div className="text-2xl font-bold">{total.toLocaleString()}</div>
+              <div className="text-[11px] uppercase tracking-wide text-neutral-500">total sessions</div>
+              <div className="mt-1 text-xs font-medium text-violet-600">Top: {top}</div>
+            </div>
+          )
+
+          const CenterLabel = () => (
+            <div className="relative">
+              <Pie data={data} innerRadius="66%" showLabels={false} labelOnHover legendPosition="bottom" />
+              <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ top: '46%' }}>
+                <TotalCard total={16250} top="Search" />
+              </div>
+            </div>
+          )
+
+          export default CenterLabel
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Nested pies**
+
+    Two `series` sharing a center. The inner ring uses `selectedMode: "single"` — click a slice to pop it out; clicking another resets the first (one datum starts `selected`). The outer ring uses a **series-level `richLabel`** (`formatter` + `rich`) for the name / value / percent card, and inside labels pick a readable text color from the slice fill. Because the rich cards radiate on every side, the legend is rendered as plain HTML **below** the chart (`showLegend={false}` + your own list) so it can never collide with them.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Nested} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Nested = () => (
+            <div>
+              <Pie
+                showLegend={false}
+                series={[
+                  {
+                    name: 'Access From',
+                    data: [
+                      { label: 'Search Engine', value: 1548 },
+                      { label: 'Direct', value: 775 },
+                      { label: 'Marketing', value: 679, selected: true },
+                    ],
+                    innerRadius: 0,
+                    outerRadius: '30%',
+                    labelPosition: 'inside',
+                    showLabelLine: false,
+                    selectedMode: 'single',
+                  },
+                  {
+                    name: 'Access From',
+                    data: outer,
+                    innerRadius: '40%',
+                    outerRadius: '50%',
+                    richLabel: {
+                      formatter: ['{a|{a}}', '{hr|}', '{b|{b}}{c|{c}}{per|{d}%}'].join('\\n'),
+                      rich: {
+                        a: { color: '#9ca3af', fontSize: 11, lineHeight: 18, align: 'center' },
+                        hr: { borderColor: '#d4d4d8', width: '100%', borderWidth: 1, height: 0, lineHeight: 12 },
+                        b: { fontSize: 13, fontWeight: 'bold', lineHeight: 22 },
+                        c: { fontSize: 12, padding: [0, 10, 0, 6] },
+                        per: { color: '#fff', backgroundColor: '#7c3aed', padding: [3, 6], borderRadius: 4, fontSize: 11 },
+                      },
+                    },
+                  },
+                ]}
+              />
+              {/* legend below the chart, in the DOM — never collides */}
+              <ul className="legend">{/* color dot + name per outer slice */}</ul>
+            </div>
+          )
+
+          export default Nested
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Partition**
+
+    Split a breakdown across several pies in one chart by giving each `series` its own `center`. Operating spend and marketing spend sit side by side, sharing one legend.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Partition} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Partition = () => (
+            <Pie
+              labelPosition="inside"
+              showLabelLine={false}
+              labelFormatter={({ percent }) => percent + '%'}
+              series={[
+                { name: 'Operating', data: opex, center: ['27%', '52%'], outerRadius: '62%' },
+                { name: 'Marketing', data: marketing, center: ['73%', '52%'], outerRadius: '62%' },
+              ]}
+            />
+          )
+
+          export default Partition
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Default arrangement**
+
+    Lay out one small pie per facet on a grid of `center`s — four regions, same categories, one shared legend. Hover any slice to compare the mix across regions.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.Arrangement} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie } from '@clera/charts'
+
+          const Arrangement = () => (
+            <Pie
+              showLabels={false}
+              highlightOnHover
+              series={regions.map((r, i) => ({
+                name: r.name,
+                data: r.data,
+                center: [(i % 2 === 0 ? 30 : 70) + '%', (i < 2 ? 32 : 74) + '%'],
+                outerRadius: '26%',
+              }))}
+            />
+          )
+
+          export default Arrangement
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **On a geo map**
+
+    Pass a `geo` prop to lay the chart out on a map instead of the chart box. Every series `center` is then read as a `[lng, lat]` coordinate and `outerRadius` as a pixel radius — here a Singapore map with a pie per region of its retail / office / dining mix. Register the map once with `registerGeoMap`, which pulls in the ECharts geo module only for the bundles that use it.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.GeoMap} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie, registerGeoMap } from '@clera/charts'
+
+          registerGeoMap('singapore', singaporeGeoJson)
+
+          const series = regions.map((r) => ({
+            name: r.name,
+            data: r.data,
+            center: r.coord, // [lng, lat]
+            outerRadius: 22,
+          }))
+
+          const GeoPie = () => (
+            <Pie
+              geo={{ map: 'singapore' }}
+              series={series}
+              height={460}
+              showLabels={false}
+              showLabelLine={false}
+              showLegend
+              highlightOnHover
+            />
+          )
+
+          export default GeoPie
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Calendar pie**
+
+    Pass a `calendar` prop to lay the chart out on a date grid. Each series names the `date` cell it belongs to, so a pie lands on every day of the month — here how each day's 24 hours were spent. The day-of-month numbers are drawn in the cell corners, and the pie radius defaults to the cell size. Call `registerCalendar()` once, which pulls in the ECharts calendar module only for the bundles that use it.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.CalendarPie} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Pie, registerCalendar } from '@clera/charts'
+
+          registerCalendar()
+
+          const series = days.map((day) => ({
+            name: day.date,
+            date: day.date,
+            data: day.data,
+          }))
+
+          const CalendarPie = () => (
+            <Pie
+              calendar={{ range: '2024-03', cellSize: 80, orient: 'vertical' }}
+              series={series}
+              height={520}
+              labelPosition="inside"
+              labelFormatter={(d) => String(d.value)}
+              showLabelLine={false}
+              showLegend
+              highlightOnHover
+              formatValue={(v) => \`\${v}h\`}
+            />
+          )
+
+          export default CalendarPie
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Share dataset**
+
+    One dataset, two linked views in a single canvas — a part-to-whole pie on top, the trend over time below. Hover any point on the line and the pie re-encodes to that category, so both charts always describe the same moment. Since the pie slices and the lines are the same series, one legend toggles both.
+
+    This lives on `Combo` as a `summaryPie` prop rather than on `Pie`: the lower half needs a cartesian grid and axes, which don't belong in a pie's option, while `Combo` already owns the categories, the shared legend, and the axis pointer.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PieStories.ShareDataset} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Combo } from '@clera/charts'
+
+          const categories = ['2012', '2013', '2014', '2015', '2016', '2017']
+
+          const series = [
+            { name: 'Milk Tea', type: 'line', smooth: true, data: [56.5, 82.1, 88.7, 70.1, 53.4, 85.1] },
+            { name: 'Matcha Latte', type: 'line', smooth: true, data: [51.1, 51.4, 55.1, 53.3, 73.8, 68.7] },
+            { name: 'Cheese Cocoa', type: 'line', smooth: true, data: [40.1, 62.2, 69.5, 36.4, 45.2, 32.5] },
+            { name: 'Walnut Brownie', type: 'line', smooth: true, data: [25.2, 37.1, 41.2, 18, 33.9, 49.1] },
+          ]
+
+          const ShareDataset = () => (
+            <Combo
+              categories={categories}
+              series={series}
+              height={620}
+              summaryPie
+              highlightSeries
+              legendPosition="bottom"
+            />
+          )
+
+          export default ShareDataset
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Pie component, along with their types, default values, and descriptions.
+    <ArgTypes />
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            { id: "basic", label: "Basic" },
+            { id: "doughnut", label: "Doughnut" },
+            { id: "half-doughnut", label: "Half doughnut" },
+            { id: "pad-angle", label: "Pad angle" },
+            { id: "nightingale", label: "Nightingale" },
+            { id: "label-align", label: "Label align" },
+            { id: "label-align-adjust", label: "Label align adjust" },
+            { id: "scrollable-legend", label: "Scrollable legend" },
+            { id: "special-label", label: "Special label" },
+            { id: "custom-label-component", label: "Custom label (component)" },
+            { id: "nested-pies", label: "Nested pies" },
+            { id: "partition", label: "Partition" },
+            { id: "default-arrangement", label: "Default arrangement" },
+            { id: "on-a-geo-map", label: "On a geo map" },
+            { id: "calendar-pie", label: "Calendar pie" },
+            { id: "share-dataset", label: "Share dataset" },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>
