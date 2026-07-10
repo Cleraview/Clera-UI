@@ -252,7 +252,9 @@ export const Pie: React.FC<PieProps> = ({
       cardItems.length > 0 && stackDetailBelow !== false
         ? stackDetailBelow
         : undefined,
-    rebuildOnResize: Boolean(calendar),
+    rebuildOnResize: Boolean(
+      calendar || legendPosition === 'left' || legendPosition === 'right'
+    ),
   })
 
   useEffect(() => {

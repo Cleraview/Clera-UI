@@ -194,6 +194,13 @@ export function buildPieOption(params: BuildPieOptionParams) {
   )
   const legendBand = 44
   const legendSideWidth = 20 + legendLabelChars * 7
+  // On narrow (mobile) containers a side legend sized purely off label length
+  // can eat past half the width and collide with the pie itself, so once the
+  // real pixel width is known, cap it and shrink/shift the pie to match.
+  const sideLegendWidth =
+    legendVertical && width > 0
+      ? Math.min(legendSideWidth, Math.max(64, Math.round(width * 0.42)))
+      : legendSideWidth
 
   const calInset = calendar
     ? {
@@ -256,9 +263,16 @@ export function buildPieOption(params: BuildPieOptionParams) {
   const calDayFont = Math.max(8, Math.min(13, Math.round(calCell * 0.16)))
   const calDayInset = Math.max(6, Math.round(calCell * 0.14))
 
+  const legendSideKnown =
+    legendShown && legendVertical && seriesInput.length === 1 && width > 0
+
   const defaultOuterRadius = (): PieCoord => {
     if (calendar) return Math.round(calCell * 0.38)
     if (geo) return 24
+    if (legendSideKnown) {
+      const pieAreaW = Math.max(0, width - sideLegendWidth)
+      return Math.round(Math.min(pieAreaW, height || pieAreaW) * 0.375)
+    }
     return '75%'
   }
 
@@ -271,6 +285,14 @@ export function buildPieOption(params: BuildPieOptionParams) {
     if (!legendShown || seriesInput.length > 1) return ['50%', '50%']
     if (legendPosition === 'top') return ['50%', '56%']
     if (legendPosition === 'bottom') return ['50%', '46%']
+    if (legendSideKnown) {
+      const pieAreaW = Math.max(0, width - sideLegendWidth)
+      const centerX =
+        legendPosition === 'left'
+          ? sideLegendWidth + pieAreaW / 2
+          : pieAreaW / 2
+      return [Math.round(centerX), '50%']
+    }
     if (legendPosition === 'left') return ['56%', '50%']
     return ['44%', '50%']
   }
@@ -684,11 +706,18 @@ export function buildPieOption(params: BuildPieOptionParams) {
             ? undefined
             : 'center',
       right: legendPosition === 'right' ? 0 : undefined,
+      ...(legendVertical && width > 0 ? { width: sideLegendWidth - 8 } : {}),
       icon: 'circle',
       itemWidth: 10,
       itemHeight: 10,
       itemGap: 12,
-      textStyle: { color: labelColor, fontSize: 12 },
+      textStyle: {
+        color: labelColor,
+        fontSize: 12,
+        ...(legendVertical && width > 0
+          ? { width: sideLegendWidth - 26, overflow: 'truncate' as const }
+          : {}),
+      },
       pageIconColor: subtleColor,
       pageIconInactiveColor: lineColor,
       pageTextStyle: { color: subtleColor },
