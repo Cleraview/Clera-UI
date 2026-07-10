@@ -6,4 +6,5 @@ export type {
   ComboYAxis,
   ComboXAxis,
   ComboLegendPosition,
+  ComboSummaryPie,
 } from './types'

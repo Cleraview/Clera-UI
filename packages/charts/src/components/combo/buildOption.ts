@@ -17,7 +17,9 @@ import type {
   ComboYAxis,
   ComboXAxis,
   ComboLegendPosition,
+  ComboSummaryPie,
 } from './types'
+import { buildPieOption } from '../pie/buildOption'
 
 export interface BuildComboOptionParams {
   categories: string[]
@@ -33,11 +35,102 @@ export interface BuildComboOptionParams {
   yAxes?: ComboYAxis[]
   xAxis?: ComboXAxis
   xAxisLabel?: AxisLabelOverride
+  summaryPie?: ComboSummaryPie
+  activeIndex?: number
   animate: boolean
   emptyMessage: string
 }
 
 const identity = (value: number) => String(value)
+
+const LEGEND_RESERVE = 52
+const LEGEND_ICON_WIDTH = 20
+const LEGEND_CHAR_WIDTH = 6.8
+const LEGEND_GAP = 24
+
+export const SUMMARY_PIE_ID = 'combo-summary-pie'
+
+export function resolveSeriesColors(series: ComboSeries[]): string[] {
+  const categorical = resolveCategoricalPalette()
+  return series.map(
+    (s, i) =>
+      s.color ??
+      (s.variant
+        ? resolveVariant(s.variant)
+        : categorical[i % categorical.length])
+  )
+}
+
+type PieSeriesOption = { data: unknown[] } & Record<string, unknown>
+
+/**
+ * The summary pie is a real `Pie` series — built by `buildPieOption` so its
+ * hover, emphasis, labels and colors are identical to the `Pie` component's.
+ * Only the placement (center/radius) and id are Combo's.
+ */
+export function buildSummaryPieSeries(
+  series: ComboSeries[],
+  colors: string[],
+  activeIndex: number,
+  opts: {
+    center: [string, string]
+    innerRadius?: number | string
+    outerRadius: number | string
+    showLabels: boolean
+    format: (value: number) => string
+    animate: boolean
+  }
+): PieSeriesOption {
+  const built = buildPieOption({
+    data: series.map((s, i) => ({
+      label: s.name,
+      value: s.data[activeIndex] ?? 0,
+      color: colors[i],
+    })),
+    innerRadius: opts.innerRadius,
+    outerRadius: opts.outerRadius,
+    center: opts.center,
+    startAngle: 90,
+    padAngle: 0,
+    borderRadius: 0,
+    roseType: false,
+    palette: 'categorical',
+    showLabels: opts.showLabels,
+    labelOnHover: false,
+    labelOnClick: false,
+    labelPosition: 'outside',
+    labelAlignTo: 'none',
+    showLabelLine: true,
+    labelFormatter: d => `${d.name}: ${opts.format(d.value)} (${d.percent}%)`,
+    showTooltip: false,
+    showLegend: false,
+    legendPosition: 'bottom',
+    scrollableLegend: false,
+    highlightOnHover: true,
+    selectedMode: false,
+    formatValue: opts.format,
+    animate: opts.animate,
+    emptyMessage: '',
+  }) as { series?: PieSeriesOption[] }
+
+  const pie = built.series?.[0] ?? ({ data: [] } as PieSeriesOption)
+  return { ...pie, id: SUMMARY_PIE_ID, tooltip: { show: false } }
+}
+
+/** Just the slice data, for merging a new active category into a live chart. */
+export function summaryPieData(
+  series: ComboSeries[],
+  colors: string[],
+  activeIndex: number
+): unknown[] {
+  return buildSummaryPieSeries(series, colors, activeIndex, {
+    center: ['50%', '50%'],
+    outerRadius: '50%',
+    showLabels: true,
+    format: String,
+    animate: true,
+  }).data
+}
 
 export function buildComboOption(params: BuildComboOptionParams) {
   const {
@@ -54,6 +147,8 @@ export function buildComboOption(params: BuildComboOptionParams) {
     yAxes,
     xAxis,
     xAxisLabel,
+    summaryPie,
+    activeIndex = 0,
     animate,
     emptyMessage,
   } = params
@@ -205,6 +300,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
       symbol: 'circle',
       symbolSize: 6,
       showSymbol: true,
+      ...(summaryPie ? { triggerLineEvent: true } : {}),
       lineStyle: { color, width: 2 },
       itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
       emphasis: {
@@ -327,6 +423,32 @@ export function buildComboOption(params: BuildComboOptionParams) {
 
   const legendVertical = legendPosition === 'left' || legendPosition === 'right'
 
+  const longestLegendLabel = series.reduce(
+    (n, s) => Math.max(n, (s.name ?? '').length),
+    0
+  )
+  const legendSideReserve = Math.round(
+    LEGEND_ICON_WIDTH + longestLegendLabel * LEGEND_CHAR_WIDTH + LEGEND_GAP
+  )
+
+  const legendTopPct = showLegend && legendPosition === 'top' ? 6 : 0
+  const pieShare = summaryPie ? (summaryPie.share ?? 0.5) : 0
+  const pieBandPct = pieShare * 100
+  const pieOuter = summaryPie?.outerRadius ?? `${Math.round(pieShare * 56)}%`
+
+  const pieSeries = summaryPie
+    ? [
+        buildSummaryPieSeries(series, seriesColors, activeIndex, {
+          center: ['50%', `${pieBandPct / 2 + legendTopPct}%`],
+          innerRadius: summaryPie.innerRadius,
+          outerRadius: pieOuter,
+          showLabels: summaryPie.showLabels ?? true,
+          format: formatForSeries(series[0]),
+          animate,
+        }),
+      ]
+    : []
+
   const xAxisOption = {
     type: 'category' as const,
     data: categories,
@@ -383,19 +505,23 @@ export function buildComboOption(params: BuildComboOptionParams) {
     grid: {
       left: Math.max(
         8,
-        (showLegend && legendPosition === 'left' ? 96 : 0) + reserveFor('left')
+        (showLegend && legendPosition === 'left' ? legendSideReserve : 0) +
+          reserveFor('left')
       ),
       right: Math.max(
         8,
-        (showLegend && legendPosition === 'right' ? 96 : 0) +
+        (showLegend && legendPosition === 'right' ? legendSideReserve : 0) +
           reserveFor('right')
       ),
-      top: Math.max(
-        (showLegend && legendPosition === 'top' ? 36 : 0) + reserveFor('top'),
-        12
-      ),
+      top: summaryPie
+        ? `${pieBandPct + legendTopPct}%`
+        : Math.max(
+            (showLegend && legendPosition === 'top' ? LEGEND_RESERVE : 0) +
+              reserveFor('top'),
+            12
+          ),
       bottom: Math.max(
-        (showLegend && legendPosition === 'bottom' ? 36 : 0) +
+        (showLegend && legendPosition === 'bottom' ? LEGEND_RESERVE : 0) +
           reserveFor('bottom'),
         axisLabelRotate ? 24 : 0,
         8
@@ -447,6 +573,6 @@ export function buildComboOption(params: BuildComboOptionParams) {
     },
     xAxis: xAxisOption,
     yAxis,
-    series: seriesList,
+    series: [...seriesList, ...pieSeries],
   }
 }

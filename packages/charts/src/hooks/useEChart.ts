@@ -1,29 +1,46 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import * as echarts from 'echarts/core'
 import type { ECharts, EChartsCoreOption } from 'echarts/core'
 import { setColorScope } from '@/utils'
+
+export interface EChartBuildContext {
+  compact: boolean
+  stacked: boolean
+  width: number
+  height: number
+}
 
 export interface EChartEventParams {
   componentType?: string
   seriesType?: string
   seriesName?: string
+  seriesIndex?: number
   name?: string
   value?: unknown
   dataIndex?: number
   batch?: Array<{ selected?: Array<{ dataIndex?: number[] }> }>
   breaks?: Array<{ start?: number; end?: number; isExpanded?: boolean }>
+  axesInfo?: Array<{ axisDim?: string; axisIndex?: number; value?: unknown }>
 }
 
 export type EChartEvents = Record<string, (params: EChartEventParams) => void>
 
 export interface UseEChartOptions {
-  buildOption: () => EChartsCoreOption
+  buildOption: (ctx: EChartBuildContext) => EChartsCoreOption
   loading?: boolean
   loadingColor?: string
   events?: EChartEvents
   onReady?: (chart: ECharts) => void
+  compactBelow?: number
+  stackBelow?: number
+  /**
+   * Re-run `buildOption` (not just `chart.resize()`) whenever the container's
+   * size changes. Off by default so most charts just resize; opt in when the
+   * option itself depends on pixel size (e.g. a calendar's square cell size).
+   */
+  rebuildOnResize?: boolean
 }
 
 /**
@@ -39,10 +56,45 @@ export function useEChart({
   loadingColor = 'rgb(124, 58, 237)',
   events,
   onReady,
+  compactBelow,
+  stackBelow,
+  rebuildOnResize = false,
 }: UseEChartOptions) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<ECharts | null>(null)
-  const settleQueuedRef = useRef(false)
+
+  const [compact, setCompact] = useState(false)
+  const compactRef = useRef(compact)
+  useEffect(() => {
+    compactRef.current = compact
+  }, [compact])
+
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  const sizeRef = useRef(size)
+  useEffect(() => {
+    sizeRef.current = size
+  }, [size])
+
+  const rebuildOnResizeRef = useRef(rebuildOnResize)
+  useEffect(() => {
+    rebuildOnResizeRef.current = rebuildOnResize
+  }, [rebuildOnResize])
+
+  const [stacked, setStacked] = useState(false)
+  const stackedRef = useRef(stacked)
+  useEffect(() => {
+    stackedRef.current = stacked
+  }, [stacked])
+
+  const compactBelowRef = useRef(compactBelow)
+  useEffect(() => {
+    compactBelowRef.current = compactBelow
+  }, [compactBelow])
+
+  const stackBelowRef = useRef(stackBelow)
+  useEffect(() => {
+    stackBelowRef.current = stackBelow
+  }, [stackBelow])
 
   const buildOptionRef = useRef(buildOption)
   useEffect(() => {
@@ -75,24 +127,33 @@ export function useEChart({
     onReadyRef.current?.(chart)
 
     const settle = () => {
-      if (!settleQueuedRef.current) return
-      settleQueuedRef.current = false
+      chart.off('finished', settle)
       chartRef.current?.resize()
     }
     chart.on('finished', settle)
 
-    let lastWidth = el.clientWidth
-    let lastHeight = el.clientHeight
+    let lastWidth = -1
+    let lastHeight = -1
     const resizeIfChanged = () => {
       const { clientWidth, clientHeight } = el
+      if (clientWidth > 0) {
+        const compactAt = compactBelowRef.current
+        if (compactAt) setCompact(clientWidth < compactAt)
+        const stackAt = stackBelowRef.current
+        if (stackAt) setStacked(clientWidth < stackAt)
+      }
       if (clientWidth === lastWidth && clientHeight === lastHeight) return
       lastWidth = clientWidth
       lastHeight = clientHeight
       chartRef.current?.resize()
+      if (rebuildOnResizeRef.current) {
+        setSize({ width: clientWidth, height: clientHeight })
+      }
     }
 
     const observer = new ResizeObserver(resizeIfChanged)
     observer.observe(el)
+    resizeIfChanged()
 
     if (typeof document !== 'undefined' && 'fonts' in document) {
       document.fonts.ready.then(resizeIfChanged)
@@ -109,8 +170,15 @@ export function useEChart({
     if (typeof window === 'undefined') return
     const apply = () => {
       setColorScope(containerRef.current)
-      settleQueuedRef.current = true
-      chartRef.current?.setOption(buildOptionRef.current(), true)
+      chartRef.current?.setOption(
+        buildOptionRef.current({
+          compact: compactRef.current,
+          stacked: stackedRef.current,
+          width: sizeRef.current.width,
+          height: sizeRef.current.height,
+        }),
+        true
+      )
     }
 
     // Subtree so a nested `data-theme` scope (e.g. a themed canvas) re-themes
@@ -153,9 +221,11 @@ export function useEChart({
 
   useEffect(() => {
     setColorScope(containerRef.current)
-    settleQueuedRef.current = true
-    chartRef.current?.setOption(buildOption(), true)
-  }, [buildOption])
+    chartRef.current?.setOption(
+      buildOption({ compact, stacked, width: size.width, height: size.height }),
+      true
+    )
+  }, [buildOption, compact, stacked, size])
 
-  return { containerRef, chartRef }
+  return { containerRef, chartRef, compact, stacked, width: size.width }
 }
