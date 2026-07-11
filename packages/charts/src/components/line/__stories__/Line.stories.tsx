@@ -289,7 +289,7 @@ const meta: Meta<typeof Line> = {
         'Fine-grained legend styling: `itemWidth`/`itemHeight`/`itemGap`, `fontSize`/`fontWeight`/`textColor`, `inactiveColor`, `backgroundColor`/`borderColor`/`borderWidth`/`borderRadius`/`padding`.',
       table: { type: { summary: 'LegendStyleOverrides' } },
     },
-    highlightSeries: {
+    highlightOnHover: {
       control: 'boolean',
       description:
         'On hover, focus the hovered series and dim the others. Off by default — hovering just lightens the line, like Bar.',

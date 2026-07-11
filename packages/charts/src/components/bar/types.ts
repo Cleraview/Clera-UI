@@ -130,7 +130,8 @@ export interface BarProps extends BaseLegendProps {
   showValueAxis?: boolean
   stacked?: boolean
   stackMode?: BarStackMode
-  highlightSeries?: boolean
+  /** On hover, highlight the whole series the bar belongs to and dim the rest. Off by default. */
+  highlightOnHover?: boolean
   showTrack?: boolean
   trackColor?: string
   gridLines?: boolean

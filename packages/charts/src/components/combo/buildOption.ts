@@ -6,6 +6,8 @@ import {
   prefersReducedMotion,
   resolveAxisName,
   buildLegendOption,
+  buildItemHighlight,
+  buildLineHighlight,
 } from '@/utils'
 import type {
   AxisLabelOverride,
@@ -36,7 +38,7 @@ export interface BuildComboOptionParams {
   legendAlign?: LegendAlign
   legendStyle?: LegendStyleOverrides
   gridLines: boolean
-  highlightSeries: boolean
+  highlightOnHover: boolean
   barRadius: number
   axisLabelRotate: number
   yAxes?: ComboYAxis[]
@@ -151,7 +153,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
     legendAlign,
     legendStyle,
     gridLines,
-    highlightSeries,
+    highlightOnHover,
     barRadius,
     axisLabelRotate,
     yAxes,
@@ -267,9 +269,6 @@ export function buildComboOption(params: BuildComboOptionParams) {
   const formatForSeries = (s?: ComboSeries) =>
     axes[seriesAxisIndex(s?.yAxis)]?.format ?? identity
 
-  const blurOpacity = highlightSeries ? 0.2 : 1
-  const areaBlurOpacity = highlightSeries ? 0.06 : 0.15
-
   const seriesList = series.map((s, i) => {
     const color = seriesColors[i]
     const yAxisIndex = seriesAxisIndex(s.yAxis)
@@ -294,8 +293,7 @@ export function buildComboOption(params: BuildComboOptionParams) {
           color,
           borderRadius: [barRadius, barRadius, 0, 0],
         },
-        emphasis: { focus: 'series', itemStyle: { color: lighten(color) } },
-        blur: { itemStyle: { opacity: blurOpacity } },
+        ...buildItemHighlight(color, highlightOnHover, 0.2, true),
         label,
       }
     }
@@ -313,21 +311,15 @@ export function buildComboOption(params: BuildComboOptionParams) {
       ...(summaryPie ? { triggerLineEvent: true } : {}),
       lineStyle: { color, width: 2 },
       itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
-      emphasis: {
-        focus: 'series',
-        itemStyle: { color: hover },
-        lineStyle: { color: hover, width: 2 },
-        ...(s.type === 'area'
-          ? { areaStyle: { color: hover, opacity: 0.25 } }
-          : {}),
-      },
-      blur: {
-        lineStyle: { opacity: blurOpacity },
-        itemStyle: { opacity: blurOpacity },
-        ...(s.type === 'area'
-          ? { areaStyle: { opacity: areaBlurOpacity } }
-          : {}),
-      },
+      ...buildLineHighlight(color, {
+        width: 2,
+        enabled: highlightOnHover,
+        alwaysFocusSeries: true,
+        area:
+          s.type === 'area'
+            ? { emphasis: { color: hover, opacity: 0.25 }, blurOpacity: 0.06 }
+            : undefined,
+      }),
       ...(s.type === 'area' ? { areaStyle: { color, opacity: 0.15 } } : {}),
       label,
     }

@@ -69,7 +69,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Stacked on polar**
 
-    Grouped series stacked around the circle, with a legend to toggle them. Add `highlightSeries` so hovering one segment lights up its whole series around the circle and dims the rest.
+    Grouped series stacked around the circle, with a legend to toggle them. Add `highlightOnHover` so hovering one segment lights up its whole series around the circle and dims the rest.
     <Canvas>
       <Canvas.Story>
         <Story of={PolarBarStories.Stacked} />
@@ -83,7 +83,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
             <PolarBar
               orientation="angular"
               stacked
-              highlightSeries
+              highlightOnHover
               categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
               series={[
                 { name: 'Direct', data: [20, 28, 24, 30, 34, 10, 8], variant: 'primary' },

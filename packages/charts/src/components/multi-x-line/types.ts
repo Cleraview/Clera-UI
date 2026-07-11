@@ -72,6 +72,8 @@ export interface MultiXLineProps extends Omit<
   max?: number
   /** Show the hover crosshair with a per-axis value readout. */
   showTooltip?: boolean
+  /** On hover, highlight the whole series and dim the rest. On by default. */
+  highlightOnHover?: boolean
   formatValue?: (value: number) => string
   loading?: boolean
   animate?: boolean

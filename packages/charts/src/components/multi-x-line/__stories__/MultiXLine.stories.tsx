@@ -117,6 +117,15 @@ const meta: Meta<typeof MultiXLine> = {
         defaultValue: { summary: 'true' },
       },
     },
+    highlightOnHover: {
+      control: 'boolean',
+      description:
+        'On hover, highlight the whole series and dim the rest. On by default.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
     height: {
       control: 'number',
       description: 'Chart height in px or any CSS length.',

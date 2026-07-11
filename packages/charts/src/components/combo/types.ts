@@ -97,7 +97,8 @@ export interface ComboProps extends BaseLegendProps {
   showValues?: boolean
   showTooltip?: boolean
   gridLines?: boolean
-  highlightSeries?: boolean
+  /** On hover, highlight the whole series and dim the rest. Off by default. */
+  highlightOnHover?: boolean
   barRadius?: number
   axisLabelRotate?: number
   /**

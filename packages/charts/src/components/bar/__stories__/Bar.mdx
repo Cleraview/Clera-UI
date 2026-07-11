@@ -180,7 +180,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     </Canvas>
 
     ### **Multiple stacks**
-    Mix several independent stacks in one chart by giving series a `stack` name — series sharing a name stack together, different names sit side by side, and series without one are standalone bars. `highlightSeries` lights up the hovered series and dims the rest, while `tooltipTrigger="axis"` lists every series for the hovered category with its color.
+    Mix several independent stacks in one chart by giving series a `stack` name — series sharing a name stack together, different names sit side by side, and series without one are standalone bars. `highlightOnHover` lights up the hovered series and dims the rest, while `tooltipTrigger="axis"` lists every series for the hovered category with its color.
     <Canvas>
       <Canvas.Story>
         <Story of={BarStories.MultipleStacks} />
@@ -195,7 +195,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
               direction="vertical"
               showLegend
               showValueAxis
-              highlightSeries
+              highlightOnHover
               tooltipTrigger="axis"
               categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
               series={[

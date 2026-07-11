@@ -6,6 +6,7 @@ import {
   prefersReducedMotion,
   resolveAxisName,
   buildLegendOption,
+  buildLineHighlight,
 } from '@/utils'
 import type { LegendIcon, LegendAlign, LegendStyleOverrides } from '@/utils'
 import { curveProps, gradientFill } from '../line/helpers'
@@ -23,6 +24,7 @@ export interface BuildMultiXLineOptionParams {
   max?: number
   yAxis?: MultiXLineYAxis
   showTooltip: boolean
+  highlightOnHover: boolean
   formatValue: (value: number) => string
   animate: boolean
   emptyMessage: string
@@ -41,6 +43,7 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
     max,
     yAxis,
     showTooltip,
+    highlightOnHover,
     formatValue,
     animate,
     emptyMessage,
@@ -165,19 +168,16 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
         symbolSize: 6,
         lineStyle: { color, width: 2 },
         itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
-        emphasis: {
-          focus: 'series' as const,
-          lineStyle: { color: hover },
-          itemStyle: { color: hover },
-          ...(fill
-            ? { areaStyle: isGradient ? fill : { color: hover, opacity: 0.25 } }
-            : {}),
-        },
-        blur: {
-          lineStyle: { opacity: 0.28 },
-          itemStyle: { opacity: 0.28 },
-          ...(fill ? { areaStyle: { opacity: 0.05 } } : {}),
-        },
+        ...buildLineHighlight(color, {
+          enabled: highlightOnHover,
+          blurOpacity: 0.28,
+          area: fill
+            ? {
+                emphasis: isGradient ? fill : { color: hover, opacity: 0.25 },
+                blurOpacity: 0.05,
+              }
+            : undefined,
+        }),
         ...(fill ? { areaStyle: fill } : {}),
       })
     })

@@ -122,7 +122,7 @@ const meta: Meta<typeof Combo> = {
         defaultValue: { summary: 'true' },
       },
     },
-    highlightSeries: {
+    highlightOnHover: {
       control: 'boolean',
       description:
         'On hover, focus the whole hovered series and dim the others. Off by default, where hovering a series highlights it without fading the rest.',
@@ -415,13 +415,13 @@ export const MultipleYAxes: Story = {
     docs: {
       description: {
         story:
-          'Three value axes in one chart via `yAxes`. Evaporation and Precipitation each get their own right-hand axis (same-side axes auto-stack outward), while Temperature keeps the left. Series point at an axis by index with `yAxis: <n>`, and each axis takes on its series’ color. `highlightSeries` focuses the hovered series and dims the others.',
+          'Three value axes in one chart via `yAxes`. Evaporation and Precipitation each get their own right-hand axis (same-side axes auto-stack outward), while Temperature keeps the left. Series point at an axis by index with `yAxis: <n>`, and each axis takes on its series’ color. `highlightOnHover` focuses the hovered series and dims the others.',
       },
     },
   },
   args: {
     height: 380,
-    highlightSeries: true,
+    highlightOnHover: true,
     categories: [
       'Jan',
       'Feb',
