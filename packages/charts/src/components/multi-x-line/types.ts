@@ -1,6 +1,10 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ValueAxisNamePosition, AxisNameOrientation } from '@/utils'
+import type {
+  ValueAxisNamePosition,
+  AxisNameOrientation,
+  BaseLegendProps,
+} from '@/utils'
 import type { LineVariant, LineCurve } from '../line/types'
 
 export type {
@@ -47,7 +51,10 @@ export type MultiXLineYAxis = {
   format?: (value: number) => string
 }
 
-export interface MultiXLineProps {
+export interface MultiXLineProps extends Omit<
+  BaseLegendProps,
+  'legendPosition'
+> {
   /**
    * The x-axes to overlay on a shared value axis. The first sits on the bottom,
    * the second on top, and any further axes alternate (offset outward). Each
@@ -60,7 +67,6 @@ export interface MultiXLineProps {
   curve?: LineCurve
   /** Default fill under each line; override per series. */
   area?: boolean | 'gradient'
-  showLegend?: boolean
   /** Force the value-axis minimum / maximum. */
   min?: number
   max?: number

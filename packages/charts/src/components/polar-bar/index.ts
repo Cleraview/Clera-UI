@@ -5,5 +5,4 @@ export type {
   PolarBarSeries,
   PolarBarOrientation,
   PolarBarPalette,
-  PolarBarLegendPosition,
 } from './types'

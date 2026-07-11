@@ -7,6 +7,7 @@ import type {
   ValueAxisNamePosition,
   CategoryAxisNamePosition,
   AxisNameOrientation,
+  BaseLegendProps,
 } from '@/utils'
 
 export type {
@@ -18,8 +19,6 @@ export type {
 }
 
 export type ComboSeriesType = 'bar' | 'line' | 'area'
-
-export type ComboLegendPosition = 'top' | 'bottom' | 'left' | 'right'
 
 export type ComboSeries = {
   name: string
@@ -91,14 +90,12 @@ export type ComboSummaryPie = {
   onActiveIndexChange?: (index: number, category: string) => void
 }
 
-export interface ComboProps {
+export interface ComboProps extends BaseLegendProps {
   categories: string[]
   series: ComboSeries[]
   height?: number | string
   showValues?: boolean
   showTooltip?: boolean
-  showLegend?: boolean
-  legendPosition?: ComboLegendPosition
   gridLines?: boolean
   highlightSeries?: boolean
   barRadius?: number

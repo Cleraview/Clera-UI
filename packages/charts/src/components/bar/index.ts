@@ -11,6 +11,5 @@ export type {
   BarStackMode,
   BarZoom,
   BarMarkPoint,
-  BarLegendPosition,
   BarReferenceLine,
 } from './types'

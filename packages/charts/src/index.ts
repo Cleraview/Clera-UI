@@ -4,6 +4,11 @@ export type {
   ValueAxisNamePosition,
   CategoryAxisNamePosition,
   AxisNameOrientation,
+  LegendPosition,
+  LegendAlign,
+  LegendIcon,
+  LegendStyleOverrides,
+  BaseLegendProps,
 } from './utils'
 export * from './components/bar'
 export * from './components/combo'

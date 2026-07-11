@@ -153,6 +153,41 @@ const meta: Meta<typeof PolarBar> = {
         defaultValue: { summary: 'top' },
       },
     },
+    legendIcon: {
+      control: { type: 'select' },
+      options: [
+        'circle',
+        'rect',
+        'roundRect',
+        'triangle',
+        'diamond',
+        'pin',
+        'arrow',
+        'none',
+      ],
+      description:
+        'Marker shape for each legend entry, or a custom `path://…`/`image://…` icon string.',
+      table: {
+        type: { summary: 'LegendIcon' },
+        defaultValue: { summary: 'roundRect' },
+      },
+    },
+    legendAlign: {
+      control: { type: 'radio' },
+      options: ['start', 'center', 'end'],
+      description:
+        'Where along its edge the legend sits, e.g. `left`/`center`/`right` when `legendPosition` is `top`/`bottom`.',
+      table: {
+        type: { summary: "'start' | 'center' | 'end'" },
+        defaultValue: { summary: 'center' },
+      },
+    },
+    legendStyle: {
+      control: false,
+      description:
+        'Fine-grained legend styling: `itemWidth`/`itemHeight`/`itemGap`, `fontSize`/`fontWeight`/`textColor`, `inactiveColor`, `backgroundColor`/`borderColor`/`borderWidth`/`borderRadius`/`padding`.',
+      table: { type: { summary: 'LegendStyleOverrides' } },
+    },
     height: {
       control: 'number',
       description: 'Chart height in px or any CSS length.',

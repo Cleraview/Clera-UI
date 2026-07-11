@@ -7,6 +7,7 @@ import type {
   ValueAxisNamePosition,
   CategoryAxisNamePosition,
   AxisNameOrientation,
+  BaseLegendProps,
 } from '@/utils'
 
 export type {
@@ -26,8 +27,6 @@ export type LineCurve = 'smooth' | 'straight' | 'stepped'
 
 /** Category x-axis (evenly spaced labels) or a true time axis. */
 export type LineXAxisType = 'category' | 'time'
-
-export type LineLegendPosition = 'top' | 'bottom' | 'left' | 'right'
 
 export type LineMarkPoint = 'max' | 'min'
 
@@ -125,7 +124,7 @@ export type LineThreshold = {
   below?: LineVariant | string
 }
 
-export interface LineProps {
+export interface LineProps extends BaseLegendProps {
   categories?: (string | number)[]
   series: LineSeries[]
   xAxisType?: LineXAxisType
@@ -156,8 +155,6 @@ export interface LineProps {
   xAxisLabel?: AxisLabelOverride
   showTooltip?: boolean
   tooltipTrigger?: 'item' | 'axis'
-  showLegend?: boolean
-  legendPosition?: LineLegendPosition
   /** On hover, focus the hovered series and dim the rest. Off by default. */
   highlightSeries?: boolean
   threshold?: LineThreshold

@@ -1,6 +1,16 @@
 import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { FaYoutube, FaXTwitter, FaLinkedin } from 'react-icons/fa6'
 import { Bar } from '../Bar'
 import { useBarDrilldown, type BarDrilldownDatum } from '../useDrilldown'
+
+// Storybook persists args to the URL / HMR state as plain JSON, which a live
+// React element can't survive — any control change (even an unrelated one)
+// re-syncs args from that serialized form and silently drops it, so these
+// per-series icons are pre-rendered to plain SVG-markup strings here instead.
+const youtubeIcon = renderToStaticMarkup(<FaYoutube color="#FF0000" />)
+const xIcon = renderToStaticMarkup(<FaXTwitter color="#000000" />)
+const linkedinIcon = renderToStaticMarkup(<FaLinkedin color="#0A66C2" />)
 
 const centerStory: Decorator = (Story, { viewMode }) => {
   if (viewMode === 'docs') {
@@ -146,6 +156,41 @@ const meta: Meta<typeof Bar> = {
         type: { summary: "'top' | 'bottom' | 'left' | 'right'" },
         defaultValue: { summary: 'top' },
       },
+    },
+    legendIcon: {
+      control: { type: 'select' },
+      options: [
+        'circle',
+        'rect',
+        'roundRect',
+        'triangle',
+        'diamond',
+        'pin',
+        'arrow',
+        'none',
+      ],
+      description:
+        "Marker shape for every legend entry, or a custom `path://…`/`image://…` icon string. Only applies to series that don't set their own `series[].legendIcon` — it never overrides a series-level custom icon.",
+      table: {
+        type: { summary: 'LegendIcon' },
+        defaultValue: { summary: 'roundRect' },
+      },
+    },
+    legendAlign: {
+      control: { type: 'radio' },
+      options: ['start', 'center', 'end'],
+      description:
+        'Where along its edge the legend sits, e.g. `left`/`center`/`right` when `legendPosition` is `top`/`bottom`.',
+      table: {
+        type: { summary: "'start' | 'center' | 'end'" },
+        defaultValue: { summary: 'center' },
+      },
+    },
+    legendStyle: {
+      control: false,
+      description:
+        'Fine-grained legend styling: `itemWidth`/`itemHeight`/`itemGap`, `fontSize`/`fontWeight`/`textColor`, `inactiveColor`, `backgroundColor`/`borderColor`/`borderWidth`/`borderRadius`/`padding`.',
+      table: { type: { summary: 'LegendStyleOverrides' } },
     },
     stacked: {
       control: 'boolean',
@@ -488,6 +533,55 @@ export const WithLegend: Story = {
     series: [
       { name: 'New', data: [28000, 24500, 31200, 40100] },
       { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const CustomLegendIcons: Story = {
+  name: 'Custom legend icons',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`legendIcon` accepts a built-in shape, a `path://`/`image://` string, raw `<svg>` markup, an image URL, or — as here — a React element from any icon library (react-icons, lucide, or a plain inline `<svg>`), rendered to a data URI under the hood. Each series can also override it individually via its own `legendIcon`, which is how these three platforms get their own logo instead of one shared shape and stay immune to the chart-level `legendIcon` control — disabled below since every series here already sets its own icon.',
+      },
+    },
+  },
+  argTypes: {
+    legendIcon: { control: false },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    showLegend: true,
+    legendPosition: 'top',
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 6,
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Jan', 'Feb', 'Mar', 'Apr'],
+    series: [
+      {
+        name: 'YouTube',
+        data: [12400, 15100, 14300, 18700],
+        legendIcon: youtubeIcon,
+      },
+      {
+        name: 'X (Twitter)',
+        data: [8200, 9100, 10800, 9700],
+        legendIcon: xIcon,
+      },
+      {
+        name: 'LinkedIn',
+        data: [5400, 6300, 7100, 8900],
+        legendIcon: linkedinIcon,
+      },
     ],
   },
   render: args => (

@@ -7,7 +7,6 @@ export type {
   LinePalette,
   LineCurve,
   LineXAxisType,
-  LineLegendPosition,
   LineMarkPoint,
   LineReferenceLine,
   LineMarkArea,

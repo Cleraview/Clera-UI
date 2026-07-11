@@ -5,7 +5,9 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
   resolveAxisName,
+  buildLegendOption,
 } from '@/utils'
+import type { LegendIcon, LegendAlign, LegendStyleOverrides } from '@/utils'
 import { curveProps, gradientFill } from '../line/helpers'
 import type { MultiXLineXAxis, MultiXLineYAxis, LineCurve } from './types'
 
@@ -14,6 +16,9 @@ export interface BuildMultiXLineOptionParams {
   curve: LineCurve
   area?: boolean | 'gradient'
   showLegend: boolean
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   min?: number
   max?: number
   yAxis?: MultiXLineYAxis
@@ -29,6 +34,9 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
     curve,
     area,
     showLegend,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     min,
     max,
     yAxis,
@@ -187,16 +195,15 @@ export function buildMultiXLineOption(params: BuildMultiXLineOptionParams) {
       duration: anyGradient ? 0 : 300,
       easing: 'cubicOut' as const,
     },
-    legend: {
-      show: showLegend,
+    legend: buildLegendOption({
+      shown: showLegend,
       data: legendNames,
-      top: 0,
-      icon: 'roundRect',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 16,
-      textStyle: { color: labelColor, fontSize: 12 },
-    },
+      position: 'top',
+      icon: legendIcon,
+      align: legendAlign,
+      colors: { label: labelColor, subtle, line: lineColor },
+      style: legendStyle,
+    }),
     tooltip: {
       show: showTooltip,
       trigger: 'none' as const,

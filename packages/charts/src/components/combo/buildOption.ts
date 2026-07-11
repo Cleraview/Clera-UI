@@ -5,18 +5,22 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
   resolveAxisName,
+  buildLegendOption,
 } from '@/utils'
 import type {
   AxisLabelOverride,
   ValueAxisPosition,
   ValueAxisNamePosition,
   AxisNameOrientation,
+  LegendPosition,
+  LegendIcon,
+  LegendAlign,
+  LegendStyleOverrides,
 } from '@/utils'
 import type {
   ComboSeries,
   ComboYAxis,
   ComboXAxis,
-  ComboLegendPosition,
   ComboSummaryPie,
 } from './types'
 import { buildPieOption } from '../pie/buildOption'
@@ -27,7 +31,10 @@ export interface BuildComboOptionParams {
   showValues: boolean
   showTooltip: boolean
   showLegend: boolean
-  legendPosition: ComboLegendPosition
+  legendPosition: LegendPosition
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   gridLines: boolean
   highlightSeries: boolean
   barRadius: number
@@ -140,6 +147,9 @@ export function buildComboOption(params: BuildComboOptionParams) {
     showTooltip,
     showLegend,
     legendPosition,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     gridLines,
     highlightSeries,
     barRadius,
@@ -421,8 +431,6 @@ export function buildComboOption(params: BuildComboOptionParams) {
     return m
   }
 
-  const legendVertical = legendPosition === 'left' || legendPosition === 'right'
-
   const longestLegendLabel = series.reduce(
     (n, s) => Math.max(n, (s.name ?? '').length),
     0
@@ -480,28 +488,15 @@ export function buildComboOption(params: BuildComboOptionParams) {
     animation: animate && !prefersReducedMotion(),
     animationDuration: 600,
     animationEasing: 'cubicOut' as const,
-    legend: {
-      show: showLegend,
+    legend: buildLegendOption({
+      shown: showLegend,
       data: series.map(s => s.name),
-      orient: (legendVertical ? 'vertical' : 'horizontal') as
-        | 'vertical'
-        | 'horizontal',
-      top:
-        legendPosition === 'bottom' ? undefined : legendVertical ? 'middle' : 0,
-      bottom: legendPosition === 'bottom' ? 0 : undefined,
-      left:
-        legendPosition === 'left'
-          ? 0
-          : legendPosition === 'right'
-            ? undefined
-            : 'center',
-      right: legendPosition === 'right' ? 0 : undefined,
-      icon: 'roundRect',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 16,
-      textStyle: { color: labelColor, fontSize: 12 },
-    },
+      position: legendPosition,
+      icon: legendIcon,
+      align: legendAlign,
+      colors: { label: labelColor, subtle: subtleColor, line: lineColor },
+      style: legendStyle,
+    }),
     grid: {
       left: Math.max(
         8,

@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react'
 import * as echarts from 'echarts/core'
 import type { ECharts, EChartsCoreOption } from 'echarts/core'
-import { setColorScope } from '@/utils'
+import { setColorScope, syncCustomLegendIconOpacity } from '@/utils'
 
 export interface EChartBuildContext {
   compact: boolean
@@ -122,6 +122,12 @@ export function useEChart({
       chart.on(name, (params: unknown) =>
         eventsRef.current?.[name]?.(params as EChartEventParams)
       )
+    })
+
+    chart.on('legendselectchanged', (params: unknown) => {
+      const selected = (params as { selected?: Record<string, boolean> })
+        .selected
+      if (selected) syncCustomLegendIconOpacity(chart, selected)
     })
 
     onReadyRef.current?.(chart)
