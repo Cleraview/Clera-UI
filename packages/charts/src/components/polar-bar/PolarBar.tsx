@@ -24,7 +24,6 @@ export type {
   PolarBarSeries,
   PolarBarOrientation,
   PolarBarPalette,
-  PolarBarLegendPosition,
 } from './types'
 
 echarts.use([
@@ -61,6 +60,9 @@ export const PolarBar: React.FC<PolarBarProps> = ({
   showTooltip = true,
   showLegend,
   legendPosition = 'top',
+  legendIcon,
+  legendAlign,
+  legendStyle,
   palette = 'brand',
   barRadius = 4,
   roundCap = true,
@@ -91,6 +93,9 @@ export const PolarBar: React.FC<PolarBarProps> = ({
         showTooltip,
         showLegend,
         legendPosition,
+        legendIcon,
+        legendAlign,
+        legendStyle,
         palette,
         barRadius,
         roundCap,
@@ -114,6 +119,9 @@ export const PolarBar: React.FC<PolarBarProps> = ({
       showTooltip,
       showLegend,
       legendPosition,
+      legendIcon,
+      legendAlign,
+      legendStyle,
       palette,
       barRadius,
       roundCap,

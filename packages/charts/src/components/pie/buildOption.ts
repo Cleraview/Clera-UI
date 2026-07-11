@@ -4,6 +4,13 @@ import {
   resolveVariant,
   resolveCategoricalPalette,
   prefersReducedMotion,
+  buildLegendOption,
+} from '@/utils'
+import type {
+  LegendPosition,
+  LegendIcon,
+  LegendAlign,
+  LegendStyleOverrides,
 } from '@/utils'
 import type {
   PieDatum,
@@ -15,7 +22,6 @@ import type {
   PieGeo,
   PieCalendar,
   PieRoseType,
-  PieLegendPosition,
   PieLabelPosition,
   PieLabelAlignTo,
   PieLabelDatum,
@@ -44,7 +50,10 @@ export interface BuildPieOptionParams {
   labelFormatter?: (datum: PieLabelDatum) => string
   showTooltip: boolean
   showLegend?: boolean
-  legendPosition: PieLegendPosition
+  legendPosition: LegendPosition
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   scrollableLegend: boolean
   highlightOnHover: boolean
   selectedMode: false | 'single' | 'multiple'
@@ -113,6 +122,9 @@ export function buildPieOption(params: BuildPieOptionParams) {
     showTooltip,
     showLegend,
     legendPosition,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     scrollableLegend,
     highlightOnHover,
     selectedMode,
@@ -689,39 +701,17 @@ export function buildPieOption(params: BuildPieOptionParams) {
           },
         }
       : {}),
-    legend: {
-      show: legendShown,
-      type: (scrollableLegend ? 'scroll' : 'plain') as 'scroll' | 'plain',
+    legend: buildLegendOption({
+      shown: legendShown,
       data: legendData,
-      orient: (legendVertical ? 'vertical' : 'horizontal') as
-        | 'vertical'
-        | 'horizontal',
-      top:
-        legendPosition === 'bottom' ? undefined : legendVertical ? 'middle' : 0,
-      bottom: legendPosition === 'bottom' ? 0 : undefined,
-      left:
-        legendPosition === 'left'
-          ? 0
-          : legendPosition === 'right'
-            ? undefined
-            : 'center',
-      right: legendPosition === 'right' ? 0 : undefined,
-      ...(legendVertical && width > 0 ? { width: sideLegendWidth - 8 } : {}),
-      icon: 'circle',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 12,
-      textStyle: {
-        color: labelColor,
-        fontSize: 12,
-        ...(legendVertical && width > 0
-          ? { width: sideLegendWidth - 26, overflow: 'truncate' as const }
-          : {}),
-      },
-      pageIconColor: subtleColor,
-      pageIconInactiveColor: lineColor,
-      pageTextStyle: { color: subtleColor },
-    },
+      position: legendPosition,
+      icon: legendIcon,
+      align: legendAlign,
+      scrollable: scrollableLegend,
+      sideWidth: legendVertical && width > 0 ? sideLegendWidth : undefined,
+      colors: { label: labelColor, subtle: subtleColor, line: lineColor },
+      style: legendStyle,
+    }),
     tooltip: {
       show: showTooltip,
       trigger: 'item' as const,

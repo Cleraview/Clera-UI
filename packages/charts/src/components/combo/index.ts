@@ -5,6 +5,5 @@ export type {
   ComboSeriesType,
   ComboYAxis,
   ComboXAxis,
-  ComboLegendPosition,
   ComboSummaryPie,
 } from './types'

@@ -7,6 +7,8 @@ import type {
   ValueAxisNamePosition,
   CategoryAxisNamePosition,
   AxisNameOrientation,
+  BaseLegendProps,
+  LegendIcon,
 } from '@/utils'
 
 export type {
@@ -65,8 +67,6 @@ export type BarBrushSelection = {
   labels: string[]
 }
 
-export type BarLegendPosition = 'top' | 'bottom' | 'left' | 'right'
-
 export type BarReferenceLine = {
   value: number
   label?: string
@@ -110,9 +110,11 @@ export type BarSeries = {
   color?: string
   silent?: boolean
   stack?: string
+  /** Overrides the chart-level `legendIcon` for just this series' legend entry. */
+  legendIcon?: LegendIcon
 }
 
-export interface BarProps {
+export interface BarProps extends BaseLegendProps {
   data?: BarDatum[]
   categories?: string[]
   series?: BarSeries[]
@@ -126,8 +128,6 @@ export interface BarProps {
   tooltipTrigger?: 'item' | 'axis'
   axisPointerLabel?: boolean
   showValueAxis?: boolean
-  showLegend?: boolean
-  legendPosition?: BarLegendPosition
   stacked?: boolean
   stackMode?: BarStackMode
   highlightSeries?: boolean

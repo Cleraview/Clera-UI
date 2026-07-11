@@ -4,13 +4,19 @@ import {
   resolveVariant,
   resolveCategoricalPalette,
   prefersReducedMotion,
+  buildLegendOption,
+} from '@/utils'
+import type {
+  LegendPosition,
+  LegendIcon,
+  LegendAlign,
+  LegendStyleOverrides,
 } from '@/utils'
 import type {
   PolarBarDatum,
   PolarBarSeries,
   PolarBarOrientation,
   PolarBarPalette,
-  PolarBarLegendPosition,
 } from './types'
 
 export interface BuildPolarBarOptionParams {
@@ -25,7 +31,10 @@ export interface BuildPolarBarOptionParams {
   showValues: boolean
   showTooltip: boolean
   showLegend?: boolean
-  legendPosition: PolarBarLegendPosition
+  legendPosition: LegendPosition
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   palette: PolarBarPalette
   barRadius: number
   roundCap: boolean
@@ -51,6 +60,9 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
     showTooltip,
     showLegend,
     legendPosition,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     palette,
     barRadius,
     roundCap,
@@ -202,7 +214,6 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
   }
 
   const legendShown = grouped && (showLegend ?? true)
-  const legendVertical = legendPosition === 'left' || legendPosition === 'right'
 
   return {
     animation: animate && !prefersReducedMotion(),
@@ -213,28 +224,15 @@ export function buildPolarBarOption(params: BuildPolarBarOptionParams) {
       ? { ...categoryAxis, startAngle, endAngle }
       : { ...valueAxis, startAngle, endAngle },
     radiusAxis: isAngular ? valueAxis : categoryAxis,
-    legend: {
-      show: legendShown,
+    legend: buildLegendOption({
+      shown: legendShown,
       data: grouped ? (series as PolarBarSeries[]).map(s => s.name) : undefined,
-      orient: (legendVertical ? 'vertical' : 'horizontal') as
-        | 'vertical'
-        | 'horizontal',
-      top:
-        legendPosition === 'bottom' ? undefined : legendVertical ? 'middle' : 0,
-      bottom: legendPosition === 'bottom' ? 0 : undefined,
-      left:
-        legendPosition === 'left'
-          ? 0
-          : legendPosition === 'right'
-            ? undefined
-            : 'center',
-      right: legendPosition === 'right' ? 0 : undefined,
-      icon: 'roundRect',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 16,
-      textStyle: { color: labelColor, fontSize: 12 },
-    },
+      position: legendPosition,
+      icon: legendIcon,
+      align: legendAlign,
+      colors: { label: labelColor, subtle: subtleColor, line: lineColor },
+      style: legendStyle,
+    }),
     tooltip: {
       show: showTooltip,
       trigger: 'item',

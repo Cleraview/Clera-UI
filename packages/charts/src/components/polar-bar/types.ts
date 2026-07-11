@@ -1,12 +1,10 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant } from '@/utils'
+import type { ChartVariant, BaseLegendProps } from '@/utils'
 
 export type PolarBarOrientation = 'angular' | 'radial'
 
 export type PolarBarPalette = 'brand' | 'categorical'
-
-export type PolarBarLegendPosition = 'top' | 'bottom' | 'left' | 'right'
 
 export type PolarBarDatum = {
   label: string
@@ -22,7 +20,7 @@ export type PolarBarSeries = {
   color?: string
 }
 
-export interface PolarBarProps {
+export interface PolarBarProps extends BaseLegendProps {
   data?: PolarBarDatum[]
   categories?: string[]
   series?: PolarBarSeries[]
@@ -34,8 +32,6 @@ export interface PolarBarProps {
   min?: number
   showValues?: boolean
   showTooltip?: boolean
-  showLegend?: boolean
-  legendPosition?: PolarBarLegendPosition
   palette?: PolarBarPalette
   barRadius?: number
   roundCap?: boolean

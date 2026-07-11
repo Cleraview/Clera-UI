@@ -5,8 +5,15 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
   resolveAxisName,
+  buildLegendOption,
 } from '@/utils'
-import type { AxisLabelOverride } from '@/utils'
+import type {
+  AxisLabelOverride,
+  LegendPosition,
+  LegendIcon,
+  LegendAlign,
+  LegendStyleOverrides,
+} from '@/utils'
 import type {
   BarDatum,
   BarSeries,
@@ -16,7 +23,6 @@ import type {
   BarZoom,
   BarMarkPoint,
   BarAxisBreak,
-  BarLegendPosition,
   BarReferenceLine,
   BarXAxis,
   BarYAxis,
@@ -36,7 +42,10 @@ export interface BuildBarOptionParams {
   axisPointerLabel: boolean
   showValueAxis: boolean
   showLegend?: boolean
-  legendPosition: BarLegendPosition
+  legendPosition: LegendPosition
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   stacked: boolean
   stackMode: BarStackMode
   highlightSeries: boolean
@@ -101,6 +110,9 @@ export function buildBarOption(params: BuildBarOptionParams) {
     showValueAxis,
     showLegend,
     legendPosition,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     stacked,
     stackMode,
     highlightSeries,
@@ -368,7 +380,6 @@ export function buildBarOption(params: BuildBarOptionParams) {
 
   const legendShown = grouped && (showLegend ?? true)
   const showGrid = gridLines ?? showValueAxis
-  const legendVertical = legendPosition === 'left' || legendPosition === 'right'
 
   const valueAxis = {
     type: 'value' as const,
@@ -581,34 +592,24 @@ export function buildBarOption(params: BuildBarOptionParams) {
     animationEasing: 'cubicOut' as const,
     ...(brushConfig ?? {}),
     ...(dataZoom ? { dataZoom } : {}),
-    legend: {
-      show: legendShown,
+    legend: buildLegendOption({
+      shown: legendShown,
       data: grouped
-        ? (series as BarSeries[]).filter(s => !s.silent).map(s => s.name)
+        ? (series as BarSeries[])
+            .filter(s => !s.silent)
+            .map(s =>
+              s.legendIcon !== undefined
+                ? { name: s.name, icon: s.legendIcon }
+                : s.name
+            )
         : undefined,
-      orient: (legendVertical ? 'vertical' : 'horizontal') as
-        | 'vertical'
-        | 'horizontal',
-      top:
-        legendPosition === 'bottom'
-          ? undefined
-          : legendVertical
-            ? 'middle'
-            : topLegendY,
-      bottom: legendPosition === 'bottom' ? 0 : undefined,
-      left:
-        legendPosition === 'left'
-          ? 0
-          : legendPosition === 'right'
-            ? undefined
-            : 'center',
-      right: legendPosition === 'right' ? 0 : undefined,
-      icon: 'roundRect',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 16,
-      textStyle: { color: labelColor, fontSize: 12 },
-    },
+      position: legendPosition,
+      icon: legendIcon,
+      align: legendAlign,
+      topOffset: topLegendY,
+      colors: { label: labelColor, subtle: subtleColor, line: lineColor },
+      style: legendStyle,
+    }),
     grid: {
       left: Math.max(
         legendShown && legendPosition === 'left' ? 96 : 8,

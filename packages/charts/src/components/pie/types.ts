@@ -1,10 +1,8 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant } from '@/utils'
+import type { ChartVariant, BaseLegendProps } from '@/utils'
 
 export type PiePalette = 'brand' | 'categorical'
-
-export type PieLegendPosition = 'top' | 'bottom' | 'left' | 'right'
 
 export type PieRoseType = 'radius' | 'area' | false
 
@@ -106,7 +104,7 @@ export type PieLabelDatum = {
   percent: number
 }
 
-export interface PieProps {
+export interface PieProps extends BaseLegendProps {
   data?: PieDatum[]
   series?: PieSeries[]
   height?: number | string
@@ -129,8 +127,6 @@ export interface PieProps {
   showLabelLine?: boolean
   labelFormatter?: (datum: PieLabelDatum) => string
   showTooltip?: boolean
-  showLegend?: boolean
-  legendPosition?: PieLegendPosition
   scrollableLegend?: boolean
   highlightOnHover?: boolean
   selectedMode?: false | 'single' | 'multiple'

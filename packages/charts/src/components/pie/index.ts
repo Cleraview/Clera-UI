@@ -14,6 +14,5 @@ export type {
   PieRoseType,
   PieLabelPosition,
   PieLabelAlignTo,
-  PieLegendPosition,
   PieLabelDatum,
 } from './types'

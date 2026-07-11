@@ -6,6 +6,7 @@ import {
   resolveCategoricalPalette,
   prefersReducedMotion,
   withAlpha,
+  buildLegendOption,
 } from '@/utils'
 import { resolveAxisName } from '@/utils'
 import type {
@@ -13,6 +14,10 @@ import type {
   ValueAxisPosition,
   ValueAxisNamePosition,
   AxisNameOrientation,
+  LegendPosition,
+  LegendIcon,
+  LegendAlign,
+  LegendStyleOverrides,
 } from '@/utils'
 import { gradientFill, curveProps, toArray, valueOf } from './helpers'
 import type {
@@ -20,7 +25,6 @@ import type {
   LinePalette,
   LineCurve,
   LineXAxisType,
-  LineLegendPosition,
   LineMarkPoint,
   LineReferenceLine,
   LineMarkArea,
@@ -51,7 +55,10 @@ export interface BuildLineOptionParams {
   showTooltip: boolean
   tooltipTrigger: 'item' | 'axis'
   showLegend?: boolean
-  legendPosition: LineLegendPosition
+  legendPosition: LegendPosition
+  legendIcon?: LegendIcon
+  legendAlign?: LegendAlign
+  legendStyle?: LegendStyleOverrides
   highlightSeries: boolean
   threshold?: LineThreshold
   referenceLine?: LineReferenceLine | LineReferenceLine[]
@@ -92,6 +99,9 @@ export function buildLineOption(params: BuildLineOptionParams) {
     tooltipTrigger,
     showLegend,
     legendPosition,
+    legendIcon,
+    legendAlign,
+    legendStyle,
     highlightSeries,
     threshold,
     referenceLine,
@@ -234,7 +244,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
   const multi = series.length > 1
   const anyGradient = series.some(s => (s.area ?? area) === 'gradient')
   const legendShown = !sparkline && (showLegend ?? multi)
-  const legendVertical = legendPosition === 'left' || legendPosition === 'right'
 
   const seriesList = series.map((s, i) => {
     const color = seriesColors[i]
@@ -646,28 +655,15 @@ export function buildLineOption(params: BuildLineOptionParams) {
     ...(visualMap ? { visualMap } : {}),
     ...(dataZoom ? { dataZoom } : {}),
     ...(toolboxOpt ? { toolbox: toolboxOpt } : {}),
-    legend: {
-      show: legendShown,
+    legend: buildLegendOption({
+      shown: legendShown,
       data: series.map(s => s.name),
-      orient: (legendVertical ? 'vertical' : 'horizontal') as
-        | 'vertical'
-        | 'horizontal',
-      top:
-        legendPosition === 'bottom' ? undefined : legendVertical ? 'middle' : 0,
-      bottom: legendPosition === 'bottom' ? 0 : undefined,
-      left:
-        legendPosition === 'left'
-          ? 0
-          : legendPosition === 'right'
-            ? undefined
-            : 'center',
-      right: legendPosition === 'right' ? 0 : undefined,
-      icon: 'roundRect',
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 16,
-      textStyle: { color: labelColor, fontSize: 12 },
-    },
+      position: legendPosition,
+      icon: legendIcon,
+      align: legendAlign,
+      colors: { label: labelColor, subtle: subtleColor, line: lineColor },
+      style: legendStyle,
+    }),
     grid,
     tooltip: {
       show: showTooltip && !sparkline,
