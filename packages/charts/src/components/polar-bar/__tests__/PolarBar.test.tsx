@@ -182,11 +182,11 @@ describe('components/charts/PolarBar', () => {
     expect(lastOption().legend.data).toEqual(['X', 'Y'])
   })
 
-  it('focuses the whole series and dims the rest when highlightSeries', () => {
+  it('focuses the whole series and dims the rest when highlightOnHover', () => {
     render(
       <PolarBar
         categories={['A', 'B']}
-        highlightSeries
+        highlightOnHover
         series={[
           { name: 'X', data: [1, 2] },
           { name: 'Y', data: [3, 4] },

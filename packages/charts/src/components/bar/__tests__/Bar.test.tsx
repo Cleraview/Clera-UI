@@ -613,11 +613,11 @@ describe('components/charts/Bar', () => {
     expect(series[0].blur).toBeUndefined()
   })
 
-  it('highlights the whole series and dims the rest when highlightSeries is set', () => {
+  it('highlights the whole series and dims the rest when highlightOnHover is set', () => {
     render(
       <Bar
         direction="vertical"
-        highlightSeries
+        highlightOnHover
         categories={['Mon', 'Tue']}
         series={[
           { name: 'Blue', data: [3, 4] },
@@ -906,12 +906,12 @@ describe('components/charts/Bar', () => {
     expect(axisPointer.triggerEmphasis).toBe(false)
   })
 
-  it('keeps the axis pointer hidden when highlightSeries is on', () => {
+  it('keeps the axis pointer hidden when highlightOnHover is on', () => {
     render(
       <Bar
         direction="vertical"
         tooltipTrigger="axis"
-        highlightSeries
+        highlightOnHover
         categories={['Mon', 'Tue']}
         series={[
           { name: 'A', data: [1, 2] },

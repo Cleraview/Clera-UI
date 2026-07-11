@@ -55,7 +55,7 @@ const meta: Meta<typeof PolarBar> = {
         defaultValue: { summary: 'false' },
       },
     },
-    highlightSeries: {
+    highlightOnHover: {
       control: 'boolean',
       description:
         'Grouped mode only. When `true`, hovering any segment highlights its entire series (every same-colored segment around the circle) and dims the others. When `false` (default), only the hovered segment lightens.',
@@ -269,7 +269,7 @@ export const Stacked: Story = {
     docs: {
       description: {
         story:
-          'Grouped series stacked around the circle. Each ring segment is a series; the legend toggles them. With `highlightSeries`, hovering one segment lights up its whole series around the circle and dims the rest.',
+          'Grouped series stacked around the circle. Each ring segment is a series; the legend toggles them. With `highlightOnHover`, hovering one segment lights up its whole series around the circle and dims the rest.',
       },
     },
   },
@@ -277,7 +277,7 @@ export const Stacked: Story = {
     height: 420,
     orientation: 'angular',
     stacked: true,
-    highlightSeries: true,
+    highlightOnHover: true,
     showLegend: true,
     categories: weekdays,
     series: [

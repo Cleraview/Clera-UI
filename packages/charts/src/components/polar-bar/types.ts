@@ -27,7 +27,8 @@ export interface PolarBarProps extends BaseLegendProps {
   orientation?: PolarBarOrientation
   height?: number | string
   stacked?: boolean
-  highlightSeries?: boolean
+  /** On hover, highlight the whole series the segment belongs to and dim the rest. Off by default. */
+  highlightOnHover?: boolean
   max?: number
   min?: number
   showValues?: boolean

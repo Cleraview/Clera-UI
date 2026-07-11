@@ -126,13 +126,13 @@ describe('components/charts/Combo', () => {
     const [bar, line] = lastOption().series
     expect(bar.emphasis.focus).toBe('series')
     expect(line.emphasis.focus).toBe('series')
-    // blur state keeps non-focused series at full opacity (no fade)
-    expect(bar.blur.itemStyle.opacity).toBe(1)
-    expect(line.blur.lineStyle.opacity).toBe(1)
+    // no blur config means non-focused series stay at full opacity (no fade)
+    expect(bar.blur?.itemStyle?.opacity ?? 1).toBe(1)
+    expect(line.blur?.lineStyle?.opacity ?? 1).toBe(1)
   })
 
-  it('dims the other series when highlightSeries is on', () => {
-    render(<Combo categories={categories} series={series} highlightSeries />)
+  it('dims the other series when highlightOnHover is on', () => {
+    render(<Combo categories={categories} series={series} highlightOnHover />)
     const [bar, line] = lastOption().series
     expect(bar.blur.itemStyle.opacity).toBeLessThan(1)
     expect(line.blur.lineStyle.opacity).toBeLessThan(1)

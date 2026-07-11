@@ -6,6 +6,7 @@ import {
   prefersReducedMotion,
   resolveAxisName,
   buildLegendOption,
+  buildItemHighlight,
 } from '@/utils'
 import type {
   AxisLabelOverride,
@@ -48,7 +49,7 @@ export interface BuildBarOptionParams {
   legendStyle?: LegendStyleOverrides
   stacked: boolean
   stackMode: BarStackMode
-  highlightSeries: boolean
+  highlightOnHover: boolean
   showTrack: boolean
   trackColor?: string
   gridLines?: boolean
@@ -115,7 +116,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
     legendStyle,
     stacked,
     stackMode,
-    highlightSeries,
+    highlightOnHover,
     showTrack,
     trackColor,
     gridLines,
@@ -313,10 +314,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
         silent: s.silent ?? false,
         data: isHorizontal ? [...values].reverse() : values,
         itemStyle: { color, borderRadius: radius },
-        emphasis: highlightSeries
-          ? { focus: 'series', itemStyle: { color: lighten(color) } }
-          : { itemStyle: { color: lighten(color) } },
-        blur: highlightSeries ? { itemStyle: { opacity: 0.2 } } : undefined,
+        ...buildItemHighlight(color, highlightOnHover),
         barMaxWidth: groupWidth,
         label: s.silent
           ? { show: false }
@@ -648,7 +646,7 @@ export function buildBarOption(params: BuildBarOptionParams) {
       axisPointer:
         tooltipTrigger === 'axis'
           ? {
-              type: highlightSeries ? ('none' as const) : ('shadow' as const),
+              type: highlightOnHover ? ('none' as const) : ('shadow' as const),
               triggerEmphasis: false,
               shadowStyle: { color: 'rgba(127, 127, 127, 0.12)' },
               label: {

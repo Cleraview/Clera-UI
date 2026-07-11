@@ -7,6 +7,7 @@ import {
   prefersReducedMotion,
   withAlpha,
   buildLegendOption,
+  buildLineHighlight,
 } from '@/utils'
 import { resolveAxisName } from '@/utils'
 import type {
@@ -59,7 +60,7 @@ export interface BuildLineOptionParams {
   legendIcon?: LegendIcon
   legendAlign?: LegendAlign
   legendStyle?: LegendStyleOverrides
-  highlightSeries: boolean
+  highlightOnHover: boolean
   threshold?: LineThreshold
   referenceLine?: LineReferenceLine | LineReferenceLine[]
   markArea?: LineMarkArea | LineMarkArea[]
@@ -102,7 +103,7 @@ export function buildLineOption(params: BuildLineOptionParams) {
     legendIcon,
     legendAlign,
     legendStyle,
-    highlightSeries,
+    highlightOnHover,
     threshold,
     referenceLine,
     markArea,
@@ -264,12 +265,6 @@ export function buildLineOption(params: BuildLineOptionParams) {
         : { color, opacity: 0.15 }
       : undefined
 
-    const emphasisArea = fill
-      ? isGradient
-        ? fill
-        : { color: hover, opacity: 0.25 }
-      : undefined
-
     const annotations = i === 0 ? buildAnnotations() : {}
 
     return {
@@ -292,22 +287,17 @@ export function buildLineOption(params: BuildLineOptionParams) {
         type: s.dashed ? ('dashed' as const) : ('solid' as const),
       },
       itemStyle: { color, borderColor: surface, borderWidth: 1.5 },
-      emphasis: isThreshold
-        ? { disabled: true }
-        : {
-            focus: (highlightSeries ? 'series' : 'none') as 'series' | 'none',
-            lineStyle: { color: hover, width },
-            itemStyle: { color: hover },
-            ...(emphasisArea ? { areaStyle: emphasisArea } : {}),
-          },
-      blur:
-        highlightSeries && !isThreshold
+      ...buildLineHighlight(color, {
+        width,
+        enabled: highlightOnHover,
+        disabled: isThreshold,
+        area: fill
           ? {
-              lineStyle: { opacity: 0.2 },
-              itemStyle: { opacity: 0.2 },
-              ...(fill ? { areaStyle: { opacity: 0.06 } } : {}),
+              emphasis: isGradient ? fill : { color: hover, opacity: 0.25 },
+              blurOpacity: 0.06,
             }
           : undefined,
+      }),
       ...(fill ? { areaStyle: fill } : {}),
       ...annotations,
     }

@@ -435,8 +435,8 @@ describe('components/charts/Line', () => {
     expect(sum(hover)).toBeGreaterThan(sum(base))
   })
 
-  it('focuses the hovered series and dims the rest when highlightSeries is set', () => {
-    render(<Line categories={categories} series={dual} highlightSeries />)
+  it('focuses the hovered series and dims the rest when highlightOnHover is set', () => {
+    render(<Line categories={categories} series={dual} highlightOnHover />)
     const s = lastOption().series[0]
     expect(s.emphasis.focus).toBe('series')
     expect(s.blur.lineStyle.opacity).toBeLessThan(1)

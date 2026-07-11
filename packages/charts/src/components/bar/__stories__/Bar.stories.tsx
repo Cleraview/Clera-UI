@@ -201,7 +201,7 @@ const meta: Meta<typeof Bar> = {
         defaultValue: { summary: 'false' },
       },
     },
-    highlightSeries: {
+    highlightOnHover: {
       control: 'boolean',
       description:
         'On hover, highlight the whole series the bar belongs to (every same-colored bar) and dim the other series. Grouped mode only; off by default (plain per-bar hover).',
@@ -634,7 +634,7 @@ export const MultipleStacks: Story = {
     docs: {
       description: {
         story:
-          'Several independent stacks in one chart, à la the advanced ECharts "Stacked Bar" example. Give a `stack` name to series that should stack together; series with different `stack` names (or none) sit side by side — here a standalone "Direct" bar, an "Ad" stack, and a "Search Engine" stack per weekday. `highlightSeries` lights up the hovered series (and dims the rest), and `tooltipTrigger="axis"` lists every series in the hovered weekday with its color.',
+          'Several independent stacks in one chart, à la the advanced ECharts "Stacked Bar" example. Give a `stack` name to series that should stack together; series with different `stack` names (or none) sit side by side — here a standalone "Direct" bar, an "Ad" stack, and a "Search Engine" stack per weekday. `highlightOnHover` lights up the hovered series (and dims the rest), and `tooltipTrigger="axis"` lists every series in the hovered weekday with its color.',
       },
     },
   },
@@ -645,7 +645,7 @@ export const MultipleStacks: Story = {
     showValueAxis: true,
     showValues: false,
     barRadius: 4,
-    highlightSeries: true,
+    highlightOnHover: true,
     tooltipTrigger: 'axis',
     referenceLine: undefined,
     data: undefined,

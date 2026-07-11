@@ -156,7 +156,7 @@ export interface LineProps extends BaseLegendProps {
   showTooltip?: boolean
   tooltipTrigger?: 'item' | 'axis'
   /** On hover, focus the hovered series and dim the rest. Off by default. */
-  highlightSeries?: boolean
+  highlightOnHover?: boolean
   threshold?: LineThreshold
   referenceLine?: LineReferenceLine | LineReferenceLine[]
   markArea?: LineMarkArea | LineMarkArea[]

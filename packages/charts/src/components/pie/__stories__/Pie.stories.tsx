@@ -1004,7 +1004,7 @@ export const ShareDataset: Story = {
       smooth: true,
     })),
     summaryPie: true,
-    highlightSeries: true,
+    highlightOnHover: true,
     legendPosition: 'bottom',
   },
   render: args => <Combo {...args} />,
