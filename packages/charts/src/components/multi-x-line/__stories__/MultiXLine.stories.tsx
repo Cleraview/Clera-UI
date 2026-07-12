@@ -1,30 +1,13 @@
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { MultiXLine } from '../MultiXLine'
-
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="mx-auto w-full max-w-[820px]">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
-      <div className="w-full max-w-[820px]">
-        <Story />
-      </div>
-    </div>
-  )
-}
 
 const meta: Meta<typeof MultiXLine> = {
   title: 'Charts/Multi-X Line',
   component: MultiXLine,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: { maxWidth: 820 },
     docs: {
       description: {
         component:

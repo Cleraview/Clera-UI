@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
+import type { ChartLoadingProps } from '@/utils'
 import type { LineVariant, LineCurve, LinePoint } from '../line/types'
 
 export type { LineVariant, LineCurve, LinePoint }
@@ -19,7 +20,7 @@ export type LineMatrixCell = {
   color?: string
 }
 
-export interface LineMatrixProps {
+export interface LineMatrixProps extends ChartLoadingProps {
   /** Column labels (the matrix x dimension). */
   columns: (string | number)[]
   /** Row labels (the matrix y dimension); strings or `{ label, divider }`. */
@@ -44,7 +45,6 @@ export interface LineMatrixProps {
   formatValue?: (value: number) => string
   /** Formats the tooltip header (e.g. a timestamp). */
   formatX?: (value: string | number) => string
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onReady?: (chart: ECharts) => void

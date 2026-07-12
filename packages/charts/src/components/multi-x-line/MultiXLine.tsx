@@ -13,8 +13,8 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildMultiXLineOption } from './buildOption'
 import { styles } from './styles'
 import type { MultiXLineProps } from './types'
@@ -52,6 +52,10 @@ export const MultiXLine: React.FC<MultiXLineProps> = ({
   highlightOnHover = true,
   formatValue = v => String(v),
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onReady,
@@ -98,8 +102,6 @@ export const MultiXLine: React.FC<MultiXLineProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     onReady,
   })
 
@@ -108,13 +110,22 @@ export const MultiXLine: React.FC<MultiXLineProps> = ({
       role="img"
       aria-label="Multiple x-axis line chart"
       data-testid="multi-x-line-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

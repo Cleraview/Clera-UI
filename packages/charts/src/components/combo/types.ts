@@ -8,6 +8,7 @@ import type {
   CategoryAxisNamePosition,
   AxisNameOrientation,
   BaseLegendProps,
+  ChartLoadingProps,
 } from '@/utils'
 
 export type {
@@ -90,7 +91,7 @@ export type ComboSummaryPie = {
   onActiveIndexChange?: (index: number, category: string) => void
 }
 
-export interface ComboProps extends BaseLegendProps {
+export interface ComboProps extends BaseLegendProps, ChartLoadingProps {
   categories: string[]
   series: ComboSeries[]
   height?: number | string
@@ -116,7 +117,6 @@ export interface ComboProps extends BaseLegendProps {
    * `true` for defaults, or an object to tune it.
    */
   summaryPie?: boolean | ComboSummaryPie
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onReady?: (chart: ECharts) => void

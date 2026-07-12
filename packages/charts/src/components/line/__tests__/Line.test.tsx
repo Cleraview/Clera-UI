@@ -613,8 +613,7 @@ describe('components/charts/Line', () => {
 
   it('shows the loading overlay when loading is true', () => {
     render(<Line categories={categories} series={single} loading />)
-    expect(mockChart.showLoading).toHaveBeenCalled()
-    expect(mockChart.hideLoading).not.toHaveBeenCalled()
+    expect(screen.getByTestId('chart-loading')).toBeInTheDocument()
   })
 
   it('registers a click handler that maps back to a point payload', () => {

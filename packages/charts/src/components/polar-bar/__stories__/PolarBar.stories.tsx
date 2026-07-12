@@ -8,7 +8,8 @@ const meta: Meta<typeof PolarBar> = {
   component: PolarBar,
   tags: [],
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
+    chartLayout: { maxWidth: 720, padding: 4 },
     docs: {
       description: {
         component:
@@ -256,11 +257,7 @@ export const Angular: Story = {
       value: [42, 58, 51, 64, 70, 22, 18][i],
     })),
   },
-  render: args => (
-    <div className="w-[440px]">
-      <PolarBar {...args} />
-    </div>
-  ),
+  render: args => <PolarBar {...args} />,
 }
 
 export const Stacked: Story = {
@@ -286,11 +283,7 @@ export const Stacked: Story = {
       { name: 'Social', data: [8, 12, 11, 14, 14, 4, 4], variant: 'success' },
     ],
   },
-  render: args => (
-    <div className="w-[460px]">
-      <PolarBar {...args} />
-    </div>
-  ),
+  render: args => <PolarBar {...args} />,
 }
 
 export const Radial: Story = {
@@ -317,11 +310,7 @@ export const Radial: Story = {
       { label: 'API', value: 61 },
     ],
   },
-  render: args => (
-    <div className="w-[460px]">
-      <PolarBar {...args} />
-    </div>
-  ),
+  render: args => <PolarBar {...args} />,
 }
 
 export const TangentialLabels: Story = {
@@ -348,11 +337,7 @@ export const TangentialLabels: Story = {
       { label: 'd', value: 3.6 },
     ],
   },
-  render: args => (
-    <div className="w-[460px]">
-      <PolarBar {...args} />
-    </div>
-  ),
+  render: args => <PolarBar {...args} />,
 }
 
 const twoPolarOption = {
@@ -401,21 +386,19 @@ function TwoPolarArcs() {
     chart.setOption({ ...twoPolarOption, tooltip }, true)
   }, [])
   return (
-    <div className="w-[460px]">
-      <PolarBar
-        height={420}
-        orientation="angular"
-        showValues
-        data={[
-          { label: 'S1', value: 1 },
-          { label: 'S2', value: 2 },
-          { label: 'S3', value: 3 },
-        ]}
-        onReady={chart => {
-          chartRef.current = chart
-        }}
-      />
-    </div>
+    <PolarBar
+      height={420}
+      orientation="angular"
+      showValues
+      data={[
+        { label: 'S1', value: 1 },
+        { label: 'S2', value: 2 },
+        { label: 'S3', value: 3 },
+      ]}
+      onReady={chart => {
+        chartRef.current = chart
+      }}
+    />
   )
 }
 

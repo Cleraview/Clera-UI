@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
+import type { ChartLoadingProps } from '@/utils'
 import type {
   LineVariant,
   LineCurve,
@@ -35,7 +36,7 @@ export type LinePanel = {
   formatValue?: (value: number) => string
 }
 
-export interface LinePanelsProps {
+export interface LinePanelsProps extends ChartLoadingProps {
   /** Shared x-axis labels for `xAxisType="category"`. */
   categories?: (string | number)[]
   xAxisType?: LineXAxisType
@@ -58,7 +59,6 @@ export interface LinePanelsProps {
   formatValue?: (value: number) => string
   /** Formats x-axis ticks and the tooltip header (handy for time axes). */
   formatX?: (value: string | number) => string
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onReady?: (chart: ECharts) => void

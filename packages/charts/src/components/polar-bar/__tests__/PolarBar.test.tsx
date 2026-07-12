@@ -260,7 +260,7 @@ describe('components/charts/PolarBar', () => {
 
   it('shows the loading overlay when loading', () => {
     render(<PolarBar data={sample} loading />)
-    expect(mockChart.showLoading).toHaveBeenCalled()
+    expect(screen.getByTestId('chart-loading')).toBeInTheDocument()
   })
 
   it('disposes on unmount', () => {

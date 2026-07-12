@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Line } from '../Line'
 import {
   lcg,
@@ -23,30 +23,13 @@ import {
   PLAY_ICON,
 } from './fixtures'
 
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="mx-auto w-full max-w-[720px]">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center p-4">
-      <div className="w-full max-w-[720px]">
-        <Story />
-      </div>
-    </div>
-  )
-}
-
 const meta: Meta<typeof Line> = {
   title: 'Charts/Line',
   component: Line,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: { maxWidth: 720, padding: 4 },
     docs: {
       description: {
         component:

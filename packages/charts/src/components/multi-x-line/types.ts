@@ -4,6 +4,7 @@ import type {
   ValueAxisNamePosition,
   AxisNameOrientation,
   BaseLegendProps,
+  ChartLoadingProps,
 } from '@/utils'
 import type { LineVariant, LineCurve } from '../line/types'
 
@@ -51,10 +52,8 @@ export type MultiXLineYAxis = {
   format?: (value: number) => string
 }
 
-export interface MultiXLineProps extends Omit<
-  BaseLegendProps,
-  'legendPosition'
-> {
+export interface MultiXLineProps
+  extends Omit<BaseLegendProps, 'legendPosition'>, ChartLoadingProps {
   /**
    * The x-axes to overlay on a shared value axis. The first sits on the bottom,
    * the second on top, and any further axes alternate (offset outward). Each
@@ -75,7 +74,6 @@ export interface MultiXLineProps extends Omit<
   /** On hover, highlight the whole series and dim the rest. On by default. */
   highlightOnHover?: boolean
   formatValue?: (value: number) => string
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onReady?: (chart: ECharts) => void

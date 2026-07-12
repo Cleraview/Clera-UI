@@ -19,9 +19,10 @@ import {
 import { AxisBreak } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant, readCssColor } from '@/utils'
+import { readCssColor } from '@/utils'
 import { useEChart } from '@/hooks'
 import type { EChartEventParams, EChartEvents } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildBarOption, getBarCategories } from './buildOption'
 import { styles } from './styles'
 import type { BarProps, BarDatum } from './types'
@@ -107,6 +108,10 @@ export const Bar: React.FC<BarProps> = ({
   yAxis,
   xAxisLabel,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onBarClick,
@@ -343,8 +348,6 @@ export const Bar: React.FC<BarProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     events,
     onReady: handleReady,
   })
@@ -383,17 +386,26 @@ export const Bar: React.FC<BarProps> = ({
       role="img"
       aria-label="Bar chart"
       data-testid="bar-chart"
-      ref={containerRef}
       className={cn(
         styles.root,
         zoom && '[&_canvas]:!cursor-grab active:[&_canvas]:!cursor-grabbing',
         className
       )}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

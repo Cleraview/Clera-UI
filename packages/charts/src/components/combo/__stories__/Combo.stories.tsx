@@ -1,32 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Combo } from '../Combo'
-
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="mx-auto w-full max-w-[820px]">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
-      <div className="w-full max-w-[820px]">
-        <Story />
-      </div>
-    </div>
-  )
-}
 
 const meta: Meta<typeof Combo> = {
   title: 'Charts/Combo',
   component: Combo,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: { maxWidth: 820 },
     docs: {
       description: {
         component:

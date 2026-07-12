@@ -1,0 +1,356 @@
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
+import * as ScatterStories from "./Scatter.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
+
+<Meta title="Charts/Scatter" of={ScatterStories} />
+
+<DocsLayout>
+  <div>
+    # Scatter
+
+    To plot `[x, y]` points on two numeric axes.
+
+    <DocInfo importStatement={`import { Scatter } from '@clera/charts'`} sourcePath={`components/scatter`} />
+
+    <br />
+
+    ## **When To Use**
+    The Scatter chart plots raw `[x, y]` points instead of category-aligned bars or lines. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`/`Line`, and adapts to light/dark mode automatically.
+
+    Reach for it when you need to show correlation, distribution, or clustering between two numeric values:
+
+      - **Series**: One or more `series`, each `{ name, data, variant?, color?, symbolSize? }`, where `data` is `[x, y][]`. A single series hides the legend by default; more than one shows it.
+      - **Coloring**: `palette="categorical"` cycles the design-system colors across series; or set `variant`/`color` per series.
+      - **Axes**: Both `xAxis` and `yAxis` are numeric, each `{ name?, min?, max?, format? }` — same title-placement options as the other charts.
+      - **Legend, hover, tooltip**: Same ergonomics as `Bar`/`Line` — `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle` for the legend, `highlightOnHover` to dim other series while one is hovered.
+      - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
+
+    ## **Examples**
+    ### **Basic**
+
+    A single series of `[x, y]` points — height vs. weight for a sample of people.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.Basic} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const HeightWeight = () => (
+            <Scatter
+              xAxis={{ name: 'Height (cm)' }}
+              yAxis={{ name: 'Weight (kg)' }}
+              series={[
+                { name: 'Sample', data: [[160, 58], [172, 70], [181, 85], [ /* ... */ ]] },
+              ]}
+            />
+          )
+
+          export default HeightWeight
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Multiple series**
+
+    Two clusters as separate series, colored by the categorical palette. `highlightOnHover` dims the other cluster while one is hovered.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.MultipleSeries} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const Clusters = () => (
+            <Scatter
+              highlightOnHover
+              xAxis={{ name: 'Score A' }}
+              yAxis={{ name: 'Score B' }}
+              series={[
+                { name: 'Group A', data: [[24, 62], [31, 75], [ /* ... */ ]] },
+                { name: 'Group B', data: [[58, 28], [70, 41], [ /* ... */ ]] },
+              ]}
+            />
+          )
+
+          export default Clusters
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Anscombe's quartet**
+
+    Four datasets with near-identical summary statistics but very different distributions. A single `Scatter` lays out the four panels with `columns`; each series binds to a panel with `gridIndex` and draws its own straight `trendLine`. The panels reflow to one column on narrow screens.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.AnscombesQuartet} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const trend = { from: [0, 3], to: [20, 13], label: 'y = 0.5 * x + 3' }
+
+          const AnscombesQuartet = () => (
+            <Scatter
+              title="Anscombe's quartet"
+              columns={2}
+              showLegend={false}
+              xAxis={{ min: 0, max: 20 }}
+              yAxis={{ min: 0, max: 15 }}
+              series={[
+                { name: 'I', data: [[10, 8.04], [ /* ... */ ]], variant: 'info', gridIndex: 0, trendLine: trend },
+                { name: 'II', data: [[10, 9.14], [ /* ... */ ]], variant: 'success', gridIndex: 1, trendLine: trend },
+                { name: 'III', data: [[10, 7.46], [ /* ... */ ]], variant: 'neutral', gridIndex: 2, trendLine: trend },
+                { name: 'IV', data: [[8, 6.58], [ /* ... */ ]], variant: 'warning', gridIndex: 3, trendLine: trend },
+              ]}
+            />
+          )
+
+          export default AnscombesQuartet
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Clustering**
+
+    Points grouped into six clusters, rendered as one series per cluster so the legend, categorical palette, and hover behavior all come from the component.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.Clustering} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const Clustering = () => (
+            <Scatter
+              highlightOnHover
+              symbolSize={15}
+              legendPosition="left"
+              series={[
+                { name: 'cluster 0', data: [[3.2, 2.9], [ /* ... */ ]] },
+                { name: 'cluster 1', data: [[-3.3, 2.6], [ /* ... */ ]] },
+                // ...one series per cluster
+              ]}
+            />
+          )
+
+          export default Clustering
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Clustering process**
+
+    A timeline walkthrough of the clustering: each `steps` frame carries its own `series`, plus an optional dashed `boundary` circle around the newest cluster. Drive it with the scrubber or `autoPlay`. Every frame keeps the same series shape so the timeline loops back cleanly.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.ClusteringProcess} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const ClusteringProcess = () => (
+            <Scatter
+              autoPlay
+              symbolSize={12}
+              steps={[
+                { series: [{ name: 'Cluster 1', data: [ /* all points */ ] }] },
+                {
+                  series: [
+                    { name: 'Cluster 1', data: [ /* ... */ ] },
+                    { name: 'Cluster 2', data: [ /* ... */ ] },
+                  ],
+                  boundary: { center: [1.4, 3.1], radius: 2.6 },
+                },
+                // ...one frame per split
+              ]}
+            />
+          )
+
+          export default ClusteringProcess
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Exponential regression**
+
+    A scatter with a fitted curve. Compute the fit from the raw data and pass it to the series as a `regression` — the smooth line and its formula label render through the component in the series color.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.ExponentialRegression} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const gdp = [[1, 4862.4], [2, 5294.7], [ /* ... */ ]]
+
+          const ExponentialRegression = () => (
+            <Scatter
+              title="1981–1998 GDP (trillion yuan)"
+              xAxis={{ name: 'Year' }}
+              yAxis={{ name: 'GDP' }}
+              series={[
+                {
+                  name: 'GDP',
+                  variant: 'info',
+                  data: gdp,
+                  regression: {
+                    points: [[1, 4116.5], [ /* ...fitted curve */ ]],
+                    label: 'y = 4116.55 * e^(0.19x)',
+                  },
+                },
+              ]}
+            />
+          )
+
+          export default ExponentialRegression
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Loading**
+
+    Set `loading` to overlay a themed mask + spinner while data is fetching. The overlay is shared by every chart type. Choose the spinner with `loadingVariant` (`spinner` | `dots` | `bars` | `pulse`) and its size with `loadingSize` (`sm` | `md` | `lg`).
+
+    `loadingColor` and `loadingMask` default to design tokens, so the mask is a light veil in light mode and a dark veil in dark mode. To override, pass a single CSS color to use in both themes, or `{ light, dark }` to vary per theme — if you set only one side, it is used for both.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.Loading} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Scatter } from '@clera/charts'
+
+          const Loading = () => (
+            <Scatter
+              loading
+              loadingVariant="dots"                             // 'spinner' | 'dots' | 'bars' | 'pulse'
+              loadingSize="md"                                  // 'sm' | 'md' | 'lg'
+              // loadingColor="#7c3aed"                          // same in both themes
+              // loadingMask={{ light: 'rgba(255,255,255,0.7)', dark: 'rgba(0,0,0,0.5)' }}
+              series={[{ name: 'Sample', data: [[12, 40], [ /* ... */ ]] }]}
+            />
+          )
+
+          export default Loading
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Aggregate transition**
+
+    Set `aggregate` to let the scatter morph into a bar of per-series averages, then drive `view` (`'scatter' | 'bar'`) to switch between them — ECharts' `universalTransition` animates the points flying into the bars and back. `view` is fully controlled, so wire it to a toggle, a tab, or (as here) a timer. Each bar's value is its series averaged over `aggregate.dimension` (`0` = x, `1` = y). Set `transitionDuration` (ms, default `1000`) to control how fast the morph runs.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={ScatterStories.AggregateTransition} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useEffect, useState } from 'react'
+          import { Scatter } from '@clera/charts'
+          import type { ScatterView } from '@clera/charts'
+
+          const AggregateTransition = () => {
+            const [view, setView] = useState<ScatterView>('scatter')
+            useEffect(() => {
+              const id = setInterval(
+                () => setView(v => (v === 'scatter' ? 'bar' : 'scatter')),
+                2500
+              )
+              return () => clearInterval(id)
+            }, [])
+
+            return (
+              <Scatter
+                view={view}
+                aggregate={{ dimension: 0, formatValue: v => \`\${v.toFixed(1)} cm\` }}
+                xAxis={{ name: 'Height (cm)' }}
+                yAxis={{ name: 'Weight (kg)' }}
+                series={[
+                  { name: 'Female', variant: 'destructive', data: [[161.2, 51.6], [ /* ... */ ]] },
+                  { name: 'Male', variant: 'info', data: [[174.0, 65.6], [ /* ... */ ]] },
+                ]}
+              />
+            )
+          }
+
+          export default AggregateTransition
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Scatter component, along with their types, default values, and descriptions.
+    <PropsTable />
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "basic",
+              label: "Basic"
+            },
+            {
+              id: "multiple-series",
+              label: "Multiple series"
+            },
+            {
+              id: "anscombes-quartet",
+              label: "Anscombe's quartet"
+            },
+            {
+              id: "clustering",
+              label: "Clustering"
+            },
+            {
+              id: "clustering-process",
+              label: "Clustering process"
+            },
+            {
+              id: "exponential-regression",
+              label: "Exponential regression"
+            },
+            {
+              id: "loading",
+              label: "Loading"
+            },
+            {
+              id: "aggregate-transition",
+              label: "Aggregate transition"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

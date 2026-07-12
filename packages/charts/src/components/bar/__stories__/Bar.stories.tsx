@@ -1,4 +1,4 @@
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { FaYoutube, FaXTwitter, FaLinkedin } from 'react-icons/fa6'
 import { Bar } from '../Bar'
@@ -12,30 +12,13 @@ const youtubeIcon = renderToStaticMarkup(<FaYoutube color="#FF0000" />)
 const xIcon = renderToStaticMarkup(<FaXTwitter color="#000000" />)
 const linkedinIcon = renderToStaticMarkup(<FaLinkedin color="#0A66C2" />)
 
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="mx-auto w-full max-w-[820px]">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
-      <div className="w-full max-w-[820px]">
-        <Story />
-      </div>
-    </div>
-  )
-}
-
 const meta: Meta<typeof Bar> = {
   title: 'Charts/Bar',
   component: Bar,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: { maxWidth: 820 },
     docs: {
       description: {
         component:

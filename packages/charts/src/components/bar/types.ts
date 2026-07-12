@@ -9,6 +9,7 @@ import type {
   AxisNameOrientation,
   BaseLegendProps,
   LegendIcon,
+  ChartLoadingProps,
 } from '@/utils'
 
 export type {
@@ -114,7 +115,7 @@ export type BarSeries = {
   legendIcon?: LegendIcon
 }
 
-export interface BarProps extends BaseLegendProps {
+export interface BarProps extends BaseLegendProps, ChartLoadingProps {
   data?: BarDatum[]
   categories?: string[]
   series?: BarSeries[]
@@ -154,7 +155,6 @@ export interface BarProps extends BaseLegendProps {
   yAxis?: BarYAxis
   /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onBarClick?: (datum: BarDatum, index: number) => void

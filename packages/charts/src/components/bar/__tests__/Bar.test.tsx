@@ -798,13 +798,12 @@ describe('components/charts/Bar', () => {
 
   it('shows the loading overlay when loading is true', () => {
     render(<Bar data={sample} loading />)
-    expect(mockChart.showLoading).toHaveBeenCalled()
-    expect(mockChart.hideLoading).not.toHaveBeenCalled()
+    expect(screen.getByTestId('chart-loading')).toBeInTheDocument()
   })
 
   it('hides the loading overlay by default', () => {
     render(<Bar data={sample} />)
-    expect(mockChart.hideLoading).toHaveBeenCalled()
+    expect(screen.queryByTestId('chart-loading')).not.toBeInTheDocument()
   })
 
   it('uses horizontal layout by default (yAxis is category)', () => {
@@ -1129,6 +1128,11 @@ describe('components/charts/Bar', () => {
     return !el.dispatchEvent(evt)
   }
 
+  // The element ECharts renders into — a leaf inside the chart's wrapper, which
+  // is where the wheel guard is bound.
+  const chartSurface = (container: HTMLElement) =>
+    container.firstChild!.firstChild as HTMLElement
+
   it('swallows zoom-in wheel events when already at the minimum span', () => {
     mockChart.getOption.mockReturnValue({
       dataZoom: [{ type: 'inside', start: 0, end: 4, minSpan: 4 }],
@@ -1136,7 +1140,7 @@ describe('components/charts/Bar', () => {
     const { container } = render(
       <Bar data={sample} direction="vertical" zoom="both" />
     )
-    expect(fireWheelIn(container.firstChild as HTMLElement)).toBe(true)
+    expect(fireWheelIn(chartSurface(container))).toBe(true)
   })
 
   it('lets zoom-in wheel events through when not at the minimum span', () => {
@@ -1146,7 +1150,7 @@ describe('components/charts/Bar', () => {
     const { container } = render(
       <Bar data={sample} direction="vertical" zoom="both" />
     )
-    expect(fireWheelIn(container.firstChild as HTMLElement)).toBe(false)
+    expect(fireWheelIn(chartSurface(container))).toBe(false)
   })
 
   it('zooms both axes with a slider each when zoom="both"', () => {
