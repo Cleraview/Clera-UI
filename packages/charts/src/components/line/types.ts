@@ -8,6 +8,7 @@ import type {
   CategoryAxisNamePosition,
   AxisNameOrientation,
   BaseLegendProps,
+  ChartLoadingProps,
 } from '@/utils'
 
 export type {
@@ -124,7 +125,7 @@ export type LineThreshold = {
   below?: LineVariant | string
 }
 
-export interface LineProps extends BaseLegendProps {
+export interface LineProps extends BaseLegendProps, ChartLoadingProps {
   categories?: (string | number)[]
   series: LineSeries[]
   xAxisType?: LineXAxisType
@@ -172,7 +173,6 @@ export interface LineProps extends BaseLegendProps {
   formatValue?: (value: number) => string
   /** Formats x-axis ticks and the tooltip header — handy for time axes. */
   formatX?: (value: string | number) => string
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   onPointClick?: (point: LinePointClick) => void

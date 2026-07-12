@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Pie } from '../Pie'
 import { registerGeoMap } from '../registerGeoMap'
 import { registerCalendar } from '../registerCalendar'
@@ -31,23 +31,6 @@ import {
 registerCalendar()
 registerGeoMap('singapore', singaporeMap)
 
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="mx-auto w-full max-w-[760px]">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="flex min-h-screen w-full items-center justify-center p-4">
-      <div className="w-full max-w-[760px]">
-        <Story />
-      </div>
-    </div>
-  )
-}
-
 const caption =
   'mb-2 text-center text-[13px] font-medium text-neutral-500 dark:text-neutral-400'
 
@@ -55,9 +38,9 @@ const meta: Meta<typeof Pie> = {
   title: 'Charts/Pie',
   component: Pie,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: { maxWidth: 760, padding: 4 },
     docs: {
       description: {
         component:

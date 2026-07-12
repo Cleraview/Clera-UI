@@ -17,9 +17,9 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
 import type { EChartEvents, EChartEventParams } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import {
   buildComboOption,
   summaryPieData,
@@ -70,6 +70,10 @@ export const Combo: React.FC<ComboProps> = ({
   xAxisLabel,
   summaryPie,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onReady,
@@ -166,8 +170,6 @@ export const Combo: React.FC<ComboProps> = ({
 
   const { containerRef, chartRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     events,
     onReady: chart => {
       instanceRef.current = chart
@@ -253,13 +255,22 @@ export const Combo: React.FC<ComboProps> = ({
       role="img"
       aria-label="Combo chart"
       data-testid="combo-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

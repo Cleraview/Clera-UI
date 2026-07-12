@@ -11,9 +11,9 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
 import type { EChartEventParams, EChartEvents } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildPolarBarOption } from './buildOption'
 import { styles } from './styles'
 import type { PolarBarProps, PolarBarDatum } from './types'
@@ -71,6 +71,10 @@ export const PolarBar: React.FC<PolarBarProps> = ({
   formatValue = v => String(v),
   labelFormatter,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onBarClick,
@@ -146,8 +150,6 @@ export const PolarBar: React.FC<PolarBarProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     events,
     onReady,
   })
@@ -157,13 +159,22 @@ export const PolarBar: React.FC<PolarBarProps> = ({
       role="img"
       aria-label="Polar bar chart"
       data-testid="polar-bar-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

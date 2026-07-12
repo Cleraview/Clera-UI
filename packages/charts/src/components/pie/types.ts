@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { ECharts } from 'echarts/core'
-import type { ChartVariant, BaseLegendProps } from '@/utils'
+import type { ChartVariant, BaseLegendProps, ChartLoadingProps } from '@/utils'
 
 export type PiePalette = 'brand' | 'categorical'
 
@@ -104,7 +104,7 @@ export type PieLabelDatum = {
   percent: number
 }
 
-export interface PieProps extends BaseLegendProps {
+export interface PieProps extends BaseLegendProps, ChartLoadingProps {
   data?: PieDatum[]
   series?: PieSeries[]
   height?: number | string
@@ -131,7 +131,6 @@ export interface PieProps extends BaseLegendProps {
   highlightOnHover?: boolean
   selectedMode?: false | 'single' | 'multiple'
   formatValue?: (value: number) => string
-  loading?: boolean
   animate?: boolean
   emptyMessage?: string
   compact?: boolean

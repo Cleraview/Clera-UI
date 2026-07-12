@@ -13,8 +13,8 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildLineMatrixOption } from './buildOption'
 import { styles } from './styles'
 import type { LineMatrixProps } from './types'
@@ -46,6 +46,10 @@ export const LineMatrix: React.FC<LineMatrixProps> = ({
   formatValue = v => String(v),
   formatX,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onReady,
@@ -90,8 +94,6 @@ export const LineMatrix: React.FC<LineMatrixProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     onReady,
   })
 
@@ -100,13 +102,22 @@ export const LineMatrix: React.FC<LineMatrixProps> = ({
       role="img"
       aria-label="Line matrix chart"
       data-testid="line-matrix-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

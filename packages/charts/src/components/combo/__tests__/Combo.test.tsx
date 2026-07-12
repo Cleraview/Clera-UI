@@ -343,7 +343,7 @@ describe('components/charts/Combo', () => {
 
   it('shows the loading overlay when loading', () => {
     render(<Combo categories={categories} series={series} loading />)
-    expect(mockChart.showLoading).toHaveBeenCalled()
+    expect(screen.getByTestId('chart-loading')).toBeInTheDocument()
   })
 
   it('disposes on unmount', () => {

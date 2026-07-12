@@ -571,7 +571,7 @@ describe('components/charts/Pie', () => {
 
   it('shows the loading overlay when loading', () => {
     render(<Pie data={sample} loading />)
-    expect(mockChart.showLoading).toHaveBeenCalled()
+    expect(screen.getByTestId('chart-loading')).toBeInTheDocument()
   })
 
   it('disposes on unmount', () => {

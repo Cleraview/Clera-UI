@@ -29,8 +29,6 @@ export type EChartEvents = Record<string, (params: EChartEventParams) => void>
 
 export interface UseEChartOptions {
   buildOption: (ctx: EChartBuildContext) => EChartsCoreOption
-  loading?: boolean
-  loadingColor?: string
   events?: EChartEvents
   onReady?: (chart: ECharts) => void
   compactBelow?: number
@@ -44,7 +42,7 @@ export interface UseEChartOptions {
 }
 
 /**
- * Shared ECharts runtime: init, resize, dispose, theme re-resolution, loading,
+ * Shared ECharts runtime: init, resize, dispose, theme re-resolution,
  * imperative `onReady` escape hatch, and event binding. Chart components supply
  * a `buildOption` builder and register their own ECharts modules; everything
  * else (lifecycle + theme reactivity) is handled here so every chart behaves
@@ -52,8 +50,6 @@ export interface UseEChartOptions {
  */
 export function useEChart({
   buildOption,
-  loading = false,
-  loadingColor = 'rgb(124, 58, 237)',
   events,
   onReady,
   compactBelow,
@@ -210,27 +206,36 @@ export function useEChart({
   }, [])
 
   useEffect(() => {
+    setColorScope(containerRef.current)
     const chart = chartRef.current
     if (!chart) return
-    if (loading) {
-      chart.showLoading('default', {
-        text: '',
-        color: loadingColor,
-        maskColor: 'rgba(0, 0, 0, 0)',
-        spinnerRadius: 8,
-        lineWidth: 2,
-      })
-    } else {
-      chart.hideLoading()
-    }
-  }, [loading, loadingColor])
 
-  useEffect(() => {
-    setColorScope(containerRef.current)
-    chartRef.current?.setOption(
-      buildOption({ compact, stacked, width: size.width, height: size.height }),
-      true
-    )
+    const option = buildOption({
+      compact,
+      stacked,
+      width: size.width,
+      height: size.height,
+    })
+
+    // A full rebuild (`notMerge`) drops the legend's selected state, so a
+    // series the user hid would reappear on theme changes or a morph. Carry
+    // the current selection into the new option (matched by series name).
+    const prevLegend = (chart.getOption?.() as { legend?: unknown[] })?.legend
+    const selected = Array.isArray(prevLegend)
+      ? (prevLegend[0] as { selected?: Record<string, boolean> })?.selected
+      : undefined
+    const legend = (option as { legend?: unknown }).legend
+    if (selected && legend && typeof legend === 'object') {
+      const target = Array.isArray(legend) ? legend[0] : legend
+      if (target && typeof target === 'object') {
+        ;(target as { selected?: Record<string, boolean> }).selected = {
+          ...(target as { selected?: Record<string, boolean> }).selected,
+          ...selected,
+        }
+      }
+    }
+
+    chart.setOption(option, true)
   }, [buildOption, compact, stacked, size])
 
   return { containerRef, chartRef, compact, stacked, width: size.width }

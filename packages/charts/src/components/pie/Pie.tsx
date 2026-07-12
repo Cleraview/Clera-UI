@@ -11,13 +11,13 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
 import type {
   EChartEventParams,
   EChartEvents,
   EChartBuildContext,
 } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildPieOption } from './buildOption'
 import { styles } from './styles'
 import type { PieProps, PieDatum } from './types'
@@ -95,6 +95,10 @@ export const Pie: React.FC<PieProps> = ({
   selectedMode = false,
   formatValue = defaultFormatValue,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   compact,
@@ -248,8 +252,6 @@ export const Pie: React.FC<PieProps> = ({
     width: chartWidth,
   } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     events,
     onReady: chart => {
       instanceRef.current = chart
@@ -307,10 +309,21 @@ export const Pie: React.FC<PieProps> = ({
         role="img"
         aria-label="Pie chart"
         data-testid="pie-chart"
-        ref={containerRef}
         className={styles.root}
-        style={{ height: typeof height === 'number' ? `${height}px` : height }}
-      />
+        style={{
+          position: 'relative',
+          height: typeof height === 'number' ? `${height}px` : height,
+        }}
+      >
+        <div ref={containerRef} style={CHART_SURFACE} />
+        <ChartLoading
+          show={loading}
+          variant={loadingVariant}
+          size={loadingSize}
+          color={loadingColor}
+          mask={loadingMask}
+        />
+      </div>
       {stacked && cardItems.length > 0 ? (
         <PieDetailPanel items={cardItems} formatValue={formatValue} />
       ) : null}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ComponentProps, ReactNode } from 'react'
-import type { Meta, StoryObj, Decorator } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Badge, Button, Dropdown } from '@clera/ui'
 import type { DropdownItemDef } from '@clera/ui'
 import { LineMatrix } from '../LineMatrix'
@@ -11,28 +11,13 @@ import type {
   LinePoint,
 } from '../types'
 
-const centerStory: Decorator = (Story, { viewMode }) => {
-  if (viewMode === 'docs') {
-    return (
-      <div className="w-full">
-        <Story />
-      </div>
-    )
-  }
-  return (
-    <div className="min-h-screen w-full py-6">
-      <Story />
-    </div>
-  )
-}
-
 const meta: Meta<typeof LineMatrix> = {
   title: 'Charts/Line Matrix',
   component: LineMatrix,
   tags: [],
-  decorators: [centerStory],
   parameters: {
     layout: 'fullscreen',
+    chartLayout: {},
     docs: {
       description: {
         component:

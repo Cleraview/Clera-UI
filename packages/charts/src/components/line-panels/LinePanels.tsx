@@ -13,8 +13,8 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildLinePanelsOption } from './buildOption'
 import { styles } from './styles'
 import type { LinePanelsProps } from './types'
@@ -46,6 +46,10 @@ export const LinePanels: React.FC<LinePanelsProps> = ({
   formatValue = v => String(v),
   formatX,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onReady,
@@ -90,8 +94,6 @@ export const LinePanels: React.FC<LinePanelsProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     onReady,
   })
 
@@ -100,13 +102,22 @@ export const LinePanels: React.FC<LinePanelsProps> = ({
       role="img"
       aria-label="Stacked line panels chart"
       data-testid="line-panels-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

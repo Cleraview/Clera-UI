@@ -296,7 +296,7 @@ export function buildLegendOption({
           pageTextStyle: { color: colors.subtle },
         }
       : {}),
-    ...(style?.inactiveColor ? { inactiveColor: style.inactiveColor } : {}),
+    inactiveColor: style?.inactiveColor ?? toInactiveColor(),
     ...(style?.backgroundColor
       ? { backgroundColor: style.backgroundColor }
       : {}),
@@ -309,6 +309,10 @@ export function buildLegendOption({
       : {}),
     ...(style?.padding !== undefined ? { padding: style.padding } : {}),
   }
+}
+
+function toInactiveColor(opacity = 0.4): string {
+  return `rgba(128, 128, 128, ${opacity})`
 }
 
 const CUSTOM_ICON_RE = /^(?:path|image):\/\//

@@ -18,9 +18,9 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { cn } from '@clera/ui/utils'
-import { resolveVariant } from '@/utils'
 import { useEChart } from '@/hooks'
 import type { EChartEvents } from '@/hooks'
+import { ChartLoading, CHART_SURFACE } from '@/components/loading'
 import { buildLineOption } from './buildOption'
 import { resolvePoint } from './helpers'
 import { styles } from './styles'
@@ -97,6 +97,10 @@ export const Line: React.FC<LineProps> = ({
   formatValue = v => String(v),
   formatX,
   loading = false,
+  loadingVariant,
+  loadingSize,
+  loadingColor,
+  loadingMask,
   animate = true,
   emptyMessage = 'No data',
   onPointClick,
@@ -202,8 +206,6 @@ export const Line: React.FC<LineProps> = ({
 
   const { containerRef } = useEChart({
     buildOption,
-    loading,
-    loadingColor: resolveVariant('primary'),
     events,
     onReady,
   })
@@ -213,13 +215,22 @@ export const Line: React.FC<LineProps> = ({
       role="img"
       aria-label="Line chart"
       data-testid="line-chart"
-      ref={containerRef}
       className={cn(styles.root, className)}
       style={{
+        position: 'relative',
         height: typeof height === 'number' ? `${height}px` : height,
         ...style,
       }}
-    />
+    >
+      <div ref={containerRef} style={CHART_SURFACE} />
+      <ChartLoading
+        show={loading}
+        variant={loadingVariant}
+        size={loadingSize}
+        color={loadingColor}
+        mask={loadingMask}
+      />
+    </div>
   )
 }
 

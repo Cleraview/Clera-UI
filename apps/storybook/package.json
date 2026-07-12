@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clera/charts": "workspace:*",
+    "@clera/docs": "workspace:*",
     "@clera/tokens": "workspace:*",
     "@clera/ui": "workspace:*"
   },
