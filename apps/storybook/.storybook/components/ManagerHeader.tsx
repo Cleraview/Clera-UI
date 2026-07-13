@@ -19,6 +19,8 @@ import { cn } from '@clera/ui/utils'
 export const ADDON_ID = 'custom-header'
 export const TOOL_ID = `${ADDON_ID}/tool`
 
+const LANDING_STORY_ID = 'charts-overview--docs'
+
 type ThemeMode = 'light' | 'dark' | 'system'
 
 const THEME_MODES: { mode: ThemeMode; label: string; Icon: typeof FiSun }[] = [
@@ -36,7 +38,10 @@ const resolveDark = (mode: ThemeMode) =>
 
 export const ManagerHeader = () => {
   const api = useStorybookApi()
-  const state = useStorybookState() as unknown as { viewMode?: string }
+  const state = useStorybookState() as unknown as {
+    viewMode?: string
+    storyId?: string
+  }
   const [ currentStoryId, setCurrentStoryId ] = useState<string | null>(null)
   const [themeMode, setThemeMode] = useState<ThemeMode>(
     () => (window.localStorage.getItem('themeMode') as ThemeMode) || 'system'
@@ -44,9 +49,10 @@ export const ManagerHeader = () => {
   const [themeMenuOpen, setThemeMenuOpen] = useState(false)
 
   const navMenus = useMemo(() => [
-    // { label: 'Docs', url: 'overview--docs' },
+    { label: 'Documentation', url: 'overview--docs' },
     // { label: 'Foundation', url: 'foundation--docs' },
     // { label: 'Components', url: 'components--docs' },
+    { label: 'Charts', url: LANDING_STORY_ID },
     // { label: 'Changelog', url: 'changelog--docs' },
   ], [])
 
@@ -130,6 +136,19 @@ export const ManagerHeader = () => {
   }, [])
 
   useEffect(() => {
+    if (state.storyId) setCurrentStoryId(state.storyId)
+  }, [state.storyId])
+
+  // The charts landing is its own full-width page, so it hides the sidebar
+  // without touching the user's collapse preference.
+  useEffect(() => {
+    document.body.classList.toggle(
+      'clera-landing',
+      state.storyId === LANDING_STORY_ID
+    )
+  }, [state.storyId])
+
+  useEffect(() => {
     document.body.classList.toggle('clera-nav-hidden', navHidden)
   }, [navHidden])
 
@@ -182,8 +201,9 @@ export const ManagerHeader = () => {
       if (isControls) {
         e.preventDefault()
         e.stopPropagation()
-        if (isMobile()) setPanelOpen(o => !o)
-        else api.togglePanel()
+        // if (isMobile()) setPanelOpen(o => !o)
+        // else 
+        api.togglePanel()
       }
     }
     window.addEventListener('keydown', onKeyDown, true)
@@ -225,9 +245,10 @@ export const ManagerHeader = () => {
           </div>
 
           <nav className="nav-menu">
-            {navMenus.map((navMenu, index) => (
-              <button 
-                onClick={onNavClick(navMenu.url)} 
+            {navMenus.map(navMenu => (
+              <button
+                key={navMenu.url}
+                onClick={onNavClick(navMenu.url)}
                 className={cn("nav-button", navMenu.url === currentStoryId && 'active')}
               >
                 {navMenu.label}

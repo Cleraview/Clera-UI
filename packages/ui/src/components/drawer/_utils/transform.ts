@@ -1,17 +1,21 @@
 export const getPositionStyles = (
   position: 'left' | 'right' | 'bottom' | 'top',
-  fullScreen: boolean
+  fullScreen: boolean,
+  size?: string | number
 ): React.CSSProperties => {
+  const isHorizontal = ['left', 'right'].includes(position)
+  const resolved = typeof size === 'number' ? `${size}px` : size
+
   const base = {
-    width: ['left', 'right'].includes(position)
+    width: isHorizontal
       ? fullScreen
         ? '100vw'
-        : '378px'
+        : (resolved ?? '378px')
       : '100vw',
-    height: ['top', 'bottom'].includes(position)
+    height: !isHorizontal
       ? fullScreen
         ? '100%'
-        : 'auto'
+        : (resolved ?? 'auto')
       : '100%',
   }
 

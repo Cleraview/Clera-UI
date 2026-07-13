@@ -32,7 +32,18 @@ const preview: PreviewConfig = {
       panelPosition: 'bottom',
       bottomPanelHeight: 300,
       storySort: {
-        order: ['Overview', 'Foundations', 'Layout', 'Section', 'Features', 'UI'],
+        // A nested array orders that group's children: Charts lists its
+        // Overview landing page first, then everything else alphabetically.
+        order: [
+          'Overview',
+          'Foundations',
+          'Layout',
+          'Section',
+          'Features',
+          'UI',
+          'Charts',
+          ['Overview', '*'],
+        ],
       },
     },
     docs: {

@@ -5,7 +5,15 @@ export default {
     patterns: (item: { tags: string[] }) => !item.tags?.includes('hidden'),
   },
   renderLabel: (item: SidebarItemProps) => {
-    const { tags, type, name, children, storiesImports } = item
-    return renderSidebarItem({ tags, children, name, storiesImports, type })
+    const { tags, type, name, children, storiesImports, id, parent } = item
+    return renderSidebarItem({
+      tags,
+      children,
+      name,
+      storiesImports,
+      type,
+      id,
+      parent,
+    })
   }
 }
