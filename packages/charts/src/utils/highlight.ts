@@ -1,8 +1,90 @@
-import { lighten } from './colors'
+import { lighten, withAlpha } from './colors'
 
 export interface ItemHighlightState {
   emphasis: Record<string, unknown>
   blur?: Record<string, unknown>
+}
+
+export interface SelfHighlightOptions {
+  enabled: boolean
+  blurOpacity?: number
+  /**
+   * Grow the hovered item. Off by default: for symbol/line/area shapes,
+   * scaling moves the hit area out from under the cursor, which fires
+   * `mouseout` -> shrink -> `mouseover` in a loop — the hover (and the
+   * cursor) flickers. Only safe for shapes that grow around the cursor,
+   * e.g. a pie slice.
+   */
+  scale?: boolean
+  scaleSize?: number
+}
+
+/**
+ * Series-level `emphasis`/`blur` for charts where each *data item* is a group
+ * rather than each series — the radar/pie shape, where the legend and hover
+ * target data items (`focus: 'self'`) instead of whole series.
+ *
+ * Like the other builders, hovering always gives an affordance; `enabled` only
+ * decides whether the *other* items are dimmed too.
+ *
+ * `scale` stays off by default because scaling can move a symbol out from
+ * under the cursor, which fires `mouseout` -> `mouseover` in a loop and makes
+ * the hover (and the cursor) flicker. Callers must also state any hover
+ * geometry explicitly rather than let ECharts' default emphasis apply: see
+ * `buildSelfHoverStyle`, which only ever *grows* the stroke, so the hit area
+ * expands around the cursor instead of shifting away from it.
+ */
+export function buildSelfHighlight({
+  enabled,
+  blurOpacity = 0.15,
+  scale = false,
+  scaleSize,
+}: SelfHighlightOptions): ItemHighlightState {
+  return {
+    emphasis: {
+      scale,
+      ...(scale && scaleSize !== undefined ? { scaleSize } : {}),
+      focus: enabled ? 'self' : 'none',
+      ...(enabled ? { blurScope: 'series' } : {}),
+    },
+    ...(enabled
+      ? {
+          blur: {
+            lineStyle: { opacity: blurOpacity },
+            itemStyle: { opacity: blurOpacity },
+            areaStyle: { opacity: blurOpacity * 0.4 },
+          },
+        }
+      : {}),
+  }
+}
+
+export interface SelfHoverStyleOptions {
+  /** The item's resting line width. Hover grows it by `boldBy`. */
+  lineWidth: number
+  /** Extra px of stroke on hover. Growing only ever expands the hit area. */
+  boldBy?: number
+  /** Fill opacity on hover. Omit for items with no area. */
+  areaOpacity?: number
+}
+
+/**
+ * The per-item hover style to pair with `buildSelfHighlight`: a lighter fill
+ * and a bolder line, with every changed value stated explicitly so ECharts'
+ * default emphasis (which resizes shapes unpredictably) never applies.
+ */
+export function buildSelfHoverStyle(
+  color: string,
+  { lineWidth, boldBy = 1, areaOpacity }: SelfHoverStyleOptions
+): Record<string, unknown> {
+  const hover = lighten(color)
+  return {
+    lineStyle: { color: hover, width: lineWidth + boldBy },
+    itemStyle: { color: hover },
+    ...(areaOpacity !== undefined
+      ? { areaStyle: { color: withAlpha(hover, areaOpacity) } }
+      : {}),
+  }
 }
 
 /**

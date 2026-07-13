@@ -1,0 +1,202 @@
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
+import * as RadarStories from "./Radar.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
+
+<Meta title="Charts/Radar" of={RadarStories} />
+
+<DocsLayout>
+  <div>
+    # Radar
+
+    To compare several series across the same set of axes.
+
+    <DocInfo importStatement={`import { Radar } from '@clera/charts'`} sourcePath={`components/radar`} />
+
+    <br />
+
+    ## **When To Use**
+    The Radar (or spider) chart plots each series as a closed web over a shared set of axes, so you can compare their overall shape at a glance. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`/`Line`, and adapts to light/dark mode automatically.
+
+    Reach for it when several items are scored on the same criteria — product comparisons, skill profiles, budget vs. actual:
+
+      - **Indicators**: The axes, `{ name, max?, min? }[]`. Set `max` per indicator, or a chart-level `max` for all of them.
+      - **Series**: One or more `series`, each `{ name, data, variant?, color?, area? }`, where `data` is one value per indicator, in the same order.
+      - **Shape & fill**: `shape="polygon"` (default) or `"circle"`; `area` fills each web, and `splitArea` shades alternate rings.
+      - **Legend, hover, tooltip**: Same ergonomics as the other charts — `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle`, and `highlightOnHover` to bring the hovered web forward and dim the rest.
+      - **Loading**: The shared overlay — `loading`, `loadingVariant`, `loadingSize`, `loadingColor`, `loadingMask`.
+      - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
+
+    ## **Examples**
+    ### **Basic**
+
+    Two vehicles scored across the same six attributes.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadarStories.Basic} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Radar } from '@clera/charts'
+
+          const Vehicles = () => (
+            <Radar
+              indicators={[
+                { name: 'Speed', max: 100 },
+                { name: 'Power', max: 100 },
+                { name: 'Range', max: 100 },
+                { name: 'Comfort', max: 100 },
+                { name: 'Safety', max: 100 },
+                { name: 'Value', max: 100 },
+              ]}
+              series={[
+                { name: 'Roadster', data: [92, 88, 54, 62, 70, 45] },
+                { name: 'Commuter', data: [58, 52, 88, 84, 90, 82] },
+              ]}
+            />
+          )
+
+          export default Vehicles
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Filled**
+
+    `area` fills each web, and `highlightOnHover` keeps overlapping fills readable by dimming the others.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadarStories.Filled} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Radar } from '@clera/charts'
+
+          const Budget = () => (
+            <Radar
+              area
+              highlightOnHover
+              title="Budget vs. spending"
+              subtitle="Allocated against actual, by department"
+              legendPosition="bottom"
+              formatValue={v => \`$\${v.toLocaleString()}\`}
+              indicators={[
+                { name: 'Sales', max: 6500 },
+                { name: 'Administration', max: 16000 },
+                // ...
+              ]}
+              series={[
+                { name: 'Allocated budget', variant: 'primary', data: [4200, 3000, /* ... */] },
+                { name: 'Actual spending', variant: 'warning', data: [5000, 14000, /* ... */] },
+              ]}
+            />
+          )
+
+          export default Budget
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Circle shape**
+
+    A round web instead of the straight-edged polygon. A chart-level `max` scales every indicator that doesn't set its own.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadarStories.CircleShape} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Radar } from '@clera/charts'
+
+          const Circle = () => (
+            <Radar
+              area
+              shape="circle"
+              max={100}
+              indicators={[{ name: 'Speed' }, { name: 'Power' }, { name: 'Range' }]}
+              series={[
+                { name: 'Roadster', data: [92, 88, 54] },
+                { name: 'Commuter', data: [58, 52, 88] },
+              ]}
+            />
+          )
+
+          export default Circle
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Loading**
+
+    The same themed overlay as every other chart.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={RadarStories.Loading} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { Radar } from '@clera/charts'
+
+          const Loading = () => (
+            <Radar
+              loading
+              loadingVariant="bars"   // 'spinner' | 'dots' | 'bars' | 'pulse'
+              loadingSize="md"        // 'sm' | 'md' | 'lg'
+              indicators={[{ name: 'Speed', max: 100 }, /* ... */]}
+              series={[{ name: 'Roadster', data: [92, 88, /* ... */] }]}
+            />
+          )
+
+          export default Loading
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the Radar component, along with their types, default values, and descriptions.
+    <PropsTable />
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "basic",
+              label: "Basic"
+            },
+            {
+              id: "filled",
+              label: "Filled"
+            },
+            {
+              id: "circle-shape",
+              label: "Circle shape"
+            },
+            {
+              id: "loading",
+              label: "Loading"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>
