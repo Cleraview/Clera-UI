@@ -59,17 +59,33 @@ export type SidebarItemProps = {
   name: string
   children: string[]
   storiesImports: string[]
+  id?: string
+  parent?: string
 }
+
+/**
+ * Tags only the Charts Overview landing page, so manager.css can indent it to
+ * line up with its component siblings and bold it. Anchoring to a class we
+ * emit here beats guessing Storybook's `data-*` attributes — and keeping it to
+ * this one row leaves every other menu and submenu at its native indent.
+ */
+const labelClass = (id?: string, parent?: string) =>
+  parent === 'charts' && id?.startsWith('charts-overview')
+    ? 'clera-charts-overview'
+    : undefined
 
 const SidebarItem = ({
   tags,
   children,
   name,
   storiesImports,
-  type
+  type,
+  id,
+  parent,
 }: SidebarItemProps) => {
   let statusBadge = null
-  
+  const className = labelClass(id, parent)
+
   if (tags) {
     for (const tag of tags) {
       if (/^v\d/.test(tag)) {
@@ -92,11 +108,12 @@ const SidebarItem = ({
     ((type === 'docs') && storiesImports?.length)
   ) {
     // console.log(item, children, (type === 'component' && !children?.length))
-    return name
+    return className ? <span className={className}>{name}</span> : name
   }
-  
+
   return (
     <div
+      className={className}
       style={{
         display: 'flex',
         justifyContent: 'space-between',

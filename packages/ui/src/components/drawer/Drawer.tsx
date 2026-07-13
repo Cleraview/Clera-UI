@@ -33,6 +33,7 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
   onClose,
   children,
   position = 'right',
+  size,
   duration = 300,
   overlayOpacity = 0.5,
   title,
@@ -111,7 +112,7 @@ const Drawer: React.FC<DrawerProps> & DrawerSubcomponents = ({
         ref={drawerRef}
         className={styles.drawer}
         style={{
-          ...getPositionStyles(position, fullScreen),
+          ...getPositionStyles(position, fullScreen, size),
           ...getTransformStyles(position, isVisible),
           transition: `transform ${duration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
           overflow: 'hidden',
