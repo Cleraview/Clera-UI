@@ -19,8 +19,8 @@ export const tooltipVariants = cva(
 export const styles = {
   themeDark: 'bg-ds-neutral-bold text-ds-inverse',
   themeLight: 'bg-ds-neutral text-ds-default',
-  arrowDark: 'fill-ds-icon',
-  arrowLight: 'fill-ds-icon-inverse',
+  arrowDark: '-translate-y-px fill-(--background-color-ds-neutral-bold)',
+  arrowLight: '-translate-y-px fill-(--background-color-ds-neutral)',
 }
 
 export default styles

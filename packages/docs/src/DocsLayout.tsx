@@ -17,7 +17,7 @@ export const DocsLayout: React.FC<Props> = ({ children, className }) => {
   return (
     <div className={cn('relative', className)}>
       <div className="@container flex gap-space-lg">
-        <div className="flex-1 min-w-0 max-w-[800px] overflow-x-hidden">
+        <div className="flex-1 min-w-0 max-w-[800px] overflow-x-clip">
           {main}
         </div>
 

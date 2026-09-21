@@ -6,14 +6,17 @@ import { cn } from '@ui/utils/tailwind'
 type DocInfoProps = {
   importStatement: string
   sourcePath: string
+  extPath?: 'ui' | 'charts'
 }
 
 export const DocInfo: React.FC<DocInfoProps> = ({
   importStatement,
   sourcePath,
+  extPath = 'ui',
 }) => {
   const [importCopied, setImportCopied] = useState(false)
-  const githubRepoUrl = config.repoUrl + '/tree/main/src'
+  const githubRepoUrl =
+    config.repoUrl + '/tree/main/packages/' + extPath + '/src'
 
   const copyToClipboard = (
     text: string,
@@ -58,7 +61,9 @@ export const DocInfo: React.FC<DocInfoProps> = ({
             rel="noreferrer"
           >
             {FiGithub ? <FiGithub /> : null}
-            <span className="text-body-sm">{sourcePath}</span>
+            <span className="text-body-sm! font-(family-name:--font-code)!">
+              {sourcePath}
+            </span>
           </a>
         </div>
       </div>
