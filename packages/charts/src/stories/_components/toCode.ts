@@ -6,7 +6,7 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> =>
 
 /**
  * Serializes a story's args back into a JSX snippet. Long data arrays are
- * elided — the point is a readable, copyable example, not a byte-for-byte
+ * elided, because the point is a readable, copyable example, not a byte-for-byte
  * reproduction of the fixture.
  */
 function serialize(value: unknown, depth: number): string | null {
@@ -32,7 +32,7 @@ function serialize(value: unknown, depth: number): string | null {
       .filter(Boolean)
       .join(',\n')
 
-    // Keep short arrays of primitives on one line — `[1, 2, 3]` reads better
+    // Keep short arrays of primitives on one line, since `[1, 2, 3]` reads better
     // than one number per row.
     const primitives = shown.every(
       item => typeof item === 'number' || typeof item === 'string'

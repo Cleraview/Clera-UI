@@ -18,16 +18,16 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     <br />
 
     ## **When To Use**
-    The Line Matrix is a **small-multiples** grid: a single chart, built on the [Apache ECharts](https://echarts.apache.org/) matrix coordinate system, lays out one tiny line per cell so you can scan a whole table of trends at a glance — FX pairs by weekday, sectors by quarter, servers by region. It resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically, and shares the same `useEChart` runtime as the other charts.
+    The Line Matrix is a **small-multiples** grid: a single chart, built on the [Apache ECharts](https://echarts.apache.org/) matrix coordinate system, lays out one tiny line per cell so you can scan a whole table of trends at a glance, whether that is FX pairs by weekday, sectors by quarter, or servers by region. It resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically, and shares the same `useEChart` runtime as the other charts.
 
     In {config.title}, the matrix adapts through its props:
 
     - **Columns & Rows**: `columns` are the x dimension, `rows` are the y dimension. A row can be a plain string, or `{ label, divider }` to render a **merged group header** that spans the full width (like a section break).
     - **Cells**: each `{ col, row, data }` places one mini line at that intersection. `data` is plain values or `[x, y]` pairs.
-    - **Trend coloring**: `colorByTrend` paints each cell green or red by whether its line ended up or down — a fast read across the grid.
+    - **Trend coloring**: `colorByTrend` paints each cell green or red by whether its line ended up or down, which makes the grid fast to read.
     - **Area & Curve**: fill under each line with `area`, and choose the line shape with `curve` (`straight`, `smooth`, `stepped`).
     - **Zoom**: `zoom` adds a single shared dataZoom that scrubs every cell's x range together.
-    - **Cell label**: `showCellLabel` prints the per-cell value on the y axis; `cornerLabel` labels the top-left corner.
+    - **Cell label**: `showCellLabel` prints the per-cell value on the y axis, and `cornerLabel` labels the top-left corner.
 
     This makes the Line Matrix ideal for dashboards that would otherwise need a wall of separate charts or legends.
 
@@ -153,7 +153,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I add a group divider row?**
 
-    Pass a row as `{ label, divider: true }` instead of a string. It renders as a single merged cell spanning all columns — useful for separating groups (majors vs. commodity pairs, for example). Don't give that row any cells.
+    Pass a row as `{ label, divider: true }` instead of a string. It renders as a single merged cell spanning all columns, which is useful for separating groups (majors vs. commodity pairs, for example). Don't give that row any cells.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <LineMatrix
@@ -206,7 +206,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **Does the chart adapt to light and dark themes?**
 
-    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes, so no manual theming is required.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <LineMatrix columns={cols} rows={rows} cells={cells} />

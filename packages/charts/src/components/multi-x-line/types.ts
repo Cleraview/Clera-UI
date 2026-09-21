@@ -31,7 +31,7 @@ export type MultiXSeries = {
 export type MultiXLineXAxis = {
   /** Category labels for this x-axis. */
   categories: (string | number)[]
-  /** Axis title; also used in the crosshair readout. */
+  /** Axis title, also used in the crosshair readout. */
   name?: string
   /** Axis + default series color. Falls back to the series variant, then the palette. */
   color?: string
@@ -64,7 +64,7 @@ export interface MultiXLineProps
   yAxis?: MultiXLineYAxis
   height?: number | string
   curve?: LineCurve
-  /** Default fill under each line; override per series. */
+  /** Default fill under each line. Override it per series. */
   area?: boolean | 'gradient'
   /** Force the value-axis minimum / maximum. */
   min?: number

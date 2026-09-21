@@ -43,7 +43,7 @@ export interface LinePanelsProps extends ChartLoadingProps {
   /** The stacked panels, top to bottom. Each is its own grid + value axis. */
   panels: LinePanel[]
   height?: number | string
-  /** Default fill under each line; override per series. */
+  /** Default fill under each line. Override it per series. */
   area?: boolean | 'gradient'
   /** Default line shape for every panel. */
   curve?: LineCurve

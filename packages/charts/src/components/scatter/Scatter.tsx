@@ -109,7 +109,7 @@ export const Scatter: React.FC<ScatterProps> = ({
   const multiPanel = panelCount > 0
 
   // When `autoToggle` is on, the component drives the scatter↔bar view itself
-  // on a timer — re-armed after each flip so the hold always begins once the
+  // on a timer, re-armed after each flip so the hold always begins once the
   // morph (transitionDuration) has finished, not while it's still animating.
   const cycling = Boolean(autoToggle && aggregate)
   const [autoView, setAutoView] = useState<ScatterView>(view)

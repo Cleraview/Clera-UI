@@ -96,7 +96,7 @@ export const AsyncComboBox = forwardRef<HTMLButtonElement, AsyncComboBoxProps>(
       [options]
     )
 
-    // totalItems handled by BaseComboBox; no local usage required
+    // totalItems handled by BaseComboBox, so no local usage required
 
     useEffect(() => {
       if (value) {

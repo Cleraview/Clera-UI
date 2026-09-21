@@ -1,0 +1,16 @@
+@theme inline {
+  --text-2xs: calc(var(--font-size-base, 0.875rem) * 10 / 14);
+  --text-xs: calc(var(--font-size-base, 0.875rem) * 12 / 14);
+  --text-sm: var(--font-size-base, 0.875rem);
+  --text-base: calc(var(--font-size-base, 0.875rem) * 16 / 14);
+  --text-lg: calc(var(--font-size-base, 0.875rem) * 18 / 14);
+  --text-xl: calc(var(--font-size-base, 0.875rem) * 20 / 14);
+  --text-2xl: calc(var(--font-size-base, 0.875rem) * 24 / 14);
+  --text-3xl: calc(var(--font-size-base, 0.875rem) * 30 / 14);
+  --text-4xl: calc(var(--font-size-base, 0.875rem) * 36 / 14);
+  --text-5xl: calc(var(--font-size-base, 0.875rem) * 48 / 14);
+  --text-6xl: calc(var(--font-size-base, 0.875rem) * 60 / 14);
+  --text-7xl: calc(var(--font-size-base, 0.875rem) * 72 / 14);
+  --text-8xl: calc(var(--font-size-base, 0.875rem) * 96 / 14);
+  --text-9xl: calc(var(--font-size-base, 0.875rem) * 128 / 14);
+}

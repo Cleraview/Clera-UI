@@ -74,7 +74,7 @@ const meta: Meta<typeof Line> = {
       control: { type: 'select' },
       options: [false, true, 'gradient'],
       description:
-        'Fill under every line. `true` is a flat tint; `gradient` fades the line color down to transparent. Override per series with `series[].area`.',
+        'Fill under every line. `true` is a flat tint, and `gradient` fades the line color down to transparent. Override per series with `series[].area`.',
       table: {
         type: { summary: "boolean | 'gradient'" },
         defaultValue: { summary: 'false' },
@@ -84,7 +84,7 @@ const meta: Meta<typeof Line> = {
       control: { type: 'radio' },
       options: ['categorical', 'brand'],
       description:
-        'Default coloring for series without a `variant`/`color`. `categorical` cycles the eight design-system colors; `brand` paints every line with the primary color.',
+        'Default coloring for series without a `variant`/`color`. `categorical` cycles the eight design-system colors, while `brand` paints every line with the primary color.',
       table: {
         type: { summary: "'categorical' | 'brand'" },
         defaultValue: { summary: 'categorical' },
@@ -93,7 +93,7 @@ const meta: Meta<typeof Line> = {
     showSymbol: {
       control: 'boolean',
       description:
-        'Show the point marker on every data point. Off by default (clean trend lines); the marker still appears on hover.',
+        'Show the point marker on every data point. Off by default for clean trend lines, though the marker still appears on hover.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -140,7 +140,7 @@ const meta: Meta<typeof Line> = {
     threshold: {
       control: 'object',
       description:
-        'Color the first series by where each point sits relative to a baseline — `{ value, above?, below? }`. `above`/`below` take a token variant (e.g. `success`) or a raw color. The classic green-above / red-below look.',
+        'Color the first series by where each point sits relative to a baseline, using `{ value, above?, below? }`. `above`/`below` take a token variant (e.g. `success`) or a raw color. The classic green-above / red-below look.',
       table: {
         type: { summary: '{ value: number; above?: string; below?: string }' },
         defaultValue: { summary: 'undefined' },
@@ -149,7 +149,7 @@ const meta: Meta<typeof Line> = {
     referenceLine: {
       control: 'object',
       description:
-        'One or more dashed reference lines: `{ value, label?, axis?, color? }` (or an array). Defaults to the value (`y`) axis — e.g. a previous close, target, or SLA line.',
+        'One or more dashed reference lines: `{ value, label?, axis?, color? }` (or an array). Defaults to the value (`y`) axis, so think of a previous close, target, or SLA line.',
       table: {
         type: { summary: 'LineReferenceLine | LineReferenceLine[]' },
         defaultValue: { summary: 'undefined' },
@@ -158,7 +158,7 @@ const meta: Meta<typeof Line> = {
     markArea: {
       control: 'object',
       description:
-        'Shade one or more bands: `{ from, to, label?, color?, axis? }` (or an array). Defaults to a vertical band over the x-axis — e.g. an incident window or after-hours range.',
+        'Shade one or more bands: `{ from, to, label?, color?, axis? }` (or an array). Defaults to a vertical band over the x-axis, like an incident window or after-hours range.',
       table: {
         type: { summary: 'LineMarkArea | LineMarkArea[]' },
         defaultValue: { summary: 'undefined' },
@@ -177,7 +177,7 @@ const meta: Meta<typeof Line> = {
     zoom: {
       control: 'boolean',
       description:
-        'Add a dataZoom slider plus scroll/drag zoom on the x-axis — for paging through long time series.',
+        'Add a dataZoom slider plus scroll/drag zoom on the x-axis, for paging through long time series.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -195,7 +195,7 @@ const meta: Meta<typeof Line> = {
     sparkline: {
       control: 'boolean',
       description:
-        'Minimal axis-less trend line — no axes, grid, legend, or tooltip. For KPI cards and inline sparklines.',
+        'Minimal axis-less trend line with no axes, grid, legend, or tooltip. For KPI cards and inline sparklines.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -205,7 +205,7 @@ const meta: Meta<typeof Line> = {
       control: { type: 'radio' },
       options: ['axis', 'item'],
       description:
-        '`axis` shows a crosshair listing every series at the hovered x; `item` shows just the hovered point.',
+        '`axis` shows a crosshair listing every series at the hovered x, while `item` shows just the hovered point.',
       table: {
         type: { summary: "'axis' | 'item'" },
         defaultValue: { summary: 'axis' },
@@ -231,7 +231,7 @@ const meta: Meta<typeof Line> = {
     legendPosition: {
       control: { type: 'radio' },
       options: ['top', 'bottom', 'left', 'right'],
-      description: 'Legend placement; margin is reserved automatically.',
+      description: 'Legend placement. Margin is reserved automatically.',
       table: {
         type: { summary: "'top' | 'bottom' | 'left' | 'right'" },
         defaultValue: { summary: 'top' },
@@ -275,7 +275,7 @@ const meta: Meta<typeof Line> = {
     highlightOnHover: {
       control: 'boolean',
       description:
-        'On hover, focus the hovered series and dim the others. Off by default — hovering just lightens the line, like Bar.',
+        'On hover, focus the hovered series and dim the others. Off by default, so hovering just lightens the line, like Bar.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -301,7 +301,7 @@ const meta: Meta<typeof Line> = {
     yAxes: {
       control: 'object',
       description:
-        'The y-axes — one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format? }`. `name` is the axis title; `position` (top/middle/bottom) and `orientation` place it. Bind series with `series[].yAxis` (the axis id or index).',
+        'The y-axes, one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format? }`. `name` is the axis title, and `position` (top/middle/bottom) plus `orientation` place it. Bind series with `series[].yAxis` (the axis id or index).',
       table: {
         type: { summary: 'LineYAxis[]' },
         defaultValue: { summary: '-' },
@@ -310,7 +310,7 @@ const meta: Meta<typeof Line> = {
     xAxis: {
       control: 'object',
       description:
-        'The x-axis — `{ name?, position?, orientation? }`. `name` is its title; `position` is `left`/`middle`/`right` (default `right`).',
+        'The x-axis, `{ name?, position?, orientation? }`. `name` is its title, and `position` is `left`/`middle`/`right` (default `right`).',
       table: {
         type: { summary: 'LineXAxis' },
         defaultValue: { summary: '-' },
@@ -352,7 +352,7 @@ const meta: Meta<typeof Line> = {
     formatX: {
       control: false,
       description:
-        'Formats x-axis ticks and the tooltip header — handy for time axes (e.g. format a timestamp).',
+        'Formats x-axis ticks and the tooltip header, handy for time axes (say, formatting a timestamp).',
       table: { type: { summary: '(value: string | number) => string' } },
     },
     loading: {
@@ -397,7 +397,7 @@ const meta: Meta<typeof Line> = {
     onReady: {
       action: 'ready',
       description:
-        'Escape hatch — called once on mount with the ECharts instance.',
+        'An escape hatch, called once on mount with the ECharts instance.',
       table: { type: { summary: '(chart: ECharts) => void' } },
     },
     className: {
@@ -434,7 +434,7 @@ export const StockPrice: Story = {
     docs: {
       description: {
         story:
-          'A Google-Finance-style intraday chart on a real `time` axis. A single line with a gradient area fill, a dashed **previous close** reference line, and a color driven by whether the last price is up or down on the day. Points are hidden until you hover; the crosshair tooltip shows the price and the time of day.',
+          'A Google-Finance-style intraday chart on a real `time` axis. A single line with a gradient area fill, a dashed **previous close** reference line, and a color driven by whether the last price is up or down on the day. Points are hidden until you hover, and the crosshair tooltip shows the price and the time of day.',
       },
     },
   },
@@ -462,7 +462,7 @@ export const ThresholdSplit: Story = {
     docs: {
       description: {
         story:
-          'Color the line by where each point sits relative to a baseline with `threshold`. Here daily net P&L is drawn green above the break-even line and red below it — the segments switch color as the line crosses zero. `above`/`below` accept a token variant or a raw color.',
+          'Color the line by where each point sits relative to a baseline with `threshold`. Here daily net P&L is drawn green above the break-even line and red below it, and the segments switch color as the line crosses zero. `above`/`below` accept a token variant or a raw color.',
       },
     },
   },
@@ -495,7 +495,7 @@ export const MultiTicker: Story = {
     docs: {
       description: {
         story:
-          'Compare several instruments by **normalized return** — each line starts at 0% so different price levels become comparable. A dashed line marks flat (0%), and the axis tooltip lists every ticker at the hovered month.',
+          'Compare several instruments by **normalized return**, where each line starts at 0% so different price levels become comparable. A dashed line marks flat (0%), and the axis tooltip lists every ticker at the hovered month.',
       },
     },
   },
@@ -590,7 +590,7 @@ export const RightAxisIcons: Story = {
     docs: {
       description: {
         story:
-          'Two axis escape hatches: `yAxes={[{ side: "right" }]}` moves the y-axis to the right (common in analytics/finance dashboards), and `xAxisLabel` renders **rich labels** — here a small image icon above each weekday via an ECharts rich-text formatter. Point `xAxisLabel.rich.<name>.backgroundColor.image` at any URL (e.g. a channel/video thumbnail) for the YouTube-analytics look.',
+          'Two axis escape hatches: `yAxes={[{ side: "right" }]}` moves the y-axis to the right (common in analytics/finance dashboards), and `xAxisLabel` renders **rich labels**, here a small image icon above each weekday via an ECharts rich-text formatter. Point `xAxisLabel.rich.<name>.backgroundColor.image` at any URL (e.g. a channel/video thumbnail) for the YouTube-analytics look.',
       },
     },
   },
@@ -663,7 +663,7 @@ export const StackedArea: Story = {
     docs: {
       description: {
         story:
-          'Give series a shared `stack` name and an `area` fill to stack them into a cumulative composition — here monthly revenue split across product lines. The top edge is the total; each band is one product’s contribution.',
+          'Give series a shared `stack` name and an `area` fill to stack them into a cumulative composition, like monthly revenue split across product lines. The top edge is the total, and each band is one product’s contribution.',
       },
     },
   },
@@ -706,7 +706,7 @@ export const Stepped: Story = {
     docs: {
       description: {
         story:
-          'A `stepped` line holds each value until the next reading — the right shape for things that change in discrete jumps and stay put, like a benchmark interest rate.',
+          'A `stepped` line holds each value until the next reading, the right shape for things that change in discrete jumps and stay put, like a benchmark interest rate.',
       },
     },
   },
@@ -746,7 +746,7 @@ export const Sparkline: Story = {
     docs: {
       description: {
         story:
-          'The `sparkline` preset strips the axes, grid, legend, and tooltip down to a pure trend line — ideal inside a KPI card or a table cell. Pair it with a gradient `area` fill and a fixed, short `height`.',
+          'The `sparkline` preset strips the axes, grid, legend, and tooltip down to a pure trend line, ideal inside a KPI card or a table cell. Pair it with a gradient `area` fill and a fixed, short `height`.',
       },
     },
   },
@@ -836,7 +836,7 @@ export const RainfallAndFlow: Story = {
     docs: {
       description: {
         story:
-          'Two gradient area-lines on opposing value axes: flow reads off the left axis (`Flow (m³/s)`), while the rainfall axis on the right (`Rainfall (mm)`) is `inverse`d so showers fall from the top and visibly precede the flow response. The one light-gray vertical band is a `markArea` highlighting a storm window; `zoomWindow` opens pre-zoomed on it, and the `toolbox` adds box-zoom / restore / save-as-image.',
+          'Two gradient area-lines on opposing value axes: flow reads off the left axis (`Flow (m³/s)`), while the rainfall axis on the right (`Rainfall (mm)`) is `inverse`d so showers fall from the top and visibly precede the flow response. The one light-gray vertical band is a `markArea` highlighting a storm window, `zoomWindow` opens pre-zoomed on it, and the `toolbox` adds box-zoom, restore, and save-as-image.',
       },
     },
   },
@@ -898,7 +898,7 @@ export const MultipleAxes: Story = {
     docs: {
       description: {
         story:
-          'The `yAxes` array is the general model: any number of axes on either side, each self-describing its `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id`. Here two axes stack on the left (temperature, rainfall) and one sits on the right (pressure) — each title placed separately, and gutters sized so nothing overlaps.',
+          'The `yAxes` array is the general model: any number of axes on either side, each self-describing its `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id`. Here two axes stack on the left (temperature, rainfall) and one sits on the right (pressure), each title placed separately, with gutters sized so nothing overlaps.',
       },
     },
   },
@@ -1010,7 +1010,7 @@ export const LiveStreaming: Story = {
     docs: {
       description: {
         story:
-          'Streaming data: a new reading arrives every ~1s and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval — ECharts merges and animates each point to its new slot, so the line slides smoothly to the left.',
+          'Streaming data: a new reading arrives every ~1s and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval, and ECharts merges and animates each point to its new slot, so the line slides smoothly to the left.',
       },
     },
   },

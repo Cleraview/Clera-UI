@@ -167,7 +167,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     ### **Implementation Notes**
 
     - Card brand detection: when using `maskPreset="card16"` the demo `MaskedInput` can attempt to detect the card brand (Visa/MasterCard/Amex) from the entered BIN prefix and render a matching brand icon. Icons are dynamically imported to avoid bundling unless used.
-    - CVC handling: treat CVC like a sensitive value. The `CVCCode` story demonstrates masking with a show/hide toggle; prefer masking by default and never persist or log CVC values.
+    - CVC handling: treat CVC like a sensitive value. The `CVCCode` story demonstrates masking with a show/hide toggle. Prefer masking by default and never persist or log CVC values.
     - Controlled usage: `MaskedInput` supports a `rawValue` + `onRawChange` controlled API for cases where you need the unformatted value.
 
     ## **API**

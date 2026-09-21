@@ -28,19 +28,19 @@ const meta: Meta<typeof LineMatrix> = {
   argTypes: {
     columns: {
       control: 'object',
-      description: 'Column labels — the matrix x dimension.',
+      description: 'Column labels, the matrix x dimension.',
       table: { type: { summary: '(string | number)[]' } },
     },
     rows: {
       control: 'object',
       description:
-        'Row labels — the matrix y dimension. A string, or `{ label, divider }` where a `divider` row spans the full width as a group header.',
+        'Row labels, the matrix y dimension. A string, or `{ label, divider }` where a `divider` row spans the full width as a group header.',
       table: { type: { summary: '(string | LineMatrixRow)[]' } },
     },
     cells: {
       control: 'object',
       description:
-        'The cells to plot, each `{ col, row, data, variant?, color? }`. `data` is plain values or `[x, y]` pairs; the cell is placed at its (`col`, `row`).',
+        'The cells to plot, each `{ col, row, data, variant?, color? }`. `data` is plain values or `[x, y]` pairs, and the cell is placed at its (`col`, `row`).',
       table: { type: { summary: 'LineMatrixCell[]' } },
     },
     colorByTrend: {
@@ -526,7 +526,7 @@ function PlaygroundDemo() {
         />
       ) : (
         <div className="flex h-[200px] items-center justify-center text-body-sm text-ds-subtle">
-          All rows hidden — click a chip to bring one back.
+          All rows hidden. Click a chip to bring one back.
         </div>
       )}
     </div>

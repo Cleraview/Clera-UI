@@ -24,7 +24,7 @@ const DEFAULT_COLOR: Record<ChartTheme, string> = {
   dark: 'var(--chart-ds-violet-bold, rgb(167, 139, 250))',
 }
 
-// The same scrim token the Drawer's overlay uses — it already carries its own
+// The same scrim token the Drawer's overlay uses. It already carries its own
 // alpha and is defined per theme (a light veil on light, a dark one on dark).
 const DEFAULT_MASK: Record<ChartTheme, string> = {
   light:
@@ -81,8 +81,8 @@ const KEYFRAMES = `
 const UNIT: Record<ChartLoadingSize, number> = { sm: 20, md: 32, lg: 44 }
 
 /**
- * Sizing for the element ECharts renders into. It must stay a React leaf —
- * ECharts appends its own canvas there — so the loading overlay is mounted as
+ * Sizing for the element ECharts renders into. It must stay a React leaf,
+ * since ECharts appends its own canvas there, so the loading overlay is mounted as
  * its sibling instead of inside it, or React's reconciler and ECharts fight
  * over the same children (`removeChild` crashes, overlay disappearing).
  */

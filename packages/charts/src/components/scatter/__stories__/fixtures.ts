@@ -769,7 +769,7 @@ export interface ClusteringStep {
 /**
  * Bisecting k-means: starts as one cluster and repeatedly splits the
  * highest-variance cluster in two, so each step adds exactly one new
- * cluster — the same "grow one cluster at a time" shape as ECharts'
+ * cluster, the same "grow one cluster at a time" shape as ECharts'
  * `ecStat.clustering.hierarchicalKMeans` step-by-step demo.
  */
 export function clusteringSteps(

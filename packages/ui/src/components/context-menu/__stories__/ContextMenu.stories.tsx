@@ -218,7 +218,7 @@ export const CheckboxesAndRadios: Story = {
         <div className="text-body-sm text-ds-subtle">
           <strong>Selected:</strong>{' '}
           {selectedItems.length > 0 ? selectedItems.join(', ') : 'none'}
-          {' — '}
+          {' \u00b7 '}
           <strong>Person:</strong> {person}
         </div>
         {(() => {

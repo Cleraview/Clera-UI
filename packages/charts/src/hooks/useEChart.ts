@@ -35,7 +35,7 @@ export interface UseEChartOptions {
   stackBelow?: number
   /**
    * Re-run `buildOption` (not just `chart.resize()`) whenever the container's
-   * size changes. Off by default so most charts just resize; opt in when the
+   * size changes. Off by default so most charts just resize. Opt in when the
    * option itself depends on pixel size (e.g. a calendar's square cell size).
    */
   rebuildOnResize?: boolean
@@ -44,7 +44,7 @@ export interface UseEChartOptions {
 /**
  * Shared ECharts runtime: init, resize, dispose, theme re-resolution,
  * imperative `onReady` escape hatch, and event binding. Chart components supply
- * a `buildOption` builder and register their own ECharts modules; everything
+ * a `buildOption` builder and register their own ECharts modules, and everything
  * else (lifecycle + theme reactivity) is handled here so every chart behaves
  * consistently.
  */
@@ -184,7 +184,7 @@ export function useEChart({
     }
 
     // Subtree so a nested `data-theme` scope (e.g. a themed canvas) re-themes
-    // the chart, not just the root <html>. Limited to `data-theme` only —
+    // the chart, not just the root <html>. Limited to `data-theme` only,
     // watching `class` across the subtree would fire on every hover/focus.
     const observer = new MutationObserver(apply)
     observer.observe(document.documentElement, {

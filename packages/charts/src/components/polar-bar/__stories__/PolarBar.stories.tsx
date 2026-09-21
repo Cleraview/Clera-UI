@@ -13,7 +13,7 @@ const meta: Meta<typeof PolarBar> = {
     docs: {
       description: {
         component:
-          'A bar chart on a polar coordinate system. `angular` bars sweep around the circle (category = angle, value = radius); `radial` bars are concentric rings (category = radius, value = angle). Best for cyclical data (hours, weekdays, compass) where the round layout is meaningful. Shares the `useEChart` runtime and `@clera/tokens` colors with the other charts.',
+          'A bar chart on a polar coordinate system. `angular` bars sweep around the circle (category = angle, value = radius), while `radial` bars are concentric rings (category = radius, value = angle). Best for cyclical data (hours, weekdays, compass) where the round layout is meaningful. Shares the `useEChart` runtime and `@clera/tokens` colors with the other charts.',
       },
     },
   },
@@ -96,7 +96,7 @@ const meta: Meta<typeof PolarBar> = {
     endAngle: {
       control: { type: 'range', min: -360, max: 360, step: 15 },
       description:
-        'Ending angle (degrees) of the angle axis. Set it (with `startAngle`) to sweep only part of the circle — e.g. `startAngle={180} endAngle={0}` for a semicircular fan.',
+        'Ending angle (degrees) of the angle axis. Set it (with `startAngle`) to sweep only part of the circle, so `startAngle={180} endAngle={0}` gives a semicircular fan.',
       table: {
         type: { summary: 'number' },
         defaultValue: { summary: 'full circle' },
@@ -123,7 +123,7 @@ const meta: Meta<typeof PolarBar> = {
     labelFormatter: {
       control: false,
       description:
-        'Customize the on-bar label from `{ name, value }` (e.g. `({ name, value }) => `${name}: ${value}``). Implies the labels are shown; positioned in the middle of each bar (tangential on polar).',
+        'Customize the on-bar label from `{ name, value }` (e.g. `({ name, value }) => `${name}: ${value}``). Implies the labels are shown, positioned in the middle of each bar (tangential on polar).',
       table: {
         type: { summary: '(d: { name: string; value: number }) => string' },
         defaultValue: { summary: '-' },
@@ -207,7 +207,8 @@ const meta: Meta<typeof PolarBar> = {
     },
     animate: {
       control: 'boolean',
-      description: 'Grow-in animation; auto-disabled under reduced-motion.',
+      description:
+        'Grow-in animation. It turns itself off under reduced-motion.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' },
@@ -243,7 +244,7 @@ export const Angular: Story = {
     docs: {
       description: {
         story:
-          'Single-series bars sweeping around the circle — here, commits per weekday. `palette="categorical"` gives each slice its own color.',
+          'Single-series bars sweeping around the circle, here commits per weekday. `palette="categorical"` gives each slice its own color.',
       },
     },
   },
@@ -266,7 +267,7 @@ export const Stacked: Story = {
     docs: {
       description: {
         story:
-          'Grouped series stacked around the circle. Each ring segment is a series; the legend toggles them. With `highlightOnHover`, hovering one segment lights up its whole series around the circle and dims the rest.',
+          'Grouped series stacked around the circle. Each ring segment is a series, and the legend toggles them. With `highlightOnHover`, hovering one segment lights up its whole series around the circle and dims the rest.',
       },
     },
   },
@@ -292,7 +293,7 @@ export const Radial: Story = {
     docs: {
       description: {
         story:
-          'Set `orientation="radial"` for concentric rings — category on the radius axis, value sweeping around. Reads like a set of progress rings.',
+          'Set `orientation="radial"` for concentric rings, with category on the radius axis and value sweeping around. Reads like a set of progress rings.',
       },
     },
   },
@@ -319,7 +320,7 @@ export const TangentialLabels: Story = {
     docs: {
       description: {
         story:
-          'Radial bars (category on the radius, value sweeping around to `max`) with a `labelFormatter` that prints `name: value` in the middle of each bar — ECharts lays the middle label out tangentially, curving along the arc. Recreates the official "Tangential Polar Bar Label Position" demo.',
+          'Radial bars (category on the radius, value sweeping around to `max`) with a `labelFormatter` that prints `name: value` in the middle of each bar, and ECharts lays the middle label out tangentially, curving along the arc. Recreates the official "Tangential Polar Bar Label Position" demo.',
       },
     },
   },
@@ -408,7 +409,7 @@ export const PartialArc: Story = {
     docs: {
       description: {
         story:
-          'Two polar systems sharing one center, each a quarter arc set by `startAngle`/`endAngle` — S1–S3 fan the top-right (90°→0°) and T1–T3 the bottom-left (-90°→-180°), the official polar-endAngle demo. A single `PolarBar` draws one polar system, so the second is composed by grabbing the instance via `onReady` and applying a two-polar option from an effect (after the chart has mounted). For a single partial arc, just pass `startAngle`/`endAngle` props.',
+          'Two polar systems sharing one center, each a quarter arc set by `startAngle`/`endAngle`. S1–S3 fan the top-right (90°→0°) and T1–T3 the bottom-left (-90°→-180°), the official polar-endAngle demo. A single `PolarBar` draws one polar system, so the second is composed by grabbing the instance via `onReady` and applying a two-polar option from an effect (after the chart has mounted). For a single partial arc, just pass `startAngle`/`endAngle` props.',
       },
     },
   },

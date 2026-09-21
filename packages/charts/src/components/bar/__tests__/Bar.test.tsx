@@ -1128,7 +1128,7 @@ describe('components/charts/Bar', () => {
     return !el.dispatchEvent(evt)
   }
 
-  // The element ECharts renders into — a leaf inside the chart's wrapper, which
+  // The element ECharts renders into, a leaf inside the chart's wrapper, which
   // is where the wheel guard is bound.
   const chartSurface = (container: HTMLElement) =>
     container.firstChild!.firstChild as HTMLElement

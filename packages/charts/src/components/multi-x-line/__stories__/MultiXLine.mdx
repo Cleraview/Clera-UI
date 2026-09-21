@@ -18,13 +18,13 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     <br />
 
     ## **When To Use**
-    Multi-X Line overlays series that have **different x categories** on a single shared value axis, giving each its own x-axis — the first on the bottom, the second on top. Powered by [Apache ECharts](https://echarts.apache.org/), it resolves colors from `@clera/tokens` and shares the `useEChart` runtime with the other charts.
+    Multi-X Line overlays series that have **different x categories** on a single shared value axis, giving each its own x-axis, the first on the bottom and the second on top. Powered by [Apache ECharts](https://echarts.apache.org/), it resolves colors from `@clera/tokens` and shares the `useEChart` runtime with the other charts.
 
-    Reach for it when the x labels line up index-by-index but belong to different scales — the classic case is **period over period** (this year vs. last year), where January 2016 sits above January 2015 but the two axes are distinct.
+    Reach for it when the x labels line up index-by-index but belong to different scales. The classic case is **period over period** (this year vs. last year), where January 2016 sits above January 2015 but the two axes are distinct.
 
-    - **Per-axis data**: each entry in `xAxes` — `{ categories, name?, color?, series }` — carries its own labels, unlike `Line`/`Combo`, where every series shares one `categories` axis. The shared value axis is configured through `yAxis`.
+    - **Per-axis data**: each entry in `xAxes`, shaped `{ categories, name?, color?, series }`, carries its own labels, unlike `Line`/`Combo`, where every series shares one `categories` axis. The shared value axis is configured through `yAxis`.
     - **Color-matched axes**: each x-axis line and labels take the series' color, so you can tell them apart at a glance.
-    - **Crosshair readout**: a cross axis-pointer reads out every axis at the hovered position; hovering a series isolates it and dims the rest.
+    - **Crosshair readout**: a cross axis-pointer reads out every axis at the hovered position, and hovering a series isolates it and dims the rest.
 
     > For series that **share** an x-axis, use [`Line`](?path=/docs/charts-line--docs) (or [`Combo`](?path=/docs/charts-combo--docs) for a second value axis) instead.
 
@@ -107,7 +107,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I add a second x-axis?**
 
-    Pass a second entry in `xAxes`. The first renders on the bottom, the second on top; each has its own `categories` and `series`. Further axes alternate bottom/top, offset outward.
+    Pass a second entry in `xAxes`. The first renders on the bottom and the second on top, each with its own `categories` and `series`. Further axes alternate bottom/top, offset outward.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <MultiXLine
@@ -139,7 +139,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **Does the chart adapt to light and dark themes?**
 
-    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes, so no manual theming is required.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <MultiXLine xAxes={xAxes} />

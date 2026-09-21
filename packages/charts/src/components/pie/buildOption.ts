@@ -258,7 +258,7 @@ export function buildPieOption(params: BuildPieOptionParams) {
   const calLeft =
     calInset.left + (width > 0 ? Math.max(0, (calAvailW - calGridW) / 2) : 0)
   // Anchor the grid to the legend's edge so it sits next to the legend rather
-  // than floating in the centre; only centre vertically when the legend is on
+  // than floating in the centre, and only centre vertically when the legend is on
   // the side or hidden.
   const calTop =
     legendShown && legendPosition === 'top'

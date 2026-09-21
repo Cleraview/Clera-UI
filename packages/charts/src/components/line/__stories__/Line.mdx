@@ -18,21 +18,21 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     <br />
 
     ## **When To Use**
-    The Line chart visualizes trends — a stock price through the day, traffic over the week, a metric over the year. It is powered by [Apache ECharts](https://echarts.apache.org/) and resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically. Where [`Combo`](?path=/docs/charts-combo--docs) mixes bars and lines on a category axis, `Line` specializes in time-series and trend work.
+    The Line chart visualizes trends, like a stock price through the day, traffic over the week, or a metric over the year. It is powered by [Apache ECharts](https://echarts.apache.org/) and resolves every color from `@clera/tokens`, so it adapts to light/dark mode automatically. Where [`Combo`](?path=/docs/charts-combo--docs) mixes bars and lines on a category axis, `Line` specializes in time-series and trend work.
 
     In {config.title}, the chart adapts to different contexts through its props:
 
       - **X axis**: Choose how points are positioned.
-        - `category`: Evenly spaced labels — best for periodic data (days, months).
-        - `time`: A real time axis that positions each point by its timestamp — pass `[x, y]` pairs. Best for intraday or irregular data.
+        - `category`: Evenly spaced labels, best for periodic data (days, months).
+        - `time`: A real time axis that positions each point by its timestamp, so pass `[x, y]` pairs. Best for intraday or irregular data.
 
       - **Curve**: Choose the line shape.
         - `straight`: Segments between points.
         - `smooth`: A spline through the points.
-        - `stepped`: Holds each value until the next — for things that change in jumps.
+        - `stepped`: Holds each value until the next, for things that change in jumps.
 
-    - **Area Fill**: Add `area` (a flat tint) or `area="gradient"` (fades to transparent) under any line; override per series.
-    - **Threshold Coloring**: Color the line green-above / red-below a baseline with `threshold` — the classic finance look.
+    - **Area Fill**: Add `area` (a flat tint) or `area="gradient"` (fades to transparent) under any line, and override it per series.
+    - **Threshold Coloring**: Color the line green-above / red-below a baseline with `threshold`, the classic finance look.
     - **Annotations**: Mark a `referenceLine` (target, SLA, previous close) or shade a `markArea` (an incident window, after-hours).
     - **Zoom**: Turn on `zoom` to page through long series with a slider plus scroll/drag.
     - **Sparkline**: The `sparkline` preset strips everything down to a pure trend line for KPI cards.
@@ -73,7 +73,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Threshold (above / below)**
 
-    Color the line by where each point sits relative to a baseline with `threshold`. Here daily net P&L is green above break-even and red below it; the segments switch color as the line crosses zero.
+    Color the line by where each point sits relative to a baseline with `threshold`. Here daily net P&L is green above break-even and red below it, and the segments switch color as the line crosses zero.
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.ThresholdSplit} />
@@ -100,7 +100,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Multi-ticker comparison**
 
-    Compare several instruments by **normalized return** — each line starts at 0% so different price levels become comparable. A dashed line marks flat (0%).
+    Compare several instruments by **normalized return**, where each line starts at 0% so different price levels become comparable. A dashed line marks flat (0%).
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.MultiTicker} />
@@ -198,7 +198,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Stacked area**
 
-    Give series a shared `stack` name and an `area` fill to stack them into a cumulative composition — here monthly revenue split across product lines.
+    Give series a shared `stack` name and an `area` fill to stack them into a cumulative composition, like monthly revenue split across product lines.
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.StackedArea} />
@@ -230,7 +230,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Stepped line**
 
-    A `stepped` line holds each value until the next reading — the right shape for things that change in discrete jumps and stay put, like a benchmark interest rate.
+    A `stepped` line holds each value until the next reading, the right shape for things that change in discrete jumps and stay put, like a benchmark interest rate.
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.Stepped} />
@@ -259,7 +259,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Sparkline (KPI card)**
 
-    The `sparkline` preset strips the axes, grid, legend, and tooltip down to a pure trend line — ideal inside a KPI card or a table cell. Pair it with an `area` fill and a short, fixed `height`.
+    The `sparkline` preset strips the axes, grid, legend, and tooltip down to a pure trend line, ideal inside a KPI card or a table cell. Pair it with an `area` fill and a short, fixed `height`.
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.Sparkline} />
@@ -320,7 +320,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Y-axes (`yAxes`)**
 
-    The y-axes are a list — any number on the left and/or right, each self-describing its `name` (title), `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id` (or array index) via `series[].yAxis`; a series with no `yAxis` uses the first axis. Multiple axes on the same side auto-offset outward, and each axis's title gutter is reserved so nothing overlaps the ticks or the zoom slider. (The x-axis is a single `xAxis` object; several x-axes are `MultiXLine`.)
+    The y-axes are a list. Put any number on the left or right, each self-describing its `name` (title), `side`, scale, `format`, and its own title `position` / `orientation`. Series bind to an axis by its `id` (or array index) via `series[].yAxis`, and a series with no `yAxis` uses the first axis. Multiple axes on the same side auto-offset outward, and each axis's title gutter is reserved so nothing overlaps the ticks or the zoom slider. (The x-axis is a single `xAxis` object. For several x-axes, reach for `MultiXLine`.)
 
     Here flow reads off the left axis and the rainfall axis on the right is `inverse`d so showers fall from the top:
     <Canvas>
@@ -357,7 +357,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
       </Canvas.Source>
     </Canvas>
 
-    Two axes can stack on one side and a third sit opposite — each title placed separately (`position` + `orientation`):
+    Two axes can stack on one side and a third sit opposite, each title placed separately (`position` + `orientation`):
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.MultipleAxes} />
@@ -392,7 +392,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Live streaming**
 
-    A new reading arrives every second and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval — ECharts animates each point to its new slot.
+    A new reading arrives every second and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval, and ECharts animates each point to its new slot.
     <Canvas>
       <Canvas.Story>
         <Story of={LineStories.LiveStreaming} />
@@ -459,7 +459,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I color a line above/below a baseline?**
 
-    Pass `threshold={{ value, above?, below? }}`. Segments at or above `value` use the `above` color, below use `below` — each accepts a token variant (`success`, `destructive`, …) or a raw color. Applies to the first series, which is drawn with straight segments (per-segment color mapping does not support smoothing).
+    Pass `threshold={{ value, above?, below? }}`. Segments at or above `value` use the `above` color, below use `below`. Each accepts a token variant (`success`, `destructive`, and so on) or a raw color. Applies to the first series, which is drawn with straight segments (per-segment color mapping does not support smoothing).
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line
@@ -498,7 +498,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I shade a region?**
 
-    Pass `markArea={{ from, to, label?, color?, axis? }}` (or an array). It defaults to a vertical band over the x-axis — handy for an incident window or an after-hours range.
+    Pass `markArea={{ from, to, label?, color?, axis? }}` (or an array). It defaults to a vertical band over the x-axis, handy for an incident window or an after-hours range.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line
@@ -534,7 +534,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I move the y-axis to the right?**
 
-    Give the axis `side: 'right'` — `yAxes={[{ side: 'right' }]}` — and it (with its label space) flips to the right. The same array holds a left-and-right pair, or several axes, each with its own `side`.
+    Give the axis `side: 'right'`, as in `yAxes={[{ side: 'right' }]}`, and it (with its label space) flips to the right. The same array holds a left-and-right pair, or several axes, each with its own `side`.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line yAxes={[{ side: 'right' }]} series={[{ name: 'Views', data }]} />
@@ -545,7 +545,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I put icons on the x-axis labels (like YouTube analytics)?**
 
-    Use the `xAxisLabel` escape hatch. Its `formatter` is the render function — return ECharts rich-text markup — and `rich` defines the style blocks, including images via `backgroundColor.image` (any URL or data URI, e.g. a video thumbnail). Available on `Bar`, `Line`, and `Combo`.
+    Use the `xAxisLabel` escape hatch. Its `formatter` is the render function, returning ECharts rich-text markup, and `rich` defines the style blocks, including images via `backgroundColor.image` (any URL or data URI, e.g. a video thumbnail). Available on `Bar`, `Line`, and `Combo`.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line
@@ -566,7 +566,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I access the ECharts instance directly?**
 
-    Pass `onReady` — it's called once on mount with the underlying ECharts instance. Use it for streaming updates or anything the props don't cover.
+    Pass `onReady` and it's called once on mount with the underlying ECharts instance. Use it for streaming updates or anything the props don't cover.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line
@@ -580,7 +580,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **Does the chart adapt to light and dark themes?**
 
-    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes, so no manual theming is required.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Line series={[{ name: 'Visits', data }]} />

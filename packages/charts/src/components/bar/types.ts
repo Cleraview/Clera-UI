@@ -20,7 +20,7 @@ export type {
 }
 
 /**
- * The x-axis (horizontal). For vertical bars this is the category axis; for
+ * The x-axis (horizontal). For vertical bars this is the category axis. For
  * horizontal bars it's the value axis, so `min`/`max`/`format`/`inverse` apply.
  */
 export type BarXAxis = {
@@ -37,7 +37,7 @@ export type BarXAxis = {
 
 /**
  * The y-axis (vertical). For vertical bars this is the value axis, so
- * `min`/`max`/`format`/`inverse` apply; for horizontal bars it's the category axis.
+ * `min`/`max`/`format`/`inverse` apply. For horizontal bars it's the category axis.
  */
 export type BarYAxis = {
   name?: string
@@ -153,7 +153,7 @@ export interface BarProps extends BaseLegendProps, ChartLoadingProps {
   xAxis?: BarXAxis
   /** The y-axis (vertical): `{ name?, side?, position?, orientation?, min?, max?, inverse?, format? }`. */
   yAxis?: BarYAxis
-  /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
+  /** Escape hatch to customize the x-axis labels, say rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
   animate?: boolean
   emptyMessage?: string

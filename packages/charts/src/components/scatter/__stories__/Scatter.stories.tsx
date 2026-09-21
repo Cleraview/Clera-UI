@@ -23,7 +23,7 @@ const meta: Meta<typeof Scatter> = {
     docs: {
       description: {
         component:
-          'A scatter chart for plotting `[x, y]` points — correlations, distributions, clusters. Both axes are numeric. Shares the `useEChart` runtime, `@clera/tokens` colors, and legend/hover-highlight behavior with the other charts.',
+          'A scatter chart for plotting `[x, y]` points, whether correlations, distributions, or clusters. Both axes are numeric. Shares the `useEChart` runtime, `@clera/tokens` colors, and legend/hover-highlight behavior with the other charts.',
       },
     },
   },
@@ -118,7 +118,7 @@ const meta: Meta<typeof Scatter> = {
     legendPosition: {
       control: { type: 'radio' },
       options: ['top', 'bottom', 'left', 'right'],
-      description: 'Legend placement; margin is reserved automatically.',
+      description: 'Legend placement. Margin is reserved automatically.',
       table: {
         type: { summary: "'top' | 'bottom' | 'left' | 'right'" },
         defaultValue: { summary: 'top' },
@@ -205,7 +205,7 @@ const meta: Meta<typeof Scatter> = {
     loadingMask: {
       control: 'color',
       description:
-        'Overlay/mask behind the spinner. A single string applies to both themes, or pass `{ light, dark }` to vary it. Defaults to the themed surface at 65% — a light veil on light, a dark veil on dark.',
+        'Overlay/mask behind the spinner. A single string applies to both themes, or pass `{ light, dark }` to vary it. Defaults to the themed surface at 65%, so a light veil on light and a dark veil on dark.',
       table: {
         type: { summary: 'string | { light?: string; dark?: string }' },
         defaultValue: { summary: '-' },
@@ -213,7 +213,8 @@ const meta: Meta<typeof Scatter> = {
     },
     animate: {
       control: 'boolean',
-      description: 'Grow-in animation; auto-disabled under reduced-motion.',
+      description:
+        'Grow-in animation. It turns itself off under reduced-motion.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' },
@@ -261,7 +262,7 @@ const meta: Meta<typeof Scatter> = {
       control: { type: 'radio' },
       options: ['scatter', 'bar'],
       description:
-        'Which view to show when `aggregate` is set — the points or the aggregate bars. Ignored when `autoToggle` is on.',
+        'Which view to show when `aggregate` is set, either the points or the aggregate bars. Ignored when `autoToggle` is on.',
       table: {
         type: { summary: "'scatter' | 'bar'" },
         defaultValue: { summary: 'scatter' },
@@ -310,7 +311,7 @@ export const Basic: Story = {
     docs: {
       description: {
         story:
-          'A single series of `[x, y]` points — height vs. weight for a sample of people.',
+          'A single series of `[x, y]` points, plotting height vs. weight for a sample of people.',
       },
     },
   },
@@ -371,7 +372,7 @@ export const AnscombesQuartet: Story = {
     docs: {
       description: {
         story:
-          'The classic statistics demo: four datasets with nearly identical mean, variance, and trend line, but wildly different distributions — a reminder to always plot data rather than trust summary stats alone. A single `Scatter` lays the four panels out with `columns`; each series binds to a panel with `gridIndex` and draws its own `trendLine`. The panels reflow to a single column on narrow screens.',
+          'The classic statistics demo: four datasets with nearly identical mean, variance, and trend line, but wildly different distributions, a reminder to always plot data rather than trust summary stats alone. A single `Scatter` lays the four panels out with `columns`, and each series binds to a panel with `gridIndex` and draws its own `trendLine`. The panels reflow to a single column on narrow screens.',
       },
     },
   },
@@ -523,7 +524,7 @@ export const AggregateTransition: Story = {
     docs: {
       description: {
         story:
-          "Height/weight points for two groups that morph into a bar of each group's average height, matching ECharts' `scatter-aggregate-bar` example. Set `aggregate` to enable the morph, then either drive `view` (`'scatter' | 'bar'`) yourself or turn on `autoToggle` to let the component cycle the views for you — no timers or hooks needed. `transitionDuration` controls the morph speed; `holdDuration` is how long each view rests after its morph before flipping.",
+          "Height/weight points for two groups that morph into a bar of each group's average height, matching ECharts' `scatter-aggregate-bar` example. Set `aggregate` to enable the morph, then either drive `view` (`'scatter' | 'bar'`) yourself or turn on `autoToggle` to let the component cycle the views for you, with no timers or hooks needed. `transitionDuration` controls the morph speed, and `holdDuration` is how long each view rests after its morph before flipping.",
       },
     },
   },

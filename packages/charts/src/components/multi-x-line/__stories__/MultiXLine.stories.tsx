@@ -11,7 +11,7 @@ const meta: Meta<typeof MultiXLine> = {
     docs: {
       description: {
         component:
-          'Overlays series that have *different* x categories on one shared value axis, each with its own x-axis (bottom, then top). Ideal for period-over-period comparisons — e.g. this year vs. last year — where the months line up index-by-index but belong to different scales. Each axis is colored to match its series, and a cross crosshair reads out both at once. Colors resolve from `@clera/tokens` and it rides the same `useEChart` runtime as the other charts.',
+          'Overlays series that have *different* x categories on one shared value axis, each with its own x-axis (bottom, then top). Ideal for period-over-period comparisons, like this year vs. last year, where the months line up index-by-index but belong to different scales. Each axis is colored to match its series, and a cross crosshair reads out both at once. Colors resolve from `@clera/tokens` and it rides the same `useEChart` runtime as the other charts.',
       },
     },
   },
@@ -34,7 +34,7 @@ const meta: Meta<typeof MultiXLine> = {
     area: {
       control: { type: 'select' },
       options: [false, true, 'gradient'],
-      description: 'Default fill under each line; override per series.',
+      description: 'Default fill under each line. Override it per series.',
       table: {
         type: { summary: "boolean | 'gradient'" },
         defaultValue: { summary: 'false' },
@@ -86,7 +86,7 @@ const meta: Meta<typeof MultiXLine> = {
     yAxis: {
       control: 'object',
       description:
-        'The shared value (y) axis — `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. `name` is its title; `position` is `top`/`middle`/`bottom` (default `middle`, rotated).',
+        'The shared value (y) axis, `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. `name` is its title, and `position` is `top`/`middle`/`bottom` (default `middle`, rotated).',
       table: {
         type: { summary: 'MultiXLineYAxis' },
         defaultValue: { summary: '-' },

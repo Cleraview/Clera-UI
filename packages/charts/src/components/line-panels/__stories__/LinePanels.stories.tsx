@@ -12,7 +12,7 @@ const meta: Meta<typeof LinePanels> = {
     docs: {
       description: {
         component:
-          'Two or more line charts stacked as synced panels on a shared x-axis — each panel is its own grid and value axis, with a linked crosshair, one dataZoom spanning all panels, and optional per-panel inverted axes. Colors resolve from `@clera/tokens` and it rides the same `useEChart` runtime as the other charts. Great for correlating series on different scales (rainfall vs. flow, CPU vs. memory vs. network).',
+          'Two or more line charts stacked as synced panels on a shared x-axis, where each panel is its own grid and value axis, with a linked crosshair, one dataZoom spanning all panels, and optional per-panel inverted axes. Colors resolve from `@clera/tokens` and it rides the same `useEChart` runtime as the other charts. Great for correlating series on different scales (rainfall vs. flow, CPU vs. memory vs. network).',
       },
     },
   },
@@ -41,7 +41,7 @@ const meta: Meta<typeof LinePanels> = {
     area: {
       control: { type: 'select' },
       options: [false, true, 'gradient'],
-      description: 'Default fill under each line; override per series.',
+      description: 'Default fill under each line. Override it per series.',
       table: {
         type: { summary: "boolean | 'gradient'" },
         defaultValue: { summary: 'false' },
@@ -66,7 +66,7 @@ const meta: Meta<typeof LinePanels> = {
     },
     zoomSlider: {
       control: 'boolean',
-      description: 'Show the draggable slider; `false` keeps inside-only zoom.',
+      description: 'Show the draggable slider. `false` keeps inside-only zoom.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' },

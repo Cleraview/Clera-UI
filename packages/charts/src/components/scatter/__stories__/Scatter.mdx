@@ -22,16 +22,16 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     Reach for it when you need to show correlation, distribution, or clustering between two numeric values:
 
-      - **Series**: One or more `series`, each `{ name, data, variant?, color?, symbolSize? }`, where `data` is `[x, y][]`. A single series hides the legend by default; more than one shows it.
-      - **Coloring**: `palette="categorical"` cycles the design-system colors across series; or set `variant`/`color` per series.
-      - **Axes**: Both `xAxis` and `yAxis` are numeric, each `{ name?, min?, max?, format? }` — same title-placement options as the other charts.
-      - **Legend, hover, tooltip**: Same ergonomics as `Bar`/`Line` — `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle` for the legend, `highlightOnHover` to dim other series while one is hovered.
+      - **Series**: One or more `series`, each `{ name, data, variant?, color?, symbolSize? }`, where `data` is `[x, y][]`. A single series hides the legend by default, and more than one shows it.
+      - **Coloring**: `palette="categorical"` cycles the design-system colors across series, or set `variant`/`color` per series.
+      - **Axes**: Both `xAxis` and `yAxis` are numeric, each `{ name?, min?, max?, format? }`, with the same title-placement options as the other charts.
+      - **Legend, hover, tooltip**: Same ergonomics as `Bar`/`Line`, so `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle` for the legend, `highlightOnHover` to dim other series while one is hovered.
       - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
 
     ## **Examples**
     ### **Basic**
 
-    A single series of `[x, y]` points — height vs. weight for a sample of people.
+    A single series of `[x, y]` points, plotting height vs. weight for a sample of people.
     <Canvas>
       <Canvas.Story>
         <Story of={ScatterStories.Basic} />
@@ -87,7 +87,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Anscombe's quartet**
 
-    Four datasets with near-identical summary statistics but very different distributions. A single `Scatter` lays out the four panels with `columns`; each series binds to a panel with `gridIndex` and draws its own straight `trendLine`. The panels reflow to one column on narrow screens.
+    Four datasets with near-identical summary statistics but very different distributions. A single `Scatter` lays out the four panels with `columns`, and each series binds to a panel with `gridIndex` and draws its own straight `trendLine`. The panels reflow to one column on narrow screens.
     <Canvas>
       <Canvas.Story>
         <Story of={ScatterStories.AnscombesQuartet} />
@@ -187,7 +187,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Exponential regression**
 
-    A scatter with a fitted curve. Compute the fit from the raw data and pass it to the series as a `regression` — the smooth line and its formula label render through the component in the series color.
+    A scatter with a fitted curve. Compute the fit from the raw data and pass it to the series as a `regression`. The smooth line and its formula label render through the component in the series color.
     <Canvas>
       <Canvas.Story>
         <Story of={ScatterStories.ExponentialRegression} />
@@ -227,7 +227,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     Set `loading` to overlay a themed mask + spinner while data is fetching. The overlay is shared by every chart type. Choose the spinner with `loadingVariant` (`spinner` | `dots` | `bars` | `pulse`) and its size with `loadingSize` (`sm` | `md` | `lg`).
 
-    `loadingColor` and `loadingMask` default to design tokens, so the mask is a light veil in light mode and a dark veil in dark mode. To override, pass a single CSS color to use in both themes, or `{ light, dark }` to vary per theme — if you set only one side, it is used for both.
+    `loadingColor` and `loadingMask` default to design tokens, so the mask is a light veil in light mode and a dark veil in dark mode. To override, pass a single CSS color to use in both themes, or `{ light, dark }` to vary per theme. If you set only one side, it is used for both.
     <Canvas>
       <Canvas.Story>
         <Story of={ScatterStories.Loading} />
@@ -255,7 +255,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Aggregate transition**
 
-    Set `aggregate` to let the scatter morph into a bar of per-series averages, then drive `view` (`'scatter' | 'bar'`) to switch between them — ECharts' `universalTransition` animates the points flying into the bars and back. `view` is fully controlled, so wire it to a toggle, a tab, or (as here) a timer. Each bar's value is its series averaged over `aggregate.dimension` (`0` = x, `1` = y). Set `transitionDuration` (ms, default `1000`) to control how fast the morph runs.
+    Set `aggregate` to let the scatter morph into a bar of per-series averages, then drive `view` (`'scatter' | 'bar'`) to switch between them, and ECharts' `universalTransition` animates the points flying into the bars and back. `view` is fully controlled, so wire it to a toggle, a tab, or (as here) a timer. Each bar's value is its series averaged over `aggregate.dimension` (`0` = x, `1` = y). Set `transitionDuration` (ms, default `1000`) to control how fast the morph runs.
     <Canvas>
       <Canvas.Story>
         <Story of={ScatterStories.AggregateTransition} />

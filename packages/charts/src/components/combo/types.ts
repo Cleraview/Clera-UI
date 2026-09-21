@@ -28,7 +28,7 @@ export type ComboSeries = {
   variant?: ChartVariant
   color?: string
   /**
-   * Which y-axis this series is plotted against — an axis `id` or index from
+   * Which y-axis this series is plotted against, as an axis `id` or index from
    * `yAxes` (or `'left'`/`'right'`). Defaults to the first axis.
    */
   yAxis?: string | number
@@ -37,7 +37,7 @@ export type ComboSeries = {
 }
 
 /**
- * A y-axis. Pass one or more to `yAxes` — several on the left and/or right, each
+ * A y-axis. Pass one or more to `yAxes`, several on the left or right, each
  * with its own title and scale. Series bind to an axis via `series[].yAxis`.
  */
 export type ComboYAxis = {
@@ -108,9 +108,9 @@ export interface ComboProps extends BaseLegendProps, ChartLoadingProps {
    * `position`/`orientation` place it. Bind series with `series[].yAxis`.
    */
   yAxes?: ComboYAxis[]
-  /** The x-axis: `{ name?, position?, orientation? }` — `name` is its title. */
+  /** The x-axis: `{ name?, position?, orientation? }`, where `name` is its title. */
   xAxis?: ComboXAxis
-  /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
+  /** Escape hatch to customize the x-axis labels, say rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
   /**
    * Draw a part-to-whole pie above the grid, linked to the axis pointer. Pass

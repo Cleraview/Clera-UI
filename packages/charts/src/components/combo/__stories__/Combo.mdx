@@ -18,7 +18,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     <br />
 
     ## **When To Use**
-    The Combo chart mixes `bar`, `line`, and `area` series on one cartesian grid — revenue bars with an orders line, rainfall bars with a temperature line, and so on. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`, and adapts to light/dark mode automatically.
+    The Combo chart mixes `bar`, `line`, and `area` series on one cartesian grid: revenue bars with an orders line, rainfall bars with a temperature line, and so on. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`, and adapts to light/dark mode automatically.
 
     In {config.title}, it is driven entirely by the `series` array:
 
@@ -27,8 +27,8 @@ import { DocsLayout, PropsTable } from "@clera/docs"
         - `line`: A trend line, optionally `smooth`.
         - `area`: A line with a translucent fill.
 
-      - **Multiple axes**: Declare the y-axes in `yAxes` — one or more, each with a `side` (`left`/`right`), `name`, scale, and `format`. Bind a series to one with `series[].yAxis` (its `id` or index) to plot two units (e.g. mm vs. °C) or several. Same-side axes stack outward and take on their series' color.
-      - **Per-series color**: `variant` (a design-system token) or a raw `color`; otherwise the categorical palette is used.
+      - **Multiple axes**: Declare the y-axes in `yAxes`, one or more, each with a `side` (`left`/`right`), `name`, scale, and `format`. Bind a series to one with `series[].yAxis` (its `id` or index) to plot two units (e.g. mm vs. °C) or several. Same-side axes stack outward and take on their series' color.
+      - **Per-series color**: `variant` (a design-system token) or a raw `color`. Otherwise the categorical palette is used.
       - **Shared tooltip**: Hovering a category lists every series, each formatted by its own axis.
       - **Legend, grid, labels, loading, empty, animation**: Same ergonomics as `Bar`.
       - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
@@ -36,7 +36,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     ## **Examples**
     ### **Mixed line and bar**
 
-    Revenue bars on the left axis and an orders line on the right axis — two units in one chart, each formatting its own ticks and tooltip rows.
+    Revenue bars on the left axis and an orders line on the right axis, so two units share one chart, each formatting its own ticks and tooltip rows.
     <Canvas>
       <Canvas.Story>
         <Story of={ComboStories.LineAndBar} />
@@ -127,7 +127,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Multiple Y axes**
 
-    When two units aren't enough, add more entries to `yAxes`. Each axis sets its own `side` (`left`/`right`) and `format`; same-side axes stack outward automatically. Series point at one with `yAxis: <index>` (or its `id`), and each axis adopts its series' color so they're easy to tell apart.
+    When two units aren't enough, add more entries to `yAxes`. Each axis sets its own `side` (`left`/`right`) and `format`, and same-side axes stack outward automatically. Series point at one with `yAxis: <index>` (or its `id`), and each axis adopts its series' color so they're easy to tell apart.
     <Canvas>
       <Canvas.Story>
         <Story of={ComboStories.MultipleYAxes} />
@@ -160,7 +160,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Dynamic data**
 
-    For a smooth streaming chart, grab the ECharts instance with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval. ECharts merges the update and animates each bar and point to its new slot, so the series slides to the left as the oldest reading drops off — much nicer than re-rendering the whole option.
+    For a smooth streaming chart, grab the ECharts instance with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval. ECharts merges the update and animates each bar and point to its new slot, so the series slides to the left as the oldest reading drops off, which is much nicer than re-rendering the whole option.
     <Canvas>
       <Canvas.Story>
         <Story of={ComboStories.DynamicData} />
@@ -226,7 +226,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I plot two different units?**
 
-    Declare two `yAxes` (the second with `side: 'right'`) and bind a series to it with `yAxis: 'right'` — each axis's `format` applies to its own ticks and tooltip rows.
+    Declare two `yAxes` (the second with `side: 'right'`) and bind a series to it with `yAxis: 'right'`. Each axis's `format` applies to its own ticks and tooltip rows.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Combo
@@ -261,7 +261,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I access the ECharts instance?**
 
-    Pass `onReady` — it fires once on mount with the instance, so you can wire up dataZoom, brush, or any ECharts API directly.
+    Pass `onReady` and it fires once on mount with the instance, so you can wire up dataZoom, brush, or any ECharts API directly.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <Combo categories={categories} series={series} onReady={(chart) => { /* ... */ }} />

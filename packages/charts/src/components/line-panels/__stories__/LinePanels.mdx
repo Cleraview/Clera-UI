@@ -22,16 +22,16 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     What makes it a *panel* chart rather than N separate charts:
 
-    - **One shared x-axis** with a **linked crosshair** — hovering lines up the same instant across every panel, and the tooltip lists all series at that x.
+    - **One shared x-axis** with a **linked crosshair**, so hovering lines up the same instant across every panel and the tooltip lists all series at that x.
     - **One dataZoom** spanning every panel, so zoom/pan stays in sync.
-    - **Per-panel value axis** — each `{ label, min, max, formatValue }` is independent, and `inverse` grows a panel downward (the classic rainfall-vs-flow look).
+    - **Per-panel value axis**, where each `{ label, min, max, formatValue }` is independent and `inverse` grows a panel downward (the classic rainfall-vs-flow look).
 
-    It stays declarative: pass `categories` (or `[x, y]` pairs on a `time` axis) and a `panels` array — the component lays out the grids, axes, linked pointer, and zoom for you.
+    It stays declarative: pass `categories` (or `[x, y]` pairs on a `time` axis) and a `panels` array, and the component lays out the grids, axes, linked pointer, and zoom for you.
 
     ## **Examples**
     ### **Rainfall vs evaporation**
 
-    The hydrology pattern: flow on top, rainfall below with an **inverted** axis so storms read as spikes hanging from the divider. One crosshair aligns both panels; the slider zooms them together.
+    The hydrology pattern: flow on top, rainfall below with an **inverted** axis so storms read as spikes hanging from the divider. One crosshair aligns both panels, and the slider zooms them together.
     <Canvas>
       <Canvas.Story>
         <Story of={LinePanelsStories.RainfallVsEvaporation} />
@@ -97,7 +97,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **How do I invert a panel (grow downward)?**
 
-    Set `inverse: true` on that panel. Its value axis flips, so the series reads as spikes hanging from the top — ideal for a rainfall panel beneath a flow panel.
+    Set `inverse: true` on that panel. Its value axis flips, so the series reads as spikes hanging from the top, ideal for a rainfall panel beneath a flow panel.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <LinePanels
@@ -140,7 +140,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     #### **Does the chart adapt to light and dark themes?**
 
-    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes — no manual theming required.
+    Yes. All colors resolve from `@clera/tokens` CSS variables at render time, and the chart re-resolves them when the active theme changes, so no manual theming is required.
     <Canvas.Source>
       <Source className="my-0!" dark code={`
         <LinePanels panels={panels} />

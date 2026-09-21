@@ -214,7 +214,8 @@ const meta: Meta<typeof Radar> = {
     },
     animate: {
       control: 'boolean',
-      description: 'Grow-in animation; auto-disabled under reduced-motion.',
+      description:
+        'Grow-in animation. It turns itself off under reduced-motion.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' },
@@ -306,7 +307,7 @@ export const Loading: Story = {
     docs: {
       description: {
         story:
-          'The same themed loading overlay as every other chart — pick the spinner with `loadingVariant` and its size with `loadingSize`.',
+          'The same themed loading overlay as every other chart. Pick the spinner with `loadingVariant` and its size with `loadingSize`.',
       },
     },
   },

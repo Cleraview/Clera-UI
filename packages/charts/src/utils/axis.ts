@@ -1,5 +1,5 @@
 /**
- * Escape hatch for customizing an axis's labels — for example, rendering rich
+ * Escape hatch for customizing an axis's labels, for example rendering rich
  * labels with icons/images (the "YouTube icon on the x-axis" case).
  *
  * `formatter` is the render function: return plain text, or ECharts rich-text
@@ -7,7 +7,7 @@
  * `rich`. Put an icon in a block with `backgroundColor: { image: url }`.
  *
  * These fields map straight onto ECharts' `axisLabel`, so anything valid there
- * works; the listed ones are the common knobs.
+ * works, and the listed ones are the common knobs.
  */
 export type AxisLabelOverride = {
   formatter?: (value: string | number, index: number) => string
@@ -40,7 +40,7 @@ export type AxisNameOrientation = 'horizontal' | 'vertical'
 export interface AxisNameOptions {
   /** The axis's real on-screen orientation. */
   orientation: 'vertical' | 'horizontal'
-  /** Which side a vertical axis sits on — affects title alignment. */
+  /** Which side a vertical axis sits on, which affects title alignment. */
   side?: 'left' | 'right'
   /** Whether the axis is inverted (flips the top/bottom, i.e. start/end, ends). */
   inverse?: boolean
@@ -55,7 +55,7 @@ export interface AxisNameOptions {
    * a `middle` title on a vertical axis, and `horizontal` everywhere else.
    */
   rotation?: AxisNameOrientation
-  /** Estimated title width (px) — used to reserve gutter for an upright title. */
+  /** Estimated title width (px), used to reserve gutter for an upright title. */
   nameWidth?: number
 }
 

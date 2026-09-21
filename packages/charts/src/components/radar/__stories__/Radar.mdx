@@ -20,13 +20,13 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     ## **When To Use**
     The Radar (or spider) chart plots each series as a closed web over a shared set of axes, so you can compare their overall shape at a glance. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`/`Line`, and adapts to light/dark mode automatically.
 
-    Reach for it when several items are scored on the same criteria — product comparisons, skill profiles, budget vs. actual:
+    Reach for it when several items are scored on the same criteria, like product comparisons, skill profiles, or budget vs. actual:
 
       - **Indicators**: The axes, `{ name, max?, min? }[]`. Set `max` per indicator, or a chart-level `max` for all of them.
       - **Series**: One or more `series`, each `{ name, data, variant?, color?, area? }`, where `data` is one value per indicator, in the same order.
-      - **Shape & fill**: `shape="polygon"` (default) or `"circle"`; `area` fills each web, and `splitArea` shades alternate rings.
-      - **Legend, hover, tooltip**: Same ergonomics as the other charts — `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle`, and `highlightOnHover` to bring the hovered web forward and dim the rest.
-      - **Loading**: The shared overlay — `loading`, `loadingVariant`, `loadingSize`, `loadingColor`, `loadingMask`.
+      - **Shape & fill**: `shape="polygon"` (default) or `"circle"`, `area` fills each web, and `splitArea` shades alternate rings.
+      - **Legend, hover, tooltip**: Same ergonomics as the other charts, so `legendPosition`/`legendIcon`/`legendAlign`/`legendStyle`, and `highlightOnHover` to bring the hovered web forward and dim the rest.
+      - **Loading**: The shared overlay, with `loading`, `loadingVariant`, `loadingSize`, `loadingColor`, and `loadingMask`.
       - **Escape hatch**: `onReady(chart)` exposes the ECharts instance for anything else.
 
     ## **Examples**

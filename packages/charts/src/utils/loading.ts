@@ -5,7 +5,7 @@ export type ChartLoadingSize = 'sm' | 'md' | 'lg'
 /**
  * A color that may differ per theme. Pass a single string to use it in both
  * themes, or `{ light, dark }` to vary it. If only one side is given, that one
- * is used for both; if neither is given, the design-token default applies.
+ * is used for both. If neither is given, the design-token default applies.
  */
 export type ChartThemedColor = string | { light?: string; dark?: string }
 

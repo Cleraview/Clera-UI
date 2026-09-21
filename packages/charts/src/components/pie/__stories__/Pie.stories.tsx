@@ -100,7 +100,7 @@ const meta: Meta<typeof Pie> = {
       control: { type: 'select' },
       options: [false, 'radius', 'area'],
       description:
-        "Nightingale (rose) layout. `'radius'` varies each slice's radius by value while keeping equal angles; `'area'` varies the area. `false` is a normal pie.",
+        "Nightingale (rose) layout. `'radius'` varies each slice's radius by value while keeping equal angles, and `'area'` varies the area. `false` is a normal pie.",
       table: {
         type: { summary: "'radius' | 'area' | false" },
         defaultValue: { summary: 'false' },
@@ -134,7 +134,7 @@ const meta: Meta<typeof Pie> = {
       control: { type: 'radio' },
       options: ['categorical', 'brand'],
       description:
-        'Fallback coloring for slices without a `variant`/`color`. `categorical` cycles distinct colors; `brand` is a violet monochrome ramp.',
+        'Fallback coloring for slices without a `variant`/`color`. `categorical` cycles distinct colors, while `brand` is a violet monochrome ramp.',
       table: {
         type: { summary: "'categorical' | 'brand'" },
         defaultValue: { summary: 'categorical' },
@@ -160,7 +160,7 @@ const meta: Meta<typeof Pie> = {
     labelOnClick: {
       control: 'boolean',
       description:
-        'Reveal a slice’s label (incl. `detail` / `richLabel` cards) only while it is selected — click to show, click another to switch, click empty space to dismiss. Implies `selectedMode: "single"`, and clamps any revealed card that would cross the canvas edge back inside.',
+        'Reveal a slice’s label (incl. `detail` / `richLabel` cards) only while it is selected. Click to show, click another to switch, click empty space to dismiss. Implies `selectedMode: "single"`, and clamps any revealed card that would cross the canvas edge back inside.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -179,7 +179,7 @@ const meta: Meta<typeof Pie> = {
       control: { type: 'radio' },
       options: ['none', 'labelLine', 'edge'],
       description:
-        "Line up outside labels. `'labelLine'` aligns text to the label-line elbow; `'edge'` flushes text to the chart edge.",
+        "Line up outside labels. `'labelLine'` aligns text to the label-line elbow, and `'edge'` flushes text to the chart edge.",
       table: {
         type: { summary: "'none' | 'labelLine' | 'edge'" },
         defaultValue: { summary: 'none' },
@@ -217,7 +217,7 @@ const meta: Meta<typeof Pie> = {
     selectedMode: {
       control: { type: 'select' },
       options: [false, 'single', 'multiple'],
-      description: 'Let slices be clicked out (offset) — single or multiple.',
+      description: 'Let slices be clicked out (offset), single or multiple.',
       table: {
         type: { summary: "false | 'single' | 'multiple'" },
         defaultValue: { summary: 'false' },
@@ -279,7 +279,7 @@ const meta: Meta<typeof Pie> = {
     scrollableLegend: {
       control: 'boolean',
       description:
-        'Page long legends instead of wrapping — good with many slices down the side.',
+        'Page long legends instead of wrapping, which is good with many slices down the side.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -311,7 +311,8 @@ const meta: Meta<typeof Pie> = {
     },
     animate: {
       control: 'boolean',
-      description: 'Grow-in animation; auto-disabled under reduced-motion.',
+      description:
+        'Grow-in animation. It turns itself off under reduced-motion.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'true' },
@@ -354,7 +355,7 @@ export const Basic: Story = {
     docs: {
       description: {
         story:
-          'The default pie — one slice per datum, outside labels with leader lines, and a legend below. A `labelFormatter` prints the share as a percentage.',
+          'The default pie, with one slice per datum, outside labels with leader lines, and a legend below. A `labelFormatter` prints the share as a percentage.',
       },
     },
   },
@@ -428,7 +429,7 @@ export const PadAngle: Story = {
     docs: {
       description: {
         story:
-          '`padAngle` inserts an even gap between slices; pair it with `borderRadius` for a clean segmented ring.',
+          '`padAngle` inserts an even gap between slices. Pair it with `borderRadius` for a clean segmented ring.',
       },
     },
   },
@@ -448,7 +449,7 @@ export const Nightingale: Story = {
     docs: {
       description: {
         story:
-          'The Nightingale rose, in both modes side by side (the ECharts `pie-roseType` demo). `roseType="radius"` keeps equal angles and grows each slice by radius; `roseType="area"` grows the area. Whether each slice shows its label + leader line at rest is a prop: **Radius mode** uses `showLabels={false} labelOnHover` (clean, reveals on hover), while **Area mode** uses `showLabels` (each label + leader line is drawn on load, no hover needed). Rounded corners come from `borderRadius`.',
+          'The Nightingale rose, in both modes side by side (the ECharts `pie-roseType` demo). `roseType="radius"` keeps equal angles and grows each slice by radius, while `roseType="area"` grows the area. Whether each slice shows its label + leader line at rest is a prop: **Radius mode** uses `showLabels={false} labelOnHover` (clean, reveals on hover), while **Area mode** uses `showLabels` (each label + leader line is drawn on load, no hover needed). Rounded corners come from `borderRadius`.',
       },
     },
   },
@@ -490,7 +491,7 @@ export const LabelAlign: Story = {
     docs: {
       description: {
         story:
-          '`labelAlignTo` tidies outside labels. `"labelLine"` aligns the text to the leader-line elbow; `"edge"` flushes every label to the chart edge for a clean column.',
+          '`labelAlignTo` tidies outside labels. `"labelLine"` aligns the text to the leader-line elbow, and `"edge"` flushes every label to the chart edge for a clean column.',
       },
     },
   },
@@ -521,7 +522,7 @@ export const LabelAlignAdjust: Story = {
     docs: {
       description: {
         story:
-          'Flush labels to the edge and stack a bold name over a muted value line with a multiline `labelFormatter` — a compact, aligned label block.',
+          'Flush labels to the edge and stack a bold name over a muted value line with a multiline `labelFormatter`, for a compact, aligned label block.',
       },
     },
   },
@@ -656,7 +657,7 @@ export const SpecialLabel: Story = {
     docs: {
       description: {
         story:
-          'Two custom labels, both injected through the data — no `onReady`, no overlay. **Aurora** uses a structured `detail` table (title, header, a row per device with an inline icon, count, and share). **Cedar** uses a raw `richLabel` — an ECharts `formatter` + `rich` config with an inline SVG sparkline image. Both are drawn at rest, toggled by `showLabels`, and revealed on hover when hidden — the Pie owns all of that. **Responsive, in the component:** as the container narrows the Pie tightens the cards to a `compact` density; below `stackDetailBelow` (default 520px) the cards can no longer fit, so the Pie itself drops them and re-renders every `detail` as a plain HTML table beneath the pie — so any consumer of the package gets it for free with no extra markup. Because `richLabel` is an opaque escape hatch, its narrow presentation is the consumer’s to own (Cedar simply falls back to an inside label). Icons/sparkline are self-contained inline SVG data URIs; colors resolve from `@clera/tokens`.',
+          'Two custom labels, both injected through the data, with no `onReady` and no overlay. **Aurora** uses a structured `detail` table (title, header, a row per device with an inline icon, count, and share). **Cedar** uses a raw `richLabel`, an ECharts `formatter` + `rich` config with an inline SVG sparkline image. Both are drawn at rest, toggled by `showLabels`, and revealed on hover when hidden, because the Pie owns all of that. **Responsive, in the component:** as the container narrows the Pie tightens the cards to a `compact` density. Below `stackDetailBelow` (default 520px) the cards can no longer fit, so the Pie itself drops them and re-renders every `detail` as a plain HTML table beneath the pie, and any consumer of the package gets that for free with no extra markup. Because `richLabel` is an opaque escape hatch, its narrow presentation is the consumer’s to own (Cedar simply falls back to an inside label). Icons and sparkline are self-contained inline SVG data URIs, and colors resolve from `@clera/tokens`.',
       },
     },
   },
@@ -708,7 +709,7 @@ export const CustomLabel: Story = {
     docs: {
       description: {
         story:
-          'When you want full control, skip the rich-text label and attach your own React component. Here a doughnut leaves a hole (`innerRadius`), and a `TotalCenterCard` component is absolutely centered over it — a live React node (any markup, links, buttons) rather than a canvas label. Slice labels reveal on hover (`labelOnHover`), so the center card stays the focus.',
+          'When you want full control, skip the rich-text label and attach your own React component. Here a doughnut leaves a hole (`innerRadius`), and a `TotalCenterCard` component is absolutely centered over it, a live React node (any markup, links, buttons) rather than a canvas label. Slice labels reveal on hover (`labelOnHover`), so the center card stays the focus.',
       },
     },
   },
@@ -730,7 +731,7 @@ export const Nested: Story = {
     docs: {
       description: {
         story:
-          'Two `series` sharing a center (the ECharts nested-pies demo). The outer ring shows a series-level `richLabel` card (name / value / percent) on every slice, and the inner ring uses `selectedMode: "single"` — click an inner slice to pop it out (Marketing starts `selected`). This mirrors the official ECharts nested-pies example: the eight cards fit on a wide canvas and, like the demo, get tight on very narrow widths. The legend is plain HTML **outside** the chart, driven by the `showLegend` / `legendPosition` controls.',
+          'Two `series` sharing a center (the ECharts nested-pies demo). The outer ring shows a series-level `richLabel` card (name / value / percent) on every slice, and the inner ring uses `selectedMode: "single"`, so clicking an inner slice pops it out (Marketing starts `selected`). This mirrors the official ECharts nested-pies example: the eight cards fit on a wide canvas and, like the demo, get tight on very narrow widths. The legend is plain HTML **outside** the chart, driven by the `showLegend` / `legendPosition` controls.',
       },
     },
   },
@@ -835,7 +836,7 @@ export const Partition: Story = {
     docs: {
       description: {
         story:
-          'Split a big breakdown into a pie per group so each stays readable. On a responsive grid they sit side by side on desktop and stack on mobile — here operating spend and marketing spend.',
+          'Split a big breakdown into a pie per group so each stays readable. On a responsive grid they sit side by side on desktop and stack on mobile, here operating spend and marketing spend.',
       },
     },
   },
@@ -867,7 +868,7 @@ export const Arrangement: Story = {
     docs: {
       description: {
         story:
-          'One small pie per facet on a responsive grid — four regions with the same categories. It reflows from four-up on desktop to two-up on mobile, so every pie stays legible. Hover any slice to compare the mix across regions.',
+          'One small pie per facet on a responsive grid, four regions with the same categories. It reflows from four-up on desktop to two-up on mobile, so every pie stays legible. Hover any slice to compare the mix across regions.',
       },
     },
   },
@@ -922,7 +923,7 @@ export const GeoMap: Story = {
     docs: {
       description: {
         story:
-          'Pass a `geo` prop to place every series on a map instead of the chart box: each series `center` becomes a `[lng, lat]` coordinate and `outerRadius` a pixel radius. Here a **Singapore** map carries a pie per region (Central / East / West / North) showing its retail / office / dining mix. Register the map once with `registerGeoMap(name, geoJson)` — the outline is a small inline GeoJSON, so nothing is fetched.',
+          'Pass a `geo` prop to place every series on a map instead of the chart box: each series `center` becomes a `[lng, lat]` coordinate and `outerRadius` a pixel radius. Here a **Singapore** map carries a pie per region (Central / East / West / North) showing its retail / office / dining mix. Register the map once with `registerGeoMap(name, geoJson)`. The outline is a small inline GeoJSON, so nothing is fetched.',
       },
     },
   },

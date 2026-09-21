@@ -19,11 +19,17 @@ svg {
   color: var(--fill-ds-icon-subtlest);
 }
 
+button,
+input {
+  font-family: inherit;
+}
+
 button:has(> svg) {
   color: inherit!important;
 }
-#storybook-preview-iframe {
-  background-color: transparent !important;
+#storybook-preview-iframe,
+div:has(> #preview-loader) {
+  background-color: var(--background-color-ds-elevation-surface) !important;
 }
 
 /* Header */
@@ -32,8 +38,8 @@ button:has(> svg) {
   left: 0;
   top: 0;
   width: 100%;
+  height: var(--header-height);
   background-color: var(--background-color-ds-elevation-surface);
-  border-bottom: 1px solid var(--border-color-ds-default);
   z-index: 9999;
 }
 .manager-header .manager-header-wrapper .icon-button {
@@ -56,11 +62,15 @@ button:has(> svg) {
 }
 .manager-header .manager-header-wrapper {
   margin: 0 auto;
-  display: flex;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding: 12px 24px;
+}
+.manager-header .manager-header-wrapper .right-section {
+  justify-self: end;
 }
 .manager-header .manager-header-wrapper .left-section,
 .manager-header .manager-header-wrapper .right-section {
@@ -73,21 +83,26 @@ button:has(> svg) {
   height: auto;
   display: block;
 }
+.manager-header .manager-header-wrapper .nav-menu {
+  display: flex;
+  gap: 6px;
+}
 .manager-header .manager-header-wrapper .nav-menu .nav-button {
   background-color: transparent;
   border: none;
   color: var(--text-color-ds-default);
   padding: 6px 10px;
   cursor: pointer;
+  font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
 }
 .manager-header .manager-header-wrapper .nav-menu .nav-button.active {
-  background-color: var(--background-color-ds-selected,oklch(0.49 0.27 292.58 / .2))!important;
+  background-color: color-mix(in srgb, var(--background-color-ds-selected,oklch(0.49 0.27 292.58 / .2)) 40%, transparent)!important;
   color: var(--text-color-ds-accent-violet)!important;
 }
 .manager-header .manager-header-wrapper .nav-menu .nav-button:not(.active):hover {
-  background-color: var(--background-color-ds-neutral-hovered)!important;
+  background-color: color-mix(in srgb, var(--background-color-ds-neutral-hovered) 40%, transparent)!important;
 }
 .manager-header .manager-header-wrapper .search-trigger {
   display: flex;
@@ -99,7 +114,7 @@ button:has(> svg) {
   border: 1px solid var(--border-color-ds-default);
   background: transparent;
   color: var(--text-color-ds-subtle);
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
 }
 .manager-header .manager-header-wrapper .search-trigger:hover {
@@ -126,8 +141,8 @@ button:has(> svg) {
 }
 .manager-header .manager-header-wrapper .divider {
   width: 1px;
-  height: 28px;
-  background: rgba(0,0,0,0.06);
+  height: 20px;
+  background: var(--border-color-ds-default);
   margin: 0 8px;
 }
 .manager-header .manager-header-wrapper .icon-link {
@@ -166,7 +181,7 @@ button:has(> svg) {
   padding: 6px 8px 6px 10px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
 }
 .manager-header .manager-header-wrapper .control-toggle:hover {
   background-color: var(--background-color-ds-elevation-surface-hovered);
@@ -224,7 +239,7 @@ button:has(> svg) {
   background: transparent;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-color-ds-default);
 }
 .manager-header .manager-header-wrapper .theme-menu-item:hover {
@@ -244,6 +259,8 @@ section:has(> div[role="toolbar"]) {
   height: var(--header-height);
   position: fixed;
   left: 0;
+  box-shadow: none !important;
+  background: var(--background-color-ds-elevation-surface) !important;
 }
 div:has(> .sidebar-header) {
   display: none;
@@ -256,9 +273,42 @@ div:has(> .sidebar-header) {
   height: 100%;
   z-index: 4;
   background: var(--background-color-ds-elevation-surface);
-  border-right: 1px solid var(--border-color-ds-default);
   padding-top: 69px!important;
   transition: transform 0.2s ease;
+}
+.container.sidebar-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--border-color-ds-default) 10%,
+    var(--border-color-ds-default) 90%,
+    transparent 100%
+  );
+}
+.container.sidebar-container::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--background-color-ds-elevation-surface) 80%, transparent)
+  );
+  backdrop-filter: blur(2px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000);
+  mask-image: linear-gradient(to bottom, transparent, #000);
 }
 div:has(> div > nav.container.sidebar-container) {
   grid-template-columns: 300px minmax(0, 1fr) 0 !important;
@@ -347,10 +397,16 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
 .sidebar-item:not([data-selected="true"]):hover {
   background-color: var(--background-color-ds-neutral-subtle-hovered)!important;
 }
+[data-theme='dark'] .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="component"]:hover,
+[data-theme='dark'] .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="group"]:hover,
+[data-theme='dark'] .sidebar-item:not([data-selected="true"]):hover {
+  background-color: color-mix(in srgb, var(--background-color-ds-neutral-hovered) 40%, transparent)!important;
+}
 .sidebar-item a,
 .sidebar-item button {
   padding-top: 8px;
   padding-bottom: 8px;
+  font-size: 12px;
   letter-spacing: .5px;
   display: flex;
   align-items: center;
@@ -557,6 +613,8 @@ a[title="Skip to sidebar"] {
     height: var(--header-height);
   }
   .manager-header .manager-header-wrapper {
+    display: flex;
+    justify-content: space-between;
     gap: 6px;
     padding: 0 10px;
     height: 100%;

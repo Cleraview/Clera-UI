@@ -37,7 +37,7 @@ export type LegendIconShape =
 /**
  * Marker for each legend entry: one of the built-in shapes, a `path://…` /
  * `image://…` string, a raw `<svg>` string, an image URL (png/jpg/etc.), or
- * a React element — from react-icons, lucide, or any other icon library, or
+ * a React element from react-icons, lucide, or any other icon library, or
  * a plain inline `<svg>`. React elements are rendered to a static SVG string
  * and embedded as a data URI, so any icon component works.
  */
@@ -91,8 +91,8 @@ function isNamedShape(icon: LegendIcon): icon is LegendIconShape {
   return typeof icon === 'string' && NAMED_SHAPES.has(icon as LegendIconShape)
 }
 
-/** Sizing for ECharts' built-in shape vocabulary — `rect`/`roundRect` get a
- * wider-than-tall box; `square` is forced to equal width/height. */
+/** Sizing for ECharts' built-in shape vocabulary, where `rect`/`roundRect` get
+ * a wider-than-tall box and `square` is forced to equal width/height. */
 function resolveShapeItemSize(
   shape: LegendIconShape,
   style?: LegendStyleOverrides
@@ -109,7 +109,7 @@ function resolveShapeItemSize(
 }
 
 /** Sizing for custom icons (React elements, inline SVG, images, arbitrary
- * `path://`/`image://` strings) — logos/artwork, not geometric shapes, so
+ * `path://`/`image://` strings), which are logos and artwork rather than geometric shapes, so
  * they get their own default box rather than sharing the shape defaults. */
 function resolveCustomIconItemSize(
   style?: LegendStyleOverrides
@@ -169,7 +169,7 @@ export interface BuildLegendOptionParams {
   /** Renders as a paging `scroll` legend instead of wrapping (`plain`). */
   scrollable?: boolean
   /**
-   * Reserved px width for a `left`/`right` legend — caps it and truncates
+   * Reserved px width for a `left`/`right` legend. It caps the width and truncates
    * long labels so it can't grow past the space the caller has for it.
    */
   sideWidth?: number
@@ -196,7 +196,7 @@ export function buildLegendOption({
   style,
 }: BuildLegendOptionParams): Record<string, unknown> {
   const vertical = position === 'left' || position === 'right'
-  // ECharts' itemWidth/itemHeight are one shared box for every entry — icon
+  // ECharts' itemWidth/itemHeight are one shared box for every entry, and icon
   // is the only thing that's truly per-item. So if any series brings its own
   // custom icon, the whole legend uses the custom-icon box size instead of
   // whatever the chart-level shape wants, or switching that shape (e.g.
@@ -209,7 +209,7 @@ export function buildLegendOption({
   const resolvedIcon = resolveLegendIcon(icon)
   // Custom path://‌/image:// icons (react-icons, raw SVG, images, our
   // hand-authored pin/arrow paths) get stretched to exactly fill the box
-  // by default, distorting non-square icons — keep their own aspect instead.
+  // by default, distorting non-square icons, so keep their own aspect instead.
   // Built-in named shapes (circle/rect/roundRect/...) are unaffected by this
   // flag: they have no "natural aspect" of their own to preserve.
   const keepAspect =
@@ -325,7 +325,7 @@ type LegendDataOption = {
 
 /**
  * Deselecting a legend entry normally dims its icon via `inactiveColor`, but
- * that's a fill/stroke recolor — a no-op for `path://`/`image://` icons (a
+ * that's a fill/stroke recolor, which is a no-op for `path://`/`image://` icons (a
  * bitmap/SVG has no "fill" to recolor). Wire this to the chart's own
  * `legendselectchanged` event to fade custom icons via opacity instead, so
  * they still visibly go inactive along with their label.

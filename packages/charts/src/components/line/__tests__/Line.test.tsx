@@ -929,7 +929,7 @@ describe('components/charts/Line', () => {
       />
     )
     const option = lastOption()
-    // legend lane (96) plus the middle-title gutter, added — not max'd
+    // legend lane (96) plus the middle-title gutter, added rather than max'd
     expect(option.grid.left).toBeGreaterThan(96)
     expect(option.legend.left).toBe(0)
   })

@@ -66,7 +66,7 @@ export type SidebarItemProps = {
 /**
  * Tags only the Charts Overview landing page, so manager.css can indent it to
  * line up with its component siblings and bold it. Anchoring to a class we
- * emit here beats guessing Storybook's `data-*` attributes — and keeping it to
+ * emit here beats guessing Storybook's `data-*` attributes, and keeping it to
  * this one row leaves every other menu and submenu at its native indent.
  */
 const labelClass = (id?: string, parent?: string) =>

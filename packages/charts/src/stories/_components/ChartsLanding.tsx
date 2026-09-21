@@ -41,7 +41,7 @@ export const ChartsLanding = () => {
       .map(([key, story]: [string, any]) => {
         const storyArgs = { ...(meta?.args ?? {}), ...(story.args ?? {}) }
         // Stories set their own heights (340, 620, ...) which would make the
-        // cards ragged; the grid wants one height.
+        // cards ragged, and the grid wants one height.
         const args = { ...storyArgs, height: CARD_CHART_HEIGHT }
         const name = story.name ?? humanize(key)
 
@@ -52,7 +52,7 @@ export const ChartsLanding = () => {
           code = `<${group.component} /* see the ${name} story */ />`
         }
 
-        // A story's `render` is a component, not a plain function — several of
+        // A story's `render` is a component, not a plain function, and several of
         // them call hooks (Bar's Drilldown, for one). Hand it to React as a
         // component so those hooks belong to it, rather than invoking it here
         // and leaking them into this component's hook list.
@@ -78,7 +78,7 @@ export const ChartsLanding = () => {
 
         <p className="max-w-2xl text-center text-body-md text-ds-subtle">
           A collection of chart components built on Apache ECharts and driven by
-          Clera design tokens. Copy and paste into your apps — they adapt to
+          Clera design tokens. Copy and paste into your apps, and they adapt to
           light and dark mode out of the box.
         </p>
 

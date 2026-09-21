@@ -23,19 +23,19 @@ import { DocsLayout, PropsTable } from "@clera/docs"
     Reach for it when the round layout itself carries meaning:
 
       - **Orientation**: Choose how the circle is used.
-        - `angular`: Bars sweep around the circle — category on the angle axis, value on the radius. Great for cyclical data (weekdays, hours, compass directions).
-        - `radial`: Concentric rings — category on the radius axis, value sweeping around. Reads like a set of progress rings.
+        - `angular`: Bars sweep around the circle, with category on the angle axis and value on the radius. Great for cyclical data (weekdays, hours, compass directions).
+        - `radial`: Concentric rings, with category on the radius axis and value sweeping around. Reads like a set of progress rings.
 
       - **Single or grouped**: Pass `data` for one series, or `categories` + `series` for several. Add `stacked` to stack the series around the circle.
-      - **Coloring**: `palette="categorical"` gives each slice its own color; or set `variant`/`color` per datum or series.
+      - **Coloring**: `palette="categorical"` gives each slice its own color, or set `variant`/`color` per datum or series.
       - **Polar knobs**: `roundCap` rounds the bar ends, `startAngle` rotates the circle, `max`/`min` fix the value scale.
 
-    A caveat worth knowing: polar bars are eye-catching but harder to read precise values from than cartesian bars — prefer them for cyclical or comparative-at-a-glance data, and keep `Bar` for exact comparisons.
+    A caveat worth knowing: polar bars are eye-catching but harder to read precise values from than cartesian bars, so prefer them for cyclical or comparative-at-a-glance data, and keep `Bar` for exact comparisons.
 
     ## **Examples**
     ### **Bar on polar**
 
-    Single-series bars sweeping around the circle — commits per weekday, one color per slice via `palette="categorical"`.
+    Single-series bars sweeping around the circle, like commits per weekday, one color per slice via `palette="categorical"`.
     <Canvas>
       <Canvas.Story>
         <Story of={PolarBarStories.Angular} />
@@ -100,7 +100,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Radial (concentric)**
 
-    `orientation="radial"` lays categories along the radius and sweeps the value around — like progress rings.
+    `orientation="radial"` lays categories along the radius and sweeps the value around, reading like progress rings.
     <Canvas>
       <Canvas.Story>
         <Story of={PolarBarStories.Radial} />
@@ -166,7 +166,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Partial arc (endAngle)**
 
-    Pair `startAngle` with `endAngle` to sweep only part of the circle. For a single arc just pass the props; to place two polar systems side by side in one chart (the official polar-endAngle demo) — S1–S3 in the top-right quadrant, T1–T3 in the bottom-left — grab the instance via `onReady` and apply a two-polar option from an effect after mount.
+    Pair `startAngle` with `endAngle` to sweep only part of the circle. For a single arc just pass the props. To place two polar systems side by side in one chart (the official polar-endAngle demo), with S1–S3 in the top-right quadrant and T1–T3 in the bottom-left, grab the instance via `onReady` and apply a two-polar option from an effect after mount.
     <Canvas>
       <Canvas.Story>
         <Story of={PolarBarStories.PartialArc} />

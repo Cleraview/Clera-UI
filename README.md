@@ -6,11 +6,11 @@ Monorepo for the Clera design system: UI components, design tokens, and charts, 
 
 | Package | Location | What it is |
 | --- | --- | --- |
-| `@clera/ui` | `packages/ui` | React component library — Button, Toast, Alert, form controls, and so on |
+| `@clera/ui` | `packages/ui` | React component library with Button, Toast, Alert, form controls, and so on |
 | `@clera/tokens` | `packages/tokens` | Design tokens. Source JSON in `tokens/`, generated CSS in `dist/` |
 | `@clera/charts` | `packages/charts` | Data-visualization primitives, built on top of `@clera/ui` and the tokens |
 | `@clera/config-jest` | `packages/configs/jest` | Shared Jest base config the other packages extend |
-| `@clera/storybook` | `apps/storybook` | Storybook site; picks up stories from every package |
+| `@clera/storybook` | `apps/storybook` | Storybook site that picks up stories from every package |
 
 Cross-package dependencies use the `workspace:*` protocol. `@clera/ui` and `@clera/charts` both pull their styling from `@clera/tokens`.
 
@@ -19,7 +19,7 @@ Cross-package dependencies use the `workspace:*` protocol. `@clera/ui` and `@cle
 - Node 22 or newer
 - pnpm 10 - run `corepack enable` and it'll use the version pinned in `package.json`
 
-The repo is pnpm-only; `npm install` and `yarn` are blocked.
+The repo is pnpm-only, so `npm install` and `yarn` are blocked.
 
 ## Setup
 
@@ -31,7 +31,7 @@ pnpm install
 
 ## Day-to-day
 
-Tasks run through Turborepo from the root — across every package, with caching.
+Tasks run through Turborepo from the root, across every package, with caching.
 
 ```sh
 pnpm lint          # eslint
@@ -75,9 +75,9 @@ Publishing happens from CI once the version PR lands on `main`.
 
 ## Conventions
 
-- Commits follow Conventional Commits — commitlint checks the message on commit.
+- Commits follow Conventional Commits, and commitlint checks the message on commit.
 - Pre-commit runs lint-staged: type-check and tests for touched package sources, eslint for touched files.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE).

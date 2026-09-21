@@ -66,7 +66,7 @@ export type ScatterView = 'scatter' | 'bar'
 /**
  * Enables morphing between the scatter and a bar of per-series aggregates
  * (via ECharts' `universalTransition`). Each series becomes one bar whose
- * value is its data averaged over `dimension` (0 = x, 1 = y; default 0).
+ * value is its data averaged over `dimension` (0 = x, 1 = y, default 0).
  */
 export type ScatterAggregate = {
   dimension?: 0 | 1

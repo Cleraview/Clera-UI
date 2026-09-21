@@ -23,7 +23,7 @@ export type LineMatrixCell = {
 export interface LineMatrixProps extends ChartLoadingProps {
   /** Column labels (the matrix x dimension). */
   columns: (string | number)[]
-  /** Row labels (the matrix y dimension); strings or `{ label, divider }`. */
+  /** Row labels (the matrix y dimension), either strings or `{ label, divider }`. */
   rows: (string | LineMatrixRow)[]
   /** The cells to plot. Each is one mini line chart at its (`col`, `row`). */
   cells: LineMatrixCell[]

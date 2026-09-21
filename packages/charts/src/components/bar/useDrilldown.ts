@@ -13,7 +13,7 @@ type Level = {
 }
 
 export interface UseBarDrilldownResult {
-  /** The bars for the current level — pass straight to `Bar`'s `data`. */
+  /** The bars for the current level, passed straight to `Bar`'s `data`. */
   data: BarDrilldownDatum[]
   /** Labels from the root down to the current level (for a breadcrumb). */
   path: string[]
@@ -21,7 +21,7 @@ export interface UseBarDrilldownResult {
   depth: number
   /** Whether there is a level to go back up to. */
   canDrillUp: boolean
-  /** Wire to `Bar`'s `onBarClick` — drills in when the bar has children. */
+  /** Wire to `Bar`'s `onBarClick`. Drills in when the bar has children. */
   onBarClick: (datum: BarDatum) => void
   /** Go up one level. */
   back: () => void
@@ -33,9 +33,9 @@ export interface UseBarDrilldownResult {
 
 /**
  * Drives single- or multi-level drilldown for a `Bar` chart from a tree of
- * data. The chart stays declarative — this hook just swaps which level's `data`
- * is shown and exposes a breadcrumb `path`. Clicking a bar with `children`
- * drills in; leaves do nothing.
+ * data. The chart stays declarative, and this hook just swaps which level's
+ * `data` is shown and exposes a breadcrumb `path`. Clicking a bar with
+ * `children` drills in, and leaves do nothing.
  *
  * Note: `root` is read once on mount. If it can change, give the consuming
  * component a `key` to remount.

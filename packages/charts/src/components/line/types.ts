@@ -31,7 +31,7 @@ export type LineXAxisType = 'category' | 'time'
 
 export type LineMarkPoint = 'max' | 'min'
 
-/** An `[x, y]` pair — required when `xAxisType="time"` (x is a timestamp or date string). */
+/** An `[x, y]` pair, required when `xAxisType="time"` (x is a timestamp or date string). */
 export type LinePoint = [number | string, number]
 
 export type LineSeries = {
@@ -53,15 +53,15 @@ export type LineSeries = {
   /** Per-series line thickness in px. */
   width?: number
   /**
-   * Which y-axis this series is plotted against — an axis `id` or index from
+   * Which y-axis this series is plotted against, as an axis `id` or index from
    * `yAxes` (or `'left'`/`'right'`). Defaults to the first axis.
    */
   yAxis?: string | number
 }
 
 /**
- * A y-axis. Pass one or more to `yAxes` to build any layout — several on the
- * left and/or right, each with its own title and scale. Series bind to an axis
+ * A y-axis. Pass one or more to `yAxes` to build any layout, several on the
+ * left or right, each with its own title and scale. Series bind to an axis
  * via `series[].yAxis` (its `id` or array index).
  */
 export type LineYAxis = {
@@ -73,7 +73,7 @@ export type LineYAxis = {
   side?: ValueAxisPosition
   min?: number
   max?: number
-  /** Flip the axis so values grow downward — e.g. rainfall falling from the top. */
+  /** Flip the axis so values grow downward, like rainfall falling from the top. */
   inverse?: boolean
   /** Where the title sits along the axis: `top` (default), `middle`, or `bottom`. */
   position?: ValueAxisNamePosition
@@ -114,8 +114,8 @@ export type LineMarkArea = {
 }
 
 /**
- * Color the line by where each point sits relative to a baseline — e.g. green
- * above the previous close, red below it. Applies to the first series.
+ * Color the line by where each point sits relative to a baseline, say green
+ * above the previous close and red below it. Applies to the first series.
  */
 export type LineThreshold = {
   value: number
@@ -146,13 +146,13 @@ export interface LineProps extends BaseLegendProps, ChartLoadingProps {
    * `series[].yAxis`. When omitted, a single auto-scaled axis is used.
    */
   yAxes?: LineYAxis[]
-  /** The x-axis: `{ name?, position?, orientation? }` — `name` is its title. */
+  /** The x-axis: `{ name?, position?, orientation? }`, where `name` is its title. */
   xAxis?: LineXAxis
   /** Force the single y-axis min/max (ignored when `yAxes` is set). */
   min?: number
   max?: number
   axisLabelRotate?: number
-  /** Escape hatch to customize the x-axis labels — e.g. rich labels with icons. */
+  /** Escape hatch to customize the x-axis labels, say rich labels with icons. */
   xAxisLabel?: AxisLabelOverride
   showTooltip?: boolean
   tooltipTrigger?: 'item' | 'axis'
@@ -171,7 +171,7 @@ export interface LineProps extends BaseLegendProps, ChartLoadingProps {
   /** Minimal axis-less trend line for KPI cards and inline sparklines. */
   sparkline?: boolean
   formatValue?: (value: number) => string
-  /** Formats x-axis ticks and the tooltip header — handy for time axes. */
+  /** Formats x-axis ticks and the tooltip header, handy for time axes. */
   formatX?: (value: string | number) => string
   animate?: boolean
   emptyMessage?: string

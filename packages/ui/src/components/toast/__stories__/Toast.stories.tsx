@@ -301,7 +301,8 @@ export const ActionPlacement: Story = {
         variant="outlineLight"
         onClick={() =>
           toast('Saved', {
-            description: 'Default placement — action below content.',
+            description:
+              'Default placement, with the action below the content.',
             position: args.position,
             actionPlacement: 'bottom',
             action: { label: 'Undo', variant: 'primary' },

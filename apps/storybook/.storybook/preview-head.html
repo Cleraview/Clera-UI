@@ -1,15 +1,26 @@
 <title>Clera UI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --font-code: "Google Sans Code", monospace;
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-code: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-size-base: 13px;
+    --preview-surface: var(--background-color-ds-elevation-surface, rgb(255, 255, 255));
+  }
+  [data-theme='dark'] {
+    --preview-surface: var(--background-color-ds-elevation-surface, oklch(20.5% 0 0));
+  }
+
+  html,
+  body {
+    background-color: var(--preview-surface);
   }
 
   body {
-    font-size: 16px;
-    background-color: var(--background-color-ds-elevation-surface);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
   }
 
   
@@ -43,10 +54,8 @@
     font-size: 10px;
   }
 
-  p kbd, 
-  p samp, 
-  p pre {
-    font-size: 14px;
+  .sbdocs.sbdocs-content :where(p:not(.sb-unstyled, .sb-unstyled p)) :is(kbd, samp, pre) {
+    font-size: calc(var(--font-size-base) * 12 / 14);
     font-family: var(--font-code);
     background-color: var(--background-color-ds-neutral);
   }
@@ -57,12 +66,16 @@
 
   .sb-preparing-story, .sb-preparing-docs {
     padding-top: 6rem;
-    background-color: var(--background-color-ds-elevation-surface);
+    background-color: var(--preview-surface);
   }
 
   .sbdocs.sbdocs-wrapper {
+    font-family: var(--font-sans);
     background: var(--background-color-ds-elevation-surface);
     padding: 1rem 2rem;
+  }
+  .sbdocs.sbdocs-wrapper :is(h1, h2, h3, h4, h5, h6, p, a, li, ul, ol, dl, dt, dd, blockquote, table, th, td, div, span, nav, label, button, strong, em):not(.sb-unstyled, .sb-unstyled *, code, code *, pre, pre *, kbd, samp, [class*="font-(family-name"]) {
+    font-family: var(--font-sans);
   }
 
   .sb-previewBlock {
@@ -172,8 +185,10 @@
 
   .sbdocs.sbdocs-content :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p)),
   .sbdocs.sbdocs-content :where(li:not(.sb-anchor, .sb-unstyled, .sb-unstyled li)),
-  .sbdocs.sbdocs-content :where(div:not(.sb-anchor, .sb-unstyled, .sb-unstyled div)) {
-    font-size: 16px;
+  .sbdocs.sbdocs-content :where(div:not(.sb-anchor, .sb-unstyled, .sb-unstyled div)),
+  .sbdocs.sbdocs-content :where(a:not(.sb-anchor, .sb-unstyled, .sb-unstyled a)),
+  .sbdocs.sbdocs-content :where(button:not(.sb-unstyled, .sb-unstyled button)) {
+    font-size: var(--font-size-base);
     line-height: 1.5;
   }
 

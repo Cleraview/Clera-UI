@@ -26,7 +26,7 @@ const meta: Meta<typeof Combo> = {
     series: {
       control: 'object',
       description:
-        'Mixed series, each `{ name, type, data, yAxis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`; `yAxis` binds to an axis in `yAxes` by `id` or index (or the shorthand `left`/`right`).',
+        'Mixed series, each `{ name, type, data, yAxis?, variant?, color?, smooth?, stack? }`. `type` is `bar`, `line`, or `area`, and `yAxis` binds to an axis in `yAxes` by `id` or index (or the shorthand `left`/`right`).',
       table: { type: { summary: 'ComboSeries[]' } },
     },
     showValues: {
@@ -56,7 +56,7 @@ const meta: Meta<typeof Combo> = {
     legendPosition: {
       control: { type: 'radio' },
       options: ['top', 'bottom', 'left', 'right'],
-      description: 'Legend placement; margin is reserved automatically.',
+      description: 'Legend placement. Margin is reserved automatically.',
       table: {
         type: { summary: "'top' | 'bottom' | 'left' | 'right'" },
         defaultValue: { summary: 'top' },
@@ -127,7 +127,7 @@ const meta: Meta<typeof Combo> = {
     yAxes: {
       control: 'object',
       description:
-        'The y-axes — one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format?, color? }`. `name` is the axis title; `position` (top/middle/bottom) and `orientation` place it. Bind series with `series[].yAxis` (id or index). With two+ axes each gets its series’ color and stacks outward automatically.',
+        'The y-axes, one or more, each `{ id?, name?, side?, min?, max?, inverse?, position?, orientation?, format?, color? }`. `name` is the axis title, and `position` (top/middle/bottom) plus `orientation` place it. Bind series with `series[].yAxis` (id or index). With two+ axes each gets its series’ color and stacks outward automatically.',
       table: {
         type: { summary: 'ComboYAxis[]' },
         defaultValue: { summary: '-' },
@@ -136,7 +136,7 @@ const meta: Meta<typeof Combo> = {
     xAxis: {
       control: 'object',
       description:
-        'The x-axis — `{ name?, position?, orientation? }`. `name` is its title; `position` is `left`/`middle`/`right` (default `right`).',
+        'The x-axis, `{ name?, position?, orientation? }`. `name` is its title, and `position` is `left`/`middle`/`right` (default `right`).',
       table: {
         type: { summary: 'ComboXAxis' },
         defaultValue: { summary: '-' },
@@ -187,7 +187,7 @@ export const LineAndBar: Story = {
     docs: {
       description: {
         story:
-          'Revenue as bars on the left axis and orders as a line on the right axis — two units, one chart. Each axis formats its own values (currency vs. count) in both the ticks and the shared tooltip.',
+          'Revenue as bars on the left axis and orders as a line on the right axis, so two units share one chart. Each axis formats its own values (currency vs. count) in both the ticks and the shared tooltip.',
       },
     },
   },
@@ -348,7 +348,7 @@ export const DynamicData: Story = {
     docs: {
       description: {
         story:
-          'Streaming data: a bar (orders, right axis) and a line (price, left axis) where a new reading arrives every ~2s and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval — ECharts merges and animates each bar and point to its new slot, so the whole series slides smoothly to the left.',
+          'Streaming data: a bar (orders, right axis) and a line (price, left axis) where a new reading arrives every ~2s and the oldest drops off. Grab the chart with `onReady` and push just the changed `xAxis.data` / `series.data` on an interval, and ECharts merges and animates each bar and point to its new slot, so the whole series slides smoothly to the left.',
       },
     },
   },
@@ -361,7 +361,7 @@ export const AreaAndBar: Story = {
     docs: {
       description: {
         story:
-          'An `area` series (a line with a translucent fill) layered with a bar series on a single axis — handy for showing a cumulative trend against discrete values.',
+          'An `area` series (a line with a translucent fill) layered with a bar series on a single axis, handy for showing a cumulative trend against discrete values.',
       },
     },
   },

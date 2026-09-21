@@ -11,7 +11,7 @@ export interface SelfHighlightOptions {
   /**
    * Grow the hovered item. Off by default: for symbol/line/area shapes,
    * scaling moves the hit area out from under the cursor, which fires
-   * `mouseout` -> shrink -> `mouseover` in a loop — the hover (and the
+   * `mouseout` -> shrink -> `mouseover` in a loop, so the hover (and the
    * cursor) flickers. Only safe for shapes that grow around the cursor,
    * e.g. a pie slice.
    */
@@ -21,10 +21,10 @@ export interface SelfHighlightOptions {
 
 /**
  * Series-level `emphasis`/`blur` for charts where each *data item* is a group
- * rather than each series — the radar/pie shape, where the legend and hover
+ * rather than each series, the radar/pie shape, where the legend and hover
  * target data items (`focus: 'self'`) instead of whole series.
  *
- * Like the other builders, hovering always gives an affordance; `enabled` only
+ * Like the other builders, hovering always gives an affordance, and `enabled` only
  * decides whether the *other* items are dimmed too.
  *
  * `scale` stays off by default because scaling can move a symbol out from
@@ -89,12 +89,12 @@ export function buildSelfHoverStyle(
 
 /**
  * `emphasis`/`blur` pair for solid-fill series (bar segments, polar-bar
- * segments): hovering lightens that item always; when `enabled`, it also
+ * segments): hovering lightens that item always, and when `enabled` it also
  * dims every other series (`focus: 'series'`) instead of leaving them alone.
  *
  * `alwaysFocusSeries` keeps `focus: 'series'` set even when `enabled` is
  * false, so hovering any part of a multi-point series (e.g. Combo's bars)
- * still highlights the whole series — only the dimming of *other* series is
+ * still highlights the whole series, and only the dimming of *other* series is
  * gated by `enabled`.
  */
 export function buildItemHighlight(
@@ -129,7 +129,7 @@ export interface LineHighlightOptions {
   area?: LineHighlightAreaOptions
   /**
    * Keeps `focus: 'series'` set even when `enabled` is false, so hovering
-   * any point still highlights the whole line — only the dimming of other
+   * any point still highlights the whole line, and only the dimming of other
    * series is gated by `enabled`. Off by default (focus follows `enabled`).
    */
   alwaysFocusSeries?: boolean
@@ -137,7 +137,7 @@ export interface LineHighlightOptions {
 
 /**
  * `emphasis`/`blur` pair for line/area series (Line, Combo's line/area
- * series, MultiXLine): the hovered line always lightens; when `enabled`, it
+ * series, MultiXLine): the hovered line always lightens, and when `enabled` it
  * also dims every other series instead of leaving them alone.
  */
 export function buildLineHighlight(

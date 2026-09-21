@@ -131,7 +131,7 @@ function buildTimelineOption(params: BuildScatterOptionParams) {
   const { labelColor, subtleColor, lineColor, surface } = scatterColors()
   const categorical = resolveCategoricalPalette()
   // The base cluster (index 0) stays neutral like the reference's grey, but
-  // sourced from the chart neutral token; every split cluster picks up the
+  // sourced from the chart neutral token, and every split cluster picks up the
   // categorical palette so the whole thing is design-token driven.
   const clusterColor = (clusterIndex: number) =>
     clusterIndex === 0
@@ -551,7 +551,7 @@ export function buildScatterOption(params: BuildScatterOptionParams) {
           formatter: (p: { value: number | string }) =>
             typeof p.value === 'number' ? barFormat(p.value) : '',
         },
-        // Value only at its own category; tagged with the same groupId the
+        // Value only at its own category, tagged with the same groupId the
         // scatter series carries so its points morph into this one bar.
         data: categories.map(c =>
           c === s.name ? { value: avg, groupId: s.name } : '-'

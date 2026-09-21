@@ -243,19 +243,19 @@ export const ManagerHeader = () => {
           <div className="brand-logo-container">
             <img src="/brand-logo-ui.png" alt="Logo" className="brand-logo" />
           </div>
-
-          <nav className="nav-menu">
-            {navMenus.map(navMenu => (
-              <button
-                key={navMenu.url}
-                onClick={onNavClick(navMenu.url)}
-                className={cn("nav-button", navMenu.url === currentStoryId && 'active')}
-              >
-                {navMenu.label}
-              </button>
-            ))}
-          </nav>
         </div>
+
+        <nav className="nav-menu">
+          {navMenus.map(navMenu => (
+            <button
+              key={navMenu.url}
+              onClick={onNavClick(navMenu.url)}
+              className={cn("nav-button", navMenu.url === currentStoryId && 'active')}
+            >
+              {navMenu.label}
+            </button>
+          ))}
+        </nav>
 
         <div className="right-section">
           <button
@@ -270,8 +270,6 @@ export const ManagerHeader = () => {
               {isMac ? '⌘K' : 'Ctrl K'}
             </span>
           </button>
-
-          <div className="divider" aria-hidden="true" />
 
           <a
             href="https://github.com/Cleraview/Clera-UI"

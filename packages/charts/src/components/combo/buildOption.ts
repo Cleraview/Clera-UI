@@ -73,7 +73,7 @@ export function resolveSeriesColors(series: ComboSeries[]): string[] {
 type PieSeriesOption = { data: unknown[] } & Record<string, unknown>
 
 /**
- * The summary pie is a real `Pie` series — built by `buildPieOption` so its
+ * The summary pie is a real `Pie` series, built by `buildPieOption` so its
  * hover, emphasis, labels and colors are identical to the `Pie` component's.
  * Only the placement (center/radius) and id are Combo's.
  */

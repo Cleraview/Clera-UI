@@ -180,7 +180,7 @@ export function buildRadarOption(params: BuildRadarOptionParams) {
       },
     },
     // ECharts models a radar as one series holding one polygon per group, so
-    // the legend and hover focus work per data item rather than per series —
+    // the legend and hover focus work per data item rather than per series,
     // hence `buildSelfHighlight` on each item rather than on the series.
     series: [
       {

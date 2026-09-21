@@ -22,13 +22,13 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     Reach for it when the whole matters as much as the parts:
 
-      - **Shape**: `innerRadius` turns the pie into a doughnut; `startAngle`/`endAngle` make a half doughnut; `padAngle` and `borderRadius` add breathing room and rounded corners.
+      - **Shape**: `innerRadius` turns the pie into a doughnut, `startAngle`/`endAngle` make a half doughnut, and `padAngle` plus `borderRadius` add breathing room and rounded corners.
       - **Nightingale**: `roseType="area"` (or `"radius"`) grows slices by radius instead of angle, so small differences read more clearly.
       - **Labels**: put labels `outside`/`inside`/`center`, line them up with `labelAlignTo`, or format them with `labelFormatter` (`{ name, value, percent }`).
-      - **Legend**: on for a single pie, off for multiple; set `scrollableLegend` when there are many slices.
-      - **Multiple pies**: pass `series` to draw several pies in one chart — nested rings, partitioned, or one per facet.
+      - **Legend**: on for a single pie, off for multiple. Set `scrollableLegend` when there are many slices.
+      - **Multiple pies**: pass `series` to draw several pies in one chart, whether nested rings, partitioned, or one per facet.
 
-    A caveat worth knowing: pies are hard to read precisely once you pass ~6 slices — prefer a `Bar` for exact comparison, and keep the pie for at-a-glance share.
+    A caveat worth knowing: pies are hard to read precisely once you pass ~6 slices, so prefer a `Bar` for exact comparison and keep the pie for at-a-glance share.
 
     ## **Examples**
     ### **Basic**
@@ -89,7 +89,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Half doughnut**
 
-    Sweep only the top half with `startAngle={180}` and `endAngle={360}` — handy for gauge-like sentiment or budget readouts.
+    Sweep only the top half with `startAngle={180}` and `endAngle={360}`, handy for gauge-like sentiment or budget readouts.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.HalfDoughnut} />
@@ -121,7 +121,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Pad angle**
 
-    `padAngle` inserts an even gap between slices; pair it with `borderRadius` for a clean segmented ring.
+    `padAngle` inserts an even gap between slices. Pair it with `borderRadius` for a clean segmented ring.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.PadAngle} />
@@ -142,7 +142,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Nightingale**
 
-    The Nightingale rose, in both modes side by side. `roseType="radius"` keeps equal angles and grows each slice by radius; `roseType="area"` grows the area. Keep the rose clean with `showLabels={false}` and set `labelOnHover` so a slice only labels itself under the cursor.
+    The Nightingale rose, in both modes side by side. `roseType="radius"` keeps equal angles and grows each slice by radius, while `roseType="area"` grows the area. Keep the rose clean with `showLabels={false}` and set `labelOnHover` so a slice only labels itself under the cursor.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.Nightingale} />
@@ -182,7 +182,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Label align**
 
-    `labelAlignTo` tidies outside labels. `"labelLine"` aligns text to the leader-line elbow; `"edge"` flushes every label to the chart edge for a clean column.
+    `labelAlignTo` tidies outside labels. `"labelLine"` aligns text to the leader-line elbow, and `"edge"` flushes every label to the chart edge for a clean column.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.LabelAlign} />
@@ -203,7 +203,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Label align adjust**
 
-    Flush labels to the edge and stack a bold name over a muted value line with a multiline `labelFormatter` — a compact, aligned label block.
+    Flush labels to the edge and stack a bold name over a muted value line with a multiline `labelFormatter`, for a compact, aligned label block.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.LabelAlignAdjust} />
@@ -260,7 +260,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Special label**
 
-    Two custom labels, both injected through the data — no `onReady`, no overlay. **Aurora** uses a structured `detail` table (title, header, a row per device with an inline icon, count, and share). **Cedar** uses a raw `richLabel` — an ECharts `formatter` + `rich` config with an inline SVG sparkline image, exactly the shape you'd hand ECharts. Both are drawn at rest, toggled by `showLabels`, and revealed on hover when hidden — the Pie owns all of it. Icons/sparkline are self-contained inline SVG data URIs; colors resolve from `@clera/tokens`.
+    Two custom labels, both injected through the data, with no `onReady` and no overlay. **Aurora** uses a structured `detail` table (title, header, a row per device with an inline icon, count, and share). **Cedar** uses a raw `richLabel`, an ECharts `formatter` + `rich` config with an inline SVG sparkline image, exactly the shape you'd hand ECharts. Both are drawn at rest, toggled by `showLabels`, and revealed on hover when hidden, because the Pie owns all of it. Icons and sparkline are self-contained inline SVG data URIs, and colors resolve from `@clera/tokens`.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.SpecialLabel} />
@@ -324,7 +324,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Custom label (component)**
 
-    When you want full control, skip the rich-text label and attach your own React component. A doughnut leaves a hole (`innerRadius`), and a component is absolutely centered over it — a live React node (any markup, links, buttons), not a canvas label. Slice labels reveal on hover (`labelOnHover`) so the center card stays the focus.
+    When you want full control, skip the rich-text label and attach your own React component. A doughnut leaves a hole (`innerRadius`), and a component is absolutely centered over it, a live React node (any markup, links, buttons) rather than a canvas label. Slice labels reveal on hover (`labelOnHover`) so the center card stays the focus.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.CustomLabel} />
@@ -358,7 +358,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Nested pies**
 
-    Two `series` sharing a center. The inner ring uses `selectedMode: "single"` — click a slice to pop it out; clicking another resets the first (one datum starts `selected`). The outer ring uses a **series-level `richLabel`** (`formatter` + `rich`) for the name / value / percent card, and inside labels pick a readable text color from the slice fill. Because the rich cards radiate on every side, the legend is rendered as plain HTML **below** the chart (`showLegend={false}` + your own list) so it can never collide with them.
+    Two `series` sharing a center. The inner ring uses `selectedMode: "single"`, so clicking a slice pops it out and clicking another resets the first (one datum starts `selected`). The outer ring uses a **series-level `richLabel`** (`formatter` + `rich`) for the name / value / percent card, and inside labels pick a readable text color from the slice fill. Because the rich cards radiate on every side, the legend is rendered as plain HTML **below** the chart (`showLegend={false}` + your own list) so it can never collide with them.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.Nested} />
@@ -404,7 +404,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
                   },
                 ]}
               />
-              {/* legend below the chart, in the DOM — never collides */}
+              {/* legend below the chart, in the DOM, so it never collides */}
               <ul className="legend">{/* color dot + name per outer slice */}</ul>
             </div>
           )
@@ -445,7 +445,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Default arrangement**
 
-    Lay out one small pie per facet on a grid of `center`s — four regions, same categories, one shared legend. Hover any slice to compare the mix across regions.
+    Lay out one small pie per facet on a grid of `center`s, so four regions share the same categories and one legend. Hover any slice to compare the mix across regions.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.Arrangement} />
@@ -475,7 +475,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **On a geo map**
 
-    Pass a `geo` prop to lay the chart out on a map instead of the chart box. Every series `center` is then read as a `[lng, lat]` coordinate and `outerRadius` as a pixel radius — here a Singapore map with a pie per region of its retail / office / dining mix. Register the map once with `registerGeoMap`, which pulls in the ECharts geo module only for the bundles that use it.
+    Pass a `geo` prop to lay the chart out on a map instead of the chart box. Every series `center` is then read as a `[lng, lat]` coordinate and `outerRadius` as a pixel radius. Here that is a Singapore map with a pie per region of its retail, office, and dining mix. Register the map once with `registerGeoMap`, which pulls in the ECharts geo module only for the bundles that use it.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.GeoMap} />
@@ -513,7 +513,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Calendar pie**
 
-    Pass a `calendar` prop to lay the chart out on a date grid. Each series names the `date` cell it belongs to, so a pie lands on every day of the month — here how each day's 24 hours were spent. The day-of-month numbers are drawn in the cell corners, and the pie radius defaults to the cell size. Call `registerCalendar()` once, which pulls in the ECharts calendar module only for the bundles that use it.
+    Pass a `calendar` prop to lay the chart out on a date grid. Each series names the `date` cell it belongs to, so a pie lands on every day of the month, showing how each day's 24 hours were spent. The day-of-month numbers are drawn in the cell corners, and the pie radius defaults to the cell size. Call `registerCalendar()` once, which pulls in the ECharts calendar module only for the bundles that use it.
     <Canvas>
       <Canvas.Story>
         <Story of={PieStories.CalendarPie} />
@@ -552,7 +552,7 @@ import { DocsLayout, PropsTable } from "@clera/docs"
 
     ### **Share dataset**
 
-    One dataset, two linked views in a single canvas — a part-to-whole pie on top, the trend over time below. Hover any point on the line and the pie re-encodes to that category, so both charts always describe the same moment. Since the pie slices and the lines are the same series, one legend toggles both.
+    One dataset, two linked views in a single canvas: a part-to-whole pie on top and the trend over time below. Hover any point on the line and the pie re-encodes to that category, so both charts always describe the same moment. Since the pie slices and the lines are the same series, one legend toggles both.
 
     This lives on `Combo` as a `summaryPie` prop rather than on `Pie`: the lower half needs a cartesian grid and axes, which don't belong in a pie's option, while `Combo` already owns the categories, the shared legend, and the axis pointer.
     <Canvas>
