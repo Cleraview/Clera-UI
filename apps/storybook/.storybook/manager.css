@@ -102,7 +102,7 @@ div:has(> #preview-loader) {
   color: var(--text-color-ds-accent-violet)!important;
 }
 .manager-header .manager-header-wrapper .nav-menu .nav-button:not(.active):hover {
-  background-color: color-mix(in srgb, var(--background-color-ds-neutral-hovered) 40%, transparent)!important;
+  background-color: var(--background-color-ds-neutral-subtle-hovered)!important;
 }
 .manager-header .manager-header-wrapper .search-trigger {
   display: flex;
@@ -225,7 +225,7 @@ div:has(> #preview-loader) {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  background: var(--background-color-ds-elevation-surface-raised);
+  background: var(--background-color-ds-elevation-surface);
   border: 1px solid var(--border-color-ds-default);
   border-radius: 8px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
@@ -396,11 +396,6 @@ div:has(> nav[aria-label="Global"]) > div:first-child {
 .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="group"]:hover,
 .sidebar-item:not([data-selected="true"]):hover {
   background-color: var(--background-color-ds-neutral-subtle-hovered)!important;
-}
-[data-theme='dark'] .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="component"]:hover,
-[data-theme='dark'] .sidebar-item[data-ref-id="storybook_internal"]:not([data-selected="true"])[data-nodetype="group"]:hover,
-[data-theme='dark'] .sidebar-item:not([data-selected="true"]):hover {
-  background-color: color-mix(in srgb, var(--background-color-ds-neutral-hovered) 40%, transparent)!important;
 }
 .sidebar-item a,
 .sidebar-item button {

@@ -1995,7 +1995,7 @@
               "$value": "{color.neutral.100}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.neutral.950}"
+                  "dark": "color-mix(in oklab, {color.neutral.700} 40%, transparent)"
                 }
               }
             },
@@ -2004,7 +2004,7 @@
               "$value": "{color.neutral.200}",
               "$extensions": {
                 "mode": {
-                  "dark": "{color.neutral.900}"
+                  "dark": "color-mix(in oklab, {color.neutral.700} 60%, transparent)"
                 }
               }
             },
@@ -2775,7 +2775,7 @@
             "$value": "{color.green.700}",
             "$extensions": {
               "mode": {
-                "dark": "{color.green.500}"
+                "dark": "{color.green.600}"
               }
             },
             "hovered": {

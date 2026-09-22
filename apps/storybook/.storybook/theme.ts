@@ -7,8 +7,8 @@ const baseTheme = {
   brandTarget: '_self',
   inputBorderRadius: 6,
   appBorderRadius: 8,
-  fontBase: '"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif',
-  fontCode: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
+  fontBase: '"Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, "Helvetica Neue", sans-serif',
+  fontCode: 'ui-monospace, Menlo, "Segoe UI Mono", "Ubuntu Mono", monospace',
 }
 
 export const light =  create({

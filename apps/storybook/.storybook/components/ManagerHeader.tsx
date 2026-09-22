@@ -271,6 +271,20 @@ export const ManagerHeader = () => {
             </span>
           </button>
 
+          {state.viewMode === 'story' && (
+            <button
+              className="control-toggle"
+              onClick={onTogglePanel}
+              title="Toggle controls panel (A)"
+              aria-label="Toggle controls panel"
+            >
+              {FiSliders && <FiSliders className="header-icon" />}
+              <span className="control-toggle-kbd" aria-hidden="true">
+                Ctrl + A
+              </span>
+            </button>
+          )}
+
           <a
             href="https://github.com/Cleraview/Clera-UI"
             target="_blank"
@@ -280,27 +294,7 @@ export const ManagerHeader = () => {
           >
             {FaGithub && <FaGithub className="icon-github" />}
           </a>
-
-          {/* <div className="star-badge" title="Stars">
-            <FaStar className="star-icon" />
-            <span className="star-value">1.2k</span>
-          </div> */}
-
-          {state.viewMode === 'story' && (
-            <button
-              className="control-toggle"
-              onClick={onTogglePanel}
-              title="Toggle controls panel (A)"
-              aria-label="Toggle controls panel"
-            >
-              {FiSliders && <FiSliders className="header-icon" />}
-              <span className="control-toggle-label">Controls</span>
-              <span className="control-toggle-kbd" aria-hidden="true">
-                A
-              </span>
-            </button>
-          )}
-
+          
           <div className="divider" aria-hidden="true" />
 
           <div className="theme-dropdown">

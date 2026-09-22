@@ -19,7 +19,7 @@ const base = {
 
   item: cn(
     'flex items-center justify-between rounded-sm cursor-pointer outline-none',
-    'text-ds-default focus:text-ds-default focus:bg-ds-neutral-subtle-hovered dark:focus:bg-ds-neutral-hovered',
+    'text-ds-default focus:text-ds-default focus:bg-ds-neutral-subtle-hovered',
     'data-[state=checked]:bg-ds-selected data-[state=checked]:text-ds-selected dark:data-[state=checked]:text-ds-default',
     'data-[state=checked]:focus:bg-ds-selected',
     'data-[disabled]:text-ds-disabled data-[disabled]:cursor-not-allowed'

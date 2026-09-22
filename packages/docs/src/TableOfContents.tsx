@@ -147,7 +147,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({
         className="absolute left-[-2px] w-[4px] bg-ds-selected-bold transition-all duration-200"
         style={{ top: indicatorY, height: indicatorHeight }}
       />
-      <h2 className="text-label-sm! font-bold mb-space-md border-ds-default!">
+      <h2 className="text-label-sm! font-bold pb-space-sm! mb-space-md border-ds-default!">
         Contents
       </h2>
       {renderItems(items)}

@@ -24,8 +24,7 @@ export const styles = {
   commandItem: cn(
     'relative flex cursor-pointer select-none items-center rounded-sm outline-none text-ds-default transition-colors p-2.5'
   ),
-  commandItemUnselected:
-    'aria-selected:bg-ds-neutral-subtle-hovered dark:aria-selected:bg-ds-neutral-hovered',
+  commandItemUnselected: 'aria-selected:bg-ds-neutral-subtle-hovered',
   commandItemSelected:
     'bg-ds-selected text-ds-selected dark:text-ds-default dark:hover:text-ds-default outline-none',
   commandItemDisabled: cn('cursor-not-allowed [&>*]:text-ds-disabled'),

@@ -48,8 +48,7 @@ export const styles = {
       variants: {
         isSelected: {
           true: 'bg-ds-primary-bold text-ds-inverse dark:text-ds-default [&>svg]:text-(--fill-ds-icon-inverse) dark:[&>svg]:text-(--fill-ds-icon-default)',
-          false:
-            'aria-selected:bg-ds-neutral-subtle-hovered dark:aria-selected:bg-ds-neutral-hovered',
+          false: 'aria-selected:bg-ds-neutral-subtle-hovered',
         },
       },
       defaultVariants: {

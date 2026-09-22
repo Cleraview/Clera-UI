@@ -29,7 +29,7 @@ export const alertStyles = {
   icon: 'h-6 mr-space-sm self-start flex items-center text-label-xl',
   content: 'flex-1 flex flex-col gap-space-xs',
   title: 'font-semibold',
-  description: 'font-thin',
+  description: 'font-medium',
   action: 'ml-4',
   close: cva(
     'ml-space-sm opacity-70 hover:opacity-100 transition cursor-pointer',
