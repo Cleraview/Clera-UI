@@ -29,7 +29,7 @@
       "md": { "$value": "text-base md:text-base leading-5" },
       "sm": { "$value": "text-sm md:text-sm leading-4" },
       "xs": { "$value": "text-xs md:text-xs leading-3" },
-      "xxs": { "$value": "text-[10px] md:text-[10px] leading-[10px]" }
+      "xxs": { "$value": "text-2xs md:text-2xs leading-none" }
     },
     "helper": {
       "text": { "$value": "text-xs text-ds-subtle leading-normal" },

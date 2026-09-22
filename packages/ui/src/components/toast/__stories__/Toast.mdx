@@ -1,10 +1,10 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as ToastStories from "./Toast.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 
 <Meta title="UI/Toast" of={ToastStories} />
@@ -34,7 +34,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     -   **Description**: Optional supporting detail rendered below the title.
     -   **Icon**: Optional leading icon to reinforce the message's intent.
     -   **Action**: Optional inline action (e.g., *Undo*, *Retry*) that gives the user a follow-up choice.
-    -   **Position**: Screen placement of the toast — combinations of `top` / `bottom` and `left` / `center` / `right`.
+    -   **Position**: Screen placement of the toast, combining `top` / `bottom` with `left` / `center` / `right`.
     -   **Closable**: Whether the toast renders a manual close button in addition to auto-dismiss.
 
     ## **Accesibility**
@@ -45,7 +45,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
       -  **Screen Reader Support**: The container uses `role="status"` (and aria-live polite semantics) so screen readers announce the toast as it appears.
       -  **Non-Blocking**: Toasts never trap focus or interrupt the user's primary flow. Critical confirmations should use a dialog instead.
       -  **Color Contrast**: Text on each variant background meets WCAG AA contrast guidance.
-      -  **Icons**: Decorative icons should pass `aria-hidden="true"`; meaningful icons should expose an accessible label.
+      -  **Icons**: Decorative icons should pass `aria-hidden="true"`, and meaningful icons should expose an accessible label.
       -  **Timing**: Provide a `duration` long enough for the message length, or let the user dismiss manually via the close button.
 
     <br />
@@ -178,13 +178,13 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     <br />
 
     ### **With Async Action**
-    Wire the action button to an async task and let the toast swap itself through `loading` → `success`/`error` states without any extra plumbing. Provide a `Promise`-returning `onClick` plus state-specific content; the toast updates in place and auto-dismisses after the result.
+    Wire the action button to an async task and let the toast swap itself through `loading` → `success`/`error` states without any extra plumbing. Provide a `Promise`-returning `onClick` plus state-specific content, and the toast updates in place and auto-dismisses after the result.
 
     -   **`loading`**: shown while `onClick` is pending. The toast becomes non-dismissable and displays a spinner.
     -   **`success`**: shown when the promise resolves. Switches to the *success* variant and auto-dismisses after 4s. Can be a function of the resolved value.
     -   **`error`**: shown when the promise rejects. Switches to the *destructive* variant and auto-dismisses after 4s. Can be a function of the thrown error.
 
-    The trigger that opened the toast (e.g., a `<Button>` elsewhere on the page) is yours to coordinate — wrap `onClick` with your own `useState` toggle to reflect in-flight state externally. The story below demonstrates this with `Button loading={...}`.
+    The trigger that opened the toast (e.g., a `<Button>` elsewhere on the page) is yours to coordinate, so wrap `onClick` with your own `useState` toggle to reflect in-flight state externally. The story below demonstrates this with `Button loading={...}`.
     <Canvas>
       <Canvas.Story>
         <Story of={ToastStories.WithAsyncAction} />
@@ -269,7 +269,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     ## **API**
     Below is a comprehensive list of all the props available for the Toast component, along with their types, default values, and descriptions.
-    <ArgTypes />
+    <PropsTable />
 
     <br />
     #### **PresetVariants**

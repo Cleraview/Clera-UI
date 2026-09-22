@@ -1,0 +1,63 @@
+{
+  "text": {
+    "$meta": {
+      "themeKind": "inline"
+    },
+    "2xs": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 10 / 14)"
+    },
+    "xs": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 12 / 14)"
+    },
+    "sm": {
+      "$type": "fontSize",
+      "$value": "var(--font-size-base, 0.875rem)"
+    },
+    "base": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 16 / 14)"
+    },
+    "lg": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 18 / 14)"
+    },
+    "xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 20 / 14)"
+    },
+    "2xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 24 / 14)"
+    },
+    "3xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 30 / 14)"
+    },
+    "4xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 36 / 14)"
+    },
+    "5xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 48 / 14)"
+    },
+    "6xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 60 / 14)"
+    },
+    "7xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 72 / 14)"
+    },
+    "8xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 96 / 14)"
+    },
+    "9xl": {
+      "$type": "fontSize",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 128 / 14)"
+    }
+  }
+}

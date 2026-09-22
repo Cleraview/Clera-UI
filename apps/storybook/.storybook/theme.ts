@@ -7,6 +7,8 @@ const baseTheme = {
   brandTarget: '_self',
   inputBorderRadius: 6,
   appBorderRadius: 8,
+  fontBase: '"Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, "Helvetica Neue", sans-serif',
+  fontCode: 'ui-monospace, Menlo, "Segoe UI Mono", "Ubuntu Mono", monospace',
 }
 
 export const light =  create({
@@ -18,7 +20,7 @@ export const light =  create({
 
   appBg: '#ffffff',
   appContentBg: '#ffffff',
-  appPreviewBg: '#f9fafb',
+  appPreviewBg: '#ffffff',
   appBorderColor: '#E5E7EB',
 
   textColor: '#171717',
@@ -43,7 +45,7 @@ export const dark = create({
 
   appBg: '#262626',
   appContentBg: '#262626',
-  appPreviewBg: '#262626',
+  appPreviewBg: '#171717',
   appBorderColor: '#404040',
   
   textInverseColor: '#0B0D0E',

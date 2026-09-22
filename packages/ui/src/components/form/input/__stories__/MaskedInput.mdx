@@ -1,9 +1,9 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import * as MaskedInputStories from "./MaskedInput.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Form/MaskedInput" of={MaskedInputStories} />
 
@@ -167,13 +167,13 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     ### **Implementation Notes**
 
     - Card brand detection: when using `maskPreset="card16"` the demo `MaskedInput` can attempt to detect the card brand (Visa/MasterCard/Amex) from the entered BIN prefix and render a matching brand icon. Icons are dynamically imported to avoid bundling unless used.
-    - CVC handling: treat CVC like a sensitive value. The `CVCCode` story demonstrates masking with a show/hide toggle; prefer masking by default and never persist or log CVC values.
+    - CVC handling: treat CVC like a sensitive value. The `CVCCode` story demonstrates masking with a show/hide toggle. Prefer masking by default and never persist or log CVC values.
     - Controlled usage: `MaskedInput` supports a `rawValue` + `onRawChange` controlled API for cases where you need the unformatted value.
 
     ## **API**
     Below is a comprehensive list of all the props available for the Input component, along with their types, default values, and descriptions.
 
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
     ### **What are the different preset types available?**

@@ -65,7 +65,7 @@
   @apply text-xs md:text-xs leading-3;
 }
 @utility text-label-xxs {
-  @apply text-[10px] md:text-[10px] leading-[10px];
+  @apply text-2xs md:text-2xs leading-none;
 }
 @utility text-helper-text {
   @apply text-xs text-ds-subtle leading-normal;

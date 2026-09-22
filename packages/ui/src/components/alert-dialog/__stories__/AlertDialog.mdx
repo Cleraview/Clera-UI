@@ -1,9 +1,9 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import * as AlertDialogStories from "./AlertDialog.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Feedback/AlertDialog" of={AlertDialogStories} />
 
@@ -22,7 +22,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     ## **Purpose and Context**
 
-    The `AlertDialog` component is used to present users with critical actions that require confirmation — such as deleting data, archiving projects, or performing irreversible operations. It ensures users make deliberate choices before continuing.
+    The `AlertDialog` component is used to present users with critical actions that require confirmation, such as deleting data, archiving projects, or performing irreversible operations. It ensures users make deliberate choices before continuing.
 
     Use `AlertDialog` when:
     - Confirming destructive or sensitive actions.
@@ -176,7 +176,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     The following table lists all props available for the `AlertDialog` component.
 
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
 

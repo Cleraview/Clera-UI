@@ -1,0 +1,39 @@
+{
+  "leading": {
+    "$meta": {
+      "themeKind": "inline"
+    },
+    "3": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 12 / 14)"
+    },
+    "4": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 16 / 14)"
+    },
+    "5": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 20 / 14)"
+    },
+    "6": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 24 / 14)"
+    },
+    "7": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 28 / 14)"
+    },
+    "8": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 32 / 14)"
+    },
+    "9": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 36 / 14)"
+    },
+    "10": {
+      "$type": "lineHeight",
+      "$value": "calc(var(--font-size-base, 0.875rem) * 40 / 14)"
+    }
+  }
+}

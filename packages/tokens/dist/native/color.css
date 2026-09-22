@@ -674,8 +674,8 @@
   --background-color-ds-neutral-hovered: oklch(37.1% 0 0);
   --background-color-ds-neutral-pressed: oklch(43.9% 0 0);
   --background-color-ds-neutral-subtle: transparent;
-  --background-color-ds-neutral-subtle-hovered: oklch(14.5% 0 0);
-  --background-color-ds-neutral-subtle-pressed: oklch(20.5% 0 0);
+  --background-color-ds-neutral-subtle-hovered: color-mix(in oklab, oklch(37.1% 0 0) 40%, transparent);
+  --background-color-ds-neutral-subtle-pressed: color-mix(in oklab, oklch(37.1% 0 0) 60%, transparent);
   --background-color-ds-neutral-bold: oklch(87% 0 0);
   --background-color-ds-neutral-bold-hovered: oklch(70.8% 0 0);
   --background-color-ds-neutral-bold-pressed: oklch(55.6% 0 0);
@@ -758,7 +758,7 @@
   --background-color-ds-warning-pressed: oklch(40.8% 0.123 38.172);
   --background-color-ds-success: oklch(26.6% 0.065 152.934);
   --background-color-ds-success-hovered: oklch(26.6% 0.065 152.934);
-  --background-color-ds-success-bold: oklch(72.3% 0.219 149.579);
+  --background-color-ds-success-bold: oklch(62.7% 0.194 149.214);
   --background-color-ds-success-bold-hovered: oklch(79.2% 0.209 151.711);
   --background-color-ds-success-bold-pressed: oklch(87.1% 0.15 154.449);
   --background-color-ds-success-pressed: oklch(39.3% 0.095 152.535);

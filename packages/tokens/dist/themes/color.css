@@ -675,8 +675,8 @@
   --background-color-ds-neutral-hovered: theme(colors.neutral.700);
   --background-color-ds-neutral-pressed: theme(colors.neutral.600);
   --background-color-ds-neutral-subtle: transparent;
-  --background-color-ds-neutral-subtle-hovered: theme(colors.neutral.950);
-  --background-color-ds-neutral-subtle-pressed: theme(colors.neutral.900);
+  --background-color-ds-neutral-subtle-hovered: color-mix(in oklab, theme(colors.neutral.700) 40%, transparent);
+  --background-color-ds-neutral-subtle-pressed: color-mix(in oklab, theme(colors.neutral.700) 60%, transparent);
   --background-color-ds-neutral-bold: theme(colors.neutral.300);
   --background-color-ds-neutral-bold-hovered: theme(colors.neutral.400);
   --background-color-ds-neutral-bold-pressed: theme(colors.neutral.500);
@@ -759,7 +759,7 @@
   --background-color-ds-warning-pressed: theme(colors.orange.900);
   --background-color-ds-success: theme(colors.green.950);
   --background-color-ds-success-hovered: theme(colors.green.950);
-  --background-color-ds-success-bold: theme(colors.green.500);
+  --background-color-ds-success-bold: theme(colors.green.600);
   --background-color-ds-success-bold-hovered: theme(colors.green.400);
   --background-color-ds-success-bold-pressed: theme(colors.green.300);
   --background-color-ds-success-pressed: theme(colors.green.900);

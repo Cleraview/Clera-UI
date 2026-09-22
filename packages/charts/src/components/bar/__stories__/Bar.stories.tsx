@@ -1,0 +1,1324 @@
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { FaYoutube, FaXTwitter, FaLinkedin } from 'react-icons/fa6'
+import { Bar } from '../Bar'
+import { useBarDrilldown, type BarDrilldownDatum } from '../useDrilldown'
+
+// Storybook persists args to the URL / HMR state as plain JSON, which a live
+// React element can't survive. Any control change (even an unrelated one)
+// re-syncs args from that serialized form and silently drops it, so these
+// per-series icons are pre-rendered to plain SVG-markup strings here instead.
+const youtubeIcon = renderToStaticMarkup(<FaYoutube color="#FF0000" />)
+const xIcon = renderToStaticMarkup(<FaXTwitter color="#000000" />)
+const linkedinIcon = renderToStaticMarkup(<FaLinkedin color="#0A66C2" />)
+
+const meta: Meta<typeof Bar> = {
+  title: 'Charts/Bar',
+  component: Bar,
+  tags: [],
+  parameters: {
+    layout: 'fullscreen',
+    chartLayout: { maxWidth: 820 },
+    docs: {
+      description: {
+        component:
+          'A responsive bar chart powered by Apache ECharts. Colors, labels, axes, and the tooltip all resolve from `@clera/tokens`, so the chart adapts to light/dark mode automatically. On hover, only the hovered bar lightens, and there is no shadow band behind it.',
+      },
+    },
+  },
+  argTypes: {
+    data: {
+      control: 'object',
+      description:
+        'The series to plot. Each datum is `{ label, value, variant? }`, where `variant` recolors that single bar regardless of the active palette.',
+      table: {
+        type: { summary: 'BarDatum[]' },
+        defaultValue: { summary: '[]' },
+      },
+    },
+    direction: {
+      control: { type: 'radio' },
+      options: ['horizontal', 'vertical'],
+      description:
+        'Chart orientation. `vertical` renders columns (category on the x-axis, value on the y-axis). `horizontal` renders bars (category on the y-axis, value on the x-axis).',
+      table: {
+        type: { summary: "'horizontal' | 'vertical'" },
+        defaultValue: { summary: 'horizontal' },
+      },
+    },
+    palette: {
+      control: { type: 'radio' },
+      options: ['brand', 'categorical'],
+      description:
+        'Default coloring for bars without an explicit `variant`. `brand` paints every bar with the primary color, while `categorical` cycles through the eight design-system categorical colors.',
+      table: {
+        type: { summary: "'brand' | 'categorical'" },
+        defaultValue: { summary: 'brand' },
+      },
+    },
+    sort: {
+      control: { type: 'radio' },
+      options: ['none', 'asc', 'desc'],
+      description:
+        'Order the bars by value before rendering. `none` keeps the original data order.',
+      table: {
+        type: { summary: "'none' | 'asc' | 'desc'" },
+        defaultValue: { summary: 'none' },
+      },
+    },
+    showValueAxis: {
+      control: 'boolean',
+      description:
+        'Show the numeric value axis (a `formatValue`-formatted scale plus axis line). The category axis is always shown.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    gridLines: {
+      control: 'boolean',
+      description:
+        'Toggle the dashed value-axis grid lines independently. Defaults to whatever `showValueAxis` is.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'showValueAxis' },
+      },
+    },
+    showValues: {
+      control: 'boolean',
+      description:
+        'Show the value label on each bar. Usually turned off when `showValueAxis` is on, to avoid repeating the number.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    showTooltip: {
+      control: 'boolean',
+      description:
+        'Show a tooltip for the hovered bar. Content is rendered with `formatValue`.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    tooltipTrigger: {
+      control: { type: 'radio' },
+      options: ['item', 'axis'],
+      description:
+        'Tooltip mode. `item` shows just the hovered bar. `axis` lists every series in the hovered category, each with its color marker, which is useful for grouped or stacked charts.',
+      table: {
+        type: { summary: "'item' | 'axis'" },
+        defaultValue: { summary: 'item' },
+      },
+    },
+    axisPointerLabel: {
+      control: 'boolean',
+      description:
+        'With `tooltipTrigger="axis"`, show the sticky tag on the category axis marking the hovered group. Set to `false` to keep the shadow band and tooltip without the axis tag.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    showLegend: {
+      control: 'boolean',
+      description:
+        'Show the legend. Only applies in grouped mode (when `categories` and `series` are provided), where it defaults to on.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true (grouped)' },
+      },
+    },
+    legendPosition: {
+      control: { type: 'radio' },
+      options: ['top', 'bottom', 'left', 'right'],
+      description:
+        'Where to place the legend relative to the chart. `top`/`bottom` lay the entries out horizontally, and `left`/`right` stack them vertically. Margin is reserved automatically so the legend never overlaps the plot.',
+      table: {
+        type: { summary: "'top' | 'bottom' | 'left' | 'right'" },
+        defaultValue: { summary: 'top' },
+      },
+    },
+    legendIcon: {
+      control: { type: 'select' },
+      options: [
+        'circle',
+        'rect',
+        'roundRect',
+        'triangle',
+        'diamond',
+        'pin',
+        'arrow',
+        'none',
+      ],
+      description:
+        "Marker shape for every legend entry, or a custom `path://…`/`image://…` icon string. Only applies to series that don't set their own `series[].legendIcon`. It never overrides a series-level custom icon.",
+      table: {
+        type: { summary: 'LegendIcon' },
+        defaultValue: { summary: 'roundRect' },
+      },
+    },
+    legendAlign: {
+      control: { type: 'radio' },
+      options: ['start', 'center', 'end'],
+      description:
+        'Where along its edge the legend sits, e.g. `left`/`center`/`right` when `legendPosition` is `top`/`bottom`.',
+      table: {
+        type: { summary: "'start' | 'center' | 'end'" },
+        defaultValue: { summary: 'center' },
+      },
+    },
+    legendStyle: {
+      control: false,
+      description:
+        'Fine-grained legend styling: `itemWidth`/`itemHeight`/`itemGap`, `fontSize`/`fontWeight`/`textColor`, `inactiveColor`, `backgroundColor`/`borderColor`/`borderWidth`/`borderRadius`/`padding`.',
+      table: { type: { summary: 'LegendStyleOverrides' } },
+    },
+    stacked: {
+      control: 'boolean',
+      description:
+        'Stack grouped `series` on top of each other instead of placing them side by side. Only the outer segment is rounded, and labels move inside the segments.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    highlightOnHover: {
+      control: 'boolean',
+      description:
+        'On hover, highlight the whole series the bar belongs to (every same-colored bar) and dim the other series. Grouped mode only, and off by default (plain per-bar hover).',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    showTrack: {
+      control: 'boolean',
+      description:
+        'Render a faint full-length background rail behind each bar. Best with single-series or stacked charts. Pair it with `max` for a meaningful "100%" rail.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    trackColor: {
+      control: 'color',
+      description:
+        'Custom color for the track rail. Defaults to the `--background-color-ds-neutral` token (theme-aware).',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'token' },
+      },
+    },
+    categories: {
+      control: 'object',
+      description:
+        'Shared category labels for grouped mode. Pair with `series` to render grouped bars with a legend.',
+      table: { type: { summary: 'string[]' }, defaultValue: { summary: '-' } },
+    },
+    series: {
+      control: 'object',
+      description:
+        'Grouped series, each `{ name, data, variant?, color?, silent?, stack? }`, where `data` aligns to `categories`. Give series a shared `stack` name to stack them together. Different `stack` names sit side by side and series without one are standalone bars (so you can mix several stacks in one chart). A `silent` series (e.g. a waterfall base) is excluded from the tooltip, labels, and legend.',
+      table: {
+        type: { summary: 'BarSeries[]' },
+        defaultValue: { summary: '-' },
+      },
+    },
+    referenceLine: {
+      control: 'object',
+      description:
+        "Draw a dashed reference line on the value axis. `{ value, label? }` for a fixed line (a pill on the first series), or the string `'average'` for a per-series average line.",
+      table: {
+        type: { summary: "{ value: number; label?: string } | 'average'" },
+        defaultValue: { summary: 'undefined' },
+      },
+    },
+    markPoints: {
+      control: { type: 'check' },
+      options: ['max', 'min'],
+      description:
+        'Pin the `max` and/or `min` value of each series with a labelled marker (like the ECharts rainfall example).',
+      table: {
+        type: { summary: "('max' | 'min')[]" },
+        defaultValue: { summary: '[]' },
+      },
+    },
+    axisBreaks: {
+      control: 'object',
+      description:
+        'Collapse one or more ranges of the value axis with a zig-zag break, which helps when a few bars dwarf the rest. Each break is `{ start, end, gap? }`.',
+      table: {
+        type: {
+          summary: '{ start: number; end: number; gap?: number | string }[]',
+        },
+        defaultValue: { summary: '[]' },
+      },
+    },
+    axisBreakExpandable: {
+      control: 'boolean',
+      description:
+        'When `true` (default), clicking a break area expands that range and a "Collapse breaks" button appears to restore it. Set to `false` for a static, non-interactive break.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    axisBreakCollapse: {
+      control: 'object',
+      description:
+        'Customise the "Collapse breaks" button that appears while a break is expanded. `text` sets the label, `offset` is `[left, top]` in px, `textStyle` ({ color, fontSize, fontWeight }) and `buttonStyle` ({ fill, stroke, borderRadius, paddingX }) override the theme-aware defaults.',
+      table: {
+        type: {
+          summary:
+            '{ text?; offset?: [number, number]; textStyle?; buttonStyle? }',
+        },
+        defaultValue: { summary: "{ text: 'Collapse breaks' }" },
+      },
+    },
+    max: {
+      control: 'number',
+      description:
+        'Force the value-axis maximum. When omitted, the axis auto-scales with headroom so the tallest bar and its label are never clipped.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
+    },
+    min: {
+      control: 'number',
+      description:
+        'Force the value-axis minimum (e.g. to anchor at 0 or include negative space). Auto when omitted.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
+    },
+    stackMode: {
+      control: { type: 'radio' },
+      options: ['normal', 'percent'],
+      description:
+        "Stacking mode for grouped series. `percent` normalizes each category to 100% (implies stacking). Pair with a percent `formatValue` like `v => Math.round(v) + '%'`.",
+      table: {
+        type: { summary: "'normal' | 'percent'" },
+        defaultValue: { summary: 'normal' },
+      },
+    },
+    zoom: {
+      control: { type: 'select' },
+      options: [false, true, 'category', 'value', 'both'],
+      description:
+        'Add a dataZoom slider + inside (scroll/drag) zoom. `true`/`category` zooms the category axis (page through many bars), `value` zooms the value axis, and `both` adds a slider on each axis (the horizontal one clears the labels, the vertical one clears the legend).',
+      table: {
+        type: { summary: "boolean | 'category' | 'value' | 'both'" },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    zoomSlider: {
+      control: 'boolean',
+      description:
+        'Show the draggable zoom slider(s). Set to `false` to hide the slider and keep only inside (scroll/drag-on-plot) zoom.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    selectable: {
+      control: 'boolean',
+      description:
+        'Enable brush selection via a toolbox button. Drag across the chart to select a band of bars, and the results come back through `onBrushSelect`.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    axisLabelRotate: {
+      control: { type: 'range', min: -90, max: 90, step: 15 },
+      description:
+        'Rotate the category-axis labels by this many degrees. Handy when labels are long or crowded.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
+    },
+    xAxis: {
+      control: 'object',
+      description:
+        'The x-axis, `{ name?, position?, orientation?, min?, max?, inverse?, format? }`. For vertical bars this is the category axis (`position` is `left`/`middle`/`right`). For horizontal bars it holds the values, so `min`/`max`/`inverse`/`format` apply.',
+      table: { type: { summary: 'BarXAxis' }, defaultValue: { summary: '-' } },
+    },
+    yAxis: {
+      control: 'object',
+      description:
+        'The y-axis, `{ name?, side?, position?, orientation?, min?, max?, inverse?, format? }`. For vertical bars this holds the values (`side` is `left`/`right`, `position` is `top`/`middle`/`bottom`). For horizontal bars it is the category axis.',
+      table: { type: { summary: 'BarYAxis' }, defaultValue: { summary: '-' } },
+    },
+    xAxisLabel: {
+      control: false,
+      description:
+        'Escape hatch for the x-axis labels. Pass a `formatter` (text or ECharts rich-text markup) plus `rich` style blocks to render icons/images on each label.',
+      table: { type: { summary: 'AxisLabelOverride' } },
+    },
+    onBrushSelect: {
+      action: 'bar:brush',
+      description:
+        'Called when a brush selection changes, with `{ indices, labels }` for the selected bars (requires `selectable`).',
+      table: {
+        type: {
+          summary:
+            '(selection: { indices: number[]; labels: string[] }) => void',
+        },
+      },
+    },
+    barRadius: {
+      control: 'number',
+      description:
+        'Corner radius applied to the leading edge of each bar (top corners for columns, right corners for bars).',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '4' } },
+    },
+    barWidth: {
+      control: 'number',
+      description:
+        'Maximum bar thickness in pixels. When omitted, the chart picks a sensible default per orientation.',
+      table: { type: { summary: 'number' }, defaultValue: { summary: 'auto' } },
+    },
+    formatValue: {
+      control: false,
+      description:
+        'Formats numbers for bar labels, value-axis ticks, the reference line, and the tooltip. e.g. `` v => `$${v}` ``.',
+      table: {
+        type: { summary: '(value: number) => string' },
+        defaultValue: { summary: 'String(value)' },
+      },
+    },
+    loading: {
+      control: 'boolean',
+      description:
+        'Show a loading spinner overlay and keep the canvas in place.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    animate: {
+      control: 'boolean',
+      description:
+        'Play the bar grow-in animation on load and updates. Automatically disabled when the OS requests reduced motion.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
+    },
+    emptyMessage: {
+      control: 'text',
+      description: 'Centered message shown when `data` is empty.',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: "'No data'" },
+      },
+    },
+    height: {
+      control: 'number',
+      description:
+        'Chart height as a pixel number or any valid CSS length string.',
+      table: {
+        type: { summary: 'number | string' },
+        defaultValue: { summary: '300' },
+      },
+    },
+    onBarClick: {
+      action: 'bar:click',
+      description:
+        'Called with `(datum, index)` when a bar is clicked, mapped back to the original (unsorted) datum.',
+      table: { type: { summary: '(datum: BarDatum, index: number) => void' } },
+    },
+    onBarHover: {
+      action: 'bar:hover',
+      description:
+        'Called with `(datum, index)` when a bar is hovered. Useful for syncing external UI.',
+      table: { type: { summary: '(datum: BarDatum, index: number) => void' } },
+    },
+    onBarLeave: {
+      action: 'bar:leave',
+      description: 'Called when the pointer leaves a bar.',
+      table: { type: { summary: '() => void' } },
+    },
+    onReady: {
+      action: 'ready',
+      description:
+        'An escape hatch, called once on mount with the ECharts instance, so you can wire up dataZoom, brush, drilldown, or any ECharts API directly.',
+      table: { type: { summary: '(chart: ECharts) => void' } },
+    },
+    className: {
+      control: 'text',
+      description: 'Class name merged onto the chart container.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '-' } },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    palette: 'brand',
+    sort: 'none',
+    showValueAxis: true,
+    showValues: false,
+    showTooltip: true,
+    barRadius: 6,
+    loading: false,
+    emptyMessage: 'No data',
+    referenceLine: { value: 55000, label: 'Target' },
+    formatValue: (v: number) => `$${(v / 1000).toFixed(1)}k`,
+    data: [
+      { label: 'Jan', value: 42000 },
+      { label: 'Feb', value: 38500 },
+      { label: 'Mar', value: 51200 },
+      { label: 'Apr', value: 47800 },
+      { label: 'May', value: 63400 },
+      { label: 'Jun', value: 72100 },
+    ],
+  },
+}
+
+export default meta
+
+type Story = StoryObj<typeof Bar>
+
+export const Basic: Story = {
+  name: 'Basic',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Monthly gross revenue as columns with a "Target" reference line. `direction="vertical"` puts months on the x-axis and revenue on the y-axis, `showValueAxis` renders the y-axis scale and grid lines, and `formatValue` formats ticks, labels, and the tooltip as currency. Use the Controls panel to flip orientation, switch the palette, sort bars, toggle the value axis/labels, or simulate the loading and empty states.',
+      },
+    },
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const WithLegend: Story = {
+  name: 'Grouped with legend',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Grouped bars driven by `categories` + `series`. Each series becomes a legend entry (click to toggle) and gets its own categorical color. Use this when you need to compare more than one measure per category, like new vs. returning customer revenue per quarter.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    showLegend: true,
+    legendPosition: 'top',
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 6,
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Q1', 'Q2', 'Q3', 'Q4'],
+    series: [
+      { name: 'New', data: [28000, 24500, 31200, 40100] },
+      { name: 'Returning', data: [14000, 14000, 20000, 32000] },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const CustomLegendIcons: Story = {
+  name: 'Custom legend icons',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`legendIcon` accepts a built-in shape, a `path://`/`image://` string, raw `<svg>` markup, an image URL, or (as here) a React element from any icon library (react-icons, lucide, or a plain inline `<svg>`), rendered to a data URI under the hood. Each series can also override it individually via its own `legendIcon`, which is how these three platforms get their own logo instead of one shared shape and stay immune to the chart-level `legendIcon` control, which is disabled below since every series here already sets its own icon.',
+      },
+    },
+  },
+  argTypes: {
+    legendIcon: { control: false },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    showLegend: true,
+    legendPosition: 'top',
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 6,
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Jan', 'Feb', 'Mar', 'Apr'],
+    series: [
+      {
+        name: 'YouTube',
+        data: [12400, 15100, 14300, 18700],
+        legendIcon: youtubeIcon,
+      },
+      {
+        name: 'X (Twitter)',
+        data: [8200, 9100, 10800, 9700],
+        legendIcon: xIcon,
+      },
+      {
+        name: 'LinkedIn',
+        data: [5400, 6300, 7100, 8900],
+        legendIcon: linkedinIcon,
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const Stacked: Story = {
+  name: 'Stacked column',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A recreation of the ECharts "Stacked Bar" example, with `stacked` columns of traffic sources per weekday. Each series is one color, the legend toggles them, and only the outer segment is rounded.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    stacked: true,
+    showLegend: true,
+    legendPosition: 'top',
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 4,
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+      { name: 'Email', data: [120, 132, 101, 134, 90, 230, 210] },
+      { name: 'Union Ads', data: [220, 182, 191, 234, 290, 330, 310] },
+      { name: 'Video Ads', data: [150, 232, 201, 154, 190, 330, 410] },
+      { name: 'Search Engine', data: [820, 932, 901, 934, 1290, 1330, 1320] },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const MultipleStacks: Story = {
+  name: 'Multiple stacks',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Several independent stacks in one chart, à la the advanced ECharts "Stacked Bar" example. Give a `stack` name to series that should stack together. Series with different `stack` names (or none) sit side by side, so you get a standalone "Direct" bar, an "Ad" stack, and a "Search Engine" stack per weekday. `highlightOnHover` lights up the hovered series (and dims the rest), and `tooltipTrigger="axis"` lists every series in the hovered weekday with its color.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showLegend: true,
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 4,
+    highlightOnHover: true,
+    tooltipTrigger: 'axis',
+    referenceLine: undefined,
+    data: undefined,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Direct', data: [320, 332, 301, 334, 390, 330, 320] },
+      { name: 'Email', stack: 'Ad', data: [120, 132, 101, 134, 90, 230, 210] },
+      {
+        name: 'Union Ads',
+        stack: 'Ad',
+        data: [220, 182, 191, 234, 290, 330, 310],
+      },
+      {
+        name: 'Video Ads',
+        stack: 'Ad',
+        data: [150, 232, 201, 154, 190, 330, 410],
+      },
+      {
+        name: 'Baidu',
+        stack: 'Search Engine',
+        data: [620, 732, 701, 734, 1090, 1130, 1120],
+      },
+      {
+        name: 'Google',
+        stack: 'Search Engine',
+        data: [120, 132, 101, 134, 290, 230, 220],
+      },
+      {
+        name: 'Bing',
+        stack: 'Search Engine',
+        data: [60, 72, 71, 74, 190, 130, 110],
+      },
+      {
+        name: 'Others',
+        stack: 'Search Engine',
+        data: [62, 82, 91, 84, 109, 110, 120],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const WithTrack: Story = {
+  name: 'Track background',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `showTrack` to render a faint full-length rail behind each bar, which is handy for showing progress toward a ceiling. Pairing it with an explicit `max` makes the rail represent a meaningful 100%. The track color defaults to a theme token and can be overridden with `trackColor`.',
+      },
+    },
+  },
+  args: {
+    direction: 'horizontal',
+    height: 240,
+    showTrack: true,
+    showValues: true,
+    showValueAxis: false,
+    max: 100,
+    referenceLine: undefined,
+    formatValue: v => `${v}%`,
+    data: [
+      { label: 'Storage', value: 82, variant: 'warning' },
+      { label: 'Bandwidth', value: 47, variant: 'info' },
+      { label: 'Seats', value: 95, variant: 'destructive' },
+      { label: 'API calls', value: 61, variant: 'success' },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const SingleBarStyle: Story = {
+  name: 'Single bar style',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Give one datum its own `variant` (or `color`) to make a single bar stand out from the rest. Here every bar uses the muted `neutral` variant except the peak month, which uses `primary`.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 300,
+    showValues: true,
+    showValueAxis: false,
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: [
+      { label: 'Jan', value: 320, variant: 'neutral' },
+      { label: 'Feb', value: 280, variant: 'neutral' },
+      { label: 'Mar', value: 410, variant: 'neutral' },
+      { label: 'Apr', value: 380, variant: 'neutral' },
+      { label: 'May', value: 520, variant: 'primary' },
+      { label: 'Jun', value: 470, variant: 'neutral' },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const NegativeValues: Story = {
+  name: 'Negative values',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Bars render above and below the zero baseline automatically. Color each bar by sign with a per-datum `variant`, and the corner radius flips to the correct end for negative bars.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 320,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    formatValue: v => `${v > 0 ? '+' : ''}${v}%`,
+    data: [
+      { label: 'Jan', value: 12, variant: 'success' },
+      { label: 'Feb', value: -8, variant: 'destructive' },
+      { label: 'Mar', value: 5, variant: 'success' },
+      { label: 'Apr', value: -14, variant: 'destructive' },
+      { label: 'May', value: 9, variant: 'success' },
+      { label: 'Jun', value: 18, variant: 'success' },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const waterfallSteps = [
+  { label: 'Open', delta: 3200 },
+  { label: 'Sales', delta: 4800 },
+  { label: 'Refunds', delta: -1500 },
+  { label: 'Payroll', delta: -2600 },
+  { label: 'Marketing', delta: -1100 },
+  { label: 'Net', delta: 900 },
+]
+
+const waterfallCategories = waterfallSteps.map(s => s.label)
+const waterfallChange = waterfallSteps.map(s => Math.abs(s.delta))
+let waterfallRunning = 0
+const waterfallBase = waterfallSteps.map(s => {
+  const before = waterfallRunning
+  waterfallRunning += s.delta
+  return Math.min(before, waterfallRunning)
+})
+
+export const Waterfall: Story = {
+  name: 'Waterfall',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A waterfall is a stacked chart with a transparent "base" series carrying the running offset and a visible "change" series on top. Mark the base series `silent` so it stays out of the tooltip, labels, and legend.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 340,
+    stacked: true,
+    showLegend: false,
+    showValueAxis: true,
+    showValues: false,
+    barRadius: 4,
+    referenceLine: undefined,
+    data: undefined,
+    formatValue: v => `$${(v / 1000).toFixed(1)}k`,
+    categories: waterfallCategories,
+    series: [
+      { name: 'base', data: waterfallBase, color: 'transparent', silent: true },
+      { name: 'Change', data: waterfallChange, variant: 'primary' },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const PercentStacked: Story = {
+  name: '100% stacked',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A recreation of the ECharts "Stacked Bar Normalization" example. `stackMode="percent"` normalizes each category to 100% (stacking is implied), and `showValues` prints each segment’s share inside the bar. Pass the raw values and a percent `formatValue`, and the component does the normalization.',
+      },
+    },
+  },
+  args: {
+    direction: 'horizontal',
+    height: 380,
+    stackMode: 'percent',
+    showLegend: true,
+    showValueAxis: false,
+    showValues: true,
+    referenceLine: undefined,
+    data: undefined,
+    formatValue: v => `${Math.round(v)}%`,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Direct', data: [100, 302, 301, 334, 390, 330, 320] },
+      { name: 'Mail Ad', data: [320, 132, 101, 134, 90, 230, 210] },
+      { name: 'Affiliate Ad', data: [220, 182, 191, 234, 290, 330, 310] },
+      { name: 'Video Ad', data: [150, 212, 201, 154, 190, 330, 410] },
+      { name: 'Search Engine', data: [820, 832, 901, 934, 1290, 1330, 1320] },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const zoomData = Array.from({ length: 24 }, (_, i) => ({
+  label: `2024-${String(i + 1).padStart(2, '0')}`,
+  value: Math.round(120 + Math.sin(i / 2) * 60 + i * 4),
+}))
+
+export const Zoom: Story = {
+  name: 'Zoom & rotated labels',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'With many categories, set `zoom` for a dataZoom slider + scroll/drag zoom, and `axisLabelRotate` to keep long labels readable. `xAxis.name`/`yAxis.name` add axis titles. Switch `zoom="value"` to zoom the value axis instead.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 340,
+    zoom: 'category',
+    axisLabelRotate: 45,
+    showValueAxis: true,
+    showValues: false,
+    xAxis: { name: 'Month' },
+    yAxis: { name: 'Units' },
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: zoomData,
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const budgetData = [
+  { name: 'Agriculture', b2011: 26621, b2012: 23695 },
+  { name: 'Commerce', b2011: 13858, b2012: 11929 },
+  { name: 'Defense', b2011: 666712, b2012: 670422 },
+  { name: 'Education', b2011: 71280, b2012: 77428 },
+  { name: 'Energy', b2011: 31555, b2012: 29539 },
+  { name: 'Health & Human Services', b2011: 88262, b2012: 79993 },
+  { name: 'Homeland Security', b2011: 53760, b2012: 46862 },
+  { name: 'Housing & Urban Dev', b2011: 60702, b2012: 47964 },
+  { name: 'Interior', b2011: 13339, b2012: 12056 },
+  { name: 'Justice', b2011: 30834, b2012: 28178 },
+  { name: 'Labor', b2011: 14018, b2012: 12784 },
+  { name: 'State', b2011: 56720, b2012: 56961 },
+  { name: 'Transportation', b2011: 84168, b2012: 89372 },
+  { name: 'Treasury', b2011: 13466, b2012: 14032 },
+  { name: 'Veterans Affairs', b2011: 56428, b2012: 60384 },
+  { name: 'Corps of Engineers', b2011: 10218, b2012: 9189 },
+  { name: 'Environmental Protection', b2011: 10286, b2012: 8973 },
+  { name: 'Executive Office', b2011: 437, b2012: 379 },
+  { name: 'General Services', b2011: 1466, b2012: 1117 },
+  { name: 'Intl Assistance', b2011: 20420, b2012: 24467 },
+  { name: 'NASA', b2011: 18724, b2012: 18448 },
+  { name: 'National Science Fdn', b2011: 7424, b2012: 8056 },
+  { name: 'Office of Personnel Mgmt', b2011: 77216, b2012: 81160 },
+  { name: 'Small Business Admin', b2011: 1124, b2012: 985 },
+  { name: 'Social Security Admin', b2011: 884617, b2012: 921599 },
+  { name: 'Other Agencies', b2011: 13903, b2012: 12339 },
+]
+const budgetCategories = budgetData.map(d => d.name)
+
+export const MixZoom: Story = {
+  name: 'Zoom & pan',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A federal-budget recreation (Budget 2011 vs 2012 by department). `zoom="category"` pages through the departments with a bottom slider, the scroll wheel (zoom, anchored at the cursor, stopping once a single group fills the view), and grab-drag to pan. `tooltipTrigger="axis"` shows a shadow band over the hovered group listing both years with a sticky label on the x-axis, and `hideOverlap` thins the dense labels. (Use `zoom="both"` if you also want a value-axis slider.)',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 400,
+    zoom: 'category',
+    zoomSlider: true,
+    tooltipTrigger: 'axis',
+    axisLabelRotate: 0,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    legendPosition: 'top',
+    yAxis: { name: 'Budget (million USD)' },
+    referenceLine: undefined,
+    formatValue: v => `$${v.toLocaleString('en-US')}`,
+    categories: budgetCategories,
+    series: [
+      {
+        name: 'Budget 2011',
+        data: budgetData.map(d => d.b2011),
+        variant: 'info',
+      },
+      {
+        name: 'Budget 2012',
+        data: budgetData.map(d => d.b2012),
+        variant: 'primary',
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const BrushSelect: Story = {
+  name: 'Brush select',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `selectable` to add a brush toolbox button (top-right). Activate it, then drag across the bars to select a band. The selected `{ indices, labels }` come back through `onBrushSelect` (see the Actions panel).',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 320,
+    selectable: true,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    formatValue: v => String(v),
+    data: [
+      { label: 'Jan', value: 320 },
+      { label: 'Feb', value: 280 },
+      { label: 'Mar', value: 410 },
+      { label: 'Apr', value: 380 },
+      { label: 'May', value: 520 },
+      { label: 'Jun', value: 470 },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const RainfallVsEvaporation: Story = {
+  name: 'Rainfall vs evaporation',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A recreation of the classic ECharts "Rainfall vs Evaporation" example with our `Bar`: two grouped series, `markPoints={["max", "min"]}` to pin each series’ extremes, and `referenceLine="average"` to draw each series’ own average line.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    markPoints: ['max', 'min'],
+    referenceLine: 'average',
+    formatValue: v => `${v}`,
+    categories: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    data: undefined,
+    series: [
+      {
+        name: 'Rainfall',
+        variant: 'info',
+        data: [2, 4.9, 7, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20, 6.4, 3.3],
+      },
+      {
+        name: 'Evaporation',
+        variant: 'success',
+        data: [2.6, 5.9, 9, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6, 2.3],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+export const AxisTitles: Story = {
+  name: 'Axis titles (position)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Each axis carries its own title. Because the axes are spatial, `xAxis`/`yAxis` follow the `direction`: for these vertical bars the values live on `yAxis` (`position: "middle"` gives a rotated, centered title, `side` moves it left/right) and the categories on `xAxis` (`position: "right"` tucks the title after the last label). Flip `direction` to `horizontal` and the roles swap.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 360,
+    showValueAxis: true,
+    showValues: false,
+    referenceLine: undefined,
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    data: undefined,
+    series: [
+      {
+        name: 'Revenue',
+        variant: 'primary',
+        data: [42000, 38500, 51200, 47800, 63400, 72100],
+      },
+    ],
+    xAxis: { name: 'Month', position: 'right' },
+    yAxis: {
+      name: 'Revenue (Rp)',
+      position: 'middle',
+      format: v => `${(v / 1000).toFixed(0)}k`,
+    },
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}
+
+const drilldownTree: BarDrilldownDatum[] = [
+  {
+    label: 'Americas',
+    value: 2260,
+    variant: 'info',
+    children: [
+      {
+        label: 'USA',
+        value: 1500,
+        children: [
+          { label: 'New York', value: 620 },
+          { label: 'San Francisco', value: 480 },
+          { label: 'Austin', value: 240 },
+          { label: 'Chicago', value: 160 },
+        ],
+      },
+      {
+        label: 'Canada',
+        value: 420,
+        children: [
+          { label: 'Toronto', value: 240 },
+          { label: 'Vancouver', value: 180 },
+        ],
+      },
+      {
+        label: 'Brazil',
+        value: 340,
+        children: [
+          { label: 'São Paulo', value: 210 },
+          { label: 'Rio', value: 130 },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'EMEA',
+    value: 1830,
+    variant: 'success',
+    children: [
+      {
+        label: 'UK',
+        value: 700,
+        children: [
+          { label: 'London', value: 520 },
+          { label: 'Manchester', value: 180 },
+        ],
+      },
+      {
+        label: 'Germany',
+        value: 560,
+        children: [
+          { label: 'Berlin', value: 300 },
+          { label: 'Munich', value: 260 },
+        ],
+      },
+      {
+        label: 'France',
+        value: 370,
+        children: [{ label: 'Paris', value: 370 }],
+      },
+      { label: 'UAE', value: 200, children: [{ label: 'Dubai', value: 200 }] },
+    ],
+  },
+  {
+    label: 'APAC',
+    value: 2010,
+    variant: 'warning',
+    children: [
+      {
+        label: 'China',
+        value: 900,
+        children: [
+          { label: 'Shanghai', value: 520 },
+          { label: 'Beijing', value: 380 },
+        ],
+      },
+      {
+        label: 'Japan',
+        value: 620,
+        children: [
+          { label: 'Tokyo', value: 440 },
+          { label: 'Osaka', value: 180 },
+        ],
+      },
+      {
+        label: 'India',
+        value: 490,
+        children: [
+          { label: 'Mumbai', value: 300 },
+          { label: 'Bengaluru', value: 190 },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Africa',
+    value: 540,
+    variant: 'destructive',
+    children: [
+      {
+        label: 'Nigeria',
+        value: 300,
+        children: [{ label: 'Lagos', value: 300 }],
+      },
+      {
+        label: 'South Africa',
+        value: 240,
+        children: [
+          { label: 'Cape Town', value: 140 },
+          { label: 'Johannesburg', value: 100 },
+        ],
+      },
+    ],
+  },
+]
+
+export const Drilldown: Story = {
+  name: 'Drilldown (multi-level)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Click a bar to drill into its children, and use the breadcrumb to jump back up, from regions to countries to cities. Powered by the `useBarDrilldown` helper feeding `data` + `onBarClick`, so the chart itself stays declarative. Leaf bars (no children) simply do nothing.',
+      },
+    },
+  },
+  render: () => {
+    const { data, path, depth, onBarClick, drillTo } =
+      useBarDrilldown(drilldownTree)
+    return (
+      <div className="w-full">
+        <div className="mb-3 flex items-center gap-2 text-body-sm">
+          {path.map((label, i) => {
+            const isCurrent = i === path.length - 1
+            return (
+              <span key={`${label}-${i}`} className="flex items-center gap-2">
+                {i > 0 && (
+                  <span aria-hidden className="text-ds-subtlest">
+                    /
+                  </span>
+                )}
+                {isCurrent ? (
+                  <span className="font-medium text-ds-default">{label}</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => drillTo(i)}
+                    className="cursor-pointer text-ds-subtle hover:text-ds-default"
+                  >
+                    {label}
+                  </button>
+                )}
+              </span>
+            )
+          })}
+          {depth === 0 && (
+            <span className="text-ds-subtlest">click a bar to drill in</span>
+          )}
+        </div>
+        <Bar
+          data={data}
+          direction="vertical"
+          showValueAxis
+          formatValue={v => `$${v}`}
+          height={320}
+          onBarClick={onBarClick}
+        />
+      </div>
+    )
+  },
+}
+
+const compact = (v: number) =>
+  v >= 1_000_000
+    ? `${(v / 1_000_000).toFixed(1)}M`
+    : v >= 1_000
+      ? `${(v / 1_000).toFixed(1)}k`
+      : String(v)
+
+export const AxisBreaks: Story = {
+  name: 'Axis breaks',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'When some series dwarf the rest, `axisBreaks` collapses ranges of the value axis with a zig-zag break so small and large series stay readable together. Each break is `{ start, end, gap? }` and you can pass several. With `axisBreakExpandable` (on by default), **clicking a break area expands that range** to inspect it, and a **“Collapse breaks” button** appears to restore the view, exactly like the official ECharts demo.',
+      },
+    },
+  },
+  args: {
+    direction: 'vertical',
+    height: 380,
+    showValueAxis: true,
+    showValues: false,
+    showLegend: true,
+    tooltipTrigger: 'axis',
+    referenceLine: undefined,
+    axisBreaks: [
+      { start: 5000, end: 100000, gap: '1.5%' },
+      { start: 105000, end: 3100000, gap: '1.5%' },
+    ],
+    axisBreakExpandable: true,
+    formatValue: compact,
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    series: [
+      { name: 'Data A', data: [1500, 2032, 2001, 3154, 2190, 4330, 2410] },
+      { name: 'Data B', data: [1200, 1320, 1010, 1340, 900, 2300, 2100] },
+      {
+        name: 'Data C',
+        data: [103200, 100320, 103010, 102340, 103900, 103300, 103200],
+      },
+      {
+        name: 'Data D',
+        data: [3106212, 3102118, 3102643, 3104631, 3106679, 3100130, 3107022],
+      },
+    ],
+  },
+  render: args => (
+    <div className="w-full">
+      <Bar {...args} />
+    </div>
+  ),
+}

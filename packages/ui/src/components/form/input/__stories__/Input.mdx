@@ -1,10 +1,10 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as InputStories from "./Input.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Form/Input" of={InputStories} />
 
@@ -41,7 +41,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     ## **Implementation Notes**
 
-    - Icon rendering: the visual icon inside inputs is owned by `FormInputWrapper`. Pass `icon` and `iconPosition` to `Input` and `MaskedInput`; the wrapper handles spacing and label adjustments.
+    - Icon rendering: the visual icon inside inputs is owned by `FormInputWrapper`. Pass `icon` and `iconPosition` to `Input` and `MaskedInput`, and the wrapper handles spacing and label adjustments.
     - Accessibility: labels are linked to inputs via `id` and floating labels are announced appropriately when focused.
     - Controlled vs uncontrolled: components support both controlled (`value`) and uncontrolled modes. Prefer controlled mode when validating or managing values externally.
 
@@ -567,7 +567,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     Below is a comprehensive list of all the props available for the Input component, along with their types, default values, and descriptions.
 
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
 

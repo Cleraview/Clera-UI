@@ -1,10 +1,10 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as CardStories from "./Card.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
+import { Canvas } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Card" of={CardStories} />
 
@@ -251,7 +251,7 @@ import { TableOfContents } from "@/stories/_components/TableOfContents"
 
     Below is a comprehensive list of all the props available for the Card component, along with their types, default values, and descriptions.
 
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
 

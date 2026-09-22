@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout } from "@clera/docs"
 import { TypographyPrinciples } from "./TypographyPrinciples"
 import { 
   TypographyHeadingList, 
@@ -28,7 +28,7 @@ import {
     Pair them with the {config.title} [color tokens](?path=/docs/foundations-colors--docs) and [spacing tokens](?path=/docs/foundations-spacing--docs) to build consistent product experiences.
 
     <TypographyPrinciples />
-
+    
     ## **Text styles and tokens**
     Our text styles and typography tokens define values such as font family, size, weight, and line height.  
     In design tools like Figma, these appear as text styles. In code, they are implemented as typography tokens.  
@@ -37,7 +37,7 @@ import {
     Each style includes optimized spacing and works seamlessly with other design foundations like spacing and color.  
     These tokens are future-ready, enabling typography theming across products.
 
-    For easier implementation, use the heading and text components in code — they apply typography tokens automatically.
+    For easier implementation, use the heading and text components in code, since they apply typography tokens automatically.
 
     ## **Applying Typography**
     Use text styles when designing in Figma, and typography tokens and components in code. Use the heading component for heading text, and the text component for body text. 
@@ -122,6 +122,31 @@ import {
     - **Text Component**  
       Use the `Text` component for body text and utility styles. Specify the `size` prop for body text sizes, and use the `muted`, `strong`, or `em` props for utility styles.  
       Example: `<Text size="md" strong>This is important text.</Text>`
+
+    ## **Customizing the base size**
+    Every font size and line height in the system is calculated from one CSS variable, `--font-size-base`. It defaults to `0.875rem` (14px), the size of `text-body-sm` and `text-label-sm`, which is the text most components use.
+
+    The rest of the scale is a ratio of that base. The smallest step (`text-2xs`) and the largest (`text-9xl`) move together with it, so the whole type ramp resizes in proportion and headings stay larger than body text at any base.
+
+    To change it for your whole app, set the variable after importing the styles:
+
+    ```css
+    @import '@clera/ui/styles/globals.css';
+
+    :root {
+      --font-size-base: 13px;
+    }
+    ```
+
+    You can also set it on any element to resize just that part of the page, like a dense data panel or a roomy marketing section:
+
+    ```css
+    .compact-panel {
+      --font-size-base: 12px;
+    }
+    ```
+
+    Components pick up the new size automatically, because they only use the typography tokens and never fixed pixel values.
   </div>
 
   <div>
@@ -160,6 +185,10 @@ import {
               label: "Text"
             },
           ]
+        },
+        {
+          id: "customizing-the-base-size",
+          label: "Customizing the base size"
         },
       ]}
     />

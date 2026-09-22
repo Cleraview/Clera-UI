@@ -1,9 +1,9 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import * as RadioStories from "./Radio.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Form/Radio" of={RadioStories} />
 
@@ -11,7 +11,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
   <div>
     # Radio
 
-    The `Radio` component represents a single choice input. It is intended for use both as a standalone control and as part of a `RadioGroup` for mutually exclusive selections. Use `Radio` when you need a simple, accessible choice input; prefer `RadioGroup` when managing multiple related options since it centralizes state and keyboard behavior. The component accepts all standard HTML input attributes and supports both controlled (`checked` + `onChange`) and uncontrolled usage. Use the `name` prop to group radios and `value` to identify options.
+    The `Radio` component represents a single choice input. It is intended for use both as a standalone control and as part of a `RadioGroup` for mutually exclusive selections. Use `Radio` when you need a simple, accessible choice input, and prefer `RadioGroup` when managing multiple related options since it centralizes state and keyboard behavior. The component accepts all standard HTML input attributes and supports both controlled (`checked` + `onChange`) and uncontrolled usage. Use the `name` prop to group radios and `value` to identify options.
 
     <DocInfo importStatement={`import { Radio } from '@clera-ui/form'`} sourcePath={`components/form/radio`} />
 
@@ -105,14 +105,14 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     <br />
 
     ## API
-    <ArgTypes />
+    <PropsTable />
 
     <br />
 
     ## **FAQ**
 
     ### **When should I use a standalone `Radio` vs `RadioGroup`?**
-    Use a `RadioGroup` when presenting multiple related choices where only one option may be selected; it centralizes state via `value` and `onChange` and ensures consistent keyboard navigation. Use a standalone `Radio` when the input represents a single choice or when you need to place radios in a custom layout not suited to direct children.
+    Use a `RadioGroup` when presenting multiple related choices where only one option may be selected. It centralizes state via `value` and `onChange` and ensures consistent keyboard navigation. Use a standalone `Radio` when the input represents a single choice or when you need to place radios in a custom layout not suited to direct children.
 
     ### **How do I control selection programmatically?**
     For a group, keep a `value` in state and pass it to `RadioGroup` with an `onChange` callback. For single radios, use the `checked` prop and `onChange` to control the element.

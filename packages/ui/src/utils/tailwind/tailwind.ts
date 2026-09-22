@@ -17,7 +17,8 @@ const twMerge = extendTailwindMerge<string, string>({
                 formattedValue.startsWith('label-') ||
                 formattedValue.startsWith('body-') ||
                 formattedValue.startsWith('heading-') ||
-                /^(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)$/.test(formattedValue)
+                formattedValue.startsWith('display-') ||
+                /^(2xs|xs|sm|base|md|lg|xl|[2-9]xl)$/.test(formattedValue)
               )
             },
           ],
@@ -43,7 +44,8 @@ const twMerge = extendTailwindMerge<string, string>({
                 formattedValue.startsWith('label-') ||
                 formattedValue.startsWith('body-') ||
                 formattedValue.startsWith('heading-') ||
-                /^(xs|sm|md|lg|xl|2xl|3xl|4xl|5xl)$/.test(formattedValue)
+                formattedValue.startsWith('display-') ||
+                /^(2xs|xs|sm|base|md|lg|xl|[2-9]xl)$/.test(formattedValue)
               )
             },
           ],

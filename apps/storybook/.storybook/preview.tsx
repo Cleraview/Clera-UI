@@ -1,19 +1,20 @@
 import type React from 'react'
+import type { Decorator } from '@storybook/nextjs'
 import { ThemeProvider } from '@clera/ui/theme'
+import { chartLayoutDecorator } from '@clera/docs'
 import { withThemeProvider } from './decorator/withThemeProvider'
 import { DocsContainerArgs, DocWrapper } from './components/DocWrapper'
 import '@clera/ui/styles/globals.css'
 import '@clera/ui/styles/prose.css'
-
-type DecoratorFn = (Story: React.ComponentType<Record<string, unknown>>) => React.ReactElement
+import './theme-light-scope.css'
 
 type PreviewConfig = {
-  decorators?: DecoratorFn[]
+  decorators?: Decorator[]
   parameters?: Record<string, unknown>
 }
 
 const preview: PreviewConfig = {
-  decorators: [withThemeProvider],
+  decorators: [withThemeProvider, chartLayoutDecorator],
   parameters: {
     backgrounds: {
       disable: true,
@@ -31,7 +32,18 @@ const preview: PreviewConfig = {
       panelPosition: 'bottom',
       bottomPanelHeight: 300,
       storySort: {
-        order: ['Overview', 'Foundations', 'Layout', 'Section', 'Features', 'UI'],
+        // A nested array orders that group's children: Charts lists its
+        // Overview landing page first, then everything else alphabetically.
+        order: [
+          'Overview',
+          'Foundations',
+          'Layout',
+          'Section',
+          'Features',
+          'UI',
+          'Charts',
+          ['Overview', '*'],
+        ],
       },
     },
     docs: {

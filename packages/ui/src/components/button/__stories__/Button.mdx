@@ -1,10 +1,10 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import config from "@/config/site"
 import * as ButtonStories from "./Button.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Button" of={ButtonStories} />
 
@@ -38,7 +38,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
     - **Full Width**: Use when the button should span the entire width of its container, common in forms or mobile layouts.
     - **Loading**: Indicate an action is processing and prevent multiple submissions. The button becomes disabled while loading.
     - **Disabled**: Clearly signal when an action is unavailable. Disabled buttons cannot be interacted with.
-    - **Rounded**: Control the button's shape — from sharp corners (`none`) to fully pill-shaped (`full`).
+    - **Rounded**: Control the button's shape, from sharp corners (`none`) to fully pill-shaped (`full`).
     - **As Child**: Render the button as a child element (via `Slot`), useful for integrating with other UI primitives or custom wrappers.
     - **Inner Class Name**: Apply custom styles to the inner content wrapper when fine-grained control of padding or spacing is needed.
 
@@ -109,7 +109,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     ## **API**
     Below is a comprehensive list of all the props available for the Button component, along with their types, default values, and descriptions.
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
 

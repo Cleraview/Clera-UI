@@ -55,7 +55,7 @@ export const getClassNamesCommon = (
     'hover:bg-transparent text-ds-subtle/30! [&>button]:cursor-not-allowed!',
   day: cn(
     'h-9 w-9 text-label-sm text-ds-default transition font-semibold',
-    'hover:bg-ds-neutral-subtle-hovered dark:hover:bg-ds-neutral-hovered',
+    'hover:bg-ds-neutral-subtle-hovered',
     isSameDayInRange ? 'rounded-md!' : 'rounded-md'
   ),
   today: 'text-ds-accent-violet font-bold',

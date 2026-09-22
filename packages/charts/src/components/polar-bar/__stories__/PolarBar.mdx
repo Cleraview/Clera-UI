@@ -1,0 +1,264 @@
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
+import config from "@ui/config/site"
+import * as PolarBarStories from "./PolarBar.stories"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
+
+<Meta title="Charts/PolarBar" of={PolarBarStories} />
+
+<DocsLayout>
+  <div>
+    # PolarBar
+
+    To plot bars on a circular (polar) coordinate system.
+    <DocInfo importStatement={`import { PolarBar } from '@clera/charts'`} sourcePath={`components/polar-bar`} extPath="charts" />
+
+    <br />
+
+    ## **When To Use**
+    The PolarBar wraps bars around a circle. It is powered by [Apache ECharts](https://echarts.apache.org/), shares the same `useEChart` runtime and `@clera/tokens` colors as `Bar`/`Combo`, and adapts to light/dark mode automatically.
+
+    Reach for it when the round layout itself carries meaning:
+
+      - **Orientation**: Choose how the circle is used.
+        - `angular`: Bars sweep around the circle, with category on the angle axis and value on the radius. Great for cyclical data (weekdays, hours, compass directions).
+        - `radial`: Concentric rings, with category on the radius axis and value sweeping around. Reads like a set of progress rings.
+
+      - **Single or grouped**: Pass `data` for one series, or `categories` + `series` for several. Add `stacked` to stack the series around the circle.
+      - **Coloring**: `palette="categorical"` gives each slice its own color, or set `variant`/`color` per datum or series.
+      - **Polar knobs**: `roundCap` rounds the bar ends, `startAngle` rotates the circle, `max`/`min` fix the value scale.
+
+    A caveat worth knowing: polar bars are eye-catching but harder to read precise values from than cartesian bars, so prefer them for cyclical or comparative-at-a-glance data, and keep `Bar` for exact comparisons.
+
+    ## **Examples**
+    ### **Bar on polar**
+
+    Single-series bars sweeping around the circle, like commits per weekday, one color per slice via `palette="categorical"`.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Angular} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Commits = () => (
+            <PolarBar
+              orientation="angular"
+              palette="categorical"
+              showValues
+              data={[
+                { label: 'Mon', value: 42 },
+                { label: 'Tue', value: 58 },
+                { label: 'Wed', value: 51 },
+                { label: 'Thu', value: 64 },
+                { label: 'Fri', value: 70 },
+                { label: 'Sat', value: 22 },
+                { label: 'Sun', value: 18 },
+              ]}
+            />
+          )
+
+          export default Commits
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Stacked on polar**
+
+    Grouped series stacked around the circle, with a legend to toggle them. Add `highlightOnHover` so hovering one segment lights up its whole series around the circle and dims the rest.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Stacked} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Traffic = () => (
+            <PolarBar
+              orientation="angular"
+              stacked
+              highlightOnHover
+              categories={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+              series={[
+                { name: 'Direct', data: [20, 28, 24, 30, 34, 10, 8], variant: 'primary' },
+                { name: 'Search', data: [14, 18, 16, 20, 22, 8, 6], variant: 'info' },
+                { name: 'Social', data: [8, 12, 11, 14, 14, 4, 4], variant: 'success' },
+              ]}
+            />
+          )
+
+          export default Traffic
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Radial (concentric)**
+
+    `orientation="radial"` lays categories along the radius and sweeps the value around, reading like progress rings.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.Radial} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Usage = () => (
+            <PolarBar
+              orientation="radial"
+              palette="categorical"
+              max={100}
+              showValues
+              formatValue={(v) => v + '%'}
+              data={[
+                { label: 'Storage', value: 82 },
+                { label: 'Bandwidth', value: 47 },
+                { label: 'Seats', value: 95 },
+                { label: 'API', value: 61 },
+              ]}
+            />
+          )
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Tangential labels**
+
+    Pass a `labelFormatter` to print `name: value` (or anything) in the middle of each bar. With the radial orientation ECharts lays the middle label out tangentially, curving along the arc.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.TangentialLabels} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { PolarBar } from '@clera/charts'
+
+          const Usage = () => (
+            <PolarBar
+              orientation="radial"
+              palette="categorical"
+              max={4}
+              startAngle={75}
+              labelFormatter={({ name, value }) => name + ': ' + value}
+              data={[
+                { label: 'a', value: 2 },
+                { label: 'b', value: 1.2 },
+                { label: 'c', value: 2.4 },
+                { label: 'd', value: 3.6 },
+              ]}
+            />
+          )
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ### **Partial arc (endAngle)**
+
+    Pair `startAngle` with `endAngle` to sweep only part of the circle. For a single arc just pass the props. To place two polar systems side by side in one chart (the official polar-endAngle demo), with S1–S3 in the top-right quadrant and T1–T3 in the bottom-left, grab the instance via `onReady` and apply a two-polar option from an effect after mount.
+    <Canvas>
+      <Canvas.Story>
+        <Story of={PolarBarStories.PartialArc} />
+      </Canvas.Story>
+
+      <Canvas.Source>
+        <Source className="my-0!" dark code={`
+          import { useEffect, useRef } from 'react'
+          import { PolarBar } from '@clera/charts'
+
+          const twoPolar = {
+            polar: [{}, {}],
+            angleAxis: [
+              { type: 'category', polarIndex: 0, startAngle: 90, endAngle: 0, data: ['S1', 'S2', 'S3'] },
+              { type: 'category', polarIndex: 1, startAngle: -90, endAngle: -180, data: ['T1', 'T2', 'T3'] },
+            ],
+            radiusAxis: [{ polarIndex: 0 }, { polarIndex: 1 }],
+            series: [
+              { type: 'bar', coordinateSystem: 'polar', polarIndex: 0, roundCap: true, data: [1, 2, 3] },
+              { type: 'bar', coordinateSystem: 'polar', polarIndex: 1, roundCap: true, data: [1, 2, 3] },
+            ],
+          }
+
+          const Usage = () => {
+            const chartRef = useRef(null)
+            useEffect(() => {
+              const chart = chartRef.current
+              const { tooltip } = chart.getOption()
+              chart.setOption({ ...twoPolar, tooltip }, true)
+            }, [])
+            return (
+              <PolarBar
+                orientation="angular"
+                showValues
+                data={[
+                  { label: 'S1', value: 1 },
+                  { label: 'S2', value: 2 },
+                  { label: 'S3', value: 3 },
+                ]}
+                onReady={(chart) => { chartRef.current = chart }}
+              />
+            )
+          }
+
+          export default Usage
+        `} />
+      </Canvas.Source>
+    </Canvas>
+
+    ## **API**
+    Below is a comprehensive list of all the props available for the PolarBar component, along with their types, default values, and descriptions.
+    <PropsTable />
+  </div>
+
+  <div>
+    <TableOfContents
+      items={[
+        {
+          id: "when-to-use",
+          label: "When To Use"
+        },
+        {
+          id: "examples",
+          label: "Examples",
+          children: [
+            {
+              id: "bar-on-polar",
+              label: "Bar on polar"
+            },
+            {
+              id: "stacked-on-polar",
+              label: "Stacked on polar"
+            },
+            {
+              id: "radial-concentric",
+              label: "Radial (concentric)"
+            },
+            {
+              id: "tangential-labels",
+              label: "Tangential labels"
+            },
+            {
+              id: "partial-arc-endangle",
+              label: "Partial arc (endAngle)"
+            },
+          ]
+        },
+        {
+          id: "api",
+          label: "API"
+        },
+      ]}
+    />
+  </div>
+</DocsLayout>

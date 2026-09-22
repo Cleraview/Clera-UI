@@ -4,7 +4,7 @@
   "private": true,
   "description": "Unified Storybook app aggregating stories from @clera/ui (and future @clera/charts).",
   "scripts": {
-    "dev": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6006 --no-open",
     "build": "storybook build",
     "build:static": "storybook build -o storybook-static",
     "doc:build": "vercel build --target=production",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clera/charts": "workspace:*",
+    "@clera/docs": "workspace:*",
     "@clera/tokens": "workspace:*",
     "@clera/ui": "workspace:*"
   },
@@ -35,6 +36,7 @@
     "storybook": "^10.1.8",
     "storybook-addon-deep-controls": "^0.10.0",
     "typescript": "^5.9.3",
+    "vercel": "^59.23.2",
     "webpack": "^5.103.0"
   }
 }

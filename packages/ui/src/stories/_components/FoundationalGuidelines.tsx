@@ -23,12 +23,12 @@ const foundationGuidelines = [
 ]
 
 export const FoundationalGuidelines = () => (
-  <div className="grid grid-cols-3 gap-space-md">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
     {foundationGuidelines.map((principle, index) => (
       <a key={index} href={principle.link} className="flex flex-col">
         <div className="rounded-lg overflow-hidden">
           <img
-            className="h-full aspect-[16/9] object-cover"
+            className="w-full aspect-[16/9] object-cover"
             src={principle.thumb}
             alt={principle.title}
           />

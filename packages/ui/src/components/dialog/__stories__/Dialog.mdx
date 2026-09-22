@@ -1,9 +1,9 @@
-import { Meta, Story, ArgTypes, Source } from "@storybook/addon-docs/blocks"
+import { Meta, Story, Source } from "@storybook/addon-docs/blocks"
 import * as DialogStories from "./Dialog.stories"
-import { Canvas } from "@/stories/_components/Canvas"
-import { DocInfo } from "@/stories/_components/DocInfo"
-import { TableOfContents } from "@/stories/_components/TableOfContents"
-import { DocsLayout } from "@/stories/_components/DocsLayout"
+import { Canvas } from "@clera/docs"
+import { DocInfo } from "@clera/docs"
+import { TableOfContents } from "@clera/docs"
+import { DocsLayout, PropsTable } from "@clera/docs"
 
 <Meta title="UI/Dialog" of={DialogStories} />
 
@@ -140,7 +140,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     All available props for the Dialog component.
 
-    <ArgTypes />
+    <PropsTable />
 
     ## **FAQ**
 
@@ -154,7 +154,7 @@ import { DocsLayout } from "@/stories/_components/DocsLayout"
 
     #### **How can I customize dialog size?**
 
-    Use the `size` prop — available options: `sm`, `md`, `lg`, `xl`.
+    Use the `size` prop. The available options are `sm`, `md`, `lg`, and `xl`.
 
     <Canvas.Source>
       <Source dark code={`<Dialog size="lg" />`} />

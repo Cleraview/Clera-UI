@@ -1,0 +1,10 @@
+@theme inline {
+  --leading-3: calc(var(--font-size-base, 0.875rem) * 12 / 14);
+  --leading-4: calc(var(--font-size-base, 0.875rem) * 16 / 14);
+  --leading-5: calc(var(--font-size-base, 0.875rem) * 20 / 14);
+  --leading-6: calc(var(--font-size-base, 0.875rem) * 24 / 14);
+  --leading-7: calc(var(--font-size-base, 0.875rem) * 28 / 14);
+  --leading-8: calc(var(--font-size-base, 0.875rem) * 32 / 14);
+  --leading-9: calc(var(--font-size-base, 0.875rem) * 36 / 14);
+  --leading-10: calc(var(--font-size-base, 0.875rem) * 40 / 14);
+}

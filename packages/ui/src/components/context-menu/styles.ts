@@ -9,7 +9,6 @@ export const styles = {
   subTrigger: cn(
     'flex cursor-default select-none items-center rounded-sm text-ds-default outline-none',
     'hover:bg-ds-neutral-subtle-hovered focus:bg-ds-neutral-subtle-hovered data-[state=open]:bg-ds-neutral-subtle-hovered',
-    'dark:hover:bg-ds-neutral-hovered dark:focus:bg-ds-neutral-hovered dark:data-[state=open]:bg-ds-neutral-hovered',
     elementPaddings.md,
     elementTextSizes.md
   ),
@@ -24,7 +23,6 @@ export const styles = {
     'text-ds-default cursor-pointer',
     'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
     'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-    'dark:hover:bg-ds-neutral-hovered dark:focus:bg-ds-neutral-hovered',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     elementPaddings.md,
     elementTextSizes.md
@@ -33,7 +31,6 @@ export const styles = {
     'relative flex select-none items-center outline-none transition-colors text-ds-default cursor-pointer',
     'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
     'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-    'dark:hover:bg-ds-neutral-hovered dark:focus:bg-ds-neutral-hovered',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     'pl-space-md pr-2 py-2.5',
     elementTextSizes.md
@@ -42,7 +39,6 @@ export const styles = {
     'relative flex select-none items-center rounded-sm outline-none transition-colors text-ds-default cursor-pointer',
     'hover:bg-ds-neutral-subtle-hovered hover:text-ds-default',
     'focus:bg-ds-neutral-subtle-hovered focus:text-ds-default',
-    'dark:hover:bg-ds-neutral-hovered dark:focus:bg-ds-neutral-hovered',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     'pl-space-md pr-2 py-2.5',
     elementTextSizes.md

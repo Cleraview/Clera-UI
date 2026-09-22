@@ -160,9 +160,9 @@ export const CreditCard: Story = {
     const [raw, setRaw] = useState('4111111111111111')
 
     const sampleOptions = [
-      { value: '411111111111111111111', label: 'Visa — 4111 1111 1111 1111' },
-      { value: '5555555555554444', label: 'MasterCard — 5555 5555 5555 4444' },
-      { value: '378282246310005', label: 'Amex — 3782 822463 10005' },
+      { value: '411111111111111111111', label: 'Visa 4111 1111 1111 1111' },
+      { value: '5555555555554444', label: 'MasterCard 5555 5555 5555 4444' },
+      { value: '378282246310005', label: 'Amex 3782 822463 10005' },
       { value: '', label: 'Empty' },
     ]
 

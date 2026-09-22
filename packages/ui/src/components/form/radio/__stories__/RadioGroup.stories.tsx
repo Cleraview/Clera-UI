@@ -125,7 +125,7 @@ export const GroupsWithTitles: Story = {
         label: (
           <div className="flex items-center gap-space-sm">
             <PromoSaleIcon aria-label="Sale" className="w-8 h-8" />
-            <span>Sale — 20% off</span>
+            <span>Sale, 20% off</span>
           </div>
         ),
         value: 'sale',
@@ -218,7 +218,7 @@ export const GroupsWithTitles: Story = {
                 label: (
                   <div className="flex items-center gap-space-sm">
                     <PromoSaleIcon aria-label="Sale" className="w-8 h-8" />
-                    <span>Sale — 20% off</span>
+                    <span>Sale, 20% off</span>
                   </div>
                 ),
                 value: 'sale',
